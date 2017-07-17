@@ -1332,7 +1332,7 @@ setenv("get", {_stash: true, special: function (t, k) {
   if (target === "lua" && char(__t12, 0) === "{" || infix_operator63(t)) {
     __t12 = "(" + __t12 + ")";
   }
-  if (string_literal63(k) && valid_id63(inner(k))) {
+  if (string_literal63(k) && valid_id63(inner(k)) && !( target === "py")) {
     return __t12 + "." + inner(k);
   } else {
     return __t12 + "[" + __k121 + "]";

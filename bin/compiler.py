@@ -109,7 +109,7 @@ setenv("arguments%", {"_stash": True, "macro": __f2})
 def bind42(args, body):
   __args1 = []
   def rest():
-    __args1.rest = True
+    __args1["rest"] = True
     if target == "js":
       return ["unstash", ["arguments%", _35(__args1)]]
     else:
@@ -403,9 +403,9 @@ def mapo(f, t):
   return __o6
 ____x68 = object([])
 ____x69 = object([])
-____x69.js = "!"
-____x69.lua = "not"
-____x69.py = "not"
+____x69["js"] = "!"
+____x69["lua"] = "not"
+____x69["py"] = "not"
 ____x68["not"] = ____x69
 ____x70 = object([])
 ____x70["*"] = True
@@ -413,9 +413,9 @@ ____x70["/"] = True
 ____x70["%"] = True
 ____x71 = object([])
 ____x72 = object([])
-____x72.js = "+"
-____x72.lua = ".."
-____x71.cat = ____x72
+____x72["js"] = "+"
+____x72["lua"] = ".."
+____x71["cat"] = ____x72
 ____x73 = object([])
 ____x73["+"] = True
 ____x73["-"] = True
@@ -426,21 +426,21 @@ ____x74["<="] = True
 ____x74[">="] = True
 ____x75 = object([])
 ____x76 = object([])
-____x76.js = "==="
-____x76.lua = "=="
-____x76.py = "=="
+____x76["js"] = "==="
+____x76["lua"] = "=="
+____x76["py"] = "=="
 ____x75["="] = ____x76
 ____x77 = object([])
 ____x78 = object([])
-____x78.js = "&&"
-____x78.lua = "and"
-____x78.py = "and"
+____x78["js"] = "&&"
+____x78["lua"] = "and"
+____x78["py"] = "and"
 ____x77["and"] = ____x78
 ____x79 = object([])
 ____x80 = object([])
-____x80.js = "||"
-____x80.lua = "or"
-____x80.py = "or"
+____x80["js"] = "||"
+____x80["lua"] = "or"
+____x80["py"] = "or"
 ____x79["or"] = ____x80
 infix = [____x68, ____x70, ____x71, ____x73, ____x74, ____x75, ____x77, ____x79]
 def unary63(form):
@@ -566,9 +566,9 @@ def compile_special(form, stmt63):
   __x85 = ____id6[1]
   __args2 = cut(____id6, 1)
   ____id7 = getenv(__x85)
-  __special = ____id7.special
-  __stmt = ____id7.stmt
-  __self_tr63 = ____id7.tr
+  __special = ____id7["special"]
+  __stmt = ____id7["stmt"]
+  __self_tr63 = ____id7["tr"]
   __tr = terminator(stmt63 and not __self_tr63)
   return cat(apply(__special, __args2), __tr)
 def parenthesize_call63(x):
@@ -586,7 +586,7 @@ def op_delims(parent, child):
   __parent = destash33(parent, ____r59)
   __child = destash33(child, ____r59)
   ____id8 = ____r59
-  __right = ____id8.right
+  __right = ____id8["right"]
 
   if __right:
     __e40 = _6261
@@ -632,8 +632,8 @@ def compile_function(args, body):
   __args4 = destash33(args, ____r62)
   __body3 = destash33(body, ____r62)
   ____id13 = ____r62
-  __name3 = ____id13.name
-  __prefix = ____id13.prefix
+  __name3 = ____id13["name"]
+  __prefix = ____id13["prefix"]
 
   if __name3:
     __e41 = compile(__name3)
@@ -641,7 +641,7 @@ def compile_function(args, body):
     __e41 = ""
   __id14 = __e41
 
-  if target == "lua" and __args4.rest:
+  if target == "lua" and __args4["rest"]:
     __e42 = join(__args4, ["|...|"])
   else:
     __e42 = __args4
@@ -676,7 +676,7 @@ def compile(form):
   ____r64 = unstash([...])
   __form = destash33(form, ____r64)
   ____id15 = ____r64
-  __stmt1 = ____id15.stmt
+  __stmt1 = ____id15["stmt"]
   if nil63(__form):
     return ""
   else:
@@ -1087,7 +1087,7 @@ def __f25(t, k):
   __k121 = compile(k)
   if target == "lua" and char(__t12, 0) == "{" or infix_operator63(t):
     __t12 = cat("(", __t12, ")")
-  if string_literal63(k) and valid_id63(inner(k)):
+  if string_literal63(k) and valid_id63(inner(k)) and not( target == "py"):
     return cat(__t12, ".", inner(k))
   else:
     return cat(__t12, "[", __k121, "]")

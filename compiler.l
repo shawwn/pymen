@@ -734,7 +734,8 @@
               (infix-operator? t))
       (set t1 (cat "(" t1 ")")))
     (if (and (string-literal? k)
-             (valid-id? (inner k)))
+             (valid-id? (inner k))
+             (not (= target 'py)))
         (cat t1 "." (inner k))
       (cat t1 "[" k1 "]"))))
 

@@ -335,7 +335,7 @@ def stash(args):
       if not number63(__k17):
         __p[__k17] = __v9
     }
-    __p._stash = True
+    __p["_stash"] = True
     add(args, __p)
   if array63(args):
     return args
@@ -346,7 +346,7 @@ def unstash(args):
     return {}
   else:
     __l4 = last(args)
-    if obj63(__l4) and __l4._stash:
+    if obj63(__l4) and __l4["_stash"]:
       __args1 = object(almost(args))
       ____o11 = __l4
       __k18 = None
@@ -365,7 +365,7 @@ def unstash(args):
     else:
       return args
 def destash33(l, args1):
-  if obj63(l) and l._stash:
+  if obj63(l) and l["_stash"]:
     ____o12 = l
     __k20 = None
     for (__k20 in ____o12) {
@@ -587,7 +587,7 @@ def setenv(k):
   __keys = cut(____id1, 0)
   if string63(__k24):
 
-    if __keys.toplevel:
+    if __keys["toplevel"]:
       __e21 = hd(environment)
     else:
       __e21 = last(environment)
@@ -608,26 +608,26 @@ def setenv(k):
     __frame[__k24] = __entry
     return __frame[__k24]
 
-abs = math.abs
-acos = math.acos
-asin = math.asin
-atan = math.atan
-atan2 = math.atan2
-ceil = math.ceil
-cos = math.cos
-floor = math.floor
-log = math.log
-log10 = math.log10
-max = math.max
-min = math.min
-pow = math.pow
-random = math.random
-sin = math.sin
-sinh = math.sinh
-sqrt = math.sqrt
-tan = math.tan
-tanh = math.tanh
-trunc = math.floor
+abs = math["abs"]
+acos = math["acos"]
+asin = math["asin"]
+atan = math["atan"]
+atan2 = math["atan2"]
+ceil = math["ceil"]
+cos = math["cos"]
+floor = math["floor"]
+log = math["log"]
+log10 = math["log10"]
+max = math["max"]
+min = math["min"]
+pow = math["pow"]
+random = math["random"]
+sin = math["sin"]
+sinh = math["sinh"]
+sqrt = math["sqrt"]
+tan = math["tan"]
+tanh = math["tanh"]
+trunc = math["floor"]
 def __f2(form):
   return quoted(form)
 setenv("quote", {"_stash": True, "macro": __f2})
@@ -783,7 +783,7 @@ def __f20(name, args):
   ____id23 = ____r29
   __body15 = cut(____id23, 0)
   ____x116 = object(["setenv", ["quote", __name1]])
-  ____x116.macro = join(["fn", __args3], __body15)
+  ____x116["macro"] = join(["fn", __args3], __body15)
   __form1 = ____x116
   _eval(__form1)
   return __form1
@@ -795,7 +795,7 @@ def __f21(name, args):
   ____id25 = ____r31
   __body17 = cut(____id25, 0)
   ____x123 = object(["setenv", ["quote", __name3]])
-  ____x123.special = join(["fn", __args5], __body17)
+  ____x123["special"] = join(["fn", __args5], __body17)
   __form3 = join(____x123, keys(__body17))
   _eval(__form3)
   return __form3
@@ -803,7 +803,7 @@ setenv("define-special", {"_stash": True, "macro": __f21})
 def __f22(name, expansion):
   setenv(name, {"_stash": True, "symbol": expansion})
   ____x129 = object(["setenv", ["quote", name]])
-  ____x129.symbol = ["quote", expansion]
+  ____x129["symbol"] = ["quote", expansion]
   return ____x129
 setenv("define-symbol", {"_stash": True, "macro": __f22})
 def __f23(__x137):
@@ -854,7 +854,7 @@ def __f27(__x177):
   __body27 = cut(____id37, 0)
   __x179 = unique("x")
   ____x182 = object(["setenv", __x179])
-  ____x182.variable = True
+  ____x182["variable"] = True
   return join(["with-frame", ["each", __x179, __names1, ____x182]], __body27)
 setenv("with-bindings", {"_stash": True, "macro": __f27})
 def __f28(definitions):
@@ -918,8 +918,8 @@ def __f36(expr):
     return [["fn", join(), ["%try", ["list", True, expr]]]]
   else:
     ____x257 = object(["obj"])
-    ____x257.stack = [["get", "debug", ["quote", "traceback"]]]
-    ____x257.message = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
+    ____x257["stack"] = [["get", "debug", ["quote", "traceback"]]]
+    ____x257["message"] = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
     return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x257]]]]
 setenv("guard", {"_stash": True, "macro": __f36})
 def __f37(x, t):
@@ -1078,7 +1078,7 @@ def eval_print(form):
         else:
           __e1 = str(m)
         __e = __e1
-      return {"stack": debug.traceback(), "message": __e}
+      return {"stack": debug["traceback"](), "message": __e}
   ____id = [xpcall(__f, __f1)]
   __ok = ____id[1]
   __v = ____id[2]
@@ -1096,26 +1096,26 @@ def repl():
     if not( __form == __more):
       eval_print(__form)
       __buf = ""
-      return system.write("> ")
-  return system.write("> ")
+      return system["write"]("> ")
+  return system["write"]("> ")
 def compile_file(path):
-  __s = reader.stream(system["read-file"](path))
+  __s = reader["stream"](system["read-file"](path))
   __body = reader["read-all"](__s)
-  __form1 = compiler.expand(join(["do"], __body))
-  return compiler.compile(__form1, {"_stash": True, "stmt": True})
+  __form1 = compiler["expand"](join(["do"], __body))
+  return compiler["compile"](__form1, {"_stash": True, "stmt": True})
 def _load(path):
   __previous = target
   target = "py"
   __code = compile_file(path)
   target = __previous
-  return compiler.run(__code)
+  return compiler["run"](__code)
 def script_file63(path):
   return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
 def run_file(path):
   if script_file63(path):
     return _load(path)
   else:
-    return compiler.run(system["read-file"](path))
+    return compiler["run"](system["read-file"](path))
 def usage():
   print("usage: lumen [<file> <arguments> | options <object files>]")
   print(" <file>\t\tProgram read from script file")
@@ -1127,7 +1127,7 @@ def usage():
   print(" -t <target>\tTarget language (default: lua)")
   return print(" -e <expr>\tExpression to evaluate")
 def main():
-  __arg = hd(system.argv)
+  __arg = hd(system["argv"])
   if __arg and script_file63(__arg):
     return _load(__arg)
   else:
@@ -1139,7 +1139,7 @@ def main():
       __output = None
       __target1 = None
       __expr = None
-      __argv = system.argv
+      __argv = system["argv"]
       __i = 0
       while __i < _35(__argv):
         __a = __argv[__i]

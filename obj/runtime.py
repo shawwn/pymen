@@ -335,7 +335,7 @@ def stash(args):
       if not number63(__k17):
         __p[__k17] = __v9
     }
-    __p._stash = True
+    __p["_stash"] = True
     add(args, __p)
   if array63(args):
     return args
@@ -346,7 +346,7 @@ def unstash(args):
     return {}
   else:
     __l4 = last(args)
-    if obj63(__l4) and __l4._stash:
+    if obj63(__l4) and __l4["_stash"]:
       __args1 = object(almost(args))
       ____o11 = __l4
       __k18 = None
@@ -365,7 +365,7 @@ def unstash(args):
     else:
       return args
 def destash33(l, args1):
-  if obj63(l) and l._stash:
+  if obj63(l) and l["_stash"]:
     ____o12 = l
     __k20 = None
     for (__k20 in ____o12) {
@@ -587,7 +587,7 @@ def setenv(k):
   __keys = cut(____id1, 0)
   if string63(__k24):
 
-    if __keys.toplevel:
+    if __keys["toplevel"]:
       __e21 = hd(environment)
     else:
       __e21 = last(environment)
@@ -608,23 +608,23 @@ def setenv(k):
     __frame[__k24] = __entry
     return __frame[__k24]
 
-abs = math.abs
-acos = math.acos
-asin = math.asin
-atan = math.atan
-atan2 = math.atan2
-ceil = math.ceil
-cos = math.cos
-floor = math.floor
-log = math.log
-log10 = math.log10
-max = math.max
-min = math.min
-pow = math.pow
-random = math.random
-sin = math.sin
-sinh = math.sinh
-sqrt = math.sqrt
-tan = math.tan
-tanh = math.tanh
-trunc = math.floor
+abs = math["abs"]
+acos = math["acos"]
+asin = math["asin"]
+atan = math["atan"]
+atan2 = math["atan2"]
+ceil = math["ceil"]
+cos = math["cos"]
+floor = math["floor"]
+log = math["log"]
+log10 = math["log10"]
+max = math["max"]
+min = math["min"]
+pow = math["pow"]
+random = math["random"]
+sin = math["sin"]
+sinh = math["sinh"]
+sqrt = math["sqrt"]
+tan = math["tan"]
+tanh = math["tanh"]
+trunc = math["floor"]

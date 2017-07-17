@@ -1285,7 +1285,7 @@ setenv("get", {_stash = true, special = function (t, k)
   if target == "lua" and char(__t12, 0) == "{" or infix_operator63(t) then
     __t12 = "(" .. __t12 .. ")"
   end
-  if string_literal63(k) and valid_id63(inner(k)) then
+  if string_literal63(k) and valid_id63(inner(k)) and not( target == "py") then
     return __t12 .. "." .. inner(k)
   else
     return __t12 .. "[" .. __k12 .. "]"

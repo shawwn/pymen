@@ -153,7 +153,7 @@ def __f20(name, args):
   ____id23 = ____r29
   __body15 = cut(____id23, 0)
   ____x116 = object(["setenv", ["quote", __name1]])
-  ____x116.macro = join(["fn", __args3], __body15)
+  ____x116["macro"] = join(["fn", __args3], __body15)
   __form1 = ____x116
   _eval(__form1)
   return __form1
@@ -165,7 +165,7 @@ def __f21(name, args):
   ____id25 = ____r31
   __body17 = cut(____id25, 0)
   ____x123 = object(["setenv", ["quote", __name3]])
-  ____x123.special = join(["fn", __args5], __body17)
+  ____x123["special"] = join(["fn", __args5], __body17)
   __form3 = join(____x123, keys(__body17))
   _eval(__form3)
   return __form3
@@ -173,7 +173,7 @@ setenv("define-special", {"_stash": True, "macro": __f21})
 def __f22(name, expansion):
   setenv(name, {"_stash": True, "symbol": expansion})
   ____x129 = object(["setenv", ["quote", name]])
-  ____x129.symbol = ["quote", expansion]
+  ____x129["symbol"] = ["quote", expansion]
   return ____x129
 setenv("define-symbol", {"_stash": True, "macro": __f22})
 def __f23(__x137):
@@ -224,7 +224,7 @@ def __f27(__x177):
   __body27 = cut(____id37, 0)
   __x179 = unique("x")
   ____x182 = object(["setenv", __x179])
-  ____x182.variable = True
+  ____x182["variable"] = True
   return join(["with-frame", ["each", __x179, __names1, ____x182]], __body27)
 setenv("with-bindings", {"_stash": True, "macro": __f27})
 def __f28(definitions):
@@ -288,8 +288,8 @@ def __f36(expr):
     return [["fn", join(), ["%try", ["list", True, expr]]]]
   else:
     ____x257 = object(["obj"])
-    ____x257.stack = [["get", "debug", ["quote", "traceback"]]]
-    ____x257.message = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
+    ____x257["stack"] = [["get", "debug", ["quote", "traceback"]]]
+    ____x257["message"] = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
     return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x257]]]]
 setenv("guard", {"_stash": True, "macro": __f36})
 def __f37(x, t):

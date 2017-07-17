@@ -18,7 +18,7 @@ def eval_print(form):
         else:
           __e1 = str(m)
         __e = __e1
-      return {"stack": debug.traceback(), "message": __e}
+      return {"stack": debug["traceback"](), "message": __e}
   ____id = [xpcall(__f, __f1)]
   __ok = ____id[1]
   __v = ____id[2]
@@ -36,26 +36,26 @@ def repl():
     if not( __form == __more):
       eval_print(__form)
       __buf = ""
-      return system.write("> ")
-  return system.write("> ")
+      return system["write"]("> ")
+  return system["write"]("> ")
 def compile_file(path):
-  __s = reader.stream(system["read-file"](path))
+  __s = reader["stream"](system["read-file"](path))
   __body = reader["read-all"](__s)
-  __form1 = compiler.expand(join(["do"], __body))
-  return compiler.compile(__form1, {"_stash": True, "stmt": True})
+  __form1 = compiler["expand"](join(["do"], __body))
+  return compiler["compile"](__form1, {"_stash": True, "stmt": True})
 def _load(path):
   __previous = target
   target = "py"
   __code = compile_file(path)
   target = __previous
-  return compiler.run(__code)
+  return compiler["run"](__code)
 def script_file63(path):
   return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
 def run_file(path):
   if script_file63(path):
     return _load(path)
   else:
-    return compiler.run(system["read-file"](path))
+    return compiler["run"](system["read-file"](path))
 def usage():
   print("usage: lumen [<file> <arguments> | options <object files>]")
   print(" <file>\t\tProgram read from script file")
@@ -67,7 +67,7 @@ def usage():
   print(" -t <target>\tTarget language (default: lua)")
   return print(" -e <expr>\tExpression to evaluate")
 def main():
-  __arg = hd(system.argv)
+  __arg = hd(system["argv"])
   if __arg and script_file63(__arg):
     return _load(__arg)
   else:
@@ -79,7 +79,7 @@ def main():
       __output = None
       __target1 = None
       __expr = None
-      __argv = system.argv
+      __argv = system["argv"]
       __i = 0
       while __i < _35(__argv):
         __a = __argv[__i]

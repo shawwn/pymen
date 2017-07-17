@@ -4,15 +4,15 @@ def stream(str, more):
   return {"pos": 0, "string": str, "len": _35(str), "more": more}
 def peek_char(s):
   ____id = s
-  __pos = ____id.pos
-  __len = ____id.len
-  __string = ____id.string
+  __pos = ____id["pos"]
+  __len = ____id["len"]
+  __string = ____id["string"]
   if __pos < __len:
     return char(__string, __pos)
 def read_char(s):
   __c = peek_char(s)
   if __c:
-    s.pos = s.pos + 1
+    s["pos"] = s["pos"] + 1
     return __c
 def skip_non_code(s):
   while True:
@@ -56,8 +56,8 @@ def flag63(atom):
   return string63(atom) and _35(atom) > 1 and char(atom, 0) == ":"
 def expected(s, c):
   ____id1 = s
-  __more = ____id1.more
-  __pos1 = ____id1.pos
+  __more = ____id1["more"]
+  __pos1 = ____id1["pos"]
   __id2 = __more
 
   if __id2:
@@ -68,7 +68,7 @@ def expected(s, c):
   return __e
 def wrap(s, x):
   __y = read(s)
-  if __y == s.more:
+  if __y == s["more"]:
     return __y
   else:
     return [x, __y]
@@ -143,7 +143,7 @@ def __f1(s):
   return __r16
 read_table["("] = __f1
 def __f2(s):
-  error(cat("Unexpected ) at ", s.pos))
+  error(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f2
 def __f3(s):
   read_char(s)
