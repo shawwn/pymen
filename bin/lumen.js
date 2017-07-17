@@ -670,7 +670,7 @@ escape = function (s) {
   }
   return __s1 + "\"";
 };
-str = function (x, stack) {
+_str = function (x, stack) {
   if (nil63(x)) {
     return "nil";
   } else {
@@ -723,10 +723,10 @@ str = function (x, stack) {
                         }
                         var __k23 = __e20;
                         if (number63(__k23)) {
-                          __xs11[__k23] = str(__v12, __l6);
+                          __xs11[__k23] = _str(__v12, __l6);
                         } else {
                           add(__ks, __k23 + ":");
-                          add(__ks, str(__v12, __l6));
+                          add(__ks, _str(__v12, __l6));
                         }
                       }
                       drop(__l6);
@@ -1298,7 +1298,7 @@ var eval_print = function (form) {
     return print(__v.stack);
   } else {
     if (is63(__v)) {
-      return print(str(__v));
+      return print(_str(__v));
     }
   }
 };

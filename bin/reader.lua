@@ -1,7 +1,7 @@
 local delimiters = {["("] = true, [")"] = true, [";"] = true, ["\r"] = true, ["\n"] = true}
 local whitespace = {[" "] = true, ["\t"] = true, ["\r"] = true, ["\n"] = true}
-local function stream(str, more)
-  return {pos = 0, string = str, len = _35(str), more = more}
+local function stream(_str, more)
+  return {pos = 0, string = _str, len = _35(_str), more = more}
 end
 local function peek_char(s)
   local ____id = s
@@ -62,8 +62,8 @@ local function read_all(s)
   end
   return __l
 end
-function read_string(str, more)
-  local __x = read(stream(str, more))
+function read_string(_str, more)
+  local __x = read(stream(_str, more))
   if not( __x == eof) then
     return __x
   end
@@ -96,31 +96,31 @@ local function wrap(s, x)
     return {x, __y}
   end
 end
-local function hex_prefix63(str)
+local function hex_prefix63(_str)
   local __e1
-  if code(str, 0) == 45 then
+  if code(_str, 0) == 45 then
     __e1 = 1
   else
     __e1 = 0
   end
   local __i = __e1
-  local __id3 = code(str, __i) == 48
+  local __id3 = code(_str, __i) == 48
   local __e2
   if __id3 then
     __i = __i + 1
-    local __n = code(str, __i)
+    local __n = code(_str, __i)
     __e2 = __n == 120 or __n == 88
   else
     __e2 = __id3
   end
   return __e2
 end
-local function maybe_number(str)
-  if hex_prefix63(str) then
-    return tonumber(str)
+local function maybe_number(_str)
+  if hex_prefix63(_str) then
+    return tonumber(_str)
   else
-    if number_code63(code(str, edge(str))) then
-      return number(str)
+    if number_code63(code(_str, edge(_str))) then
+      return number(_str)
     end
   end
 end
@@ -128,26 +128,26 @@ local function real63(x)
   return number63(x) and not nan63(x) and not inf63(x)
 end
 read_table[""] = function (s)
-  local __str = ""
+  local ___str = ""
   while true do
     local __c3 = peek_char(s)
     if __c3 and (not whitespace[__c3] and not delimiters[__c3]) then
-      __str = __str .. read_char(s)
+      ___str = ___str .. read_char(s)
     else
       break
     end
   end
-  if __str == "true" then
+  if ___str == "true" then
     return true
   else
-    if __str == "false" then
+    if ___str == "false" then
       return false
     else
-      local __n1 = maybe_number(__str)
+      local __n1 = maybe_number(___str)
       if real63(__n1) then
         return __n1
       else
-        return __str
+        return ___str
       end
     end
   end
@@ -191,19 +191,19 @@ end
 read_table["\""] = function (s)
   read_char(s)
   local __r19 = nil
-  local __str1 = "\""
+  local ___str1 = "\""
   while nil63(__r19) do
     local __c5 = peek_char(s)
     if __c5 == "\"" then
-      __r19 = __str1 .. read_char(s)
+      __r19 = ___str1 .. read_char(s)
     else
       if nil63(__c5) then
         __r19 = expected(s, "\"")
       else
         if __c5 == "\\" then
-          __str1 = __str1 .. read_char(s)
+          ___str1 = ___str1 .. read_char(s)
         end
-        __str1 = __str1 .. read_char(s)
+        ___str1 = ___str1 .. read_char(s)
       end
     end
   end
@@ -212,16 +212,16 @@ end
 read_table["|"] = function (s)
   read_char(s)
   local __r21 = nil
-  local __str2 = "|"
+  local ___str2 = "|"
   while nil63(__r21) do
     local __c6 = peek_char(s)
     if __c6 == "|" then
-      __r21 = __str2 .. read_char(s)
+      __r21 = ___str2 .. read_char(s)
     else
       if nil63(__c6) then
         __r21 = expected(s, "|")
       else
-        __str2 = __str2 .. read_char(s)
+        ___str2 = ___str2 .. read_char(s)
       end
     end
   end

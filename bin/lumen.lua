@@ -556,7 +556,7 @@ function escape(s)
   end
   return __s1 .. "\""
 end
-function str(x, stack)
+function _str(x, stack)
   if nil63(x) then
     return "nil"
   else
@@ -602,13 +602,13 @@ function str(x, stack)
                       for __k11 in next, ____o13 do
                         local __v12 = ____o13[__k11]
                         if number63(__k11) then
-                          __xs11[__k11] = str(__v12, __l6)
+                          __xs11[__k11] = _str(__v12, __l6)
                         else
                           if not string63(__k11) then
-                            __k11 = str(__k11, __l6)
+                            __k11 = _str(__k11, __l6)
                           end
                           add(__ks, __k11 .. ":")
-                          add(__ks, str(__v12, __l6))
+                          add(__ks, _str(__v12, __l6))
                         end
                       end
                       drop(__l6)
@@ -1143,7 +1143,7 @@ local function eval_print(form)
         if nil63(m) then
           __e1 = ""
         else
-          __e1 = str(m)
+          __e1 = _str(m)
         end
         __e = __e1
       end
@@ -1156,7 +1156,7 @@ local function eval_print(form)
     return print("error: " .. __v.message .. "\n" .. __v.stack)
   else
     if is63(__v) then
-      return print(str(__v))
+      return print(_str(__v))
     end
   end
 end

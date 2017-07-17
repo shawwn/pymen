@@ -223,7 +223,7 @@
           "else" "function" "not" "true" "elseif" "if" "or"
           "until"
           ;; python
-          "from"))
+          "from" "str"))
 
 (define-global reserved? (x)
   (has? reserved x))

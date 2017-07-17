@@ -490,7 +490,7 @@ def escape(s):
     __s1 = cat(__s1, __c1)
     __i22 = __i22 + 1
   return cat(__s1, "\"")
-def str(x, stack):
+def _str(x, stack):
   if nil63(x):
     return "nil"
   else:
@@ -539,10 +539,10 @@ def str(x, stack):
                           __e19 = __k22
                         __k23 = __e19
                         if number63(__k23):
-                          __xs11[__k23] = str(__v12, __l6)
+                          __xs11[__k23] = _str(__v12, __l6)
                         else:
                           add(__ks, cat(__k23, ":"))
-                          add(__ks, str(__v12, __l6))
+                          add(__ks, _str(__v12, __l6))
                       drop(__l6)
                       ____o14 = join(__xs11, __ks)
                       ____i24 = None
@@ -1058,7 +1058,7 @@ def eval_print(form):
         if nil63(m):
           __e1 = ""
         else:
-          __e1 = str(m)
+          __e1 = _str(m)
         __e = __e1
       return {"stack": debug["traceback"](), "message": __e}
   ____id = [xpcall(__f, __f1)]
@@ -1066,7 +1066,7 @@ def eval_print(form):
   __v = ____id[2]
   if not __ok:
     if is63(__v):
-      return print(str(__v))
+      return print(_str(__v))
 def rep(s):
   return eval_print(reader["read-string"](s))
 def repl():

@@ -1,7 +1,7 @@
 delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
 whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
-def stream(str, more):
-  return {"pos": 0, "string": str, "len": _35(str), "more": more}
+def stream(_str, more):
+  return {"pos": 0, "string": _str, "len": _35(_str), "more": more}
 def peek_char(s):
   ____id = s
   __pos = ____id["pos"]
@@ -46,8 +46,8 @@ def read_all(s):
       break
     add(__l, __form)
   return __l
-def read_string(str, more):
-  __x = read(stream(str, more))
+def read_string(_str, more):
+  __x = read(stream(_str, more))
   if not( __x == eof):
     return __x
 def key63(atom):
@@ -72,47 +72,47 @@ def wrap(s, x):
     return __y
   else:
     return [x, __y]
-def hex_prefix63(str):
+def hex_prefix63(_str):
 
-  if code(str, 0) == 45:
+  if code(_str, 0) == 45:
     __e1 = 1
   else:
     __e1 = 0
   __i = __e1
-  __id3 = code(str, __i) == 48
+  __id3 = code(_str, __i) == 48
 
   if __id3:
     __i = __i + 1
-    __n = code(str, __i)
+    __n = code(_str, __i)
     __e2 = __n == 120 or __n == 88
   else:
     __e2 = __id3
   return __e2
-def maybe_number(str):
-  if hex_prefix63(str):
-    if number_code63(code(str, edge(str))):
-      return number(str)
+def maybe_number(_str):
+  if hex_prefix63(_str):
+    if number_code63(code(_str, edge(_str))):
+      return number(_str)
 def real63(x):
   return number63(x) and not nan63(x) and not inf63(x)
 def __f(s):
-  __str = ""
+  ___str = ""
   while True:
     __c3 = peek_char(s)
     if __c3 and (not whitespace[__c3] and not delimiters[__c3]):
-      __str = cat(__str, read_char(s))
+      ___str = cat(___str, read_char(s))
     else:
       break
-  if __str == "true":
+  if ___str == "true":
     return True
   else:
-    if __str == "false":
+    if ___str == "false":
       return False
     else:
-      __n1 = maybe_number(__str)
+      __n1 = maybe_number(___str)
       if real63(__n1):
         return __n1
       else:
-        return __str
+        return ___str
 read_table[""] = __f
 def __f1(s):
   read_char(s)
@@ -148,33 +148,33 @@ read_table[")"] = __f2
 def __f3(s):
   read_char(s)
   __r19 = None
-  __str1 = "\""
+  ___str1 = "\""
   while nil63(__r19):
     __c5 = peek_char(s)
     if __c5 == "\"":
-      __r19 = cat(__str1, read_char(s))
+      __r19 = cat(___str1, read_char(s))
     else:
       if nil63(__c5):
         __r19 = expected(s, "\"")
       else:
         if __c5 == "\\":
-          __str1 = cat(__str1, read_char(s))
-        __str1 = cat(__str1, read_char(s))
+          ___str1 = cat(___str1, read_char(s))
+        ___str1 = cat(___str1, read_char(s))
   return __r19
 read_table["\""] = __f3
 def __f4(s):
   read_char(s)
   __r21 = None
-  __str2 = "|"
+  ___str2 = "|"
   while nil63(__r21):
     __c6 = peek_char(s)
     if __c6 == "|":
-      __r21 = cat(__str2, read_char(s))
+      __r21 = cat(___str2, read_char(s))
     else:
       if nil63(__c6):
         __r21 = expected(s, "|")
       else:
-        __str2 = cat(__str2, read_char(s))
+        ___str2 = cat(___str2, read_char(s))
   return __r21
 read_table["|"] = __f4
 def __f5(s):

@@ -402,7 +402,7 @@ indentation = function () {
   }
   return __s;
 };
-var reserved = {"=": true, "==": true, "+": true, "-": true, "%": true, "*": true, "/": true, "<": true, ">": true, "<=": true, ">=": true, "break": true, "case": true, "catch": true, "class": true, "const": true, "continue": true, "debugger": true, "default": true, "delete": true, "do": true, "else": true, "eval": true, "finally": true, "for": true, "function": true, "if": true, "import": true, "in": true, "instanceof": true, "let": true, "new": true, "return": true, "switch": true, "throw": true, "try": true, "typeof": true, "var": true, "void": true, "with": true, "and": true, "end": true, "load": true, "repeat": true, "while": true, "false": true, "local": true, "nil": true, "then": true, "not": true, "true": true, "elseif": true, "or": true, "until": true, "from": true};
+var reserved = {"=": true, "==": true, "+": true, "-": true, "%": true, "*": true, "/": true, "<": true, ">": true, "<=": true, ">=": true, "break": true, "case": true, "catch": true, "class": true, "const": true, "continue": true, "debugger": true, "default": true, "delete": true, "do": true, "else": true, "eval": true, "finally": true, "for": true, "function": true, "if": true, "import": true, "in": true, "instanceof": true, "let": true, "new": true, "return": true, "switch": true, "throw": true, "try": true, "typeof": true, "var": true, "void": true, "with": true, "and": true, "end": true, "load": true, "repeat": true, "while": true, "false": true, "local": true, "nil": true, "then": true, "not": true, "true": true, "elseif": true, "or": true, "until": true, "from": true, "str": true};
 reserved63 = function (x) {
   return has63(reserved, x);
 };
@@ -676,7 +676,7 @@ var compile_atom = function (x) {
                   if (number63(x)) {
                     return x + "";
                   } else {
-                    throw new Error("Cannot compile atom: " + str(x));
+                    throw new Error("Cannot compile atom: " + _str(x));
                   }
                 }
               }
@@ -1405,7 +1405,7 @@ setenv("%object", {_stash: true, special: function () {
       var __k23 = ____id30[0];
       var __v13 = ____id30[1];
       if (! string63(__k23)) {
-        throw new Error("Illegal key: " + str(__k23));
+        throw new Error("Illegal key: " + _str(__k23));
       }
       __s10 = __s10 + __c9 + key(__k23) + __sep1 + compile(__v13);
       __c9 = ", ";

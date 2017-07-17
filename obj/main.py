@@ -16,7 +16,7 @@ def eval_print(form):
         if nil63(m):
           __e1 = ""
         else:
-          __e1 = str(m)
+          __e1 = _str(m)
         __e = __e1
       return {"stack": debug["traceback"](), "message": __e}
   ____id = [xpcall(__f, __f1)]
@@ -24,7 +24,7 @@ def eval_print(form):
   __v = ____id[2]
   if not __ok:
     if is63(__v):
-      return print(str(__v))
+      return print(_str(__v))
 def rep(s):
   return eval_print(reader["read-string"](s))
 def repl():

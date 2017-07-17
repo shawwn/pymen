@@ -315,7 +315,7 @@ def indentation():
     __s = cat(__s, "  ")
     __i9 = __i9 + 1
   return __s
-reserved = {"=": True, "==": True, "+": True, "-": True, "%": True, "*": True, "/": True, "<": True, ">": True, "<=": True, ">=": True, "break": True, "case": True, "catch": True, "class": True, "const": True, "continue": True, "debugger": True, "default": True, "delete": True, "do": True, "else": True, "eval": True, "finally": True, "for": True, "function": True, "if": True, "import": True, "in": True, "instanceof": True, "let": True, "new": True, "return": True, "switch": True, "throw": True, "try": True, "typeof": True, "var": True, "void": True, "with": True, "and": True, "end": True, "load": True, "repeat": True, "while": True, "false": True, "local": True, "nil": True, "then": True, "not": True, "true": True, "elseif": True, "or": True, "until": True, "from": True}
+reserved = {"=": True, "==": True, "+": True, "-": True, "%": True, "*": True, "/": True, "<": True, ">": True, "<=": True, ">=": True, "break": True, "case": True, "catch": True, "class": True, "const": True, "continue": True, "debugger": True, "default": True, "delete": True, "do": True, "else": True, "eval": True, "finally": True, "for": True, "function": True, "if": True, "import": True, "in": True, "instanceof": True, "let": True, "new": True, "return": True, "switch": True, "throw": True, "try": True, "typeof": True, "var": True, "void": True, "with": True, "and": True, "end": True, "load": True, "repeat": True, "while": True, "false": True, "local": True, "nil": True, "then": True, "not": True, "true": True, "elseif": True, "or": True, "until": True, "from": True, "str": True}
 def reserved63(x):
   return has63(reserved, x)
 def valid_code63(n):
@@ -544,7 +544,7 @@ def compile_atom(x):
                   if number63(x):
                     return cat(x, "")
                   else:
-                    error(cat("Cannot compile atom: ", str(x)))
+                    error(cat("Cannot compile atom: ", _str(x)))
 def terminator(stmt63):
   if not stmt63:
     return ""
@@ -1143,7 +1143,7 @@ def __f27():
       __k23 = ____id30[1]
       __v13 = ____id30[2]
       if not string63(__k23):
-        error(cat("Illegal key: ", str(__k23)))
+        error(cat("Illegal key: ", _str(__k23)))
       __s10 = cat(__s10, __c9, key(__k23), __sep1, compile(__v13))
       __c9 = ", "
   return cat(__s10, "}")

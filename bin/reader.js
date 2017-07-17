@@ -1,7 +1,7 @@
 var delimiters = {"(": true, ")": true, ";": true, "\r": true, "\n": true};
 var whitespace = {" ": true, "\t": true, "\r": true, "\n": true};
-var stream = function (str, more) {
-  return {pos: 0, string: str, len: _35(str), more: more};
+var stream = function (_str, more) {
+  return {pos: 0, string: _str, len: _35(_str), more: more};
 };
 var peek_char = function (s) {
   var ____id = s;
@@ -62,8 +62,8 @@ var read_all = function (s) {
   }
   return __l;
 };
-read_string = function (str, more) {
-  var __x = read(stream(str, more));
+read_string = function (_str, more) {
+  var __x = read(stream(_str, more));
   if (!( __x === eof)) {
     return __x;
   }
@@ -96,31 +96,31 @@ var wrap = function (s, x) {
     return [x, __y];
   }
 };
-var hex_prefix63 = function (str) {
+var hex_prefix63 = function (_str) {
   var __e1;
-  if (code(str, 0) === 45) {
+  if (code(_str, 0) === 45) {
     __e1 = 1;
   } else {
     __e1 = 0;
   }
   var __i = __e1;
-  var __id3 = code(str, __i) === 48;
+  var __id3 = code(_str, __i) === 48;
   var __e2;
   if (__id3) {
     __i = __i + 1;
-    var __n = code(str, __i);
+    var __n = code(_str, __i);
     __e2 = __n === 120 || __n === 88;
   } else {
     __e2 = __id3;
   }
   return __e2;
 };
-var maybe_number = function (str) {
-  if (hex_prefix63(str)) {
-    return parseInt(str, 16);
+var maybe_number = function (_str) {
+  if (hex_prefix63(_str)) {
+    return parseInt(_str, 16);
   } else {
-    if (number_code63(code(str, edge(str)))) {
-      return number(str);
+    if (number_code63(code(_str, edge(_str)))) {
+      return number(_str);
     }
   }
 };
@@ -128,26 +128,26 @@ var real63 = function (x) {
   return number63(x) && ! nan63(x) && ! inf63(x);
 };
 read_table[""] = function (s) {
-  var __str = "";
+  var ___str = "";
   while (true) {
     var __c3 = peek_char(s);
     if (__c3 && (! whitespace[__c3] && ! delimiters[__c3])) {
-      __str = __str + read_char(s);
+      ___str = ___str + read_char(s);
     } else {
       break;
     }
   }
-  if (__str === "true") {
+  if (___str === "true") {
     return true;
   } else {
-    if (__str === "false") {
+    if (___str === "false") {
       return false;
     } else {
-      var __n1 = maybe_number(__str);
+      var __n1 = maybe_number(___str);
       if (real63(__n1)) {
         return __n1;
       } else {
-        return __str;
+        return ___str;
       }
     }
   }
@@ -191,19 +191,19 @@ read_table[")"] = function (s) {
 read_table["\""] = function (s) {
   read_char(s);
   var __r19 = undefined;
-  var __str1 = "\"";
+  var ___str1 = "\"";
   while (nil63(__r19)) {
     var __c5 = peek_char(s);
     if (__c5 === "\"") {
-      __r19 = __str1 + read_char(s);
+      __r19 = ___str1 + read_char(s);
     } else {
       if (nil63(__c5)) {
         __r19 = expected(s, "\"");
       } else {
         if (__c5 === "\\") {
-          __str1 = __str1 + read_char(s);
+          ___str1 = ___str1 + read_char(s);
         }
-        __str1 = __str1 + read_char(s);
+        ___str1 = ___str1 + read_char(s);
       }
     }
   }
@@ -212,16 +212,16 @@ read_table["\""] = function (s) {
 read_table["|"] = function (s) {
   read_char(s);
   var __r21 = undefined;
-  var __str2 = "|";
+  var ___str2 = "|";
   while (nil63(__r21)) {
     var __c6 = peek_char(s);
     if (__c6 === "|") {
-      __r21 = __str2 + read_char(s);
+      __r21 = ___str2 + read_char(s);
     } else {
       if (nil63(__c6)) {
         __r21 = expected(s, "|");
       } else {
-        __str2 = __str2 + read_char(s);
+        ___str2 = ___str2 + read_char(s);
       }
     }
   }
