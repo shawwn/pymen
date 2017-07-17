@@ -221,7 +221,9 @@
           "and" "end" "in" "load" "repeat" "while" "break"
           "false" "local" "return" "do" "for" "nil" "then"
           "else" "function" "not" "true" "elseif" "if" "or"
-          "until"))
+          "until"
+          ;; python
+          "from"))
 
 (define-global reserved? (x)
   (has? reserved x))

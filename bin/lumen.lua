@@ -116,20 +116,20 @@ end
 function inf63(n)
   return n == inf or n == _inf
 end
-function clip(s, from, upto)
-  return string.sub(s, from + 1, upto)
+function clip(s, _from, upto)
+  return string.sub(s, _from + 1, upto)
 end
 function dupe(x)
   return {}
 end
-function cut(x, from, upto)
+function cut(x, _from, upto)
   local __l2 = dupe(x)
   local __j = 0
   local __e
-  if nil63(from) or from < 0 then
+  if nil63(_from) or _from < 0 then
     __e = 0
   else
-    __e = from
+    __e = _from
   end
   local __i3 = __e
   local __n4 = _35(x)

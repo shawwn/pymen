@@ -100,18 +100,18 @@ def nan63(n):
   return not( n == n)
 def inf63(n):
   return n == inf or n == _inf
-def clip(s, from, upto):
+def clip(s, _from, upto):
   pass
 def dupe(x):
   pass
-def cut(x, from, upto):
+def cut(x, _from, upto):
   __l2 = dupe(x)
   __j = 0
 
-  if nil63(from) or from < 0:
+  if nil63(_from) or _from < 0:
     __e3 = 0
   else:
-    __e3 = from
+    __e3 = _from
   __i3 = __e3
   __n4 = _35(x)
 

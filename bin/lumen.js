@@ -143,8 +143,8 @@ nan63 = function (n) {
 inf63 = function (n) {
   return n === inf || n === _inf;
 };
-clip = function (s, from, upto) {
-  return s.substring(from, upto);
+clip = function (s, _from, upto) {
+  return s.substring(_from, upto);
 };
 dupe = function (x) {
   if (array63(x)) {
@@ -153,14 +153,14 @@ dupe = function (x) {
     return {};
   }
 };
-cut = function (x, from, upto) {
+cut = function (x, _from, upto) {
   var __l2 = dupe(x);
   var __j = 0;
   var __e3;
-  if (nil63(from) || from < 0) {
+  if (nil63(_from) || _from < 0) {
     __e3 = 0;
   } else {
-    __e3 = from;
+    __e3 = _from;
   }
   var __i3 = __e3;
   var __n4 = _35(x);
