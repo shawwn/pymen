@@ -65,7 +65,10 @@
 
 (define-global obj? (x)
   (and (is? x)
-       (= (type x) (target lua: 'table js: 'object))))
+       (target lua: (= (type x) 'table)
+               js: (= (type x) 'object)
+               py: (or (isinstance x |dict|)
+                       (isinstance x |list|)))))
 
 (define-global atom? (x)
   (or (nil? x) (string? x) (number? x) (boolean? x)))
