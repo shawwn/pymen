@@ -383,7 +383,7 @@
 
 (define-global print (x)
   (target js: ((idx console log) x)
-          py: (|print| x)
+          py: (do (|print| x) nil)
           lua: (|print| x)))
 
 (define math (target js: Math lua: math))

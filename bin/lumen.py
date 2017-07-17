@@ -592,7 +592,8 @@ def setenv(k, *_rest, **_params):
     __frame[__k24] = __entry
     return __frame[__k24]
 def _print(x):
-  return print(x)
+  print(x)
+  return None
 
 abs = math.abs
 acos = math.acos
