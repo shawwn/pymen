@@ -1442,4 +1442,9 @@ var main = function () {
     }
   }
 };
-main();
+var main63 = function () {
+  return require.main === module;
+};
+if (main63()) {
+  main();
+}

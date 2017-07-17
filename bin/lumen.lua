@@ -1312,4 +1312,9 @@ local function main()
     end
   end
 end
-main()
+local function main63()
+  return true
+end
+if main63() then
+  main()
+end

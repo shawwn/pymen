@@ -100,4 +100,11 @@
                     (print code)
                   ((idx system write-file) output code)))))))))
 
-(main)
+(define main? ()
+  (target
+    lua: true
+    js: (= (get |require| 'main) |module|)
+    py: (= |__name__| "__main__")))
+
+(when (main?)
+  (main))

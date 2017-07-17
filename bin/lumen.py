@@ -1177,4 +1177,7 @@ def main():
           return print(__code1)
         else:
           return system.write_file(__output, __code1)
-main()
+def main63():
+  return __name__ == "__main__"
+if main63():
+  main()
