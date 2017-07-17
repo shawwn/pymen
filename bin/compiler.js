@@ -1217,7 +1217,11 @@ setenv("%for", {_stash: true, special: function (t, k, form) {
   if (target === "lua") {
     return __ind7 + "for " + k + " in next, " + __t2 + " do\n" + __body12 + __ind7 + "end\n";
   } else {
-    return __ind7 + "for (" + k + " in " + __t2 + ") {\n" + __body12 + __ind7 + "}\n";
+    if (target === "py") {
+      return __ind7 + "for " + k + " in " + __t2 + ":\n" + __body12;
+    } else {
+      return __ind7 + "for (" + k + " in " + __t2 + ") {\n" + __body12 + __ind7 + "}\n";
+    }
   }
 }, stmt: true, tr: true});
 setenv("%try", {_stash: true, special: function (form) {

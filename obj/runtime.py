@@ -24,7 +24,7 @@ def array(x):
     __l = []
     ____o = x
     __k = None
-    for (__k in ____o) {
+    for __k in ____o:
       __v = ____o[__k]
 
       if numeric63(__k):
@@ -34,14 +34,13 @@ def array(x):
       __k1 = __e
       if number63(__k1):
         __l[__k1] = __v
-    }
     return __l
 def object(x):
   if array63(x):
     __l1 = {}
     ____o1 = x
     __k2 = None
-    for (__k2 in ____o1) {
+    for __k2 in ____o1:
       __v1 = ____o1[__k2]
 
       if numeric63(__k2):
@@ -50,7 +49,6 @@ def object(x):
         __e1 = __k2
       __k3 = __e1
       __l1[__k3] = __v1
-    }
     return __l1
   else:
     return x
@@ -58,7 +56,7 @@ def length(x):
   __n2 = -1
   ____o2 = x
   __k4 = None
-  for (__k4 in ____o2) {
+  for __k4 in ____o2:
     __v2 = ____o2[__k4]
 
     if numeric63(__k4):
@@ -69,7 +67,6 @@ def length(x):
     if number63(__k5):
       if __k5 > __n2:
         __n2 = __k5
-  }
   __n2 = __n2 + 1
   return __n2
 def _35(x):
@@ -129,7 +126,7 @@ def cut(x, from, upto):
     __j = __j + 1
   ____o3 = x
   __k6 = None
-  for (__k6 in ____o3) {
+  for __k6 in ____o3:
     __v3 = ____o3[__k6]
 
     if numeric63(__k6):
@@ -139,13 +136,12 @@ def cut(x, from, upto):
     __k7 = __e5
     if not number63(__k7):
       __l2[__k7] = __v3
-  }
   return __l2
 def keys(x):
   __t = dupe(x)
   ____o4 = x
   __k8 = None
-  for (__k8 in ____o4) {
+  for __k8 in ____o4:
     __v4 = ____o4[__k8]
 
     if numeric63(__k8):
@@ -155,7 +151,6 @@ def keys(x):
     __k9 = __e6
     if not number63(__k9):
       __t[__k9] = __v4
-  }
   return __t
 def edge(x):
   return _35(x) - 1
@@ -205,7 +200,7 @@ def join():
       __n7 = _35(__r41)
       ____o5 = __l3
       __k10 = None
-      for (__k10 in ____o5) {
+      for __k10 in ____o5:
         __v5 = ____o5[__k10]
 
         if numeric63(__k10):
@@ -218,13 +213,12 @@ def join():
         else:
           __l3 = object(__l3)
         __r41[__k11] = __v5
-      }
     ____i7 = ____i7 + 1
   return __r41
 def find(f, t):
   ____o6 = t
   ____i9 = None
-  for (____i9 in ____o6) {
+  for ____i9 in ____o6:
     __x3 = ____o6[____i9]
 
     if numeric63(____i9):
@@ -235,7 +229,6 @@ def find(f, t):
     __y = f(__x3)
     if __y:
       return __y
-  }
 def first(f, l):
   ____x4 = l
   ____i10 = 0
@@ -271,7 +264,7 @@ def map(f, x):
     ____i12 = ____i12 + 1
   ____o7 = x
   __k12 = None
-  for (__k12 in ____o7) {
+  for __k12 in ____o7:
     __v7 = ____o7[__k12]
 
     if numeric63(__k12):
@@ -283,7 +276,6 @@ def map(f, x):
       __y3 = f(__v7)
       if is63(__y3):
         __t1[__k13] = __y3
-  }
   return __t1
 def keep(f, x):
   def __f2(v):
@@ -293,7 +285,7 @@ def keep(f, x):
 def keys63(t):
   ____o8 = t
   __k14 = None
-  for (__k14 in ____o8) {
+  for __k14 in ____o8:
     __v8 = ____o8[__k14]
 
     if numeric63(__k14):
@@ -303,12 +295,11 @@ def keys63(t):
     __k15 = __e10
     if not number63(__k15):
       return True
-  }
   return False
 def empty63(t):
   ____o9 = t
   ____i15 = None
-  for (____i15 in ____o9) {
+  for ____i15 in ____o9:
     __x8 = ____o9[____i15]
 
     if numeric63(____i15):
@@ -317,14 +308,13 @@ def empty63(t):
       __e11 = ____i15
     ____i151 = __e11
     return False
-  }
   return True
 def stash(args):
   if keys63(args):
     __p = {}
     ____o10 = args
     __k16 = None
-    for (__k16 in ____o10) {
+    for __k16 in ____o10:
       __v9 = ____o10[__k16]
 
       if numeric63(__k16):
@@ -334,7 +324,6 @@ def stash(args):
       __k17 = __e12
       if not number63(__k17):
         __p[__k17] = __v9
-    }
     __p["_stash"] = True
     add(args, __p)
   if array63(args):
@@ -350,7 +339,7 @@ def unstash(args):
       __args1 = object(almost(args))
       ____o11 = __l4
       __k18 = None
-      for (__k18 in ____o11) {
+      for __k18 in ____o11:
         __v10 = ____o11[__k18]
 
         if numeric63(__k18):
@@ -360,7 +349,6 @@ def unstash(args):
         __k19 = __e13
         if not( __k19 == "_stash"):
           __args1[__k19] = __v10
-      }
       return __args1
     else:
       return args
@@ -368,7 +356,7 @@ def destash33(l, args1):
   if obj63(l) and l["_stash"]:
     ____o12 = l
     __k20 = None
-    for (__k20 in ____o12) {
+    for __k20 in ____o12:
       __v11 = ____o12[__k20]
 
       if numeric63(__k20):
@@ -378,7 +366,6 @@ def destash33(l, args1):
       __k21 = __e14
       if not( __k21 == "_stash"):
         args1[__k21] = __v11
-    }
   else:
     return l
 def search(s, pattern, start):
@@ -543,7 +530,7 @@ def str(x, stack):
                       add(__l6, x)
                       ____o13 = x
                       __k22 = None
-                      for (__k22 in ____o13) {
+                      for __k22 in ____o13:
                         __v12 = ____o13[__k22]
 
                         if numeric63(__k22):
@@ -556,11 +543,10 @@ def str(x, stack):
                         else:
                           add(__ks, cat(__k23, ":"))
                           add(__ks, str(__v12, __l6))
-                      }
                       drop(__l6)
                       ____o14 = join(__xs11, __ks)
                       ____i24 = None
-                      for (____i24 in ____o14) {
+                      for ____i24 in ____o14:
                         __v13 = ____o14[____i24]
 
                         if numeric63(____i24):
@@ -570,7 +556,6 @@ def str(x, stack):
                         ____i241 = __e20
                         __s = cat(__s, __sp, __v13)
                         __sp = " "
-                      }
                       return cat(__s, ")")
 def apply(f, args):
   __args = stash(args)
@@ -595,7 +580,7 @@ def setenv(k):
     __entry = __frame[__k24] or {}
     ____o15 = __keys
     __k25 = None
-    for (__k25 in ____o15) {
+    for __k25 in ____o15:
       __v14 = ____o15[__k25]
 
       if numeric63(__k25):
@@ -604,7 +589,6 @@ def setenv(k):
         __e22 = __k25
       __k26 = __e22
       __entry[__k26] = __v14
-    }
     __frame[__k24] = __entry
     return __frame[__k24]
 

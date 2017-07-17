@@ -34,7 +34,7 @@ def __f8():
   __forms1 = []
   ____o1 = __body1
   __k2 = None
-  for (__k2 in ____o1) {
+  for __k2 in ____o1:
     __v1 = ____o1[__k2]
 
     if numeric63(__k2):
@@ -46,7 +46,6 @@ def __f8():
       __l1[__k3] = __v1
     else:
       add(__forms1, ["set", ["get", __x25, ["quote", __k3]], __v1])
-  }
   if some63(__forms1):
     return join(["let", __x25, ["object", join(["%array"], __l1)]], __forms1, [__x25])
   else:
@@ -344,7 +343,7 @@ def __f40():
   __l3 = []
   ____o5 = __xs1
   ____i9 = None
-  for (____i9 in ____o5) {
+  for ____i9 in ____o5:
     __x328 = ____o5[____i9]
 
     if numeric63(____i9):
@@ -353,7 +352,6 @@ def __f40():
       __e12 = ____i9
     ____i91 = __e12
     __l3[__x328] = True
-  }
   return join(["obj"], __l3)
 setenv("set-of", {"_stash": True, "macro": __f40})
 def __f41():
@@ -411,7 +409,7 @@ def __f48():
       __x373 = {}
       ____o7 = __names5
       ____i11 = None
-      for (____i11 in ____o7) {
+      for ____i11 in ____o7:
         __k7 = ____o7[____i11]
 
         if numeric63(____i11):
@@ -420,7 +418,6 @@ def __f48():
           __e15 = ____i11
         ____i111 = __e15
         __x373[__k7] = __k7
-      }
       def __f49(x):
         return x
       return ["return", join(["%object"], mapo(__f49, __x373))]

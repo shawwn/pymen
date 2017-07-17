@@ -49,7 +49,7 @@ def stash42(args):
     __l = ["%object", "\"_stash\"", True]
     ____o = args
     __k = None
-    for (__k in ____o) {
+    for __k in ____o:
       __v = ____o[__k]
 
       if numeric63(__k):
@@ -60,7 +60,6 @@ def stash42(args):
       if not number63(__k1):
         add(__l, literal(__k1))
         add(__l, __v)
-    }
     return join(args, [__l])
   else:
     return args
@@ -79,7 +78,7 @@ def bind(lh, rh):
     __bs = [__id, rh]
     ____o1 = lh
     __k2 = None
-    for (__k2 in ____o1) {
+    for __k2 in ____o1:
       __v1 = ____o1[__k2]
 
       if numeric63(__k2):
@@ -101,7 +100,6 @@ def bind(lh, rh):
           __e26 = __v1
         __k4 = __e26
         __bs = join(__bs, bind(__k4, __x5))
-    }
     return __bs
 def __f2(from):
   return [["get", ["get", ["get", "Array", ["quote", "prototype"]], ["quote", "slice"]], ["quote", "call"]], "arguments", from]
@@ -121,7 +119,7 @@ def bind42(args, body):
     __r19 = unique("r")
     ____o2 = args
     __k5 = None
-    for (__k5 in ____o2) {
+    for __k5 in ____o2:
       __v2 = ____o2[__k5]
 
       if numeric63(__k5):
@@ -136,7 +134,6 @@ def bind42(args, body):
           __x30 = unique("x")
           add(__args1, __x30)
           __bs1 = join(__bs1, [__v2, __x30])
-    }
     if keys63(args):
       __bs1 = join(__bs1, [__r19, rest()])
       __n3 = _35(__args1)
@@ -170,7 +167,7 @@ def expand_function(__x41):
   add(environment, {})
   ____o3 = __args
   ____i5 = None
-  for (____i5 in ____o3) {
+  for ____i5 in ____o3:
     ____x43 = ____o3[____i5]
 
     if numeric63(____i5):
@@ -179,7 +176,6 @@ def expand_function(__x41):
       __e28 = ____i5
     ____i51 = __e28
     setenv(____x43, {"_stash": True, "variable": True})
-  }
   ____x44 = join(["%function", __args], macroexpand(__body))
   drop(environment)
   return ____x44
@@ -192,7 +188,7 @@ def expand_definition(__x46):
   add(environment, {})
   ____o4 = __args11
   ____i6 = None
-  for (____i6 in ____o4) {
+  for ____i6 in ____o4:
     ____x48 = ____o4[____i6]
 
     if numeric63(____i6):
@@ -201,7 +197,6 @@ def expand_definition(__x46):
       __e29 = ____i6
     ____i61 = __e29
     setenv(____x48, {"_stash": True, "variable": True})
-  }
   ____x49 = join([__x47, __name1, __args11], macroexpand(__body1))
   drop(environment)
   return ____x49
@@ -240,7 +235,7 @@ def quasiquote_list(form, depth):
   __xs = [["list"]]
   ____o5 = form
   __k7 = None
-  for (__k7 in ____o5) {
+  for __k7 in ____o5:
     __v4 = ____o5[__k7]
 
     if numeric63(__k7):
@@ -256,7 +251,6 @@ def quasiquote_list(form, depth):
         __e31 = quasiexpand(__v4, depth)
       __v5 = __e31
       last(__xs)[__k8] = __v5
-  }
   ____x55 = form
   ____i8 = 0
   while ____i8 < _35(____x55):
@@ -387,7 +381,7 @@ def mapo(f, t):
   __o6 = []
   ____o7 = t
   __k9 = None
-  for (__k9 in ____o7) {
+  for __k9 in ____o7:
     __v6 = ____o7[__k9]
 
     if numeric63(__k9):
@@ -399,7 +393,6 @@ def mapo(f, t):
     if is63(__x66):
       add(__o6, literal(__k10))
       add(__o6, __x66)
-  }
   return __o6
 ____x68 = object([])
 ____x69 = object([])
@@ -451,7 +444,7 @@ def precedence(form):
   if not( atom63(form) or unary63(form)):
     ____o8 = infix
     __k11 = None
-    for (__k11 in ____o8) {
+    for __k11 in ____o8:
       __v7 = ____o8[__k11]
 
       if numeric63(__k11):
@@ -461,7 +454,6 @@ def precedence(form):
       __k12 = __e37
       if __v7[hd(form)]:
         return index(__k12)
-    }
   return 0
 def getop(op):
   def __f5(level):
@@ -983,7 +975,10 @@ def __f12(t, k, form):
   if target == "lua":
     return cat(__ind7, "for ", k, " in next, ", __t2, " do\n", __body12, __ind7, "end\n")
   else:
-    return cat(__ind7, "for (", k, " in ", __t2, ") {\n", __body12, __ind7, "}\n")
+    if target == "py":
+      return cat(__ind7, "for ", k, " in ", __t2, ":\n", __body12)
+    else:
+      return cat(__ind7, "for (", k, " in ", __t2, ") {\n", __body12, __ind7, "}\n")
 setenv("%for", {"_stash": True, "special": __f12, "stmt": True, "tr": True})
 def __f13(form):
   __e8 = unique("e")
@@ -1110,7 +1105,7 @@ def __f26():
   __c7 = ""
   ____o10 = __forms3
   __k16 = None
-  for (__k16 in ____o10) {
+  for __k16 in ____o10:
     __v9 = ____o10[__k16]
 
     if numeric63(__k16):
@@ -1121,7 +1116,6 @@ def __f26():
     if number63(__k17):
       __s8 = cat(__s8, __c7, compile(__v9))
       __c7 = ", "
-  }
   return cat(__open1, __s8, __close1)
 setenv("%array", {"_stash": True, "special": __f26})
 def __f27():
@@ -1136,7 +1130,7 @@ def __f27():
   __sep1 = __e65
   ____o12 = pair(__forms5)
   __k21 = None
-  for (__k21 in ____o12) {
+  for __k21 in ____o12:
     __v12 = ____o12[__k21]
 
     if numeric63(__k21):
@@ -1152,7 +1146,6 @@ def __f27():
         error(cat("Illegal key: ", str(__k23)))
       __s10 = cat(__s10, __c9, key(__k23), __sep1, compile(__v13))
       __c9 = ", "
-  }
   return cat(__s10, "}")
 setenv("%object", {"_stash": True, "special": __f27})
 def __f28():

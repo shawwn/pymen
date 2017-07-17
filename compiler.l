@@ -662,6 +662,8 @@
         body (with-indent (compile form :stmt)))
     (if (= target 'lua)
         (cat ind "for " k " in next, " t " do\n" body ind "end\n")
+        (= target 'py)
+        (cat ind "for " k " in " t ":\n" body)
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
 
 (define-special %try (form) :stmt :tr
