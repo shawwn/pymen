@@ -18,7 +18,13 @@
 
 (define-global array? (x)
   (target js: ((idx Array isArray) x)
-          lua: (obj? x)))
+          py: (or (isinstance x |list|)
+                  (isinstance x |tuple|))
+          lua: (= (type x) 'table)))
+
+(target py:
+  (define-global indices (x)
+    (if (isinstance x dict) x (xrange (len x)))))
 
 (define-global array (x)
   (if (array? x) x
@@ -44,10 +50,10 @@
 
 (define-global # (x)
   (target lua: |#x|
-          js: (if (or (string? x)
-                      (array? x))
-                  (idx x length)
-                (length x))))
+    (if (or (string? x)
+            (array? x))
+        (target js: (idx x length) py: (|len| x))
+      (length x))))
 
 (define-global none? (x) (= (# x) 0))
 (define-global some? (x) (> (# x) 0))
@@ -67,8 +73,7 @@
   (and (is? x)
        (target lua: (= (type x) 'table)
                js: (= (type x) 'object)
-               py: (or (isinstance x |dict|)
-                       (isinstance x |list|)))))
+               py: (isinstance x |dict|))))
 
 (define-global atom? (x)
   (or (nil? x) (string? x) (number? x) (boolean? x)))

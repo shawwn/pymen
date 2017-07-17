@@ -77,7 +77,7 @@
 
 (define-macro arguments% (from)
   `(target js: ((idx (idx (idx Array prototype) slice) call) arguments ,from)
-           py: |_rest|
+           py: (list |_rest|)
            lua: (list |...|)))
 
 (define-global bind* (args body)
@@ -311,10 +311,14 @@
 (define-global infix-operator? (x)
   (and (obj? x) (infix? (hd x))))
 
-(define-global compile-args (args)
+(define-global compile-args (args default?)
   (let (s "(" c "")
     (step x args
       (cat! s c (compile x))
+      (when (and (= target 'py)
+                 default?
+                 (not (id-literal? x)))
+        (cat! s "=None"))
       (set c ", "))
     (cat s ")")))
 
@@ -405,7 +409,7 @@
                        (get args 'rest))
                   `(,@args |*_rest| |**_params|)
                 args)
-        args (compile-args args1)
+        args (compile-args args1 true)
         body (compile-body body)
         ind (indentation)
         p (if prefix (cat prefix " ") "")
@@ -666,7 +670,7 @@
     (if (target? 'lua)
         (cat ind "for " k " in next, " t " do\n" body ind "end\n")
         (target? 'py)
-        (cat ind "for " k " in " t ":\n" body)
+        (cat ind "for " k " in indices(" t "):\n" body)
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
 
 (define-special %try (form) :stmt :tr
@@ -778,9 +782,9 @@
 (define-special %literal args
   (apply cat (map compile args)))
 
-(define-special global args :stmt :tr
+(define-special global (x) :stmt :tr
   (if (target? 'py)
-      (cat (indentation) "global " (inner (compile-args args)) "\n")
+      (cat (indentation) "global " (compile x) "\n")
     ""))
 
 (define-special import (x) :stmt

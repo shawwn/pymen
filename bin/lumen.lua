@@ -22,7 +22,7 @@ function has63(l, k)
   return is63(l[k])
 end
 function array63(x)
-  return obj63(x)
+  return type(x) == "table"
 end
 function array(x)
   if array63(x) then

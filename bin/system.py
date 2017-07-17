@@ -1,26 +1,26 @@
-def read_file(path):
+def read_file(path=None):
   pass
-def write_file(path, data):
+def write_file(path=None, data=None):
   pass
-def file_exists63(path):
+def file_exists63(path=None):
   pass
-def directory_exists63(path):
+def directory_exists63(path=None):
   pass
 
 def path_join(*_rest, **_params):
-  __parts = unstash(_rest)
-  def __f(x, y):
+  __parts = unstash([_rest])
+  def __f(x=None, y=None):
     return cat(x, path_separator, y)
   return reduce(__f, __parts) or ""
-def get_environment_variable(name):
+def get_environment_variable(name=None):
   pass
-def write(x):
+def write(x=None):
   pass
-def exit(code):
+def exit(code=None):
   pass
 
-def reload(module):
+def reload(module=None):
   delete 
   return require(module)
-def run(command):
+def run(command=None):
   pass

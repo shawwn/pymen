@@ -1,20 +1,20 @@
 delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
 whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
-def stream(_str, more):
+def stream(_str=None, more=None):
   return {"pos": 0, "string": _str, "len": _35(_str), "more": more}
-def peek_char(s):
+def peek_char(s=None):
   ____id = s
   __pos = ____id["pos"]
   __len = ____id["len"]
   __string = ____id["string"]
   if __pos < __len:
     return char(__string, __pos)
-def read_char(s):
+def read_char(s=None):
   __c = peek_char(s)
   if __c:
     s["pos"] = s["pos"] + 1
     return __c
-def skip_non_code(s):
+def skip_non_code(s=None):
   while True:
     __c1 = peek_char(s)
     if nil63(__c1):
@@ -31,14 +31,14 @@ def skip_non_code(s):
           break
 read_table = {}
 eof = {}
-def read(s):
+def read(s=None):
   skip_non_code(s)
   __c2 = peek_char(s)
   if is63(__c2):
     return (read_table[__c2] or read_table[""])(s)
   else:
     return eof
-def read_all(s):
+def read_all(s=None):
   __l = []
   while True:
     __form = read(s)
@@ -46,15 +46,15 @@ def read_all(s):
       break
     add(__l, __form)
   return __l
-def read_string(_str, more):
+def read_string(_str=None, more=None):
   __x = read(stream(_str, more))
   if not( __x == eof):
     return __x
-def key63(atom):
+def key63(atom=None):
   return string63(atom) and _35(atom) > 1 and char(atom, edge(atom)) == ":"
-def flag63(atom):
+def flag63(atom=None):
   return string63(atom) and _35(atom) > 1 and char(atom, 0) == ":"
-def expected(s, c):
+def expected(s=None, c=None):
   ____id1 = s
   __more = ____id1["more"]
   __pos1 = ____id1["pos"]
@@ -66,13 +66,13 @@ def expected(s, c):
     error(cat("Expected ", c, " at ", __pos1))
     __e = None
   return __e
-def wrap(s, x):
+def wrap(s=None, x=None):
   __y = read(s)
   if __y == s["more"]:
     return __y
   else:
     return [x, __y]
-def hex_prefix63(_str):
+def hex_prefix63(_str=None):
 
   if code(_str, 0) == 45:
     __e1 = 1
@@ -88,13 +88,13 @@ def hex_prefix63(_str):
   else:
     __e2 = __id3
   return __e2
-def maybe_number(_str):
+def maybe_number(_str=None):
   if hex_prefix63(_str):
     if number_code63(code(_str, edge(_str))):
       return number(_str)
-def real63(x):
+def real63(x=None):
   return number63(x) and not nan63(x) and not inf63(x)
-def __f(s):
+def __f(s=None):
   ___str = ""
   while True:
     __c3 = peek_char(s)
@@ -114,7 +114,7 @@ def __f(s):
       else:
         return ___str
 read_table[""] = __f
-def __f1(s):
+def __f1(s=None):
   read_char(s)
   __r16 = None
   __l1 = []
@@ -142,10 +142,10 @@ def __f1(s):
             add(__l1, __x2)
   return __r16
 read_table["("] = __f1
-def __f2(s):
+def __f2(s=None):
   error(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f2
-def __f3(s):
+def __f3(s=None):
   read_char(s)
   __r19 = None
   ___str1 = "\""
@@ -162,7 +162,7 @@ def __f3(s):
         ___str1 = cat(___str1, read_char(s))
   return __r19
 read_table["\""] = __f3
-def __f4(s):
+def __f4(s=None):
   read_char(s)
   __r21 = None
   ___str2 = "|"
@@ -177,15 +177,15 @@ def __f4(s):
         ___str2 = cat(___str2, read_char(s))
   return __r21
 read_table["|"] = __f4
-def __f5(s):
+def __f5(s=None):
   read_char(s)
   return wrap(s, "quote")
 read_table["'"] = __f5
-def __f6(s):
+def __f6(s=None):
   read_char(s)
   return wrap(s, "quasiquote")
 read_table["`"] = __f6
-def __f7(s):
+def __f7(s=None):
   read_char(s)
   if peek_char(s) == "@":
     read_char(s)
