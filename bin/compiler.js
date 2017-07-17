@@ -465,14 +465,18 @@ unique = function (x) {
   }
 };
 key = function (k) {
-  var __i12 = inner(k);
-  if (valid_id63(__i12)) {
-    return __i12;
+  if (target === "py") {
+    return k;
   } else {
-    if (target === "js") {
-      return k;
+    var __i12 = inner(k);
+    if (valid_id63(__i12)) {
+      return __i12;
     } else {
-      return "[" + k + "]";
+      if (target === "js") {
+        return k;
+      } else {
+        return "[" + k + "]";
+      }
     }
   }
 };

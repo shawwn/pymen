@@ -262,10 +262,11 @@
             (cat "__" x))))))
 
 (define-global key (k)
-  (let i (inner k)
-    (if (valid-id? i) i
-        (= target 'js) k
-      (cat "[" k "]"))))
+  (if (= target 'py) k
+    (let i (inner k)
+      (if (valid-id? i) i
+          (= target 'js) k
+        (cat "[" k "]")))))
 
 (define-global mapo (f t)
   (with o ()

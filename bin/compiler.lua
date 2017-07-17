@@ -423,14 +423,18 @@ function unique(x)
   end
 end
 function key(k)
-  local __i12 = inner(k)
-  if valid_id63(__i12) then
-    return __i12
+  if target == "py" then
+    return k
   else
-    if target == "js" then
-      return k
+    local __i12 = inner(k)
+    if valid_id63(__i12) then
+      return __i12
     else
-      return "[" .. k .. "]"
+      if target == "js" then
+        return k
+      else
+        return "[" .. k .. "]"
+      end
     end
   end
 end

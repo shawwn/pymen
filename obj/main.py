@@ -21,7 +21,7 @@ local eval_print = function (form)
 
         __e = __e1
 
-      return {stack: debug.traceback(), message: __e}
+      return {"stack": debug.traceback(), "message": __e}
 
   end
   local ____id = [xpcall(__f, __f1)]
@@ -54,7 +54,7 @@ compile_file = function (path)
   local __s = reader.stream(system["read-file"](path))
   local __body = reader["read-all"](__s)
   local __form1 = compiler.expand(join(["do"], __body))
-  return compiler.compile(__form1, {_stash: true, stmt: true})
+  return compiler.compile(__form1, {"_stash": true, "stmt": true})
 end
 _load = function (path)
   local __previous = target
