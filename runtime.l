@@ -16,8 +16,24 @@
   (target js: ((get l 'hasOwnProperty) k)
           lua: (is? (get l k))))
 
+(define-global array? (x)
+  (target js: ((get Array 'isArray) x)
+          lua: (obj? x)))
+
+(define-global length (x)
+  (with n -1
+    (each (k v) x
+      (when (number? k)
+        (target lua: (dec k))
+        (if (> k n) (set n k))))
+    (inc n)))
+
 (define-global # (x)
-  (target js: (or (get x 'length) 0) lua: |#x|))
+  (target lua: |#x|
+          js: (if (or (string? x)
+                      (array? x))
+                  (get x 'length)
+                (length x))))
 
 (define-global none? (x) (= (# x) 0))
 (define-global some? (x) (> (# x) 0))
@@ -55,7 +71,7 @@
           lua: ((get string 'sub) s (+ from 1) upto)))
 
 (define-global dupe (x)
-  (target js: (if ((get Array 'isArray) x) () (obj))
+  (target js: (if (array? x) () (obj))
           lua: ()))
 
 (define-global cut (x from upto)

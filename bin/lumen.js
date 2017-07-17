@@ -22,8 +22,37 @@ either = function (x, y) {
 has63 = function (l, k) {
   return l.hasOwnProperty(k);
 };
+array63 = function (x) {
+  return Array.isArray(x);
+};
+length = function (x) {
+  var __n = -1;
+  var ____o = x;
+  var __k = undefined;
+  for (__k in ____o) {
+    var __v = ____o[__k];
+    var __e;
+    if (numeric63(__k)) {
+      __e = parseInt(__k);
+    } else {
+      __e = __k;
+    }
+    var __k1 = __e;
+    if (number63(__k1)) {
+      if (__k1 > __n) {
+        __n = __k1;
+      }
+    }
+  }
+  __n = __n + 1;
+  return __n;
+};
 _35 = function (x) {
-  return x.length || 0;
+  if (string63(x) || array63(x)) {
+    return x.length;
+  } else {
+    return length(x);
+  }
 };
 none63 = function (x) {
   return _35(x) === 0;
@@ -74,7 +103,7 @@ clip = function (s, from, upto) {
   return s.substring(from, upto);
 };
 dupe = function (x) {
-  if (Array.isArray(x)) {
+  if (array63(x)) {
     return [];
   } else {
     return {};
@@ -83,45 +112,26 @@ dupe = function (x) {
 cut = function (x, from, upto) {
   var __l = dupe(x);
   var __j = 0;
-  var __e;
-  if (nil63(from) || from < 0) {
-    __e = 0;
-  } else {
-    __e = from;
-  }
-  var __i = __e;
-  var __n = _35(x);
   var __e1;
-  if (nil63(upto) || upto > __n) {
-    __e1 = __n;
+  if (nil63(from) || from < 0) {
+    __e1 = 0;
   } else {
-    __e1 = upto;
+    __e1 = from;
   }
-  var __upto = __e1;
-  while (__i < __upto) {
-    __l[__j] = x[__i];
-    __i = __i + 1;
+  var __i1 = __e1;
+  var __n2 = _35(x);
+  var __e2;
+  if (nil63(upto) || upto > __n2) {
+    __e2 = __n2;
+  } else {
+    __e2 = upto;
+  }
+  var __upto = __e2;
+  while (__i1 < __upto) {
+    __l[__j] = x[__i1];
+    __i1 = __i1 + 1;
     __j = __j + 1;
   }
-  var ____o = x;
-  var __k = undefined;
-  for (__k in ____o) {
-    var __v = ____o[__k];
-    var __e2;
-    if (numeric63(__k)) {
-      __e2 = parseInt(__k);
-    } else {
-      __e2 = __k;
-    }
-    var __k1 = __e2;
-    if (! number63(__k1)) {
-      __l[__k1] = __v;
-    }
-  }
-  return __l;
-};
-keys = function (x) {
-  var __t = dupe(x);
   var ____o1 = x;
   var __k2 = undefined;
   for (__k2 in ____o1) {
@@ -134,7 +144,26 @@ keys = function (x) {
     }
     var __k3 = __e3;
     if (! number63(__k3)) {
-      __t[__k3] = __v1;
+      __l[__k3] = __v1;
+    }
+  }
+  return __l;
+};
+keys = function (x) {
+  var __t = dupe(x);
+  var ____o2 = x;
+  var __k4 = undefined;
+  for (__k4 in ____o2) {
+    var __v2 = ____o2[__k4];
+    var __e4;
+    if (numeric63(__k4)) {
+      __e4 = parseInt(__k4);
+    } else {
+      __e4 = __k4;
+    }
+    var __k5 = __e4;
+    if (! number63(__k5)) {
+      __t[__k5] = __v2;
     }
   }
   return __t;
@@ -175,10 +204,10 @@ almost = function (l) {
 };
 reverse = function (l) {
   var __l1 = keys(l);
-  var __i3 = edge(l);
-  while (__i3 >= 0) {
-    add(__l1, l[__i3]);
-    __i3 = __i3 - 1;
+  var __i4 = edge(l);
+  while (__i4 >= 0) {
+    add(__l1, l[__i4]);
+    __i4 = __i4 - 1;
   }
   return __l1;
 };
@@ -195,46 +224,46 @@ reduce = function (f, x) {
 };
 join = function () {
   var __ls = unstash(Array.prototype.slice.call(arguments, 0));
-  var __r38 = [];
+  var __r40 = [];
   var ____x1 = __ls;
-  var ____i4 = 0;
-  while (____i4 < _35(____x1)) {
-    var __l11 = ____x1[____i4];
+  var ____i5 = 0;
+  while (____i5 < _35(____x1)) {
+    var __l11 = ____x1[____i5];
     if (__l11) {
-      var __n3 = _35(__r38);
-      var ____o2 = __l11;
-      var __k4 = undefined;
-      for (__k4 in ____o2) {
-        var __v2 = ____o2[__k4];
-        var __e4;
-        if (numeric63(__k4)) {
-          __e4 = parseInt(__k4);
+      var __n5 = _35(__r40);
+      var ____o3 = __l11;
+      var __k6 = undefined;
+      for (__k6 in ____o3) {
+        var __v3 = ____o3[__k6];
+        var __e5;
+        if (numeric63(__k6)) {
+          __e5 = parseInt(__k6);
         } else {
-          __e4 = __k4;
+          __e5 = __k6;
         }
-        var __k5 = __e4;
-        if (number63(__k5)) {
-          __k5 = __k5 + __n3;
+        var __k7 = __e5;
+        if (number63(__k7)) {
+          __k7 = __k7 + __n5;
         }
-        __r38[__k5] = __v2;
+        __r40[__k7] = __v3;
       }
     }
-    ____i4 = ____i4 + 1;
+    ____i5 = ____i5 + 1;
   }
-  return __r38;
+  return __r40;
 };
 find = function (f, t) {
-  var ____o3 = t;
-  var ____i6 = undefined;
-  for (____i6 in ____o3) {
-    var __x2 = ____o3[____i6];
-    var __e5;
-    if (numeric63(____i6)) {
-      __e5 = parseInt(____i6);
+  var ____o4 = t;
+  var ____i7 = undefined;
+  for (____i7 in ____o4) {
+    var __x2 = ____o4[____i7];
+    var __e6;
+    if (numeric63(____i7)) {
+      __e6 = parseInt(____i7);
     } else {
-      __e5 = ____i6;
+      __e6 = ____i7;
     }
-    var ____i61 = __e5;
+    var ____i71 = __e6;
     var __y = f(__x2);
     if (__y) {
       return __y;
@@ -243,14 +272,14 @@ find = function (f, t) {
 };
 first = function (f, l) {
   var ____x3 = l;
-  var ____i7 = 0;
-  while (____i7 < _35(____x3)) {
-    var __x4 = ____x3[____i7];
+  var ____i8 = 0;
+  while (____i8 < _35(____x3)) {
+    var __x4 = ____x3[____i8];
     var __y1 = f(__x4);
     if (__y1) {
       return __y1;
     }
-    ____i7 = ____i7 + 1;
+    ____i8 = ____i8 + 1;
   }
 };
 in63 = function (x, t) {
@@ -260,18 +289,18 @@ in63 = function (x, t) {
 };
 pair = function (l) {
   var __l12 = dupe(l);
-  var __i8 = 0;
-  while (__i8 < _35(l)) {
-    add(__l12, [l[__i8], l[__i8 + 1]]);
-    __i8 = __i8 + 1;
-    __i8 = __i8 + 1;
+  var __i9 = 0;
+  while (__i9 < _35(l)) {
+    add(__l12, [l[__i9], l[__i9 + 1]]);
+    __i9 = __i9 + 1;
+    __i9 = __i9 + 1;
   }
   return __l12;
 };
 sort = function (l, f) {
-  var __e6;
+  var __e7;
   if (f) {
-    __e6 = function (a, b) {
+    __e7 = function (a, b) {
       if (f(a, b)) {
         return -1;
       } else {
@@ -279,35 +308,35 @@ sort = function (l, f) {
       }
     };
   }
-  return l.sort(__e6);
+  return l.sort(__e7);
 };
 map = function (f, x) {
   var __t1 = dupe(x);
   var ____x6 = x;
-  var ____i9 = 0;
-  while (____i9 < _35(____x6)) {
-    var __v3 = ____x6[____i9];
-    var __y2 = f(__v3);
+  var ____i10 = 0;
+  while (____i10 < _35(____x6)) {
+    var __v4 = ____x6[____i10];
+    var __y2 = f(__v4);
     if (is63(__y2)) {
       add(__t1, __y2);
     }
-    ____i9 = ____i9 + 1;
+    ____i10 = ____i10 + 1;
   }
-  var ____o4 = x;
-  var __k6 = undefined;
-  for (__k6 in ____o4) {
-    var __v4 = ____o4[__k6];
-    var __e7;
-    if (numeric63(__k6)) {
-      __e7 = parseInt(__k6);
+  var ____o5 = x;
+  var __k8 = undefined;
+  for (__k8 in ____o5) {
+    var __v5 = ____o5[__k8];
+    var __e8;
+    if (numeric63(__k8)) {
+      __e8 = parseInt(__k8);
     } else {
-      __e7 = __k6;
+      __e8 = __k8;
     }
-    var __k7 = __e7;
-    if (! number63(__k7)) {
-      var __y3 = f(__v4);
+    var __k9 = __e8;
+    if (! number63(__k9)) {
+      var __y3 = f(__v5);
       if (is63(__y3)) {
-        __t1[__k7] = __y3;
+        __t1[__k9] = __y3;
       }
     }
   }
@@ -321,35 +350,35 @@ keep = function (f, x) {
   }, x);
 };
 keys63 = function (t) {
-  var ____o5 = t;
-  var __k8 = undefined;
-  for (__k8 in ____o5) {
-    var __v5 = ____o5[__k8];
-    var __e8;
-    if (numeric63(__k8)) {
-      __e8 = parseInt(__k8);
+  var ____o6 = t;
+  var __k10 = undefined;
+  for (__k10 in ____o6) {
+    var __v6 = ____o6[__k10];
+    var __e9;
+    if (numeric63(__k10)) {
+      __e9 = parseInt(__k10);
     } else {
-      __e8 = __k8;
+      __e9 = __k10;
     }
-    var __k9 = __e8;
-    if (! number63(__k9)) {
+    var __k11 = __e9;
+    if (! number63(__k11)) {
       return true;
     }
   }
   return false;
 };
 empty63 = function (t) {
-  var ____o6 = t;
-  var ____i12 = undefined;
-  for (____i12 in ____o6) {
-    var __x7 = ____o6[____i12];
-    var __e9;
-    if (numeric63(____i12)) {
-      __e9 = parseInt(____i12);
+  var ____o7 = t;
+  var ____i13 = undefined;
+  for (____i13 in ____o7) {
+    var __x7 = ____o7[____i13];
+    var __e10;
+    if (numeric63(____i13)) {
+      __e10 = parseInt(____i13);
     } else {
-      __e9 = ____i12;
+      __e10 = ____i13;
     }
-    var ____i121 = __e9;
+    var ____i131 = __e10;
     return false;
   }
   return true;
@@ -357,19 +386,19 @@ empty63 = function (t) {
 stash = function (args) {
   if (keys63(args)) {
     var __p = dupe(args);
-    var ____o7 = args;
-    var __k10 = undefined;
-    for (__k10 in ____o7) {
-      var __v6 = ____o7[__k10];
-      var __e10;
-      if (numeric63(__k10)) {
-        __e10 = parseInt(__k10);
+    var ____o8 = args;
+    var __k12 = undefined;
+    for (__k12 in ____o8) {
+      var __v7 = ____o8[__k12];
+      var __e11;
+      if (numeric63(__k12)) {
+        __e11 = parseInt(__k12);
       } else {
-        __e10 = __k10;
+        __e11 = __k12;
       }
-      var __k11 = __e10;
-      if (! number63(__k11)) {
-        __p[__k11] = __v6;
+      var __k13 = __e11;
+      if (! number63(__k13)) {
+        __p[__k13] = __v7;
       }
     }
     __p._stash = true;
@@ -384,19 +413,19 @@ unstash = function (args) {
     var __l2 = last(args);
     if (obj63(__l2) && __l2._stash) {
       var __args1 = almost(args);
-      var ____o8 = __l2;
-      var __k12 = undefined;
-      for (__k12 in ____o8) {
-        var __v7 = ____o8[__k12];
-        var __e11;
-        if (numeric63(__k12)) {
-          __e11 = parseInt(__k12);
+      var ____o9 = __l2;
+      var __k14 = undefined;
+      for (__k14 in ____o9) {
+        var __v8 = ____o9[__k14];
+        var __e12;
+        if (numeric63(__k14)) {
+          __e12 = parseInt(__k14);
         } else {
-          __e11 = __k12;
+          __e12 = __k14;
         }
-        var __k13 = __e11;
-        if (!( __k13 === "_stash")) {
-          __args1[__k13] = __v7;
+        var __k15 = __e12;
+        if (!( __k15 === "_stash")) {
+          __args1[__k15] = __v8;
         }
       }
       return __args1;
@@ -407,19 +436,19 @@ unstash = function (args) {
 };
 destash33 = function (l, args1) {
   if (obj63(l) && l._stash) {
-    var ____o9 = l;
-    var __k14 = undefined;
-    for (__k14 in ____o9) {
-      var __v8 = ____o9[__k14];
-      var __e12;
-      if (numeric63(__k14)) {
-        __e12 = parseInt(__k14);
+    var ____o10 = l;
+    var __k16 = undefined;
+    for (__k16 in ____o10) {
+      var __v9 = ____o10[__k16];
+      var __e13;
+      if (numeric63(__k16)) {
+        __e13 = parseInt(__k16);
       } else {
-        __e12 = __k14;
+        __e13 = __k16;
       }
-      var __k15 = __e12;
-      if (!( __k15 === "_stash")) {
-        args1[__k15] = __v8;
+      var __k17 = __e13;
+      if (!( __k17 === "_stash")) {
+        args1[__k17] = __v9;
       }
     }
   } else {
@@ -427,9 +456,9 @@ destash33 = function (l, args1) {
   }
 };
 search = function (s, pattern, start) {
-  var __i16 = s.indexOf(pattern, start);
-  if (__i16 >= 0) {
-    return __i16;
+  var __i17 = s.indexOf(pattern, start);
+  if (__i17 >= 0) {
+    return __i17;
   }
 };
 split = function (s, sep) {
@@ -437,14 +466,14 @@ split = function (s, sep) {
     return [];
   } else {
     var __l3 = [];
-    var __n12 = _35(sep);
+    var __n14 = _35(sep);
     while (true) {
-      var __i17 = search(s, sep);
-      if (nil63(__i17)) {
+      var __i18 = search(s, sep);
+      if (nil63(__i18)) {
         break;
       } else {
-        add(__l3, clip(s, 0, __i17));
-        s = clip(s, __i17 + __n12);
+        add(__l3, clip(s, 0, __i18));
+        s = clip(s, __i18 + __n14);
       }
     }
     add(__l3, s);
@@ -488,14 +517,14 @@ _37 = function () {
   }, reverse(__xs5)), 0);
 };
 var pairwise = function (f, xs) {
-  var __i18 = 0;
-  while (__i18 < edge(xs)) {
-    var __a = xs[__i18];
-    var __b = xs[__i18 + 1];
+  var __i19 = 0;
+  while (__i19 < edge(xs)) {
+    var __a = xs[__i19];
+    var __b = xs[__i19 + 1];
     if (! f(__a, __b)) {
       return false;
     }
-    __i18 = __i18 + 1;
+    __i19 = __i19 + 1;
   }
   return true;
 };
@@ -530,22 +559,22 @@ _6261 = function () {
   }, __xs10);
 };
 number = function (s) {
-  var __n13 = parseFloat(s);
-  if (! isNaN(__n13)) {
-    return __n13;
+  var __n15 = parseFloat(s);
+  if (! isNaN(__n15)) {
+    return __n15;
   }
 };
 number_code63 = function (n) {
   return n > 47 && n < 58;
 };
 numeric63 = function (s) {
-  var __n14 = _35(s);
-  var __i19 = 0;
-  while (__i19 < __n14) {
-    if (! number_code63(code(s, __i19))) {
+  var __n16 = _35(s);
+  var __i20 = 0;
+  while (__i20 < __n16) {
+    if (! number_code63(code(s, __i20))) {
       return false;
     }
-    __i19 = __i19 + 1;
+    __i20 = __i20 + 1;
   }
   return some63(s);
 };
@@ -554,36 +583,36 @@ var tostring = function (x) {
 };
 escape = function (s) {
   var __s1 = "\"";
-  var __i20 = 0;
-  while (__i20 < _35(s)) {
-    var __c = char(s, __i20);
-    var __e13;
+  var __i21 = 0;
+  while (__i21 < _35(s)) {
+    var __c = char(s, __i21);
+    var __e14;
     if (__c === "\n") {
-      __e13 = "\\n";
+      __e14 = "\\n";
     } else {
-      var __e14;
+      var __e15;
       if (__c === "\r") {
-        __e14 = "\\r";
+        __e15 = "\\r";
       } else {
-        var __e15;
+        var __e16;
         if (__c === "\"") {
-          __e15 = "\\\"";
+          __e16 = "\\\"";
         } else {
-          var __e16;
+          var __e17;
           if (__c === "\\") {
-            __e16 = "\\\\";
+            __e17 = "\\\\";
           } else {
-            __e16 = __c;
+            __e17 = __c;
           }
-          __e15 = __e16;
+          __e16 = __e17;
         }
-        __e14 = __e15;
+        __e15 = __e16;
       }
-      __e13 = __e14;
+      __e14 = __e15;
     }
-    var __c1 = __e13;
+    var __c1 = __e14;
     __s1 = __s1 + __c1;
-    __i20 = __i20 + 1;
+    __i21 = __i21 + 1;
   }
   return __s1 + "\"";
 };
@@ -628,37 +657,37 @@ str = function (x, stack) {
                       var __ks = [];
                       var __l4 = stack || [];
                       add(__l4, x);
-                      var ____o10 = x;
-                      var __k16 = undefined;
-                      for (__k16 in ____o10) {
-                        var __v9 = ____o10[__k16];
-                        var __e17;
-                        if (numeric63(__k16)) {
-                          __e17 = parseInt(__k16);
+                      var ____o11 = x;
+                      var __k18 = undefined;
+                      for (__k18 in ____o11) {
+                        var __v10 = ____o11[__k18];
+                        var __e18;
+                        if (numeric63(__k18)) {
+                          __e18 = parseInt(__k18);
                         } else {
-                          __e17 = __k16;
+                          __e18 = __k18;
                         }
-                        var __k17 = __e17;
-                        if (number63(__k17)) {
-                          __xs11[__k17] = str(__v9, __l4);
+                        var __k19 = __e18;
+                        if (number63(__k19)) {
+                          __xs11[__k19] = str(__v10, __l4);
                         } else {
-                          add(__ks, __k17 + ":");
-                          add(__ks, str(__v9, __l4));
+                          add(__ks, __k19 + ":");
+                          add(__ks, str(__v10, __l4));
                         }
                       }
                       drop(__l4);
-                      var ____o11 = join(__xs11, __ks);
-                      var ____i22 = undefined;
-                      for (____i22 in ____o11) {
-                        var __v10 = ____o11[____i22];
-                        var __e18;
-                        if (numeric63(____i22)) {
-                          __e18 = parseInt(____i22);
+                      var ____o12 = join(__xs11, __ks);
+                      var ____i23 = undefined;
+                      for (____i23 in ____o12) {
+                        var __v11 = ____o12[____i23];
+                        var __e19;
+                        if (numeric63(____i23)) {
+                          __e19 = parseInt(____i23);
                         } else {
-                          __e18 = ____i22;
+                          __e19 = ____i23;
                         }
-                        var ____i221 = __e18;
-                        __s = __s + __sp + __v10;
+                        var ____i231 = __e19;
+                        __s = __s + __sp + __v11;
                         __sp = " ";
                       }
                       return __s + ")";
@@ -678,41 +707,41 @@ apply = function (f, args) {
   return f.apply(f, __args);
 };
 call = function (f) {
-  var ____r75 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __f = destash33(f, ____r75);
-  var ____id = ____r75;
+  var ____r77 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __f = destash33(f, ____r77);
+  var ____id = ____r77;
   var __args11 = cut(____id, 0);
   return apply(__f, __args11);
 };
 setenv = function (k) {
-  var ____r76 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __k18 = destash33(k, ____r76);
-  var ____id1 = ____r76;
+  var ____r78 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __k20 = destash33(k, ____r78);
+  var ____id1 = ____r78;
   var __keys = cut(____id1, 0);
-  if (string63(__k18)) {
-    var __e19;
+  if (string63(__k20)) {
+    var __e20;
     if (__keys.toplevel) {
-      __e19 = hd(environment);
+      __e20 = hd(environment);
     } else {
-      __e19 = last(environment);
+      __e20 = last(environment);
     }
-    var __frame = __e19;
-    var __entry = __frame[__k18] || {};
-    var ____o12 = __keys;
-    var __k19 = undefined;
-    for (__k19 in ____o12) {
-      var __v11 = ____o12[__k19];
-      var __e20;
-      if (numeric63(__k19)) {
-        __e20 = parseInt(__k19);
+    var __frame = __e20;
+    var __entry = __frame[__k20] || {};
+    var ____o13 = __keys;
+    var __k21 = undefined;
+    for (__k21 in ____o13) {
+      var __v12 = ____o13[__k21];
+      var __e21;
+      if (numeric63(__k21)) {
+        __e21 = parseInt(__k21);
       } else {
-        __e20 = __k19;
+        __e21 = __k21;
       }
-      var __k20 = __e20;
-      __entry[__k20] = __v11;
+      var __k22 = __e21;
+      __entry[__k22] = __v12;
     }
-    __frame[__k18] = __entry;
-    return __frame[__k18];
+    __frame[__k20] = __entry;
+    return __frame[__k20];
   }
 };
 print = function (x) {
