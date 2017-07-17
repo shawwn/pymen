@@ -40,9 +40,9 @@
 
 (define-global load (path)
   (let previous target
-    (set target (language))
+    (target! (language))
     (let code (compile-file path)
-      (set target previous)
+      (target! previous)
       ((idx compiler run) code))))
 
 (define script-file? (path)

@@ -603,9 +603,9 @@
 (define-global eval (form)
   (let previous target
     (global target)
-    (set target (language))
+    (target! (language))
     (let code (compile (expand `(set %result ,form)))
-      (set target previous)
+      (target! previous)
       (run code)
       %result)))
 

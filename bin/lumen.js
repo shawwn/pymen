@@ -1215,17 +1215,20 @@ setenv("target", {_stash: true, macro: function () {
 setenv("target?", {_stash: true, macro: function (x) {
   return ["=", "target", x];
 }});
+setenv("target!", {_stash: true, macro: function (x) {
+  return ["set", "target", x];
+}});
 setenv("join!", {_stash: true, macro: function (a) {
-  var ____r71 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __a3 = destash33(a, ____r71);
-  var ____id59 = ____r71;
+  var ____r73 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __a3 = destash33(a, ____r73);
+  var ____id59 = ____r73;
   var __bs5 = cut(____id59, 0);
   return ["set", __a3, join(["join", __a3], __bs5)];
 }});
 setenv("cat!", {_stash: true, macro: function (a) {
-  var ____r73 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __a5 = destash33(a, ____r73);
-  var ____id61 = ____r73;
+  var ____r75 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __a5 = destash33(a, ____r75);
+  var ____id61 = ____r75;
   var __bs7 = cut(____id61, 0);
   return ["set", __a5, join(["cat", __a5], __bs7)];
 }});
@@ -1248,8 +1251,8 @@ setenv("dec", {_stash: true, macro: function (n, by) {
   return ["set", n, ["-", n, __e13]];
 }});
 setenv("with-indent", {_stash: true, macro: function (form) {
-  var __x327 = unique("x");
-  return ["do", ["inc", "indent-level"], ["with", __x327, form, ["dec", "indent-level"]]];
+  var __x329 = unique("x");
+  return ["do", ["inc", "indent-level"], ["with", __x329, form, ["dec", "indent-level"]]];
 }});
 setenv("export", {_stash: true, macro: function () {
   var __names5 = unstash(Array.prototype.slice.call(arguments, 0));

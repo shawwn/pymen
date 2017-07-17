@@ -204,6 +204,9 @@
 (define-macro target? (x)
   `(= target ,x))
 
+(define-macro target! (x)
+  `(set target ,x))
+
 (define-macro join! (a rest: bs)
   `(set ,a (join ,a ,@bs)))
 
