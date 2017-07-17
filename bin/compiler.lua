@@ -448,40 +448,40 @@ function mapo(f, t)
   end
   return __o6
 end
-local ____x68 = {}
-local ____x69 = {}
+local ____x68 = object({})
+local ____x69 = object({})
 ____x69.js = "!"
 ____x69.lua = "not"
 ____x68["not"] = ____x69
-local ____x70 = {}
+local ____x70 = object({})
 ____x70["*"] = true
 ____x70["/"] = true
 ____x70["%"] = true
-local ____x71 = {}
-local ____x72 = {}
+local ____x71 = object({})
+local ____x72 = object({})
 ____x72.js = "+"
 ____x72.lua = ".."
 ____x71.cat = ____x72
-local ____x73 = {}
+local ____x73 = object({})
 ____x73["+"] = true
 ____x73["-"] = true
-local ____x74 = {}
+local ____x74 = object({})
 ____x74["<"] = true
 ____x74[">"] = true
 ____x74["<="] = true
 ____x74[">="] = true
-local ____x75 = {}
-local ____x76 = {}
+local ____x75 = object({})
+local ____x76 = object({})
 ____x76.js = "==="
 ____x76.lua = "=="
 ____x75["="] = ____x76
-local ____x77 = {}
-local ____x78 = {}
+local ____x77 = object({})
+local ____x78 = object({})
 ____x78.js = "&&"
 ____x78.lua = "and"
 ____x77["and"] = ____x78
-local ____x79 = {}
-local ____x80 = {}
+local ____x79 = object({})
+local ____x80 = object({})
 ____x80.js = "||"
 ____x80.lua = "or"
 ____x79["or"] = ____x80

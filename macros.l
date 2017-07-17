@@ -28,7 +28,7 @@
             (set (get l k) v)
           (add forms `(set (get ,x ',k) ,v))))
       (if (some? forms)
-          `(let ,x (%array ,@l) ,@forms ,x)
+          `(let ,x (object (%array ,@l)) ,@forms ,x)
         `(%array ,@l)))))
 
 (define-macro if branches

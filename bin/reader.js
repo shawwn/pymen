@@ -170,9 +170,11 @@ read_table["("] = function (s) {
         if (key63(__x2)) {
           var __k = clip(__x2, 0, edge(__x2));
           var __v = read(s);
+          __l1 = object(__l1);
           __l1[__k] = __v;
         } else {
           if (flag63(__x2)) {
+            __l1 = object(__l1);
             __l1[clip(__x2, 1)] = true;
           } else {
             add(__l1, __x2);

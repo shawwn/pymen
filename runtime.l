@@ -20,6 +20,20 @@
   (target js: ((get Array 'isArray) x)
           lua: (obj? x)))
 
+(define-global array (x)
+  (if (array? x) x
+    (with l ()
+      (each (k v) x
+        (when (number? k)
+          (set (get l k) v))))))
+
+(define-global object (x)
+  (if (array? x)
+      (with l (obj)
+        (each (k v) x
+          (set (get l k) v)))
+    x))
+
 (define-global length (x)
   (with n -1
     (each (k v) x
@@ -117,7 +131,10 @@
   (and (string? x) (= (char x 0) "|")))
 
 (define-global add (l x)
-  (target js: (do ((get l 'push) x) nil)
+  (target js: (do (if (array? l)
+                      ((get l 'push) x)
+                    (set (at l (# l)) x))
+                  nil)
           lua: ((get table 'insert) l x)))
 
 (define-global drop (l)
@@ -148,7 +165,7 @@
       (when l
         (let n (# r)
           (each (k v) l
-            (if (number? k) (inc k n))
+            (if (number? k) (inc k n) (set l (object l)))
             (set (get r k) v)))))))
 
 (define-global find (f t)
@@ -203,19 +220,19 @@
 
 (define-global stash (args)
   (when (keys? args)
-    (let p (dupe args)
+    (let p (obj)
       (each (k v) args
         (unless (number? k)
           (set (get p k) v)))
       (set (get p '_stash) true)
       (add args p)))
-  args)
+  (if (array? args) args (array args)))
 
 (define-global unstash (args)
-  (if (none? args) (dupe args)
+  (if (none? args) (obj)
     (let l (last args)
       (if (and (obj? l) (get l '_stash))
-          (with args1 (almost args)
+          (with args1 (object (almost args))
             (each (k v) l
               (unless (= k '_stash)
                 (set (get args1 k) v))))

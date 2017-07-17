@@ -107,8 +107,8 @@
               (if (key? x)
                   (let (k (clip x 0 (edge x))
                         v (read s))
-                    (set (get l k) v))
-                  (flag? x) (set (get l (clip x 1)) true)
+                    (set l (object l) (get l k) v))
+                  (flag? x) (set l (object l) (get l (clip x 1)) true)
                 (add l x)))))))))
 
 (define-reader (")" s)

@@ -170,9 +170,11 @@ read_table["("] = function (s)
         if key63(__x2) then
           local __k = clip(__x2, 0, edge(__x2))
           local __v = read(s)
+          __l1 = object(__l1)
           __l1[__k] = __v
         else
           if flag63(__x2) then
+            __l1 = object(__l1)
             __l1[clip(__x2, 1)] = true
           else
             add(__l1, __x2)
