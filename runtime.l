@@ -13,11 +13,11 @@
 (define-global either (x y) (if (is? x) x y))
 
 (define-global has? (l k)
-  (target js: ((get l 'hasOwnProperty) k)
+  (target js: ((idx l hasOwnProperty) k)
           lua: (is? (get l k))))
 
 (define-global array? (x)
-  (target js: ((get Array 'isArray) x)
+  (target js: ((idx Array isArray) x)
           lua: (obj? x)))
 
 (define-global array (x)
@@ -46,7 +46,7 @@
   (target lua: |#x|
           js: (if (or (string? x)
                       (array? x))
-                  (get x 'length)
+                  (idx x length)
                 (length x))))
 
 (define-global none? (x) (= (# x) 0))
@@ -81,8 +81,8 @@
   (or (= n inf) (= n -inf)))
 
 (define-global clip (s from upto)
-  (target js: ((get s 'substring) from upto)
-          lua: ((get string 'sub) s (+ from 1) upto)))
+  (target js: ((idx s substring) from upto)
+          lua: ((idx string sub) s (+ from 1) upto)))
 
 (define-global dupe (x)
   (target js: (if (array? x) () (obj))
@@ -117,12 +117,12 @@
 (define-global tl (l) (cut l 1))
 
 (define-global char (s n)
-  (target js: ((get s 'charAt) n) lua: (clip s n (+ n 1))))
+  (target js: ((idx s charAt) n) lua: (clip s n (+ n 1))))
 
 (define-global code (s n)
   (target
-    js: ((get s 'charCodeAt) n)
-    lua: ((get string 'byte) s (if n (+ n 1)))))
+    js: ((idx s charCodeAt) n)
+    lua: ((idx string byte) s (if n (+ n 1)))))
 
 (define-global string-literal? (x)
   (and (string? x) (= (char x 0) "\"")))
@@ -132,14 +132,14 @@
 
 (define-global add (l x)
   (target js: (do (if (array? l)
-                      ((get l 'push) x)
+                      ((idx l push) x)
                     (set (at l (# l)) x))
                   nil)
-          lua: ((get table 'insert) l x)))
+          lua: ((idx table insert) l x)))
 
 (define-global drop (l)
-  (target js: ((get l 'pop))
-          lua: ((get table 'remove) l)))
+  (target js: ((idx l pop))
+          lua: ((idx table remove) l)))
 
 (define-global last (l)
   (at l (edge l)))
@@ -189,8 +189,8 @@
 
 (define-global sort (l f)
   (target
-    lua: (do ((get table 'sort) l f) l)
-    js: ((get l 'sort) (when f (fn (a b) (if (f a b) -1 1))))))
+    lua: (do ((idx table sort) l f) l)
+    js: ((idx l sort) (when f (fn (a b) (if (f a b) -1 1))))))
 
 (define-global map (f x)
   (with t (dupe x)
@@ -247,10 +247,10 @@
 
 (define-global search (s pattern start)
   (target
-    js: (let i ((get s 'indexOf) pattern start)
+    js: (let i ((idx s indexOf) pattern start)
           (if (>= i 0) i))
     lua: (let (start (if start (+ start 1))
-               i ((get string 'find) s pattern start true))
+               i ((idx string find) s pattern start true))
            (and i (- i 1)))))
 
 (define-global split (s sep)
@@ -312,7 +312,7 @@
         (return false))))
   (some? s))
 
-(target js: (define tostring (x) ((get x 'toString))))
+(target js: (define tostring (x) ((idx x toString))))
 
 (define-global escape (s)
   (let s1 "\""
@@ -357,11 +357,11 @@
       (cat s  ")"))))
 
 (target lua:
-  (define values (or unpack (get table 'unpack))))
+  (define values (or unpack (idx table unpack))))
 
 (define-global apply (f args)
   (let args (stash args)
-    (target js: ((get f 'apply) f args)
+    (target js: ((idx f apply) f args)
             lua: (f (values args)))))
 
 (define-global call (f rest: args)
@@ -379,27 +379,27 @@
 
 (target js:
   (define-global print (x)
-    ((get console 'log) x)))
+    ((idx console log) x)))
 
 (define math (target js: Math lua: math))
 
-(define-global abs (get math 'abs))
-(define-global acos (get math 'acos))
-(define-global asin (get math 'asin))
-(define-global atan (get math 'atan))
-(define-global atan2 (get math 'atan2))
-(define-global ceil (get math 'ceil))
-(define-global cos (get math 'cos))
-(define-global floor (get math 'floor))
-(define-global log (get math 'log))
-(define-global log10 (get math 'log10))
-(define-global max (get math 'max))
-(define-global min (get math 'min))
-(define-global pow (get math 'pow))
-(define-global random (get math 'random))
-(define-global sin (get math 'sin))
-(define-global sinh (get math 'sinh))
-(define-global sqrt (get math 'sqrt))
-(define-global tan (get math 'tan))
-(define-global tanh (get math 'tanh))
-(define-global trunc (get math 'floor))
+(define-global abs (idx math abs))
+(define-global acos (idx math acos))
+(define-global asin (idx math asin))
+(define-global atan (idx math atan))
+(define-global atan2 (idx math atan2))
+(define-global ceil (idx math ceil))
+(define-global cos (idx math cos))
+(define-global floor (idx math floor))
+(define-global log (idx math log))
+(define-global log10 (idx math log10))
+(define-global max (idx math max))
+(define-global min (idx math min))
+(define-global pow (idx math pow))
+(define-global random (idx math random))
+(define-global sin (idx math sin))
+(define-global sinh (idx math sinh))
+(define-global sqrt (idx math sqrt))
+(define-global tan (idx math tan))
+(define-global tanh (idx math tanh))
+(define-global trunc (idx math floor))

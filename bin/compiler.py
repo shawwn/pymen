@@ -1,4 +1,3 @@
-reader = require("reader")
 def getenv(k, p):
   if string63(k):
     __i = edge(environment)
@@ -102,7 +101,7 @@ def bind(lh, rh):
         __bs = join(__bs, bind(__k4, __x5))
     return __bs
 def __f2(_from):
-  return [["get", ["get", ["get", "Array", ["quote", "prototype"]], ["quote", "slice"]], ["quote", "call"]], "arguments", _from]
+  return [["idx", ["idx", ["idx", "Array", "prototype"], "slice"], "call"], "arguments", _from]
 setenv("arguments%", {"_stash": True, "macro": __f2})
 def bind42(args, body):
   __args1 = []
@@ -131,9 +130,9 @@ def bind42(args, body):
         if atom63(__v2):
           add(__args1, __v2)
         else:
-          __x30 = unique("x")
-          add(__args1, __x30)
-          __bs1 = join(__bs1, [__v2, __x30])
+          __x24 = unique("x")
+          add(__args1, __x24)
+          __bs1 = join(__bs1, [__v2, __x24])
     if keys63(args):
       __bs1 = join(__bs1, [__r19, rest()])
       __n3 = _35(__args1)
@@ -152,36 +151,36 @@ def can_unquote63(depth):
   return quoting63(depth) and depth == 1
 def quasisplice63(x, depth):
   return can_unquote63(depth) and not atom63(x) and hd(x) == "unquote-splicing"
-def expand_local(__x38):
-  ____id1 = __x38
-  __x39 = ____id1[1]
+def expand_local(__x32):
+  ____id1 = __x32
+  __x33 = ____id1[1]
   __name = ____id1[2]
   __value = ____id1[3]
   setenv(__name, {"_stash": True, "variable": True})
   return ["%local", __name, macroexpand(__value)]
-def expand_function(__x41):
-  ____id2 = __x41
-  __x42 = ____id2[1]
+def expand_function(__x35):
+  ____id2 = __x35
+  __x36 = ____id2[1]
   __args = ____id2[2]
   __body = cut(____id2, 2)
   add(environment, {})
   ____o3 = __args
   ____i5 = None
   for ____i5 in ____o3:
-    ____x43 = ____o3[____i5]
+    ____x37 = ____o3[____i5]
 
     if numeric63(____i5):
       __e28 = parseInt(____i5)
     else:
       __e28 = ____i5
     ____i51 = __e28
-    setenv(____x43, {"_stash": True, "variable": True})
-  ____x44 = join(["%function", __args], macroexpand(__body))
+    setenv(____x37, {"_stash": True, "variable": True})
+  ____x38 = join(["%function", __args], macroexpand(__body))
   drop(environment)
-  return ____x44
-def expand_definition(__x46):
-  ____id3 = __x46
-  __x47 = ____id3[1]
+  return ____x38
+def expand_definition(__x40):
+  ____id3 = __x40
+  __x41 = ____id3[1]
   __name1 = ____id3[2]
   __args11 = ____id3[3]
   __body1 = cut(____id3, 3)
@@ -189,21 +188,21 @@ def expand_definition(__x46):
   ____o4 = __args11
   ____i6 = None
   for ____i6 in ____o4:
-    ____x48 = ____o4[____i6]
+    ____x42 = ____o4[____i6]
 
     if numeric63(____i6):
       __e29 = parseInt(____i6)
     else:
       __e29 = ____i6
     ____i61 = __e29
-    setenv(____x48, {"_stash": True, "variable": True})
-  ____x49 = join([__x47, __name1, __args11], macroexpand(__body1))
+    setenv(____x42, {"_stash": True, "variable": True})
+  ____x43 = join([__x41, __name1, __args11], macroexpand(__body1))
   drop(environment)
-  return ____x49
+  return ____x43
 def expand_macro(form):
   return macroexpand(expand1(form))
-def expand1(__x51):
-  ____id4 = __x51
+def expand1(__x45):
+  ____id4 = __x45
   __name2 = ____id4[1]
   __body2 = cut(____id4, 1)
   return apply(macro_function(__name2), __body2)
@@ -214,20 +213,20 @@ def macroexpand(form):
     if atom63(form):
       return form
     else:
-      __x52 = hd(form)
-      if __x52 == "%local":
+      __x46 = hd(form)
+      if __x46 == "%local":
         return expand_local(form)
       else:
-        if __x52 == "%function":
+        if __x46 == "%function":
           return expand_function(form)
         else:
-          if __x52 == "%global-function":
+          if __x46 == "%global-function":
             return expand_definition(form)
           else:
-            if __x52 == "%local-function":
+            if __x46 == "%local-function":
               return expand_definition(form)
             else:
-              if macro63(__x52):
+              if macro63(__x46):
                 return expand_macro(form)
               else:
                 return map(macroexpand, form)
@@ -251,16 +250,16 @@ def quasiquote_list(form, depth):
         __e31 = quasiexpand(__v4, depth)
       __v5 = __e31
       last(__xs)[__k8] = __v5
-  ____x55 = form
+  ____x49 = form
   ____i8 = 0
-  while ____i8 < _35(____x55):
-    __x56 = ____x55[____i8]
-    if quasisplice63(__x56, depth):
-      __x57 = quasiexpand(__x56[1])
-      add(__xs, __x57)
+  while ____i8 < _35(____x49):
+    __x50 = ____x49[____i8]
+    if quasisplice63(__x50, depth):
+      __x51 = quasiexpand(__x50[1])
+      add(__xs, __x51)
       add(__xs, ["list"])
     else:
-      add(last(__xs), quasiexpand(__x56, depth))
+      add(last(__xs), quasiexpand(__x50, depth))
     ____i8 = ____i8 + 1
   def __f3(x):
     return _35(x) > 1 or not( hd(x) == "list") or keys63(x)
@@ -297,8 +296,8 @@ def quasiexpand(form, depth):
           def __f4(x):
             return quasiexpand(x, depth)
           return map(__f4, form)
-def expand_if(__x61):
-  ____id5 = __x61
+def expand_if(__x55):
+  ____id5 = __x55
   __a = ____id5[1]
   __b1 = ____id5[2]
   __c = cut(____id5, 2)
@@ -357,14 +356,14 @@ def valid_id63(x):
   return some63(x) and x == id(x)
 __names = {}
 def unique(x):
-  __x65 = id(x)
-  if __names[__x65]:
-    __i11 = __names[__x65]
-    __names[__x65] = __names[__x65] + 1
-    return unique(cat(__x65, __i11))
+  __x59 = id(x)
+  if __names[__x59]:
+    __i11 = __names[__x59]
+    __names[__x59] = __names[__x59] + 1
+    return unique(cat(__x59, __i11))
   else:
-    __names[__x65] = 1
-    return cat("__", __x65)
+    __names[__x59] = 1
+    return cat("__", __x59)
 def key(k):
   if target == "py":
     return k
@@ -389,53 +388,53 @@ def mapo(f, t):
     else:
       __e36 = __k9
     __k10 = __e36
-    __x66 = f(__v6)
-    if is63(__x66):
+    __x60 = f(__v6)
+    if is63(__x60):
       add(__o6, literal(__k10))
-      add(__o6, __x66)
+      add(__o6, __x60)
   return __o6
+____x62 = object([])
+____x63 = object([])
+____x63["js"] = "!"
+____x63["lua"] = "not"
+____x63["py"] = "not"
+____x62["not"] = ____x63
+____x64 = object([])
+____x64["*"] = True
+____x64["/"] = True
+____x64["%"] = True
+____x65 = object([])
+____x66 = object([])
+____x66["js"] = "+"
+____x66["lua"] = ".."
+____x65["cat"] = ____x66
+____x67 = object([])
+____x67["+"] = True
+____x67["-"] = True
 ____x68 = object([])
+____x68["<"] = True
+____x68[">"] = True
+____x68["<="] = True
+____x68[">="] = True
 ____x69 = object([])
-____x69["js"] = "!"
-____x69["lua"] = "not"
-____x69["py"] = "not"
-____x68["not"] = ____x69
 ____x70 = object([])
-____x70["*"] = True
-____x70["/"] = True
-____x70["%"] = True
+____x70["js"] = "==="
+____x70["lua"] = "=="
+____x70["py"] = "=="
+____x69["="] = ____x70
 ____x71 = object([])
 ____x72 = object([])
-____x72["js"] = "+"
-____x72["lua"] = ".."
-____x71["cat"] = ____x72
+____x72["js"] = "&&"
+____x72["lua"] = "and"
+____x72["py"] = "and"
+____x71["and"] = ____x72
 ____x73 = object([])
-____x73["+"] = True
-____x73["-"] = True
 ____x74 = object([])
-____x74["<"] = True
-____x74[">"] = True
-____x74["<="] = True
-____x74[">="] = True
-____x75 = object([])
-____x76 = object([])
-____x76["js"] = "==="
-____x76["lua"] = "=="
-____x76["py"] = "=="
-____x75["="] = ____x76
-____x77 = object([])
-____x78 = object([])
-____x78["js"] = "&&"
-____x78["lua"] = "and"
-____x78["py"] = "and"
-____x77["and"] = ____x78
-____x79 = object([])
-____x80 = object([])
-____x80["js"] = "||"
-____x80["lua"] = "or"
-____x80["py"] = "or"
-____x79["or"] = ____x80
-infix = [____x68, ____x70, ____x71, ____x73, ____x74, ____x75, ____x77, ____x79]
+____x74["js"] = "||"
+____x74["lua"] = "or"
+____x74["py"] = "or"
+____x73["or"] = ____x74
+infix = [____x62, ____x64, ____x65, ____x67, ____x68, ____x69, ____x71, ____x73]
 def unary63(form):
   return two63(form) and in63(hd(form), ["not", "-"])
 def index(k):
@@ -457,12 +456,12 @@ def precedence(form):
   return 0
 def getop(op):
   def __f5(level):
-    __x82 = level[op]
-    if __x82 == True:
+    __x76 = level[op]
+    if __x76 == True:
       return op
     else:
-      if is63(__x82):
-        return __x82[target]
+      if is63(__x76):
+        return __x76[target]
   return find(__f5, infix)
 def infix63(x):
   return is63(getop(x))
@@ -471,11 +470,11 @@ def infix_operator63(x):
 def compile_args(args):
   __s1 = "("
   __c2 = ""
-  ____x83 = args
+  ____x77 = args
   ____i15 = 0
-  while ____i15 < _35(____x83):
-    __x84 = ____x83[____i15]
-    __s1 = cat(__s1, __c2, compile(__x84))
+  while ____i15 < _35(____x77):
+    __x78 = ____x77[____i15]
+    __s1 = cat(__s1, __c2, compile(__x78))
     __c2 = ", "
     ____i15 = ____i15 + 1
   return cat(__s1, ")")
@@ -555,9 +554,9 @@ def terminator(stmt63):
       return "\n"
 def compile_special(form, stmt63):
   ____id6 = form
-  __x85 = ____id6[1]
+  __x79 = ____id6[1]
   __args2 = cut(____id6, 1)
-  ____id7 = getenv(__x85)
+  ____id7 = getenv(__x79)
   __special = ____id7["special"]
   __stmt = ____id7["stmt"]
   __self_tr63 = ____id7["tr"]
@@ -609,14 +608,14 @@ def compile_infix(form):
     return cat(__ao, __a2, __ac, " ", __op1, " ", __bo, __b3, __bc)
 def compile_body(body):
   indent_level = indent_level + 1
-  ____x89 = compile(body, {"_stash": True, "stmt": True})
+  ____x83 = compile(body, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __s2 = ____x89
+  __s2 = ____x83
   if target == "py" and none63(__s2):
     indent_level = indent_level + 1
-    ____x90 = cat(indentation(), "pass\n")
+    ____x84 = cat(indentation(), "pass\n")
     indent_level = indent_level - 1
-    return ____x90
+    return ____x84
   else:
     return __s2
 def compile_function(args, body):
@@ -720,11 +719,11 @@ def literal63(form):
 def standalone63(form):
   return not atom63(form) and not infix63(hd(form)) and not literal63(form) and not( "get" == hd(form)) or id_literal63(form)
 def lower_do(args, hoist, stmt63, tail63):
-  ____x99 = almost(args)
+  ____x93 = almost(args)
   ____i17 = 0
-  while ____i17 < _35(____x99):
-    __x100 = ____x99[____i17]
-    ____y = lower(__x100, hoist, stmt63)
+  while ____i17 < _35(____x93):
+    __x94 = ____x93[____i17]
+    ____y = lower(__x94, hoist, stmt63)
     if yes(____y):
       __e1 = ____y
       if standalone63(__e1):
@@ -823,10 +822,10 @@ def lower_pairwise(form):
   if pairwise63(form):
     __e4 = []
     ____id24 = form
-    __x131 = ____id24[1]
+    __x125 = ____id24[1]
     __args7 = cut(____id24, 1)
     def __f7(a, b):
-      add(__e4, [__x131, a, b])
+      add(__e4, [__x125, a, b])
       return a
     reduce(__f7, __args7)
     return join(["and"], reverse(__e4))
@@ -837,10 +836,10 @@ def lower_infix63(form):
 def lower_infix(form, hoist):
   __form3 = lower_pairwise(form)
   ____id25 = __form3
-  __x134 = ____id25[1]
+  __x128 = ____id25[1]
   __args8 = cut(____id25, 1)
   def __f8(a, b):
-    return [__x134, b, a]
+    return [__x128, b, a]
   return lower(reduce(__f8, reverse(__args8)), hoist)
 def lower_special(form, hoist):
   __e5 = lower_call(form, hoist)
@@ -860,36 +859,36 @@ def lower(form, hoist, stmt63, tail63):
           return lower_infix(form, hoist)
         else:
           ____id26 = form
-          __x137 = ____id26[1]
+          __x131 = ____id26[1]
           __args9 = cut(____id26, 1)
-          if __x137 == "do":
+          if __x131 == "do":
             return lower_do(__args9, hoist, stmt63, tail63)
           else:
-            if __x137 == "%set":
+            if __x131 == "%set":
               return lower_set(__args9, hoist, stmt63, tail63)
             else:
-              if __x137 == "%if":
+              if __x131 == "%if":
                 return lower_if(__args9, hoist, stmt63, tail63)
               else:
-                if __x137 == "%try":
+                if __x131 == "%try":
                   return lower_try(__args9, hoist, tail63)
                 else:
-                  if __x137 == "while":
+                  if __x131 == "while":
                     return lower_while(__args9, hoist)
                   else:
-                    if __x137 == "%for":
+                    if __x131 == "%for":
                       return lower_for(__args9, hoist)
                     else:
-                      if __x137 == "%function":
+                      if __x131 == "%function":
                         return lower_function(__args9, hoist)
                       else:
-                        if __x137 == "%local-function" or __x137 == "%global-function":
-                          return lower_definition(__x137, __args9, hoist)
+                        if __x131 == "%local-function" or __x131 == "%global-function":
+                          return lower_definition(__x131, __args9, hoist)
                         else:
-                          if in63(__x137, ["and", "or"]):
-                            return lower_short(__x137, __args9, hoist)
+                          if in63(__x131, ["and", "or"]):
+                            return lower_short(__x131, __args9, hoist)
                           else:
-                            if statement63(__x137):
+                            if statement63(__x131):
                               return lower_special(form, hoist)
                             else:
                               return lower_call(form, hoist)
@@ -908,15 +907,15 @@ def immediate_call63(x):
 def __f9():
   __forms1 = unstash([...])
   __s4 = ""
-  ____x143 = __forms1
+  ____x137 = __forms1
   ____i19 = 0
-  while ____i19 < _35(____x143):
-    __x144 = ____x143[____i19]
-    if target == "lua" and immediate_call63(__x144) and "\n" == char(__s4, edge(__s4)):
+  while ____i19 < _35(____x137):
+    __x138 = ____x137[____i19]
+    if target == "lua" and immediate_call63(__x138) and "\n" == char(__s4, edge(__s4)):
       __s4 = cat(clip(__s4, 0, edge(__s4)), ";\n")
-    __s4 = cat(__s4, compile(__x144, {"_stash": True, "stmt": True}))
-    if not atom63(__x144):
-      if hd(__x144) == "return" or hd(__x144) == "break":
+    __s4 = cat(__s4, compile(__x138, {"_stash": True, "stmt": True}))
+    if not atom63(__x138):
+      if hd(__x138) == "return" or hd(__x138) == "break":
         break
     ____i19 = ____i19 + 1
   return __s4
@@ -969,9 +968,9 @@ def __f12(t, k, form):
   __t2 = compile(t)
   __ind7 = indentation()
   indent_level = indent_level + 1
-  ____x146 = compile(form, {"_stash": True, "stmt": True})
+  ____x140 = compile(form, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __body12 = ____x146
+  __body12 = ____x140
   if target == "lua":
     return cat(__ind7, "for ", k, " in next, ", __t2, " do\n", __body12, __ind7, "end\n")
   else:
@@ -984,14 +983,14 @@ def __f13(form):
   __e8 = unique("e")
   __ind9 = indentation()
   indent_level = indent_level + 1
-  ____x151 = compile(form, {"_stash": True, "stmt": True})
+  ____x145 = compile(form, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __body14 = ____x151
+  __body14 = ____x145
   __hf1 = ["return", ["%array", False, __e8]]
   indent_level = indent_level + 1
-  ____x154 = compile(__hf1, {"_stash": True, "stmt": True})
+  ____x148 = compile(__hf1, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __h1 = ____x154
+  __h1 = ____x148
   return cat(__ind9, "try {\n", __body14, __ind9, "}\n", __ind9, "catch (", __e8, ") {\n", __h1, __ind9, "}\n")
 setenv("%try", {"_stash": True, "special": __f13, "stmt": True, "tr": True})
 def __f14(place):
@@ -1005,15 +1004,15 @@ def __f16(args, body):
 setenv("%function", {"_stash": True, "special": __f16})
 def __f17(name, args, body):
   if target == "lua" or target == "py":
-    __x158 = compile_function(args, body, {"_stash": True, "name": name})
-    return cat(indentation(), __x158)
+    __x152 = compile_function(args, body, {"_stash": True, "name": name})
+    return cat(indentation(), __x152)
   else:
     return compile(["%set", name, ["%function", args, body]], {"_stash": True, "stmt": True})
 setenv("%global-function", {"_stash": True, "special": __f17, "stmt": True, "tr": True})
 def __f18(name, args, body):
   if target == "lua" or target == "py":
-    __x164 = compile_function(args, body, {"_stash": True, "name": name, "prefix": "local"})
-    return cat(indentation(), __x164)
+    __x158 = compile_function(args, body, {"_stash": True, "name": name, "prefix": "local"})
+    return cat(indentation(), __x158)
   else:
     return compile(["%local", name, ["%function", args, body]], {"_stash": True, "stmt": True})
 setenv("%local-function", {"_stash": True, "special": __f18, "stmt": True, "tr": True})
@@ -1023,8 +1022,8 @@ def __f19(x):
     __e56 = "return"
   else:
     __e56 = cat("return ", compile(x))
-  __x168 = __e56
-  return cat(indentation(), __x168)
+  __x162 = __e56
+  return cat(indentation(), __x162)
 setenv("return", {"_stash": True, "special": __f19, "stmt": True})
 def __f20(x):
   return cat("new ", compile(x))
@@ -1087,7 +1086,14 @@ def __f25(t, k):
   else:
     return cat(__t12, "[", __k121, "]")
 setenv("get", {"_stash": True, "special": __f25})
-def __f26():
+def __f26(t, k):
+  __t14 = compile(t)
+  __k14 = compile(k)
+  if target == "lua" and char(__t14, 0) == "{" or infix_operator63(t):
+    __t14 = cat("(", __t14, ")")
+  return cat(__t14, ".", __k14)
+setenv("idx", {"_stash": True, "special": __f26})
+def __f27():
   __forms3 = unstash([...])
 
   if target == "lua":
@@ -1117,8 +1123,8 @@ def __f26():
       __s8 = cat(__s8, __c7, compile(__v9))
       __c7 = ", "
   return cat(__open1, __s8, __close1)
-setenv("%array", {"_stash": True, "special": __f26})
-def __f27():
+setenv("%array", {"_stash": True, "special": __f27})
+def __f28():
   __forms5 = unstash([...])
   __s10 = "{"
   __c9 = ""
@@ -1147,8 +1153,8 @@ def __f27():
       __s10 = cat(__s10, __c9, key(__k23), __sep1, compile(__v13))
       __c9 = ", "
   return cat(__s10, "}")
-setenv("%object", {"_stash": True, "special": __f27})
-def __f28():
+setenv("%object", {"_stash": True, "special": __f28})
+def __f29():
   __args111 = unstash([...])
   return apply(cat, map(compile, __args111))
-setenv("%literal", {"_stash": True, "special": __f28})
+setenv("%literal", {"_stash": True, "special": __f29})

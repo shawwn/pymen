@@ -592,26 +592,26 @@ def setenv(k):
     __frame[__k24] = __entry
     return __frame[__k24]
 
-abs = math["abs"]
-acos = math["acos"]
-asin = math["asin"]
-atan = math["atan"]
-atan2 = math["atan2"]
-ceil = math["ceil"]
-cos = math["cos"]
-floor = math["floor"]
-log = math["log"]
-log10 = math["log10"]
-max = math["max"]
-min = math["min"]
-pow = math["pow"]
-random = math["random"]
-sin = math["sin"]
-sinh = math["sinh"]
-sqrt = math["sqrt"]
-tan = math["tan"]
-tanh = math["tanh"]
-trunc = math["floor"]
+abs = math.abs
+acos = math.acos
+asin = math.asin
+atan = math.atan
+atan2 = math.atan2
+ceil = math.ceil
+cos = math.cos
+floor = math.floor
+log = math.log
+log10 = math.log10
+max = math.max
+min = math.min
+pow = math.pow
+random = math.random
+sin = math.sin
+sinh = math.sinh
+sqrt = math.sqrt
+tan = math.tan
+tanh = math.tanh
+trunc = math.floor
 def __f2(form):
   return quoted(form)
 setenv("quote", {"_stash": True, "macro": __f2})
@@ -652,10 +652,10 @@ def __f8():
     __v1 = ____o1[__k2]
 
     if numeric63(__k2):
-      __e8 = parseInt(__k2)
+      __e7 = parseInt(__k2)
     else:
-      __e8 = __k2
-    __k3 = __e8
+      __e7 = __k2
+    __k3 = __e7
     if number63(__k3):
       __l1[__k3] = __v1
     else:
@@ -900,14 +900,14 @@ def __f36(expr):
   if target == "js":
     return [["fn", join(), ["%try", ["list", True, expr]]]]
   else:
-    ____x257 = object(["obj"])
-    ____x257["stack"] = [["get", "debug", ["quote", "traceback"]]]
-    ____x257["message"] = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
-    return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x257]]]]
+    ____x256 = object(["obj"])
+    ____x256["stack"] = [["idx", "debug", "traceback"]]
+    ____x256["message"] = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
+    return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x256]]]]
 setenv("guard", {"_stash": True, "macro": __f36})
 def __f37(x, t):
   ____r61 = unstash([...])
-  __x283 = destash33(x, ____r61)
+  __x281 = destash33(x, ____r61)
   __t1 = destash33(t, ____r61)
   ____id52 = ____r61
   __body37 = cut(____id52, 0)
@@ -915,24 +915,24 @@ def __f37(x, t):
   __n3 = unique("n")
   __i3 = unique("i")
 
-  if atom63(__x283):
-    __e9 = [__i3, __x283]
+  if atom63(__x281):
+    __e8 = [__i3, __x281]
   else:
 
-    if _35(__x283) > 1:
-      __e10 = __x283
+    if _35(__x281) > 1:
+      __e9 = __x281
     else:
-      __e10 = [__i3, hd(__x283)]
-    __e9 = __e10
-  ____id53 = __e9
+      __e9 = [__i3, hd(__x281)]
+    __e8 = __e9
+  ____id53 = __e8
   __k5 = ____id53[1]
   __v7 = ____id53[2]
 
   if target == "lua":
-    __e11 = __body37
+    __e10 = __body37
   else:
-    __e11 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)]
-  return ["let", [__o3, __t1, __k5, "nil"], ["%for", __o3, __k5, join(["let", [__v7, ["get", __o3, __k5]]], __e11)]]
+    __e10 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)]
+  return ["let", [__o3, __t1, __k5, "nil"], ["%for", __o3, __k5, join(["let", [__v7, ["get", __o3, __k5]]], __e10)]]
 setenv("each", {"_stash": True, "macro": __f37})
 def __f38(i, to):
   ____r63 = unstash([...])
@@ -948,9 +948,9 @@ def __f39(v, t):
   __t3 = destash33(t, ____r65)
   ____id57 = ____r65
   __body41 = cut(____id57, 0)
-  __x317 = unique("x")
+  __x315 = unique("x")
   __i7 = unique("i")
-  return ["let", [__x317, __t3], ["for", __i7, ["#", __x317], join(["let", [__v9, ["at", __x317, __i7]]], __body41)]]
+  return ["let", [__x315, __t3], ["for", __i7, ["#", __x315], join(["let", [__v9, ["at", __x315, __i7]]], __body41)]]
 setenv("step", {"_stash": True, "macro": __f39})
 def __f40():
   __xs1 = unstash([...])
@@ -958,14 +958,14 @@ def __f40():
   ____o5 = __xs1
   ____i9 = None
   for ____i9 in ____o5:
-    __x328 = ____o5[____i9]
+    __x326 = ____o5[____i9]
 
     if numeric63(____i9):
-      __e12 = parseInt(____i9)
+      __e11 = parseInt(____i9)
     else:
-      __e12 = ____i9
-    ____i91 = __e12
-    __l3[__x328] = True
+      __e11 = ____i9
+    ____i91 = __e11
+    __l3[__x326] = True
   return join(["obj"], __l3)
 setenv("set-of", {"_stash": True, "macro": __f40})
 def __f41():
@@ -995,57 +995,47 @@ setenv("cat!", {"_stash": True, "macro": __f44})
 def __f45(n, by):
 
   if nil63(by):
-    __e13 = 1
+    __e12 = 1
   else:
-    __e13 = by
-  return ["set", n, ["+", n, __e13]]
+    __e12 = by
+  return ["set", n, ["+", n, __e12]]
 setenv("inc", {"_stash": True, "macro": __f45})
 def __f46(n, by):
 
   if nil63(by):
-    __e14 = 1
+    __e13 = 1
   else:
-    __e14 = by
-  return ["set", n, ["-", n, __e14]]
+    __e13 = by
+  return ["set", n, ["-", n, __e13]]
 setenv("dec", {"_stash": True, "macro": __f46})
 def __f47(form):
-  __x356 = unique("x")
-  return ["do", ["inc", "indent-level"], ["with", __x356, form, ["dec", "indent-level"]]]
+  __x354 = unique("x")
+  return ["do", ["inc", "indent-level"], ["with", __x354, form, ["dec", "indent-level"]]]
 setenv("with-indent", {"_stash": True, "macro": __f47})
 def __f48():
   __names5 = unstash([...])
+  def __f49(k):
+    if k == compile(k):
+      return ["set", ["idx", "exports", k], k]
+    else:
+      return ["set", ["get", "exports", ["quote", k]], k, ["idx", "exports", k], k]
+  __forms3 = map(__f49, __names5)
   if target == "js":
-    def __f50(k):
-      return ["set", ["get", "exports", ["quote", k]], k]
-    return join(["do"], map(__f50, __names5))
+    return join(["do"], __forms3)
   else:
     if target == "lua":
-      __x373 = {}
-      ____o7 = __names5
-      ____i11 = None
-      for ____i11 in ____o7:
-        __k7 = ____o7[____i11]
-
-        if numeric63(____i11):
-          __e15 = parseInt(____i11)
-        else:
-          __e15 = ____i11
-        ____i111 = __e15
-        __x373[__k7] = __k7
-      def __f49(x):
-        return x
-      return ["return", join(["%object"], mapo(__f49, __x373))]
+      return join(["let", "exports", ["or", "exports", ["obj"]]], __forms3, [["return", "exports"]])
 setenv("export", {"_stash": True, "macro": __f48})
-def __f51():
+def __f50():
   __body43 = unstash([...])
   return _eval(join(["do"], __body43))
-setenv("when-compiling", {"_stash": True, "macro": __f51})
+setenv("when-compiling", {"_stash": True, "macro": __f50})
 reader = require("reader")
 compiler = require("compiler")
 system = require("system")
 def eval_print(form):
   def __f():
-    return compiler["eval"](form)
+    return compiler._eval(form)
   def __f1(m):
     if obj63(m):
       return m
@@ -1060,7 +1050,7 @@ def eval_print(form):
         else:
           __e1 = _str(m)
         __e = __e1
-      return {"stack": debug["traceback"](), "message": __e}
+      return {"stack": debug.traceback(), "message": __e}
   ____id = [xpcall(__f, __f1)]
   __ok = ____id[1]
   __v = ____id[2]
@@ -1068,36 +1058,36 @@ def eval_print(form):
     if is63(__v):
       return print(_str(__v))
 def rep(s):
-  return eval_print(reader["read-string"](s))
+  return eval_print(reader.read_string(s))
 def repl():
   __buf = ""
   def rep1(s):
     __buf = cat(__buf, s)
     __more = []
-    __form = reader["read-string"](__buf, __more)
+    __form = reader.read_string(__buf, __more)
     if not( __form == __more):
       eval_print(__form)
       __buf = ""
-      return system["write"]("> ")
-  return system["write"]("> ")
+      return system.write("> ")
+  return system.write("> ")
 def compile_file(path):
-  __s = reader["stream"](system["read-file"](path))
-  __body = reader["read-all"](__s)
-  __form1 = compiler["expand"](join(["do"], __body))
-  return compiler["compile"](__form1, {"_stash": True, "stmt": True})
+  __s = reader.stream(system.read_file(path))
+  __body = reader.read_all(__s)
+  __form1 = compiler.expand(join(["do"], __body))
+  return compiler.compile(__form1, {"_stash": True, "stmt": True})
 def _load(path):
   __previous = target
   target = "py"
   __code = compile_file(path)
   target = __previous
-  return compiler["run"](__code)
+  return compiler.run(__code)
 def script_file63(path):
   return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
 def run_file(path):
   if script_file63(path):
     return _load(path)
   else:
-    return compiler["run"](system["read-file"](path))
+    return compiler.run(system.read_file(path))
 def usage():
   print("usage: lumen [<file> <arguments> | options <object files>]")
   print(" <file>\t\tProgram read from script file")
@@ -1109,7 +1099,7 @@ def usage():
   print(" -t <target>\tTarget language (default: lua)")
   return print(" -e <expr>\tExpression to evaluate")
 def main():
-  __arg = hd(system["argv"])
+  __arg = hd(system.argv)
   if __arg and script_file63(__arg):
     return _load(__arg)
   else:
@@ -1121,7 +1111,7 @@ def main():
       __output = None
       __target1 = None
       __expr = None
-      __argv = system["argv"]
+      __argv = system.argv
       __i = 0
       while __i < _35(__argv):
         __a = __argv[__i]
@@ -1164,5 +1154,5 @@ def main():
         if nil63(__output) or __output == "-":
           return print(__code1)
         else:
-          return system["write-file"](__output, __code1)
+          return system.write_file(__output, __code1)
 main()

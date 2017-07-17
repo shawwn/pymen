@@ -34,7 +34,7 @@
   (print (cat " " passed " passed, " failed " failed")))
 
 (define-test reader
-  (let read (get reader 'read-string)
+  (let read (idx reader read-string)
     (test= nil (read ""))
     (test= "nil" (read "nil"))
     (test= 17 (read "17"))
@@ -64,7 +64,7 @@
     (test= "0." (read "0."))))
 
 (define-test read-more
-  (let read (get reader 'read-string)
+  (let read (idx reader read-string)
     (test= 17 (read "17" true))
     (let more ()
       (test= more (read "(open" more))
@@ -77,7 +77,7 @@
       (test= more (read "'\"boz" more)))
     (let ((ok e) (guard (read "(open")))
       (test= false ok)
-      (test= "Expected ) at 5" (get e 'message)))))
+      (test= "Expected ) at 5" (idx e message)))))
 
 (define-test nil?
   (test= true (nil? nil))
@@ -598,7 +598,7 @@ c"
   (let-macro ((guard1 (x)
                 (let-unique (ok v)
                   `(let ((,ok ,v) (guard ,x))
-                     (list ,ok (if ,ok ,v (get ,v 'message)))))))
+                     (list ,ok (if ,ok ,v (idx ,v message)))))))
     (test= (list false "") (guard1 (error)))
     (test= (list false "") (guard1 (error nil)))
     (test= (list false "false") (guard1 (error false)))
@@ -1030,7 +1030,7 @@ c"
   (test= 116 (apply + 1 5 '(100 10))))
 
 (define-test eval
-  (let eval (get compiler 'eval)
+  (let eval (idx compiler eval)
     (test= 4 (eval '(+ 2 2)))
     (test= 5 (eval '(let a 3 (+ 2 a))))
     (test= 9 (eval '(do (define x 7) (+ x 2))))

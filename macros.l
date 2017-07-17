@@ -156,7 +156,7 @@
              (fn () ,expr)
              (fn (m)
                (if (obj? m) m
-                 (obj stack: ((get debug 'traceback))
+                 (obj stack: ((idx debug traceback))
                       message: (if (string? m) (clip m (+ (search m ": ") 2))
                                    (nil? m) ""
                                  (str m)))))))))
@@ -220,15 +220,18 @@
            (dec indent-level)))))
 
 (define-macro export names
-  (if (= target 'js)
-      `(do ,@(map (fn (k)
-                    `(set (get exports ',k) ,k))
-                  names))
-      (= target 'lua)
-      (let x (obj)
-        (each k names
-          (set (get x k) k))
-        `(return (%object ,@(mapo (fn (x) x) x))))))
+  (let forms (map (fn (k)
+                    (if (= k (compile k))
+                        `(set (idx exports ,k) ,k)
+                      `(set (get exports ',k) ,k
+                            (idx exports ,k) ,k)))
+                  names)
+    (if (= target 'js)
+        `(do ,@forms)
+        (= target 'lua)
+        `(let exports (or exports (obj))
+           ,@forms
+           (return exports)))))
 
 (define-macro when-compiling body
   (eval `(do ,@body)))

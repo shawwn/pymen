@@ -70,4 +70,24 @@ local function run(command)
   __f2.close(__f2)
   return __x2
 end
-return {["read-file"] = read_file, ["write-file"] = write_file, ["file-exists?"] = file_exists63, ["directory-exists?"] = directory_exists63, ["path-separator"] = path_separator, ["path-join"] = path_join, ["get-environment-variable"] = get_environment_variable, write = write, exit = exit, argv = argv, reload = reload, run = run}
+local __exports = exports or {}
+__exports["read-file"] = read_file
+__exports.read_file = read_file
+__exports["write-file"] = write_file
+__exports.write_file = write_file
+__exports["file-exists?"] = file_exists63
+__exports.file_exists63 = file_exists63
+__exports["directory-exists?"] = directory_exists63
+__exports.directory_exists63 = directory_exists63
+__exports["path-separator"] = path_separator
+__exports.path_separator = path_separator
+__exports["path-join"] = path_join
+__exports.path_join = path_join
+__exports["get-environment-variable"] = get_environment_variable
+__exports.get_environment_variable = get_environment_variable
+__exports.write = write
+__exports.exit = exit
+__exports.argv = argv
+__exports.reload = reload
+__exports.run = run
+return __exports

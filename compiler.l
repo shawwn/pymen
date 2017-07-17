@@ -1,5 +1,3 @@
-(define reader (require 'reader))
-
 (define getenv (k p)
   (when (string? k)
     (let i (edge environment)
@@ -78,7 +76,7 @@
                 (join! bs (bind k x))))))))))
 
 (define-macro arguments% (from)
-  `((get (get (get Array 'prototype) 'slice) 'call) arguments ,from))
+  `((idx (idx (idx Array prototype) slice) call) arguments ,from))
 
 (define-global bind* (args body)
   (let args1 ()
@@ -591,7 +589,7 @@
 (define-global expand (form)
   (lower (macroexpand form)))
 
-(target js: (set (get global 'require) |require|))
+(target js: (set (idx global require) |require|))
 (target js: (define run |eval|))
 
 (target lua: (define load1 (or |loadstring| |load|)))
@@ -742,6 +740,15 @@
              (not (= target 'py)))
         (cat t1 "." (inner k))
       (cat t1 "[" k1 "]"))))
+
+(define-special idx (t k)
+  (let (t1 (compile t)
+        k1 (compile k))
+    (when (or (and (= target 'lua)
+                   (= (char t1 0) "{"))
+              (infix-operator? t))
+      (set t1 (cat "(" t1 ")")))
+    (cat t1 "." k1)))
 
 (define-special %array forms
   (let (open (if (= target 'lua) "{" "[")
