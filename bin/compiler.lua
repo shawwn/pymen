@@ -532,7 +532,7 @@ end
 function infix_operator63(x)
   return obj63(x) and infix63(hd(x))
 end
-local function compile_args(args)
+function compile_args(args)
   local __s1 = "("
   local __c2 = ""
   local ____x77 = args
@@ -1363,6 +1363,14 @@ setenv("%literal", {_stash = true, special = function (...)
   local __args111 = unstash({...})
   return apply(cat, map(compile, __args111))
 end})
+setenv("global", {_stash = true, special = function (...)
+  local __args13 = unstash({...})
+  if target == "py" then
+    return indentation() .. "global " .. inner(compile_args(__args13)) .. "\n"
+  else
+    return ""
+  end
+end, stmt = true, tr = true})
 local __exports = exports or {}
 __exports.run = run
 __exports["eval"] = _eval

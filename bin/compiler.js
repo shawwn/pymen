@@ -586,7 +586,7 @@ var infix63 = function (x) {
 infix_operator63 = function (x) {
   return obj63(x) && infix63(hd(x));
 };
-var compile_args = function (args) {
+compile_args = function (args) {
   var __s1 = "(";
   var __c2 = "";
   var ____x77 = args;
@@ -1424,6 +1424,14 @@ setenv("%literal", {_stash: true, special: function () {
   var __args111 = unstash(Array.prototype.slice.call(arguments, 0));
   return apply(cat, map(compile, __args111));
 }});
+setenv("global", {_stash: true, special: function () {
+  var __args13 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (target === "py") {
+    return indentation() + "global " + inner(compile_args(__args13)) + "\n";
+  } else {
+    return "";
+  }
+}, stmt: true, tr: true});
 exports.run = run;
 exports["eval"] = _eval;
 exports._eval = _eval;

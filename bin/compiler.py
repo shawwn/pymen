@@ -607,11 +607,13 @@ def compile_infix(form):
   else:
     return cat(__ao, __a2, __ac, " ", __op1, " ", __bo, __b3, __bc)
 def compile_body(body):
+  global indent_level
   indent_level = indent_level + 1
   ____x83 = compile(body, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
   __s2 = ____x83
   if target == "py" and none63(__s2):
+    global indent_level
     indent_level = indent_level + 1
     ____x84 = cat(indentation(), "pass\n")
     indent_level = indent_level - 1
@@ -897,6 +899,7 @@ def expand(form):
 _37result = None
 def _eval(form):
   __previous = target
+  global target
   target = "py"
   __code = compile(expand(["set", "%result", form]))
   target = __previous
@@ -967,6 +970,7 @@ setenv("while", {"_stash": True, "special": __f111, "stmt": True, "tr": True})
 def __f12(t, k, form):
   __t2 = compile(t)
   __ind7 = indentation()
+  global indent_level
   indent_level = indent_level + 1
   ____x140 = compile(form, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
@@ -982,11 +986,13 @@ setenv("%for", {"_stash": True, "special": __f12, "stmt": True, "tr": True})
 def __f13(form):
   __e8 = unique("e")
   __ind9 = indentation()
+  global indent_level
   indent_level = indent_level + 1
   ____x145 = compile(form, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
   __body14 = ____x145
   __hf1 = ["return", ["%array", False, __e8]]
+  global indent_level
   indent_level = indent_level + 1
   ____x148 = compile(__hf1, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
@@ -1158,3 +1164,10 @@ def __f29():
   __args111 = unstash([...])
   return apply(cat, map(compile, __args111))
 setenv("%literal", {"_stash": True, "special": __f29})
+def __f30():
+  __args13 = unstash([...])
+  if target == "py":
+    return cat(indentation(), "global ", inner(compile_args(__args13)), "\n")
+  else:
+    return ""
+setenv("global", {"_stash": True, "special": __f30, "stmt": True, "tr": True})

@@ -311,7 +311,7 @@
 (define-global infix-operator? (x)
   (and (obj? x) (infix? (hd x))))
 
-(define compile-args (args)
+(define-global compile-args (args)
   (let (s "(" c "")
     (step x args
       (cat! s c (compile x))
@@ -602,6 +602,7 @@
 
 (define-global eval (form)
   (let previous target
+    (global target)
     (set target (language))
     (let code (compile (expand `(set %result ,form)))
       (set target previous)
@@ -774,6 +775,11 @@
 
 (define-special %literal args
   (apply cat (map compile args)))
+
+(define-special global args :stmt :tr
+  (if (= target 'py)
+      (cat (indentation) "global " (inner (compile-args args)) "\n")
+    ""))
 
 (export run
         eval

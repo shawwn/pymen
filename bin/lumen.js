@@ -1245,8 +1245,8 @@ setenv("dec", {_stash: true, macro: function (n, by) {
   return ["set", n, ["-", n, __e13]];
 }});
 setenv("with-indent", {_stash: true, macro: function (form) {
-  var __x325 = unique("x");
-  return ["do", ["inc", "indent-level"], ["with", __x325, form, ["dec", "indent-level"]]];
+  var __x326 = unique("x");
+  return ["do", ["global", "indent-level"], ["inc", "indent-level"], ["with", __x326, form, ["dec", "indent-level"]]];
 }});
 setenv("export", {_stash: true, macro: function () {
   var __names5 = unstash(Array.prototype.slice.call(arguments, 0));

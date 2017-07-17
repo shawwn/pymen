@@ -1097,8 +1097,8 @@ setenv("dec", {_stash = true, macro = function (n, by)
   return {"set", n, {"-", n, __e11}}
 end})
 setenv("with-indent", {_stash = true, macro = function (form)
-  local __x354 = unique("x")
-  return {"do", {"inc", "indent-level"}, {"with", __x354, form, {"dec", "indent-level"}}}
+  local __x355 = unique("x")
+  return {"do", {"global", "indent-level"}, {"inc", "indent-level"}, {"with", __x355, form, {"dec", "indent-level"}}}
 end})
 setenv("export", {_stash = true, macro = function (...)
   local __names5 = unstash({...})

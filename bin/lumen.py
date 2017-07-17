@@ -1009,8 +1009,8 @@ def __f46(n, by):
   return ["set", n, ["-", n, __e13]]
 setenv("dec", {"_stash": True, "macro": __f46})
 def __f47(form):
-  __x354 = unique("x")
-  return ["do", ["inc", "indent-level"], ["with", __x354, form, ["dec", "indent-level"]]]
+  __x355 = unique("x")
+  return ["do", ["global", "indent-level"], ["inc", "indent-level"], ["with", __x355, form, ["dec", "indent-level"]]]
 setenv("with-indent", {"_stash": True, "macro": __f47})
 def __f48():
   __names5 = unstash([...])
