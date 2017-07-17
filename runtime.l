@@ -1,5 +1,4 @@
 (define-global environment (list (obj)))
-(define-global target (language))
 
 (define-global nil? (x)
   (target
@@ -370,11 +369,12 @@
 (define-global setenv (k rest: keys)
   (when (string? k)
     (let (frame (if (get keys 'toplevel)
-                    (hd environment)
-                  (last environment))
+                    (hd |environment|)
+                  (last |environment|))
           entry (or (get frame k) (obj)))
       (each (k v) keys
-        (set (get entry k) v))
+        (unless (= k 'toplevel)
+          (set (get entry k) v)))
       (set (get frame k) entry))))
 
 (target js:
@@ -403,3 +403,5 @@
 (define-global tan (idx math tan))
 (define-global tanh (idx math tanh))
 (define-global trunc (idx math floor))
+
+(define-variable target (language))

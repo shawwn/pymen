@@ -1,5 +1,4 @@
 environment = [{}];
-target = "js";
 nil63 = function (x) {
   return x === undefined || x === null;
 };
@@ -792,7 +791,9 @@ setenv = function (k) {
         __e23 = __k25;
       }
       var __k26 = __e23;
-      __entry[__k26] = __v14;
+      if (!( __k26 === "toplevel")) {
+        __entry[__k26] = __v14;
+      }
     }
     __frame[__k24] = __entry;
     return __frame[__k24];
@@ -822,6 +823,8 @@ sqrt = math.sqrt;
 tan = math.tan;
 tanh = math.tanh;
 trunc = math.floor;
+setenv("target", {_stash: true, toplevel: true, value: either(setenv("target", {_stash: true, toplevel: true}).value, "js")});
+setenv("target", {_stash: true, symbol: ["get-value", ["quote", "target"]]});
 setenv("quote", {_stash: true, macro: function (form) {
   return quoted(form);
 }});
@@ -838,17 +841,17 @@ setenv("set", {_stash: true, macro: function () {
   }, pair(__args1)));
 }});
 setenv("at", {_stash: true, macro: function (l, i) {
-  if (target === "lua" && number63(i)) {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "lua" && number63(i)) {
     i = i + 1;
   } else {
-    if (target === "lua") {
+    if (setenv("target", {_stash: true, toplevel: true}).value === "lua") {
       i = ["+", i, 1];
     }
   }
   return ["get", l, i];
 }});
 setenv("wipe", {_stash: true, macro: function (place) {
-  if (target === "lua") {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "lua") {
     return ["set", place, "nil"];
   } else {
     return ["%delete", place];
@@ -1049,56 +1052,74 @@ setenv("define-global", {_stash: true, macro: function (name, x) {
     return ["set", __name7, __x139];
   }
 }});
+setenv("get-value", {_stash: true, macro: function (x) {
+  var ____x146 = object(["setenv", x]);
+  ____x146.toplevel = true;
+  return ["get", ____x146, ["quote", "value"]];
+}});
+setenv("define-constant", {_stash: true, macro: function (name, x) {
+  var ____x157 = object(["setenv", ["quote", name]]);
+  ____x157.toplevel = true;
+  ____x157.value = either(x, ["get-value", ["quote", name]]);
+  return ["do", ____x157, ["define-symbol", name, ["get-value", ["quote", name]]]];
+}});
+setenv("define-variable", {_stash: true, macro: function (name, x) {
+  if (is63(x)) {
+    return ["define-constant", name, ["either", ["get-value", ["quote", name]], x]];
+  } else {
+    return ["define-constant", name];
+  }
+}});
 setenv("with-frame", {_stash: true, macro: function () {
   var __body25 = unstash(Array.prototype.slice.call(arguments, 0));
-  var __x149 = unique("x");
-  return ["do", ["add", "environment", ["obj"]], ["with", __x149, join(["do"], __body25), ["drop", "environment"]]];
+  var __x181 = unique("x");
+  return ["do", ["add", "environment", ["obj"]], ["with", __x181, join(["do"], __body25), ["drop", "environment"]]];
 }});
-setenv("with-bindings", {_stash: true, macro: function (__x161) {
-  var ____id36 = __x161;
+setenv("with-bindings", {_stash: true, macro: function (__x193) {
+  var ____id36 = __x193;
   var __names1 = ____id36[0];
-  var ____r41 = unstash(Array.prototype.slice.call(arguments, 1));
-  var ____x161 = destash33(__x161, ____r41);
-  var ____id37 = ____r41;
+  var ____r47 = unstash(Array.prototype.slice.call(arguments, 1));
+  var ____x193 = destash33(__x193, ____r47);
+  var ____id37 = ____r47;
   var __body27 = cut(____id37, 0);
-  var __x162 = unique("x");
-  var ____x165 = object(["setenv", __x162]);
-  ____x165.variable = true;
-  return join(["with-frame", ["each", __x162, __names1, ____x165]], __body27);
+  var __x194 = unique("x");
+  var ____x197 = object(["setenv", __x194]);
+  ____x197.variable = true;
+  return join(["with-frame", ["each", __x194, __names1, ____x197]], __body27);
 }});
 setenv("let-macro", {_stash: true, macro: function (definitions) {
-  var ____r44 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __definitions1 = destash33(definitions, ____r44);
-  var ____id39 = ____r44;
+  var ____r50 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __definitions1 = destash33(definitions, ____r50);
+  var ____id39 = ____r50;
   var __body29 = cut(____id39, 0);
   add(environment, {});
   map(function (m) {
     return macroexpand(join(["define-macro"], m));
   }, __definitions1);
-  var ____x169 = join(["do"], macroexpand(__body29));
+  var ____x201 = join(["do"], macroexpand(__body29));
   drop(environment);
-  return ____x169;
+  return ____x201;
 }});
 setenv("let-symbol", {_stash: true, macro: function (expansions) {
-  var ____r48 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __expansions1 = destash33(expansions, ____r48);
-  var ____id42 = ____r48;
+  var ____r54 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __expansions1 = destash33(expansions, ____r54);
+  var ____id42 = ____r54;
   var __body31 = cut(____id42, 0);
   add(environment, {});
-  map(function (__x177) {
-    var ____id43 = __x177;
+  map(function (__x209) {
+    var ____id43 = __x209;
     var __name9 = ____id43[0];
     var __exp1 = ____id43[1];
     return macroexpand(["define-symbol", __name9, __exp1]);
   }, pair(__expansions1));
-  var ____x176 = join(["do"], macroexpand(__body31));
+  var ____x208 = join(["do"], macroexpand(__body31));
   drop(environment);
-  return ____x176;
+  return ____x208;
 }});
 setenv("let-unique", {_stash: true, macro: function (names) {
-  var ____r52 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __names3 = destash33(names, ____r52);
-  var ____id45 = ____r52;
+  var ____r58 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __names3 = destash33(names, ____r58);
+  var ____id45 = ____r58;
   var __body33 = cut(____id45, 0);
   var __bs3 = map(function (n) {
     return [n, ["unique", ["quote", n]]];
@@ -1106,16 +1127,16 @@ setenv("let-unique", {_stash: true, macro: function (names) {
   return join(["let", apply(join, __bs3)], __body33);
 }});
 setenv("fn", {_stash: true, macro: function (args) {
-  var ____r55 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __args7 = destash33(args, ____r55);
-  var ____id47 = ____r55;
+  var ____r61 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __args7 = destash33(args, ____r61);
+  var ____id47 = ____r61;
   var __body35 = cut(____id47, 0);
   return join(["%function"], bind42(__args7, __body35));
 }});
 setenv("apply", {_stash: true, macro: function (f) {
-  var ____r57 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __f1 = destash33(f, ____r57);
-  var ____id49 = ____r57;
+  var ____r63 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __f1 = destash33(f, ____r63);
+  var ____id49 = ____r63;
   var __args9 = cut(____id49, 0);
   if (_35(__args9) > 1) {
     return [["do", "apply"], __f1, ["join", join(["list"], almost(__args9)), last(__args9)]];
@@ -1124,33 +1145,33 @@ setenv("apply", {_stash: true, macro: function (f) {
   }
 }});
 setenv("guard", {_stash: true, macro: function (expr) {
-  if (target === "js") {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "js") {
     return [["fn", join(), ["%try", ["list", true, expr]]]];
   } else {
-    var ____x234 = object(["obj"]);
-    ____x234.stack = [["idx", "debug", "traceback"]];
-    ____x234.message = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]];
-    return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x234]]]];
+    var ____x266 = object(["obj"]);
+    ____x266.stack = [["idx", "debug", "traceback"]];
+    ____x266.message = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]];
+    return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x266]]]];
   }
 }});
 setenv("each", {_stash: true, macro: function (x, t) {
-  var ____r61 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __x258 = destash33(x, ____r61);
-  var __t1 = destash33(t, ____r61);
-  var ____id52 = ____r61;
+  var ____r67 = unstash(Array.prototype.slice.call(arguments, 2));
+  var __x290 = destash33(x, ____r67);
+  var __t1 = destash33(t, ____r67);
+  var ____id52 = ____r67;
   var __body37 = cut(____id52, 0);
   var __o3 = unique("o");
   var __n3 = unique("n");
   var __i3 = unique("i");
   var __e8;
-  if (atom63(__x258)) {
-    __e8 = [__i3, __x258];
+  if (atom63(__x290)) {
+    __e8 = [__i3, __x290];
   } else {
     var __e9;
-    if (_35(__x258) > 1) {
-      __e9 = __x258;
+    if (_35(__x290) > 1) {
+      __e9 = __x290;
     } else {
-      __e9 = [__i3, hd(__x258)];
+      __e9 = [__i3, hd(__x290)];
     }
     __e8 = __e9;
   }
@@ -1158,7 +1179,7 @@ setenv("each", {_stash: true, macro: function (x, t) {
   var __k5 = ____id53[0];
   var __v7 = ____id53[1];
   var __e10;
-  if (target === "lua") {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "lua") {
     __e10 = __body37;
   } else {
     __e10 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)];
@@ -1166,22 +1187,22 @@ setenv("each", {_stash: true, macro: function (x, t) {
   return ["let", [__o3, __t1, __k5, "nil"], ["%for", __o3, __k5, join(["let", [__v7, ["get", __o3, __k5]]], __e10)]];
 }});
 setenv("for", {_stash: true, macro: function (i, to) {
-  var ____r63 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __i5 = destash33(i, ____r63);
-  var __to1 = destash33(to, ____r63);
-  var ____id55 = ____r63;
+  var ____r69 = unstash(Array.prototype.slice.call(arguments, 2));
+  var __i5 = destash33(i, ____r69);
+  var __to1 = destash33(to, ____r69);
+  var ____id55 = ____r69;
   var __body39 = cut(____id55, 0);
   return ["let", __i5, 0, join(["while", ["<", __i5, __to1]], __body39, [["inc", __i5]])];
 }});
 setenv("step", {_stash: true, macro: function (v, t) {
-  var ____r65 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __v9 = destash33(v, ____r65);
-  var __t3 = destash33(t, ____r65);
-  var ____id57 = ____r65;
+  var ____r71 = unstash(Array.prototype.slice.call(arguments, 2));
+  var __v9 = destash33(v, ____r71);
+  var __t3 = destash33(t, ____r71);
+  var ____id57 = ____r71;
   var __body41 = cut(____id57, 0);
-  var __x290 = unique("x");
+  var __x322 = unique("x");
   var __i7 = unique("i");
-  return ["let", [__x290, __t3], ["for", __i7, ["#", __x290], join(["let", [__v9, ["at", __x290, __i7]]], __body41)]];
+  return ["let", [__x322, __t3], ["for", __i7, ["#", __x322], join(["let", [__v9, ["at", __x322, __i7]]], __body41)]];
 }});
 setenv("set-of", {_stash: true, macro: function () {
   var __xs1 = unstash(Array.prototype.slice.call(arguments, 0));
@@ -1189,7 +1210,7 @@ setenv("set-of", {_stash: true, macro: function () {
   var ____o5 = __xs1;
   var ____i9 = undefined;
   for (____i9 in ____o5) {
-    var __x300 = ____o5[____i9];
+    var __x332 = ____o5[____i9];
     var __e11;
     if (numeric63(____i9)) {
       __e11 = parseInt(____i9);
@@ -1197,38 +1218,35 @@ setenv("set-of", {_stash: true, macro: function () {
       __e11 = ____i9;
     }
     var ____i91 = __e11;
-    __l3[__x300] = true;
+    __l3[__x332] = true;
   }
   return join(["obj"], __l3);
-}});
-setenv("language", {_stash: true, macro: function () {
-  return ["quote", target];
-}});
-setenv("target", {_stash: true, macro: function () {
-  var __clauses3 = unstash(Array.prototype.slice.call(arguments, 0));
-  if (has63(__clauses3, target)) {
-    return __clauses3[target];
-  } else {
-    return hd(__clauses3);
-  }
 }});
 setenv("target?", {_stash: true, macro: function (x) {
   return ["=", "target", x];
 }});
-setenv("target!", {_stash: true, macro: function (x) {
-  return ["set", "target", x];
+setenv("target", {_stash: true, macro: function () {
+  var __clauses3 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (has63(__clauses3, setenv("target", {_stash: true, toplevel: true}).value)) {
+    return __clauses3[setenv("target", {_stash: true, toplevel: true}).value];
+  } else {
+    return hd(__clauses3);
+  }
+}});
+setenv("language", {_stash: true, macro: function () {
+  return ["quote", setenv("target", {_stash: true, toplevel: true}).value];
 }});
 setenv("join!", {_stash: true, macro: function (a) {
-  var ____r73 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __a3 = destash33(a, ____r73);
-  var ____id59 = ____r73;
+  var ____r77 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __a3 = destash33(a, ____r77);
+  var ____id59 = ____r77;
   var __bs5 = cut(____id59, 0);
   return ["set", __a3, join(["join", __a3], __bs5)];
 }});
 setenv("cat!", {_stash: true, macro: function (a) {
-  var ____r75 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __a5 = destash33(a, ____r75);
-  var ____id61 = ____r75;
+  var ____r79 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __a5 = destash33(a, ____r79);
+  var ____id61 = ____r79;
   var __bs7 = cut(____id61, 0);
   return ["set", __a5, join(["cat", __a5], __bs7)];
 }});
@@ -1251,8 +1269,8 @@ setenv("dec", {_stash: true, macro: function (n, by) {
   return ["set", n, ["-", n, __e13]];
 }});
 setenv("with-indent", {_stash: true, macro: function (form) {
-  var __x329 = unique("x");
-  return ["do", ["inc", "indent-level"], ["with", __x329, form, ["dec", "indent-level"]]];
+  var __x359 = unique("x");
+  return ["do", ["inc", "indent-level"], ["with", __x359, form, ["dec", "indent-level"]]];
 }});
 setenv("export", {_stash: true, macro: function () {
   var __names5 = unstash(Array.prototype.slice.call(arguments, 0));
@@ -1263,10 +1281,10 @@ setenv("export", {_stash: true, macro: function () {
       return ["set", ["get", "exports", ["quote", k]], k, ["idx", "exports", k], k];
     }
   }, __names5);
-  if (target === "js") {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "js") {
     return join(["do"], __forms3);
   } else {
-    if (target === "lua") {
+    if (setenv("target", {_stash: true, toplevel: true}).value === "lua") {
       return join(["let", "exports", ["or", "exports", ["obj"]]], __forms3, [["return", "exports"]]);
     }
   }
@@ -1324,10 +1342,10 @@ compile_file = function (path) {
   return compiler.compile(__form1, {_stash: true, stmt: true});
 };
 _load = function (path) {
-  var __previous = target;
-  target = "js";
+  var __previous = setenv("target", {_stash: true, toplevel: true}).value;
+  setenv("target", {_stash: true, toplevel: true}).value = "js";
   var __code = compile_file(path);
-  target = __previous;
+  setenv("target", {_stash: true, toplevel: true}).value = __previous;
   return compiler.run(__code);
 };
 var script_file63 = function (path) {
@@ -1412,7 +1430,7 @@ var main = function () {
         }
       } else {
         if (__target1) {
-          target = __target1;
+          setenv("target", {_stash: true, toplevel: true}).value = __target1;
         }
         var __code1 = compile_file(__input);
         if (nil63(__output) || __output === "-") {

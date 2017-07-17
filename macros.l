@@ -107,6 +107,18 @@
       `(%global-function ,name ,@(bind* x body))
     `(set ,name ,x)))
 
+(define-macro get-value (x)
+  `(get (setenv ,x :toplevel) 'value))
+
+(define-macro define-constant (name x)
+  `(do (setenv ',name :toplevel value: ,(either x `(get-value ',name)))
+       (define-symbol ,name (get-value ',name))))
+
+(define-macro define-variable (name x)
+  (if (is? x)
+      `(define-constant ,name (either (get-value ',name) ,x))
+    `(define-constant ,name)))
+
 (define-macro with-frame body
   (let-unique (x)
     `(do (add environment (obj))
@@ -194,18 +206,15 @@
       (set (get l x) true))
     `(obj ,@l)))
 
-(define-macro language () `',target)
+(define-macro target? (x)
+  `(= target ,x))
 
 (define-macro target clauses
   (if (has? clauses target)
       (get clauses target)
     (hd clauses)))
 
-(define-macro target? (x)
-  `(= target ,x))
-
-(define-macro target! (x)
-  `(set target ,x))
+(define-macro language () `',target)
 
 (define-macro join! (a rest: bs)
   `(set ,a (join ,a ,@bs)))

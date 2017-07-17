@@ -200,7 +200,7 @@
   (if (is? b) `((%if ,a ,b ,@(expand-if c)))
       (is? a) (list a)))
 
-(define-global indent-level 0)
+(define-constant indent-level 0)
 
 (define-global indentation ()
   (with s ""
@@ -602,10 +602,9 @@
 
 (define-global eval (form)
   (let previous target
-    (global target)
-    (target! (language))
+    (set target (language))
     (let code (compile (expand `(set %result ,form)))
-      (target! previous)
+      (set target previous)
       (run code)
       %result)))
 
