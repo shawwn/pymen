@@ -1064,17 +1064,20 @@ setenv("target", {_stash = true, macro = function (...)
     return hd(__clauses3)
   end
 end})
+setenv("target?", {_stash = true, macro = function (x)
+  return {"=", "target", x}
+end})
 setenv("join!", {_stash = true, macro = function (a, ...)
-  local ____r69 = unstash({...})
-  local __a3 = destash33(a, ____r69)
-  local ____id59 = ____r69
+  local ____r71 = unstash({...})
+  local __a3 = destash33(a, ____r71)
+  local ____id59 = ____r71
   local __bs5 = cut(____id59, 0)
   return {"set", __a3, join({"join", __a3}, __bs5)}
 end})
 setenv("cat!", {_stash = true, macro = function (a, ...)
-  local ____r71 = unstash({...})
-  local __a5 = destash33(a, ____r71)
-  local ____id61 = ____r71
+  local ____r73 = unstash({...})
+  local __a5 = destash33(a, ____r73)
+  local ____id61 = ____r73
   local __bs7 = cut(____id61, 0)
   return {"set", __a5, join({"cat", __a5}, __bs7)}
 end})
@@ -1097,8 +1100,8 @@ setenv("dec", {_stash = true, macro = function (n, by)
   return {"set", n, {"-", n, __e11}}
 end})
 setenv("with-indent", {_stash = true, macro = function (form)
-  local __x355 = unique("x")
-  return {"do", {"global", "indent-level"}, {"inc", "indent-level"}, {"with", __x355, form, {"dec", "indent-level"}}}
+  local __x356 = unique("x")
+  return {"do", {"inc", "indent-level"}, {"with", __x356, form, {"dec", "indent-level"}}}
 end})
 setenv("export", {_stash = true, macro = function (...)
   local __names5 = unstash({...})

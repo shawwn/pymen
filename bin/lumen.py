@@ -978,58 +978,61 @@ def __f42():
   else:
     return hd(__clauses3)
 setenv("target", {"_stash": True, "macro": __f42})
-def __f43(a):
-  ____r69 = unstash([...])
-  __a3 = destash33(a, ____r69)
-  ____id59 = ____r69
-  __bs5 = cut(____id59, 0)
-  return ["set", __a3, join(["join", __a3], __bs5)]
-setenv("join!", {"_stash": True, "macro": __f43})
+def __f43(x):
+  return ["=", "target", x]
+setenv("target?", {"_stash": True, "macro": __f43})
 def __f44(a):
   ____r71 = unstash([...])
-  __a5 = destash33(a, ____r71)
-  ____id61 = ____r71
+  __a3 = destash33(a, ____r71)
+  ____id59 = ____r71
+  __bs5 = cut(____id59, 0)
+  return ["set", __a3, join(["join", __a3], __bs5)]
+setenv("join!", {"_stash": True, "macro": __f44})
+def __f45(a):
+  ____r73 = unstash([...])
+  __a5 = destash33(a, ____r73)
+  ____id61 = ____r73
   __bs7 = cut(____id61, 0)
   return ["set", __a5, join(["cat", __a5], __bs7)]
-setenv("cat!", {"_stash": True, "macro": __f44})
-def __f45(n, by):
+setenv("cat!", {"_stash": True, "macro": __f45})
+def __f46(n, by):
 
   if nil63(by):
     __e12 = 1
   else:
     __e12 = by
   return ["set", n, ["+", n, __e12]]
-setenv("inc", {"_stash": True, "macro": __f45})
-def __f46(n, by):
+setenv("inc", {"_stash": True, "macro": __f46})
+def __f47(n, by):
 
   if nil63(by):
     __e13 = 1
   else:
     __e13 = by
   return ["set", n, ["-", n, __e13]]
-setenv("dec", {"_stash": True, "macro": __f46})
-def __f47(form):
-  __x355 = unique("x")
-  return ["do", ["global", "indent-level"], ["inc", "indent-level"], ["with", __x355, form, ["dec", "indent-level"]]]
-setenv("with-indent", {"_stash": True, "macro": __f47})
-def __f48():
+setenv("dec", {"_stash": True, "macro": __f47})
+def __f48(form):
+  __x356 = unique("x")
+  return ["do", ["inc", "indent-level"], ["with", __x356, form, ["dec", "indent-level"]]]
+setenv("with-indent", {"_stash": True, "macro": __f48})
+def __f49():
   __names5 = unstash([...])
-  def __f49(k):
+  def __f50(k):
     if k == compile(k):
       return ["set", ["idx", "exports", k], k]
     else:
       return ["set", ["get", "exports", ["quote", k]], k, ["idx", "exports", k], k]
-  __forms3 = map(__f49, __names5)
+  __forms3 = map(__f50, __names5)
   if target == "js":
     return join(["do"], __forms3)
   else:
     if target == "lua":
       return join(["let", "exports", ["or", "exports", ["obj"]]], __forms3, [["return", "exports"]])
-setenv("export", {"_stash": True, "macro": __f48})
-def __f50():
+setenv("export", {"_stash": True, "macro": __f49})
+def __f51():
   __body43 = unstash([...])
   return _eval(join(["do"], __body43))
-setenv("when-compiling", {"_stash": True, "macro": __f50})
+setenv("when-compiling", {"_stash": True, "macro": __f51})
 reader = require("reader")
 compiler = require("compiler")
 system = require("system")

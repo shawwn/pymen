@@ -9,14 +9,14 @@
               (pair args))))
 
 (define-macro at (l i)
-  (if (and (= target 'lua) (number? i))
+  (if (and (target? 'lua) (number? i))
       (inc i)
-      (= target 'lua)
+      (target? 'lua)
       (set i `(+ ,i 1)))
   `(get ,l ,i))
 
 (define-macro wipe (place)
-  (if (= target 'lua)
+  (if (target? 'lua)
       `(set ,place nil)
     `(%delete ,place)))
 
@@ -150,7 +150,7 @@
       `((do apply) ,f ,@args)))
 
 (define-macro guard (expr)
-  (if (= target 'js)
+  (if (target? 'js)
       `((fn () (%try (list true ,expr))))
     `(list (xpcall
              (fn () ,expr)
@@ -169,7 +169,7 @@
       `(let (,o ,t ,k nil)
          (%for ,o ,k
            (let (,v (get ,o ,k))
-             ,@(if (= target 'lua) body
+             ,@(if (target? 'lua) body
                    `((let ,k (if (numeric? ,k)
                                  (parseInt ,k)
                                ,k)
@@ -201,6 +201,9 @@
       (get clauses target)
     (hd clauses)))
 
+(define-macro target? (x)
+  `(= target ,x))
+
 (define-macro join! (a rest: bs)
   `(set ,a (join ,a ,@bs)))
 
@@ -226,9 +229,9 @@
                       `(set (get exports ',k) ,k
                             (idx exports ,k) ,k)))
                   names)
-    (if (= target 'js)
+    (if (target? 'js)
         `(do ,@forms)
-        (= target 'lua)
+        (target? 'lua)
         `(let exports (or exports (obj))
            ,@forms
            (return exports)))))
