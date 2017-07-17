@@ -2,6 +2,7 @@
 
 (define-global nil? (x)
   (target
+    py: (%literal x | is None|)
     js: (or (= x nil) (= x null))
     lua: (= x nil)))
 

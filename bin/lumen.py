@@ -1,6 +1,6 @@
 environment = [{}]
 def nil63(x):
-  pass
+  return x is None
 def is63(x):
   return not nil63(x)
 def no(x):
