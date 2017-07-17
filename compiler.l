@@ -783,6 +783,11 @@
       (cat (indentation) "global " (inner (compile-args args)) "\n")
     ""))
 
+(define-special import (x) :stmt
+  (if (target? 'py)
+      (cat (indentation) "import " (compile x))
+    (cat (indentation) (compile `(%local ,x (require ,(escape x)))))))
+
 (export run
         eval
         expand

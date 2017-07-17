@@ -1172,3 +1172,9 @@ def __f30(*_rest, **_params):
   else:
     return ""
 setenv("global", {"_stash": True, "special": __f30, "stmt": True, "tr": True})
+def __f31(x):
+  if setenv("target", {"_stash": True, "toplevel": True})["value"] == "py":
+    return cat(indentation(), "import ", compile(x))
+  else:
+    return cat(indentation(), compile(["%local", x, ["require", escape(x)]]))
+setenv("import", {"_stash": True, "special": __f31, "stmt": True})

@@ -594,8 +594,8 @@ def setenv(k, *_rest, **_params):
 def _print(x):
   print(x)
   return None
+import math
 
-abs = math.abs
 acos = math.acos
 asin = math.asin
 atan = math.atan
@@ -605,10 +605,10 @@ cos = math.cos
 floor = math.floor
 log = math.log
 log10 = math.log10
-max = math.max
-min = math.min
-pow = math.pow
-random = math.random
+
+
+
+
 sin = math.sin
 sinh = math.sinh
 sqrt = math.sqrt
@@ -1055,9 +1055,9 @@ def __f54(*_rest, **_params):
   __body43 = unstash(_rest)
   return _eval(join(["do"], __body43))
 setenv("when-compiling", {"_stash": True, "macro": __f54})
-reader = require("reader")
-compiler = require("compiler")
-system = require("system")
+import reader
+import compiler
+
 def eval_print(form):
   def __f():
     return compiler._eval(form)

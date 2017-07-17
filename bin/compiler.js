@@ -1439,6 +1439,13 @@ setenv("global", {_stash: true, special: function () {
     return "";
   }
 }, stmt: true, tr: true});
+setenv("import", {_stash: true, special: function (x) {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "py") {
+    return indentation() + "import " + compile(x);
+  } else {
+    return indentation() + compile(["%local", x, ["require", escape(x)]]);
+  }
+}, stmt: true});
 exports.run = run;
 exports["eval"] = _eval;
 exports._eval = _eval;

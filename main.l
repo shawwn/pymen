@@ -1,6 +1,7 @@
-(define reader (require 'reader))
-(define compiler (require 'compiler))
-(define system (require 'system))
+(import reader)
+(import compiler)
+(target py: ||
+  (import system))
 
 (define eval-print (form)
   (let ((ok v) (guard ((idx compiler eval) form)))

@@ -1378,6 +1378,13 @@ setenv("global", {_stash = true, special = function (...)
     return ""
   end
 end, stmt = true, tr = true})
+setenv("import", {_stash = true, special = function (x)
+  if setenv("target", {_stash = true, toplevel = true}).value == "py" then
+    return indentation() .. "import " .. compile(x)
+  else
+    return indentation() .. compile({"%local", x, {"require", escape(x)}})
+  end
+end, stmt = true})
 local __exports = exports or {}
 __exports.run = run
 __exports["eval"] = _eval

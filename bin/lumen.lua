@@ -671,7 +671,6 @@ end
 function _print(x)
   return print(x)
 end
-local math = math
 abs = math.abs
 acos = math.acos
 asin = math.asin
