@@ -2,7 +2,7 @@ reader = require("reader")
 def getenv(k, p):
   if string63(k) then
     __i = edge(environment)
-    while __i >= 0 do
+    while __i >= 0:
       __b = environment[__i][k]
       if is63(__b) then
 
@@ -15,7 +15,6 @@ def getenv(k, p):
       else
         __i = __i - 1
 
-    end
 
 def macro_function(k):
   return getenv(k, "macro")
@@ -162,11 +161,10 @@ def bind42(args, body):
       __bs1 = join(__bs1, [__r19, rest()])
       __n3 = _35(__args1)
       __i4 = 0
-      while __i4 < __n3 do
+      while __i4 < __n3:
         __v3 = __args1[__i4]
         __bs1 = join(__bs1, [__v3, ["destash!", __v3, __r19]])
         __i4 = __i4 + 1
-      end
       __bs1 = join(__bs1, [keys(args), __r19])
 
     return [__args1, join(["let", __bs1], body)]
@@ -295,7 +293,7 @@ def quasiquote_list(form, depth):
   }
   ____x55 = form
   ____i8 = 0
-  while ____i8 < _35(____x55) do
+  while ____i8 < _35(____x55):
     __x56 = ____x55[____i8]
     if quasisplice63(__x56, depth) then
       __x57 = quasiexpand(__x56[1])
@@ -305,7 +303,6 @@ def quasiquote_list(form, depth):
       add(last(__xs), quasiexpand(__x56, depth))
 
     ____i8 = ____i8 + 1
-  end
   def __f3(x):
     return _or(_35(x) > 1, _not(_61(hd(x), "list")))
   __pruned = keep(__f3, __xs)
@@ -366,10 +363,9 @@ indent_level = 0
 def indentation():
   __s = ""
   __i9 = 0
-  while __i9 < indent_level do
+  while __i9 < indent_level:
     __s = cat(__s, "  ")
     __i9 = __i9 + 1
-  end
   return __s
 reserved = {"=": True, "==": True, "+": True, "-": True, "%": True, "*": True, "/": True, "<": True, ">": True, "<=": True, ">=": True, "break": True, "case": True, "catch": True, "class": True, "const": True, "continue": True, "debugger": True, "default": True, "delete": True, "do": True, "else": True, "eval": True, "finally": True, "for": True, "function": True, "if": True, "import": True, "in": True, "instanceof": True, "let": True, "new": True, "return": True, "switch": True, "throw": True, "try": True, "typeof": True, "var": True, "void": True, "with": True, "and": True, "end": True, "load": True, "repeat": True, "while": True, "false": True, "local": True, "nil": True, "then": True, "not": True, "true": True, "elseif": True, "or": True, "until": True}
 def reserved63(x):
@@ -385,7 +381,7 @@ def id(id):
 
   __id11 = __e32
   __i10 = 0
-  while __i10 < _35(id) do
+  while __i10 < _35(id):
     __c1 = char(id, __i10)
     __n7 = code(__c1)
 
@@ -409,7 +405,6 @@ def id(id):
     __c11 = __e33
     __id11 = cat(__id11, __c11)
     __i10 = __i10 + 1
-  end
   if reserved63(__id11) then
     return cat("_", __id11)
   else
@@ -544,17 +539,16 @@ def compile_args(args):
   __c2 = ""
   ____x83 = args
   ____i15 = 0
-  while ____i15 < _35(____x83) do
+  while ____i15 < _35(____x83):
     __x84 = ____x83[____i15]
     __s1 = cat(__s1, __c2, compile(__x84))
     __c2 = ", "
     ____i15 = ____i15 + 1
-  end
   return cat(__s1, ")")
 def escape_newlines(s):
   __s11 = ""
   __i16 = 0
-  while __i16 < _35(s) do
+  while __i16 < _35(s):
     __c3 = char(s, __i16)
 
     if _61(__c3, "\n") then
@@ -570,7 +564,6 @@ def escape_newlines(s):
 
     __s11 = cat(__s11, __e38)
     __i16 = __i16 + 1
-  end
   return __s11
 def compile_nil():
   if _61(target, "py") then
@@ -833,7 +826,7 @@ def standalone63(form):
 def lower_do(args, hoist, stmt63, tail63):
   ____x99 = almost(args)
   ____i17 = 0
-  while ____i17 < _35(____x99) do
+  while ____i17 < _35(____x99):
     __x100 = ____x99[____i17]
     ____y = lower(__x100, hoist, stmt63)
     if yes(____y) then
@@ -843,7 +836,6 @@ def lower_do(args, hoist, stmt63, tail63):
 
 
     ____i17 = ____i17 + 1
-  end
   __e2 = lower(last(args), hoist, stmt63, tail63)
   if _and(tail63, can_return63(__e2)) then
     return ["return", __e2]
@@ -1050,7 +1042,7 @@ def __f9():
   __s4 = ""
   ____x143 = __forms1
   ____i19 = 0
-  while ____i19 < _35(____x143) do
+  while ____i19 < _35(____x143):
     __x144 = ____x143[____i19]
     if _and(_61(target, "lua"), immediate_call63(__x144)) then
       __s4 = cat(clip(__s4, 0, edge(__s4)), ";\n")
@@ -1062,7 +1054,6 @@ def __f9():
 
 
     ____i19 = ____i19 + 1
-  end
   return __s4
 setenv("do", {"_stash": True, "special": __f9, "stmt": True, "tr": True})
 def __f10(cond, cons, alt):
@@ -1101,24 +1092,25 @@ def __f10(cond, cons, alt):
 setenv("%if", {"_stash": True, "special": __f10, "stmt": True, "tr": True})
 def __f111(cond, form):
   __cond4 = compile(cond)
-  indent_level = indent_level + 1
-  ____x150 = compile(form, {"_stash": True, "stmt": True})
-  indent_level = indent_level - 1
-  __body10 = ____x150
+  __body10 = compile_body(form)
   __ind5 = indentation()
   if _61(target, "js") then
     return cat(__ind5, "while (", __cond4, ") {\n", __body10, __ind5, "}\n")
   else
-    return cat(__ind5, "while ", __cond4, " do\n", __body10, __ind5, "end\n")
+    if _61(target, "py") then
+      return cat(__ind5, "while ", __cond4, ":\n", __body10)
+    else
+      return cat(__ind5, "while ", __cond4, " do\n", __body10, __ind5, "end\n")
+
 
 setenv("while", {"_stash": True, "special": __f111, "stmt": True, "tr": True})
 def __f12(t, k, form):
   __t2 = compile(t)
   __ind7 = indentation()
   indent_level = indent_level + 1
-  ____x152 = compile(form, {"_stash": True, "stmt": True})
+  ____x150 = compile(form, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __body12 = ____x152
+  __body12 = ____x150
   if _61(target, "lua") then
     return cat(__ind7, "for ", k, " in next, ", __t2, " do\n", __body12, __ind7, "end\n")
   else
@@ -1129,14 +1121,14 @@ def __f13(form):
   __e8 = unique("e")
   __ind9 = indentation()
   indent_level = indent_level + 1
-  ____x157 = compile(form, {"_stash": True, "stmt": True})
+  ____x155 = compile(form, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __body14 = ____x157
+  __body14 = ____x155
   __hf1 = ["return", ["%array", False, __e8]]
   indent_level = indent_level + 1
-  ____x160 = compile(__hf1, {"_stash": True, "stmt": True})
+  ____x158 = compile(__hf1, {"_stash": True, "stmt": True})
   indent_level = indent_level - 1
-  __h1 = ____x160
+  __h1 = ____x158
   return cat(__ind9, "try {\n", __body14, __ind9, "}\n", __ind9, "catch (", __e8, ") {\n", __h1, __ind9, "}\n")
 setenv("%try", {"_stash": True, "special": __f13, "stmt": True, "tr": True})
 def __f14(place):
@@ -1150,16 +1142,16 @@ def __f16(args, body):
 setenv("%function", {"_stash": True, "special": __f16})
 def __f17(name, args, body):
   if _or(_61(target, "lua"), _61(target, "py")) then
-    __x164 = compile_function(args, body, {"_stash": True, "name": name})
-    return cat(indentation(), __x164)
+    __x162 = compile_function(args, body, {"_stash": True, "name": name})
+    return cat(indentation(), __x162)
   else
     return compile(["%set", name, ["%function", args, body]], {"_stash": True, "stmt": True})
 
 setenv("%global-function", {"_stash": True, "special": __f17, "stmt": True, "tr": True})
 def __f18(name, args, body):
   if _or(_61(target, "lua"), _61(target, "py")) then
-    __x170 = compile_function(args, body, {"_stash": True, "name": name, "prefix": "local"})
-    return cat(indentation(), __x170)
+    __x168 = compile_function(args, body, {"_stash": True, "name": name, "prefix": "local"})
+    return cat(indentation(), __x168)
   else
     return compile(["%local", name, ["%function", args, body]], {"_stash": True, "stmt": True})
 
@@ -1171,8 +1163,8 @@ def __f19(x):
   else
     __e56 = cat("return ", compile(x))
 
-  __x174 = __e56
-  return cat(indentation(), __x174)
+  __x172 = __e56
+  return cat(indentation(), __x172)
 setenv("return", {"_stash": True, "special": __f19, "stmt": True})
 def __f20(x):
   return cat("new ", compile(x))

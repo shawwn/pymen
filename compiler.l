@@ -642,10 +642,12 @@
 
 (define-special while (cond form) :stmt :tr
   (let (cond (compile cond)
-        body (with-indent (compile form :stmt))
+        body (compile-body form)
         ind (indentation))
     (if (= target 'js)
         (cat ind "while (" cond ") {\n" body ind "}\n")
+        (= target 'py)
+        (cat ind "while " cond ":\n" body)
       (cat ind "while " cond " do\n" body ind "end\n"))))
 
 (define-special %for (t k form) :stmt :tr

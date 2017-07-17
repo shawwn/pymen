@@ -88,7 +88,7 @@ def main():
       __expr = None
       __argv = system.argv
       __i = 0
-      while __i < _35(__argv) do
+      while __i < _35(__argv):
         __a = __argv[__i]
         if _or(_61(__a, "-c"), _61(__a, "-o")) then
           if _61(__i, edge(__argv)) then
@@ -118,14 +118,12 @@ def main():
 
 
         __i = __i + 1
-      end
       ____x2 = __pre
       ____i1 = 0
-      while ____i1 < _35(____x2) do
+      while ____i1 < _35(____x2):
         __file = ____x2[____i1]
         run_file(__file)
         ____i1 = ____i1 + 1
-      end
       if nil63(__input) then
         if __expr then
           return rep(__expr)

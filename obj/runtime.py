@@ -134,11 +134,10 @@ def cut(x, from, upto):
     __e4 = upto
 
   __upto = __e4
-  while __i3 < __upto do
+  while __i3 < __upto:
     __l2[__j] = x[__i3]
     __i3 = __i3 + 1
     __j = __j + 1
-  end
   ____o3 = x
   __k6 = None
   for (__k6 in ____o3) {
@@ -198,10 +197,9 @@ def almost(l):
 def reverse(l):
   __l11 = keys(l)
   __i6 = edge(l)
-  while __i6 >= 0 do
+  while __i6 >= 0:
     add(__l11, l[__i6])
     __i6 = __i6 - 1
-  end
   return __l11
 def reduce(f, x):
   if none63(x) then
@@ -218,7 +216,7 @@ def join():
   __r41 = []
   ____x2 = __ls
   ____i7 = 0
-  while ____i7 < _35(____x2) do
+  while ____i7 < _35(____x2):
     __l3 = ____x2[____i7]
     if __l3 then
       __n7 = _35(__r41)
@@ -242,7 +240,6 @@ def join():
       }
 
     ____i7 = ____i7 + 1
-  end
   return __r41
 def find(f, t):
   ____o6 = t
@@ -264,14 +261,13 @@ def find(f, t):
 def first(f, l):
   ____x4 = l
   ____i10 = 0
-  while ____i10 < _35(____x4) do
+  while ____i10 < _35(____x4):
     __x5 = ____x4[____i10]
     __y1 = f(__x5)
     if __y1 then
       return __y1
 
     ____i10 = ____i10 + 1
-  end
 def in63(x, t):
   def __f1(y):
     return _61(x, y)
@@ -279,11 +275,10 @@ def in63(x, t):
 def pair(l):
   __l12 = dupe(l)
   __i11 = 0
-  while __i11 < _35(l) do
+  while __i11 < _35(l):
     add(__l12, [l[__i11], l[__i11 + 1]])
     __i11 = __i11 + 1
     __i11 = __i11 + 1
-  end
   return __l12
 def sort(l, f):
   pass
@@ -291,14 +286,13 @@ def map(f, x):
   __t1 = dupe(x)
   ____x7 = x
   ____i12 = 0
-  while ____i12 < _35(____x7) do
+  while ____i12 < _35(____x7):
     __v6 = ____x7[____i12]
     __y2 = f(__v6)
     if is63(__y2) then
       add(__t1, __y2)
 
     ____i12 = ____i12 + 1
-  end
   ____o7 = x
   __k12 = None
   for (__k12 in ____o7) {
@@ -437,7 +431,7 @@ def split(s, sep):
   else
     __l5 = []
     __n16 = _35(sep)
-    while True do
+    while True:
       __i19 = search(s, sep)
       if nil63(__i19) then
         break
@@ -445,7 +439,6 @@ def split(s, sep):
         add(__l5, clip(s, 0, __i19))
         s = clip(s, __i19 + __n16)
 
-    end
     add(__l5, s)
     return __l5
 
@@ -481,14 +474,13 @@ def _37():
   return either(reduce(__f8, reverse(__xs5)), 0)
 def pairwise(f, xs):
   __i20 = 0
-  while __i20 < edge(xs) do
+  while __i20 < edge(xs):
     __a = xs[__i20]
     __b = xs[__i20 + 1]
     if _not(f(__a, __b)) then
       return False
 
     __i20 = __i20 + 1
-  end
   return True
 def _60():
   __xs6 = unstash([...])
@@ -522,17 +514,16 @@ def number_code63(n):
 def numeric63(s):
   __n17 = _35(s)
   __i21 = 0
-  while __i21 < __n17 do
+  while __i21 < __n17:
     if _not(number_code63(code(s, __i21))) then
       return False
 
     __i21 = __i21 + 1
-  end
   return some63(s)
 def escape(s):
   __s1 = "\""
   __i22 = 0
-  while __i22 < _35(s) do
+  while __i22 < _35(s):
     __c = char(s, __i22)
 
     if _61(__c, "\n") then
@@ -561,7 +552,6 @@ def escape(s):
     __c1 = __e15
     __s1 = cat(__s1, __c1)
     __i22 = __i22 + 1
-  end
   return cat(__s1, "\"")
 def str(x, stack):
   if nil63(x) then

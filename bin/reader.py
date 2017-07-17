@@ -17,7 +17,7 @@ def read_char(s):
     return __c
 
 def skip_non_code(s):
-  while True do
+  while True:
     __c1 = peek_char(s)
     if nil63(__c1) then
       break
@@ -26,16 +26,14 @@ def skip_non_code(s):
         read_char(s)
       else
         if _61(__c1, ";") then
-          while _and(__c1, _not(_61(__c1, "\n"))) do
+          while _and(__c1, _not(_61(__c1, "\n"))):
             __c1 = read_char(s)
-          end
           skip_non_code(s)
         else
           break
 
 
 
-  end
 read_table = {}
 eof = {}
 def read(s):
@@ -48,13 +46,12 @@ def read(s):
 
 def read_all(s):
   __l = []
-  while True do
+  while True:
     __form = read(s)
     if _61(__form, eof) then
       break
 
     add(__l, __form)
-  end
   return __l
 def read_string(str, more):
   __x = read(stream(str, more))
@@ -113,14 +110,13 @@ def real63(x):
   return _and(number63(x), _not(nan63(x)))
 def __f(s):
   __str = ""
-  while True do
+  while True:
     __c3 = peek_char(s)
     if _and(__c3, _and(_not(whitespace[__c3]), _not(delimiters[__c3]))) then
       __str = cat(__str, read_char(s))
     else
       break
 
-  end
   if _61(__str, "true") then
     return True
   else
@@ -140,7 +136,7 @@ def __f1(s):
   read_char(s)
   __r16 = None
   __l1 = []
-  while nil63(__r16) do
+  while nil63(__r16):
     skip_non_code(s)
     __c4 = peek_char(s)
     if _61(__c4, ")") then
@@ -166,7 +162,6 @@ def __f1(s):
 
 
 
-  end
   return __r16
 read_table["("] = __f1
 def __f2(s):
@@ -176,7 +171,7 @@ def __f3(s):
   read_char(s)
   __r19 = None
   __str1 = "\""
-  while nil63(__r19) do
+  while nil63(__r19):
     __c5 = peek_char(s)
     if _61(__c5, "\"") then
       __r19 = cat(__str1, read_char(s))
@@ -190,14 +185,13 @@ def __f3(s):
         __str1 = cat(__str1, read_char(s))
 
 
-  end
   return __r19
 read_table["\""] = __f3
 def __f4(s):
   read_char(s)
   __r21 = None
   __str2 = "|"
-  while nil63(__r21) do
+  while nil63(__r21):
     __c6 = peek_char(s)
     if _61(__c6, "|") then
       __r21 = cat(__str2, read_char(s))
@@ -208,7 +202,6 @@ def __f4(s):
         __str2 = cat(__str2, read_char(s))
 
 
-  end
   return __r21
 read_table["|"] = __f4
 def __f5(s):
