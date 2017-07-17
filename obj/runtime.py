@@ -1,28 +1,24 @@
 environment = [{}]
 target = "py"
-nil63 = function (x)
-end
-is63 = function (x)
+def nil63(x):
+  pass
+def is63(x):
   return _not(nil63(x))
-end
-no = function (x)
+def no(x):
   return _or(nil63(x), _61(x, False))
-end
-yes = function (x)
+def yes(x):
   return _not(no(x))
-end
-either = function (x, y)
+def either(x, y):
   if is63(x) then
     return x
   else
     return y
 
-end
-has63 = function (l, k)
-end
-array63 = function (x)
-end
-array = function (x)
+def has63(l, k):
+  pass
+def array63(x):
+  pass
+def array(x):
   if array63(x) then
     return x
   else
@@ -44,8 +40,7 @@ array = function (x)
     }
     return __l
 
-end
-object = function (x)
+def object(x):
   if array63(x) then
     __l1 = {}
     ____o1 = x
@@ -65,8 +60,7 @@ object = function (x)
   else
     return x
 
-end
-length = function (x)
+def length(x):
   __n2 = -1
   ____o2 = x
   __k4 = None
@@ -87,56 +81,42 @@ length = function (x)
   }
   __n2 = __n2 + 1
   return __n2
-end
-_35 = function (x)
-end
-none63 = function (x)
+def _35(x):
+  pass
+def none63(x):
   return _61(_35(x), 0)
-end
-some63 = function (x)
+def some63(x):
   return _35(x) > 0
-end
-one63 = function (x)
+def one63(x):
   return _61(_35(x), 1)
-end
-two63 = function (x)
+def two63(x):
   return _61(_35(x), 2)
-end
-hd = function (l)
+def hd(l):
   return l[0]
-end
-string63 = function (x)
+def string63(x):
   return _61(type(x), "string")
-end
-number63 = function (x)
+def number63(x):
   return _61(type(x), "number")
-end
-boolean63 = function (x)
+def boolean63(x):
   return _61(type(x), "boolean")
-end
-function63 = function (x)
+def function63(x):
   return _61(type(x), "function")
-end
-obj63 = function (x)
+def obj63(x):
   return _and(is63(x), _61(type(x)))
-end
-atom63 = function (x)
+def atom63(x):
   return _or(nil63(x), string63(x))
-end
 nan = 0 / 0
 inf = 1 / 0
 _inf = - inf
-nan63 = function (n)
+def nan63(n):
   return _not(_61(n, n))
-end
-inf63 = function (n)
+def inf63(n):
   return _or(_61(n, inf), _61(n, _inf))
-end
-clip = function (s, from, upto)
-end
-dupe = function (x)
-end
-cut = function (x, from, upto)
+def clip(s, from, upto):
+  pass
+def dupe(x):
+  pass
+def cut(x, from, upto):
   __l2 = dupe(x)
   __j = 0
 
@@ -175,8 +155,7 @@ cut = function (x, from, upto)
 
   }
   return __l2
-end
-keys = function (x)
+def keys(x):
   __t = dupe(x)
   ____o4 = x
   __k8 = None
@@ -194,37 +173,29 @@ keys = function (x)
 
   }
   return __t
-end
-edge = function (x)
+def edge(x):
   return _35(x) - 1
-end
-inner = function (x)
+def inner(x):
   return clip(x, 1, edge(x))
-end
-tl = function (l)
+def tl(l):
   return cut(l, 1)
-end
-char = function (s, n)
-end
-code = function (s, n)
-end
-string_literal63 = function (x)
+def char(s, n):
+  pass
+def code(s, n):
+  pass
+def string_literal63(x):
   return _and(string63(x), _61(char(x, 0), "\""))
-end
-id_literal63 = function (x)
+def id_literal63(x):
   return _and(string63(x), _61(char(x, 0), "|"))
-end
-add = function (l, x)
-end
-drop = function (l)
-end
-last = function (l)
+def add(l, x):
+  pass
+def drop(l):
+  pass
+def last(l):
   return l[edge(l)]
-end
-almost = function (l)
+def almost(l):
   return cut(l, 0, edge(l))
-end
-reverse = function (l)
+def reverse(l):
   __l11 = keys(l)
   __i6 = edge(l)
   while __i6 >= 0 do
@@ -232,8 +203,7 @@ reverse = function (l)
     __i6 = __i6 - 1
   end
   return __l11
-end
-reduce = function (f, x)
+def reduce(f, x):
   if none63(x) then
     return None
   else
@@ -243,8 +213,7 @@ reduce = function (f, x)
       return f(hd(x), reduce(f, tl(x)))
 
 
-end
-join = function ()
+def join():
   __ls = unstash([...])
   __r41 = []
   ____x2 = __ls
@@ -275,8 +244,7 @@ join = function ()
     ____i7 = ____i7 + 1
   end
   return __r41
-end
-find = function (f, t)
+def find(f, t):
   ____o6 = t
   ____i9 = None
   for (____i9 in ____o6) {
@@ -293,8 +261,7 @@ find = function (f, t)
       return __y
 
   }
-end
-first = function (f, l)
+def first(f, l):
   ____x4 = l
   ____i10 = 0
   while ____i10 < _35(____x4) do
@@ -305,14 +272,11 @@ first = function (f, l)
 
     ____i10 = ____i10 + 1
   end
-end
-in63 = function (x, t)
-  __f1 = function (y)
+def in63(x, t):
+  def __f1(y):
     return _61(x, y)
-  end
   return find(__f1, t)
-end
-pair = function (l)
+def pair(l):
   __l12 = dupe(l)
   __i11 = 0
   while __i11 < _35(l) do
@@ -321,10 +285,9 @@ pair = function (l)
     __i11 = __i11 + 1
   end
   return __l12
-end
-sort = function (l, f)
-end
-map = function (f, x)
+def sort(l, f):
+  pass
+def map(f, x):
   __t1 = dupe(x)
   ____x7 = x
   ____i12 = 0
@@ -355,16 +318,13 @@ map = function (f, x)
 
   }
   return __t1
-end
-keep = function (f, x)
-  __f2 = function (v)
+def keep(f, x):
+  def __f2(v):
     if yes(f(v)) then
       return v
 
-  end
   return map(__f2, x)
-end
-keys63 = function (t)
+def keys63(t):
   ____o8 = t
   __k14 = None
   for (__k14 in ____o8) {
@@ -381,8 +341,7 @@ keys63 = function (t)
 
   }
   return False
-end
-empty63 = function (t)
+def empty63(t):
   ____o9 = t
   ____i15 = None
   for (____i15 in ____o9) {
@@ -397,8 +356,7 @@ empty63 = function (t)
     return False
   }
   return True
-end
-stash = function (args)
+def stash(args):
   if keys63(args) then
     __p = {}
     ____o10 = args
@@ -424,8 +382,7 @@ stash = function (args)
   else
     return array(args)
 
-end
-unstash = function (args)
+def unstash(args):
   if none63(args) then
     return {}
   else
@@ -452,8 +409,7 @@ unstash = function (args)
       return args
 
 
-end
-destash33 = function (l, args1)
+def destash33(l, args1):
   if _and(obj63(l), l._stash) then
     ____o12 = l
     __k20 = None
@@ -473,10 +429,9 @@ destash33 = function (l, args1)
   else
     return l
 
-end
-search = function (s, pattern, start)
-end
-split = function (s, sep)
+def search(s, pattern, start):
+  pass
+def split(s, sep):
   if _or(_61(s, ""), _61(sep, "")) then
     return []
   else
@@ -494,50 +449,37 @@ split = function (s, sep)
     add(__l5, s)
     return __l5
 
-end
-cat = function ()
+def cat():
   __xs = unstash([...])
-  __f3 = function (a, b)
+  def __f3(a, b):
     return cat(a, b)
-  end
   return either(reduce(__f3, __xs), "")
-end
-_43 = function ()
+def _43():
   __xs1 = unstash([...])
-  __f4 = function (a, b)
+  def __f4(a, b):
     return a + b
-  end
   return either(reduce(__f4, __xs1), 0)
-end
-_45 = function ()
+def _45():
   __xs2 = unstash([...])
-  __f5 = function (b, a)
+  def __f5(b, a):
     return a - b
-  end
   return either(reduce(__f5, reverse(__xs2)), 0)
-end
-_42 = function ()
+def _42():
   __xs3 = unstash([...])
-  __f6 = function (a, b)
+  def __f6(a, b):
     return a * b
-  end
   return either(reduce(__f6, __xs3), 1)
-end
-_47 = function ()
+def _47():
   __xs4 = unstash([...])
-  __f7 = function (b, a)
+  def __f7(b, a):
     return a / b
-  end
   return either(reduce(__f7, reverse(__xs4)), 1)
-end
-_37 = function ()
+def _37():
   __xs5 = unstash([...])
-  __f8 = function (b, a)
+  def __f8(b, a):
     return a % b
-  end
   return either(reduce(__f8, reverse(__xs5)), 0)
-end
-pairwise = function (f, xs)
+def pairwise(f, xs):
   __i20 = 0
   while __i20 < edge(xs) do
     __a = xs[__i20]
@@ -548,48 +490,36 @@ pairwise = function (f, xs)
     __i20 = __i20 + 1
   end
   return True
-end
-_60 = function ()
+def _60():
   __xs6 = unstash([...])
-  __f9 = function (a, b)
+  def __f9(a, b):
     return a < b
-  end
   return pairwise(__f9, __xs6)
-end
-_62 = function ()
+def _62():
   __xs7 = unstash([...])
-  __f10 = function (a, b)
+  def __f10(a, b):
     return a > b
-  end
   return pairwise(__f10, __xs7)
-end
-_61 = function ()
+def _61():
   __xs8 = unstash([...])
-  __f11 = function (a, b)
+  def __f11(a, b):
     return _61(a, b)
-  end
   return pairwise(__f11, __xs8)
-end
-_6061 = function ()
+def _6061():
   __xs9 = unstash([...])
-  __f12 = function (a, b)
+  def __f12(a, b):
     return a <= b
-  end
   return pairwise(__f12, __xs9)
-end
-_6261 = function ()
+def _6261():
   __xs10 = unstash([...])
-  __f13 = function (a, b)
+  def __f13(a, b):
     return a >= b
-  end
   return pairwise(__f13, __xs10)
-end
-number = function (s)
-end
-number_code63 = function (n)
+def number(s):
+  pass
+def number_code63(n):
   return _and(n > 47, n < 58)
-end
-numeric63 = function (s)
+def numeric63(s):
   __n17 = _35(s)
   __i21 = 0
   while __i21 < __n17 do
@@ -599,8 +529,7 @@ numeric63 = function (s)
     __i21 = __i21 + 1
   end
   return some63(s)
-end
-escape = function (s)
+def escape(s):
   __s1 = "\""
   __i22 = 0
   while __i22 < _35(s) do
@@ -634,8 +563,7 @@ escape = function (s)
     __i22 = __i22 + 1
   end
   return cat(__s1, "\"")
-end
-str = function (x, stack)
+def str(x, stack):
   if nil63(x) then
     return "nil"
   else
@@ -718,18 +646,15 @@ str = function (x, stack)
 
 
 
-end
-apply = function (f, args)
+def apply(f, args):
   __args = stash(args)
-end
-call = function (f)
+def call(f):
   ____r76 = unstash([...])
   __f = destash33(f, ____r76)
   ____id = ____r76
   __args11 = cut(____id, 0)
   return apply(__f, __args11)
-end
-setenv = function (k)
+def setenv(k):
   ____r77 = unstash([...])
   __k24 = destash33(k, ____r77)
   ____id1 = ____r77
@@ -759,7 +684,6 @@ setenv = function (k)
     __frame[__k24] = __entry
     return __frame[__k24]
 
-end
 
 abs = math.abs
 acos = math.acos

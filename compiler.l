@@ -404,6 +404,9 @@
     (if name (cat! tr "\n"))
     (if (= target 'js)
         (cat "function " id args " {\n" body ind "}" tr)
+        (= target 'py)
+        (let body (if (none? body) (with-indent (compile "|pass|" :stmt)) body)
+          (cat "def " id args ":\n" body))
       (cat p "function " id args "\n" body ind tr))))
 
 (define can-return? (form)
@@ -667,13 +670,13 @@
   (compile-function args body))
 
 (define-special %global-function (name args body) :stmt :tr
-  (if (= target 'lua)
+  (if (or (= target 'lua) (= target 'py))
       (let x (compile-function args body name: name)
         (cat (indentation) x))
     (compile `(%set ,name (%function ,args ,body)) :stmt)))
 
 (define-special %local-function (name args body) :stmt :tr
-  (if (= target 'lua)
+  (if (or (= target 'lua) (= target 'py))
       (let x (compile-function args body name: name prefix: 'local)
         (cat (indentation) x))
     (compile `(%local ,name (%function ,args ,body)) :stmt)))

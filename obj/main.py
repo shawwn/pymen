@@ -1,11 +1,10 @@
 reader = require("reader")
 compiler = require("compiler")
 system = require("system")
-eval_print = function (form)
-  __f = function ()
+def eval_print(form):
+  def __f():
     return compiler["eval"](form)
-  end
-  __f1 = function (m)
+  def __f1(m):
     if obj63(m) then
       return m
     else
@@ -23,7 +22,6 @@ eval_print = function (form)
 
       return {"stack": debug.traceback(), "message": __e}
 
-  end
   ____id = [xpcall(__f, __f1)]
   __ok = ____id[1]
   __v = ____id[2]
@@ -32,13 +30,11 @@ eval_print = function (form)
       return print(str(__v))
 
 
-end
-rep = function (s)
+def rep(s):
   return eval_print(reader["read-string"](s))
-end
-repl = function ()
+def repl():
   __buf = ""
-  rep1 = function (s)
+  def rep1(s):
     __buf = cat(__buf, s)
     __more = []
     __form = reader["read-string"](__buf, __more)
@@ -47,33 +43,27 @@ repl = function ()
       __buf = ""
       return system.write("> ")
 
-  end
   return system.write("> ")
-end
-compile_file = function (path)
+def compile_file(path):
   __s = reader.stream(system["read-file"](path))
   __body = reader["read-all"](__s)
   __form1 = compiler.expand(join(["do"], __body))
   return compiler.compile(__form1, {"_stash": True, "stmt": True})
-end
-_load = function (path)
+def _load(path):
   __previous = target
   target = "py"
   __code = compile_file(path)
   target = __previous
   return compiler.run(__code)
-end
-script_file63 = function (path)
+def script_file63(path):
   return _not(_or(_61("-", char(path, 0)), _61(".js", clip(path, _35(path) - 3))))
-end
-run_file = function (path)
+def run_file(path):
   if script_file63(path) then
     return _load(path)
   else
     return compiler.run(system["read-file"](path))
 
-end
-usage = function ()
+def usage():
   print("usage: lumen [<file> <arguments> | options <object files>]")
   print(" <file>\t\tProgram read from script file")
   print(" <arguments>\tPassed to program in system.argv")
@@ -83,8 +73,7 @@ usage = function ()
   print(" -o <output>\tOutput file")
   print(" -t <target>\tTarget language (default: lua)")
   return print(" -e <expr>\tExpression to evaluate")
-end
-main = function ()
+def main():
   __arg = hd(system.argv)
   if _and(__arg, script_file63(__arg)) then
     return _load(__arg)
@@ -156,5 +145,4 @@ main = function ()
 
 
 
-end
 main()

@@ -1,9 +1,8 @@
 delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
 whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
-stream = function (str, more)
+def stream(str, more):
   return {"pos": 0, "string": str, "len": _35(str), "more": more}
-end
-peek_char = function (s)
+def peek_char(s):
   ____id = s
   __pos = ____id.pos
   __len = ____id.len
@@ -11,15 +10,13 @@ peek_char = function (s)
   if __pos < __len then
     return char(__string, __pos)
 
-end
-read_char = function (s)
+def read_char(s):
   __c = peek_char(s)
   if __c then
     s.pos = s.pos + 1
     return __c
 
-end
-skip_non_code = function (s)
+def skip_non_code(s):
   while True do
     __c1 = peek_char(s)
     if nil63(__c1) then
@@ -39,10 +36,9 @@ skip_non_code = function (s)
 
 
   end
-end
 read_table = {}
 eof = {}
-read = function (s)
+def read(s):
   skip_non_code(s)
   __c2 = peek_char(s)
   if is63(__c2) then
@@ -50,8 +46,7 @@ read = function (s)
   else
     return eof
 
-end
-read_all = function (s)
+def read_all(s):
   __l = []
   while True do
     __form = read(s)
@@ -61,20 +56,16 @@ read_all = function (s)
     add(__l, __form)
   end
   return __l
-end
-read_string = function (str, more)
+def read_string(str, more):
   __x = read(stream(str, more))
   if _not(_61(__x, eof)) then
     return __x
 
-end
-key63 = function (atom)
+def key63(atom):
   return _and(string63(atom), _35(atom) > 1)
-end
-flag63 = function (atom)
+def flag63(atom):
   return _and(string63(atom), _35(atom) > 1)
-end
-expected = function (s, c)
+def expected(s, c):
   ____id1 = s
   __more = ____id1.more
   __pos1 = ____id1.pos
@@ -87,16 +78,14 @@ expected = function (s, c)
     __e = None
 
   return __e
-end
-wrap = function (s, x)
+def wrap(s, x):
   __y = read(s)
   if _61(__y, s.more) then
     return __y
   else
     return [x, __y]
 
-end
-hex_prefix63 = function (str)
+def hex_prefix63(str):
 
   if _61(code(str, 0), 45) then
     __e1 = 1
@@ -114,18 +103,15 @@ hex_prefix63 = function (str)
     __e2 = __id3
 
   return __e2
-end
-maybe_number = function (str)
+def maybe_number(str):
   if hex_prefix63(str) then
     if number_code63(code(str, edge(str))) then
       return number(str)
 
 
-end
-real63 = function (x)
+def real63(x):
   return _and(number63(x), _not(nan63(x)))
-end
-__f = function (s)
+def __f(s):
   __str = ""
   while True do
     __c3 = peek_char(s)
@@ -149,9 +135,8 @@ __f = function (s)
 
 
 
-end
 read_table[""] = __f
-__f1 = function (s)
+def __f1(s):
   read_char(s)
   __r16 = None
   __l1 = []
@@ -183,13 +168,11 @@ __f1 = function (s)
 
   end
   return __r16
-end
 read_table["("] = __f1
-__f2 = function (s)
+def __f2(s):
   error(cat("Unexpected ) at ", s.pos))
-end
 read_table[")"] = __f2
-__f3 = function (s)
+def __f3(s):
   read_char(s)
   __r19 = None
   __str1 = "\""
@@ -209,9 +192,8 @@ __f3 = function (s)
 
   end
   return __r19
-end
 read_table["\""] = __f3
-__f4 = function (s)
+def __f4(s):
   read_char(s)
   __r21 = None
   __str2 = "|"
@@ -228,19 +210,16 @@ __f4 = function (s)
 
   end
   return __r21
-end
 read_table["|"] = __f4
-__f5 = function (s)
+def __f5(s):
   read_char(s)
   return wrap(s, "quote")
-end
 read_table["'"] = __f5
-__f6 = function (s)
+def __f6(s):
   read_char(s)
   return wrap(s, "quasiquote")
-end
 read_table["`"] = __f6
-__f7 = function (s)
+def __f7(s):
   read_char(s)
   if _61(peek_char(s), "@") then
     read_char(s)
@@ -248,6 +227,5 @@ __f7 = function (s)
   else
     return wrap(s, "unquote")
 
-end
 read_table[","] = __f7
 return {"stream": stream, "read": read, "read-all": read_all, "read-string": read_string, "read-table": read_table}

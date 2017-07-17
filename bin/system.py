@@ -1,30 +1,27 @@
-read_file = function (path)
-end
-write_file = function (path, data)
-end
-file_exists63 = function (path)
-end
-directory_exists63 = function (path)
-end
+def read_file(path):
+  pass
+def write_file(path, data):
+  pass
+def file_exists63(path):
+  pass
+def directory_exists63(path):
+  pass
 
-path_join = function ()
+def path_join():
   __parts = unstash([...])
-  __f = function (x, y)
+  def __f(x, y):
     return cat(x, path_separator, y)
-  end
   return _or(reduce(__f, __parts), "")
-end
-get_environment_variable = function (name)
-end
-write = function (x)
-end
-exit = function (code)
-end
+def get_environment_variable(name):
+  pass
+def write(x):
+  pass
+def exit(code):
+  pass
 
-reload = function (module)
+def reload(module):
   delete 
   return require(module)
-end
-run = function (command)
-end
+def run(command):
+  pass
 return {"read-file": read_file, "write-file": write_file, "file-exists?": file_exists63, "directory-exists?": directory_exists63, "path-separator": path_separator, "path-join": path_join, "get-environment-variable": get_environment_variable, "write": write, "exit": exit, "argv": argv, "reload": reload, "run": run}
