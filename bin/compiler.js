@@ -618,43 +618,61 @@ var escape_newlines = function (s) {
   }
   return __s11;
 };
-var compile_atom = function (x) {
-  if (x === "nil" && target === "lua") {
-    return x;
+var compile_nil = function () {
+  if (target === "py") {
+    return "None";
   } else {
-    if (x === "nil") {
-      return "undefined";
+    if (target === "lua") {
+      return "nil";
     } else {
-      if (id_literal63(x)) {
-        return inner(x);
+      return "undefined";
+    }
+  }
+};
+var compile_boolean = function (x) {
+  if (target === "py") {
+    if (x) {
+      return "True";
+    } else {
+      return "False";
+    }
+  } else {
+    if (x) {
+      return "true";
+    } else {
+      return "false";
+    }
+  }
+};
+var compile_atom = function (x) {
+  if (x === "nil") {
+    return compile_nil();
+  } else {
+    if (id_literal63(x)) {
+      return inner(x);
+    } else {
+      if (string_literal63(x)) {
+        return escape_newlines(x);
       } else {
-        if (string_literal63(x)) {
-          return escape_newlines(x);
+        if (string63(x)) {
+          return id(x);
         } else {
-          if (string63(x)) {
-            return id(x);
+          if (boolean63(x)) {
+            return compile_boolean(x);
           } else {
-            if (boolean63(x)) {
-              if (x) {
-                return "true";
-              } else {
-                return "false";
-              }
+            if (nan63(x)) {
+              return "nan";
             } else {
-              if (nan63(x)) {
-                return "nan";
+              if (x === inf) {
+                return "inf";
               } else {
-                if (x === inf) {
-                  return "inf";
+                if (x === _inf) {
+                  return "-inf";
                 } else {
-                  if (x === _inf) {
-                    return "-inf";
+                  if (number63(x)) {
+                    return x + "";
                   } else {
-                    if (number63(x)) {
-                      return x + "";
-                    } else {
-                      throw new Error("Cannot compile atom: " + str(x));
-                    }
+                    throw new Error("Cannot compile atom: " + str(x));
                   }
                 }
               }
@@ -701,10 +719,10 @@ var compile_call = function (form) {
   }
 };
 var op_delims = function (parent, child) {
-  var ____r57 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __parent = destash33(parent, ____r57);
-  var __child = destash33(child, ____r57);
-  var ____id8 = ____r57;
+  var ____r59 = unstash(Array.prototype.slice.call(arguments, 2));
+  var __parent = destash33(parent, ____r59);
+  var __child = destash33(child, ____r59);
+  var ____id8 = ____r59;
   var __right = ____id8.right;
   var __e39;
   if (__right) {
@@ -740,10 +758,10 @@ var compile_infix = function (form) {
   }
 };
 compile_function = function (args, body) {
-  var ____r59 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __args4 = destash33(args, ____r59);
-  var __body3 = destash33(body, ____r59);
-  var ____id13 = ____r59;
+  var ____r61 = unstash(Array.prototype.slice.call(arguments, 2));
+  var __args4 = destash33(args, ____r61);
+  var __body3 = destash33(body, ____r61);
+  var ____id13 = ____r61;
   var __name3 = ____id13.name;
   var __prefix = ____id13.prefix;
   var __e40;
@@ -793,9 +811,9 @@ var can_return63 = function (form) {
   return is63(form) && (atom63(form) || !( hd(form) === "return") && ! statement63(hd(form)));
 };
 compile = function (form) {
-  var ____r61 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __form = destash33(form, ____r61);
-  var ____id15 = ____r61;
+  var ____r63 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __form = destash33(form, ____r63);
+  var ____id15 = ____r63;
   var __stmt1 = ____id15.stmt;
   if (nil63(__form)) {
     return "";

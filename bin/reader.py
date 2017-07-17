@@ -1,5 +1,5 @@
-local delimiters = {"(": true, ")": true, ";": true, "\r": true, "\n": true}
-local whitespace = {" ": true, "\t": true, "\r": true, "\n": true}
+local delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
+local whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
 local stream = function (str, more)
   return {"pos": 0, "string": str, "len": _35(str), "more": more}
 end
@@ -20,7 +20,7 @@ local read_char = function (s)
 
 end
 local skip_non_code = function (s)
-  while true do
+  while True do
     local __c1 = peek_char(s)
     if nil63(__c1) then
       break
@@ -53,7 +53,7 @@ local read = function (s)
 end
 local read_all = function (s)
   local __l = []
-  while true do
+  while True do
     local __form = read(s)
     if _61(__form, eof) then
       break
@@ -84,7 +84,7 @@ local expected = function (s, c)
     __e = __id2
   else
     error(cat("Expected ", c, " at ", __pos1))
-    __e = undefined
+    __e = None
 
   return __e
 end
@@ -127,7 +127,7 @@ local real63 = function (x)
 end
 local __f = function (s)
   local __str = ""
-  while true do
+  while True do
     local __c3 = peek_char(s)
     if _and(__c3, _and(_not(whitespace[__c3]), _not(delimiters[__c3]))) then
       __str = cat(__str, read_char(s))
@@ -136,10 +136,10 @@ local __f = function (s)
 
   end
   if _61(__str, "true") then
-    return true
+    return True
   else
     if _61(__str, "false") then
-      return false
+      return False
     else
       local __n1 = maybe_number(__str)
       if real63(__n1) then
@@ -153,7 +153,7 @@ end
 read_table[""] = __f
 local __f1 = function (s)
   read_char(s)
-  local __r16 = undefined
+  local __r16 = None
   local __l1 = []
   while nil63(__r16) do
     skip_non_code(s)
@@ -174,7 +174,7 @@ local __f1 = function (s)
         else
           if flag63(__x2) then
             __l1 = object(__l1)
-            __l1[clip(__x2, 1)] = true
+            __l1[clip(__x2, 1)] = True
           else
             add(__l1, __x2)
 
@@ -191,7 +191,7 @@ end
 read_table[")"] = __f2
 local __f3 = function (s)
   read_char(s)
-  local __r19 = undefined
+  local __r19 = None
   local __str1 = "\""
   while nil63(__r19) do
     local __c5 = peek_char(s)
@@ -213,7 +213,7 @@ end
 read_table["\""] = __f3
 local __f4 = function (s)
   read_char(s)
-  local __r21 = undefined
+  local __r21 = None
   local __str2 = "|"
   while nil63(__r21) do
     local __c6 = peek_char(s)

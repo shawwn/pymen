@@ -54,7 +54,7 @@ compile_file = function (path)
   local __s = reader.stream(system["read-file"](path))
   local __body = reader["read-all"](__s)
   local __form1 = compiler.expand(join(["do"], __body))
-  return compiler.compile(__form1, {"_stash": true, "stmt": true})
+  return compiler.compile(__form1, {"_stash": True, "stmt": True})
 end
 _load = function (path)
   local __previous = target
@@ -93,10 +93,10 @@ local main = function ()
       return usage()
     else
       local __pre = []
-      local __input = undefined
-      local __output = undefined
-      local __target1 = undefined
-      local __expr = undefined
+      local __input = None
+      local __output = None
+      local __target1 = None
+      local __expr = None
       local __argv = system.argv
       local __i = 0
       while __i < _35(__argv) do

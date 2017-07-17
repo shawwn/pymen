@@ -564,43 +564,61 @@ local function escape_newlines(s)
   end
   return __s11
 end
-local function compile_atom(x)
-  if x == "nil" and target == "lua" then
-    return x
+local function compile_nil()
+  if target == "py" then
+    return "None"
   else
-    if x == "nil" then
-      return "undefined"
+    if target == "lua" then
+      return "nil"
     else
-      if id_literal63(x) then
-        return inner(x)
+      return "undefined"
+    end
+  end
+end
+local function compile_boolean(x)
+  if target == "py" then
+    if x then
+      return "True"
+    else
+      return "False"
+    end
+  else
+    if x then
+      return "true"
+    else
+      return "false"
+    end
+  end
+end
+local function compile_atom(x)
+  if x == "nil" then
+    return compile_nil()
+  else
+    if id_literal63(x) then
+      return inner(x)
+    else
+      if string_literal63(x) then
+        return escape_newlines(x)
       else
-        if string_literal63(x) then
-          return escape_newlines(x)
+        if string63(x) then
+          return id(x)
         else
-          if string63(x) then
-            return id(x)
+          if boolean63(x) then
+            return compile_boolean(x)
           else
-            if boolean63(x) then
-              if x then
-                return "true"
-              else
-                return "false"
-              end
+            if nan63(x) then
+              return "nan"
             else
-              if nan63(x) then
-                return "nan"
+              if x == inf then
+                return "inf"
               else
-                if x == inf then
-                  return "inf"
+                if x == _inf then
+                  return "-inf"
                 else
-                  if x == _inf then
-                    return "-inf"
+                  if number63(x) then
+                    return x .. ""
                   else
-                    if number63(x) then
-                      return x .. ""
-                    else
-                      error("Cannot compile atom: " .. str(x))
-                    end
+                    error("Cannot compile atom: " .. str(x))
                   end
                 end
               end
@@ -647,10 +665,10 @@ local function compile_call(form)
   end
 end
 local function op_delims(parent, child, ...)
-  local ____r57 = unstash({...})
-  local __parent = destash33(parent, ____r57)
-  local __child = destash33(child, ____r57)
-  local ____id8 = ____r57
+  local ____r59 = unstash({...})
+  local __parent = destash33(parent, ____r59)
+  local __child = destash33(child, ____r59)
+  local ____id8 = ____r59
   local __right = ____id8.right
   local __e31
   if __right then
@@ -686,10 +704,10 @@ local function compile_infix(form)
   end
 end
 function compile_function(args, body, ...)
-  local ____r59 = unstash({...})
-  local __args4 = destash33(args, ____r59)
-  local __body3 = destash33(body, ____r59)
-  local ____id13 = ____r59
+  local ____r61 = unstash({...})
+  local __args4 = destash33(args, ____r61)
+  local __body3 = destash33(body, ____r61)
+  local ____id13 = ____r61
   local __name3 = ____id13.name
   local __prefix = ____id13.prefix
   local __e32
@@ -739,9 +757,9 @@ local function can_return63(form)
   return is63(form) and (atom63(form) or not( hd(form) == "return") and not statement63(hd(form)))
 end
 function compile(form, ...)
-  local ____r61 = unstash({...})
-  local __form = destash33(form, ____r61)
-  local ____id15 = ____r61
+  local ____r63 = unstash({...})
+  local __form = destash33(form, ____r63)
+  local ____id15 = ____r63
   local __stmt1 = ____id15.stmt
   if nil63(__form) then
     return ""

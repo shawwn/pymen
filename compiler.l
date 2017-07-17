@@ -326,13 +326,22 @@
                      (= c "\r") "\\r"
                    c))))))
 
+(define compile-nil ()
+  (if (= target 'py) "None"
+      (= target 'lua) "nil"
+    "undefined"))
+
+(define compile-boolean (x)
+  (if (= target 'py)
+      (if x "True" "False")
+    (if x "true" "false")))
+
 (define compile-atom (x)
-  (if (and (= x "nil") (= target 'lua)) x
-      (= x "nil") "undefined"
+  (if (= x "nil") (compile-nil)
       (id-literal? x) (inner x)
       (string-literal? x) (escape-newlines x)
       (string? x) (id x)
-      (boolean? x) (if x "true" "false")
+      (boolean? x) (compile-boolean x)
       (nan? x) "nan"
       (= x inf) "inf"
       (= x -inf) "-inf"

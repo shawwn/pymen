@@ -6,7 +6,7 @@ is63 = function (x)
   return _not(nil63(x))
 end
 no = function (x)
-  return _or(nil63(x), _61(x, false))
+  return _or(nil63(x), _61(x, False))
 end
 yes = function (x)
   return _not(no(x))
@@ -28,7 +28,7 @@ array = function (x)
   else
     local __l = []
     local ____o = x
-    local __k = undefined
+    local __k = None
     for (__k in ____o) {
       local __v = ____o[__k]
       local __e
@@ -49,7 +49,7 @@ object = function (x)
   if array63(x) then
     local __l1 = {}
     local ____o1 = x
-    local __k2 = undefined
+    local __k2 = None
     for (__k2 in ____o1) {
       local __v1 = ____o1[__k2]
       local __e1
@@ -69,7 +69,7 @@ end
 length = function (x)
   local __n2 = -1
   local ____o2 = x
-  local __k4 = undefined
+  local __k4 = None
   for (__k4 in ____o2) {
     local __v2 = ____o2[__k4]
     local __e2
@@ -160,7 +160,7 @@ cut = function (x, from, upto)
     __j = __j + 1
   end
   local ____o3 = x
-  local __k6 = undefined
+  local __k6 = None
   for (__k6 in ____o3) {
     local __v3 = ____o3[__k6]
     local __e5
@@ -179,7 +179,7 @@ end
 keys = function (x)
   local __t = dupe(x)
   local ____o4 = x
-  local __k8 = undefined
+  local __k8 = None
   for (__k8 in ____o4) {
     local __v4 = ____o4[__k8]
     local __e6
@@ -235,7 +235,7 @@ reverse = function (l)
 end
 reduce = function (f, x)
   if none63(x) then
-    return undefined
+    return None
   else
     if one63(x) then
       return hd(x)
@@ -254,7 +254,7 @@ join = function ()
     if __l3 then
       local __n7 = _35(__r41)
       local ____o5 = __l3
-      local __k10 = undefined
+      local __k10 = None
       for (__k10 in ____o5) {
         local __v5 = ____o5[__k10]
         local __e7
@@ -278,7 +278,7 @@ join = function ()
 end
 find = function (f, t)
   local ____o6 = t
-  local ____i9 = undefined
+  local ____i9 = None
   for (____i9 in ____o6) {
     local __x3 = ____o6[____i9]
     local __e8
@@ -337,7 +337,7 @@ map = function (f, x)
     ____i12 = ____i12 + 1
   end
   local ____o7 = x
-  local __k12 = undefined
+  local __k12 = None
   for (__k12 in ____o7) {
     local __v7 = ____o7[__k12]
     local __e9
@@ -366,7 +366,7 @@ keep = function (f, x)
 end
 keys63 = function (t)
   local ____o8 = t
-  local __k14 = undefined
+  local __k14 = None
   for (__k14 in ____o8) {
     local __v8 = ____o8[__k14]
     local __e10
@@ -377,14 +377,14 @@ keys63 = function (t)
 
     local __k15 = __e10
     if _not(number63(__k15)) then
-      return true
+      return True
 
   }
-  return false
+  return False
 end
 empty63 = function (t)
   local ____o9 = t
-  local ____i15 = undefined
+  local ____i15 = None
   for (____i15 in ____o9) {
     local __x8 = ____o9[____i15]
     local __e11
@@ -394,15 +394,15 @@ empty63 = function (t)
       __e11 = ____i15
 
     local ____i151 = __e11
-    return false
+    return False
   }
-  return true
+  return True
 end
 stash = function (args)
   if keys63(args) then
     local __p = {}
     local ____o10 = args
-    local __k16 = undefined
+    local __k16 = None
     for (__k16 in ____o10) {
       local __v9 = ____o10[__k16]
       local __e12
@@ -416,7 +416,7 @@ stash = function (args)
         __p[__k17] = __v9
 
     }
-    __p._stash = true
+    __p._stash = True
     add(args, __p)
 
   if array63(args) then
@@ -433,7 +433,7 @@ unstash = function (args)
     if _and(obj63(__l4), __l4._stash) then
       local __args1 = object(almost(args))
       local ____o11 = __l4
-      local __k18 = undefined
+      local __k18 = None
       for (__k18 in ____o11) {
         local __v10 = ____o11[__k18]
         local __e13
@@ -456,7 +456,7 @@ end
 destash33 = function (l, args1)
   if _and(obj63(l), l._stash) then
     local ____o12 = l
-    local __k20 = undefined
+    local __k20 = None
     for (__k20 in ____o12) {
       local __v11 = ____o12[__k20]
       local __e14
@@ -482,7 +482,7 @@ split = function (s, sep)
   else
     local __l5 = []
     local __n16 = _35(sep)
-    while true do
+    while True do
       local __i19 = search(s, sep)
       if nil63(__i19) then
         break
@@ -543,11 +543,11 @@ local pairwise = function (f, xs)
     local __a = xs[__i20]
     local __b = xs[__i20 + 1]
     if _not(f(__a, __b)) then
-      return false
+      return False
 
     __i20 = __i20 + 1
   end
-  return true
+  return True
 end
 _60 = function ()
   local __xs6 = unstash([...])
@@ -594,7 +594,7 @@ numeric63 = function (s)
   local __i21 = 0
   while __i21 < __n17 do
     if _not(number_code63(code(s, __i21))) then
-      return false
+      return False
 
     __i21 = __i21 + 1
   end
@@ -675,7 +675,7 @@ str = function (x, stack)
                       local __l6 = _or(stack, [])
                       add(__l6, x)
                       local ____o13 = x
-                      local __k22 = undefined
+                      local __k22 = None
                       for (__k22 in ____o13) {
                         local __v12 = ____o13[__k22]
                         local __e19
@@ -694,7 +694,7 @@ str = function (x, stack)
                       }
                       drop(__l6)
                       local ____o14 = join(__xs11, __ks)
-                      local ____i24 = undefined
+                      local ____i24 = None
                       for (____i24 in ____o14) {
                         local __v13 = ____o14[____i24]
                         local __e20
@@ -744,7 +744,7 @@ setenv = function (k)
     local __frame = __e21
     local __entry = _or(__frame[__k24], {})
     local ____o15 = __keys
-    local __k25 = undefined
+    local __k25 = None
     for (__k25 in ____o15) {
       local __v14 = ____o15[__k25]
       local __e22
