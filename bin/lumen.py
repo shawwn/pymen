@@ -591,6 +591,8 @@ def setenv(k, *_rest, **_params):
         __entry[__k26] = __v14
     __frame[__k24] = __entry
     return __frame[__k24]
+def _print(x):
+  return print(x)
 
 abs = math.abs
 acos = math.acos
@@ -1078,7 +1080,7 @@ def eval_print(form):
   __v = ____id[2]
   if not __ok:
     if is63(__v):
-      return print(_str(__v))
+      return _print(_str(__v))
 def rep(s):
   return eval_print(reader.read_string(s))
 def repl():
@@ -1111,15 +1113,15 @@ def run_file(path):
   else:
     return compiler.run(system.read_file(path))
 def usage():
-  print("usage: lumen [<file> <arguments> | options <object files>]")
-  print(" <file>\t\tProgram read from script file")
-  print(" <arguments>\tPassed to program in system.argv")
-  print(" <object files>\tLoaded before compiling <input>")
-  print("options:")
-  print(" -c <input>\tCompile input file")
-  print(" -o <output>\tOutput file")
-  print(" -t <target>\tTarget language (default: lua)")
-  return print(" -e <expr>\tExpression to evaluate")
+  _print("usage: lumen [<file> <arguments> | options <object files>]")
+  _print(" <file>\t\tProgram read from script file")
+  _print(" <arguments>\tPassed to program in system.argv")
+  _print(" <object files>\tLoaded before compiling <input>")
+  _print("options:")
+  _print(" -c <input>\tCompile input file")
+  _print(" -o <output>\tOutput file")
+  _print(" -t <target>\tTarget language (default: lua)")
+  return _print(" -e <expr>\tExpression to evaluate")
 def main():
   __arg = hd(system.argv)
   if __arg and script_file63(__arg):
@@ -1139,7 +1141,7 @@ def main():
         __a = __argv[__i]
         if __a == "-c" or __a == "-o" or __a == "-t" or __a == "-e":
           if __i == edge(__argv):
-            print(cat("missing argument for ", __a))
+            _print(cat("missing argument for ", __a))
           else:
             __i = __i + 1
             __val = __argv[__i]
@@ -1174,7 +1176,7 @@ def main():
           setenv("target", {"_stash": True, "toplevel": True})["value"] = __target1
         __code1 = compile_file(__input)
         if nil63(__output) or __output == "-":
-          return print(__code1)
+          return _print(__code1)
         else:
           return system.write_file(__output, __code1)
 def main63():

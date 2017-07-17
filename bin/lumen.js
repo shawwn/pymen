@@ -799,7 +799,7 @@ setenv = function (k) {
     return __frame[__k24];
   }
 };
-print = function (x) {
+_print = function (x) {
   return console.log(x);
 };
 var math = Math;
@@ -1308,10 +1308,10 @@ var eval_print = function (form) {
   var __ok = ____id[0];
   var __v = ____id[1];
   if (! __ok) {
-    return print(__v.stack);
+    return _print(__v.stack);
   } else {
     if (is63(__v)) {
-      return print(_str(__v));
+      return _print(_str(__v));
     }
   }
 };
@@ -1359,15 +1359,15 @@ var run_file = function (path) {
   }
 };
 var usage = function () {
-  print("usage: lumen [<file> <arguments> | options <object files>]");
-  print(" <file>\t\tProgram read from script file");
-  print(" <arguments>\tPassed to program in system.argv");
-  print(" <object files>\tLoaded before compiling <input>");
-  print("options:");
-  print(" -c <input>\tCompile input file");
-  print(" -o <output>\tOutput file");
-  print(" -t <target>\tTarget language (default: lua)");
-  return print(" -e <expr>\tExpression to evaluate");
+  _print("usage: lumen [<file> <arguments> | options <object files>]");
+  _print(" <file>\t\tProgram read from script file");
+  _print(" <arguments>\tPassed to program in system.argv");
+  _print(" <object files>\tLoaded before compiling <input>");
+  _print("options:");
+  _print(" -c <input>\tCompile input file");
+  _print(" -o <output>\tOutput file");
+  _print(" -t <target>\tTarget language (default: lua)");
+  return _print(" -e <expr>\tExpression to evaluate");
 };
 var main = function () {
   var __arg = hd(system.argv);
@@ -1388,7 +1388,7 @@ var main = function () {
         var __a = __argv[__i];
         if (__a === "-c" || __a === "-o" || __a === "-t" || __a === "-e") {
           if (__i === edge(__argv)) {
-            print("missing argument for " + __a);
+            _print("missing argument for " + __a);
           } else {
             __i = __i + 1;
             var __val = __argv[__i];
@@ -1434,7 +1434,7 @@ var main = function () {
         }
         var __code1 = compile_file(__input);
         if (nil63(__output) || __output === "-") {
-          return print(__code1);
+          return _print(__code1);
         } else {
           return system.write_file(__output, __code1);
         }

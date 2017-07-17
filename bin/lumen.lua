@@ -668,6 +668,9 @@ function setenv(k, ...)
     return __frame[__k12]
   end
 end
+function _print(x)
+  return print(x)
+end
 local math = math
 abs = math.abs
 acos = math.acos
@@ -1173,10 +1176,10 @@ local function eval_print(form)
   local __ok = ____id[1]
   local __v = ____id[2]
   if not __ok then
-    return print("error: " .. __v.message .. "\n" .. __v.stack)
+    return _print("error: " .. __v.message .. "\n" .. __v.stack)
   else
     if is63(__v) then
-      return print(_str(__v))
+      return _print(_str(__v))
     end
   end
 end
@@ -1229,15 +1232,15 @@ local function run_file(path)
   end
 end
 local function usage()
-  print("usage: lumen [<file> <arguments> | options <object files>]")
-  print(" <file>\t\tProgram read from script file")
-  print(" <arguments>\tPassed to program in system.argv")
-  print(" <object files>\tLoaded before compiling <input>")
-  print("options:")
-  print(" -c <input>\tCompile input file")
-  print(" -o <output>\tOutput file")
-  print(" -t <target>\tTarget language (default: lua)")
-  return print(" -e <expr>\tExpression to evaluate")
+  _print("usage: lumen [<file> <arguments> | options <object files>]")
+  _print(" <file>\t\tProgram read from script file")
+  _print(" <arguments>\tPassed to program in system.argv")
+  _print(" <object files>\tLoaded before compiling <input>")
+  _print("options:")
+  _print(" -c <input>\tCompile input file")
+  _print(" -o <output>\tOutput file")
+  _print(" -t <target>\tTarget language (default: lua)")
+  return _print(" -e <expr>\tExpression to evaluate")
 end
 local function main()
   local __arg = hd(system.argv)
@@ -1258,7 +1261,7 @@ local function main()
         local __a = __argv[__i + 1]
         if __a == "-c" or __a == "-o" or __a == "-t" or __a == "-e" then
           if __i == edge(__argv) then
-            print("missing argument for " .. __a)
+            _print("missing argument for " .. __a)
           else
             __i = __i + 1
             local __val = __argv[__i + 1]
@@ -1304,7 +1307,7 @@ local function main()
         end
         local __code1 = compile_file(__input)
         if nil63(__output) or __output == "-" then
-          return print(__code1)
+          return _print(__code1)
         else
           return system.write_file(__output, __code1)
         end

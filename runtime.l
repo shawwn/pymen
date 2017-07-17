@@ -381,9 +381,10 @@
           (set (get entry k) v)))
       (set (get frame k) entry))))
 
-(target js:
-  (define-global print (x)
-    ((idx console log) x)))
+(define-global print (x)
+  (target js: ((idx console log) x)
+          py: (|print| x)
+          lua: (|print| x)))
 
 (define math (target js: Math lua: math))
 
