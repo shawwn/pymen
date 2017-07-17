@@ -73,8 +73,8 @@
 (define-global atom? (x)
   (or (nil? x) (string? x) (number? x) (boolean? x)))
 
-(define-global nan (/ 0 0))
-(define-global inf (/ 1 0))
+(define-global nan (target js: (/ 0 0) lua: (/ 0 0) py: (float "nan")))
+(define-global inf (target js: (/ 1 0) lua: (/ 1 0) py: (float "inf")))
 (define-global -inf (- inf))
 
 (define-global nan? (n)

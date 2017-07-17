@@ -92,8 +92,8 @@ def obj63(x):
   return is63(x) and (isinstance(x, dict) or isinstance(x, list))
 def atom63(x):
   return nil63(x) or string63(x) or number63(x) or boolean63(x)
-nan = 0 / 0
-inf = 1 / 0
+nan = float("nan")
+inf = float("inf")
 _inf = - inf
 def nan63(n):
   return not( n == n)
