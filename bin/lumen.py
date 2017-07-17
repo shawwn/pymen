@@ -3,11 +3,11 @@ target = "py"
 def nil63(x):
   pass
 def is63(x):
-  return _not(nil63(x))
+  return not nil63(x)
 def no(x):
-  return _or(nil63(x), _61(x, False))
+  return nil63(x) or x == False
 def yes(x):
-  return _not(no(x))
+  return not no(x)
 def either(x, y):
   if is63(x):
     return x
@@ -75,34 +75,34 @@ def length(x):
 def _35(x):
   pass
 def none63(x):
-  return _61(_35(x), 0)
+  return _35(x) == 0
 def some63(x):
   return _35(x) > 0
 def one63(x):
-  return _61(_35(x), 1)
+  return _35(x) == 1
 def two63(x):
-  return _61(_35(x), 2)
+  return _35(x) == 2
 def hd(l):
   return l[0]
 def string63(x):
-  return _61(type(x), "string")
+  return type(x) == "string"
 def number63(x):
-  return _61(type(x), "number")
+  return type(x) == "number"
 def boolean63(x):
-  return _61(type(x), "boolean")
+  return type(x) == "boolean"
 def function63(x):
-  return _61(type(x), "function")
+  return type(x) == "function"
 def obj63(x):
-  return _and(is63(x), _61(type(x)))
+  return is63(x) and type(x) == 
 def atom63(x):
-  return _or(nil63(x), string63(x))
+  return nil63(x) or string63(x) or number63(x) or boolean63(x)
 nan = 0 / 0
 inf = 1 / 0
 _inf = - inf
 def nan63(n):
-  return _not(_61(n, n))
+  return not( n == n)
 def inf63(n):
-  return _or(_61(n, inf), _61(n, _inf))
+  return n == inf or n == _inf
 def clip(s, from, upto):
   pass
 def dupe(x):
@@ -111,14 +111,14 @@ def cut(x, from, upto):
   __l2 = dupe(x)
   __j = 0
 
-  if _or(nil63(from), from < 0):
+  if nil63(from) or from < 0:
     __e3 = 0
   else:
     __e3 = from
   __i3 = __e3
   __n4 = _35(x)
 
-  if _or(nil63(upto), upto > __n4):
+  if nil63(upto) or upto > __n4:
     __e4 = __n4
   else:
     __e4 = upto
@@ -137,7 +137,7 @@ def cut(x, from, upto):
     else:
       __e5 = __k6
     __k7 = __e5
-    if _not(number63(__k7)):
+    if not number63(__k7):
       __l2[__k7] = __v3
   }
   return __l2
@@ -153,7 +153,7 @@ def keys(x):
     else:
       __e6 = __k8
     __k9 = __e6
-    if _not(number63(__k9)):
+    if not number63(__k9):
       __t[__k9] = __v4
   }
   return __t
@@ -168,9 +168,9 @@ def char(s, n):
 def code(s, n):
   pass
 def string_literal63(x):
-  return _and(string63(x), _61(char(x, 0), "\""))
+  return string63(x) and char(x, 0) == "\""
 def id_literal63(x):
-  return _and(string63(x), _61(char(x, 0), "|"))
+  return string63(x) and char(x, 0) == "|"
 def add(l, x):
   pass
 def drop(l):
@@ -247,7 +247,7 @@ def first(f, l):
     ____i10 = ____i10 + 1
 def in63(x, t):
   def __f1(y):
-    return _61(x, y)
+    return x == y
   return find(__f1, t)
 def pair(l):
   __l12 = dupe(l)
@@ -279,7 +279,7 @@ def map(f, x):
     else:
       __e9 = __k12
     __k13 = __e9
-    if _not(number63(__k13)):
+    if not number63(__k13):
       __y3 = f(__v7)
       if is63(__y3):
         __t1[__k13] = __y3
@@ -301,7 +301,7 @@ def keys63(t):
     else:
       __e10 = __k14
     __k15 = __e10
-    if _not(number63(__k15)):
+    if not number63(__k15):
       return True
   }
   return False
@@ -332,7 +332,7 @@ def stash(args):
       else:
         __e12 = __k16
       __k17 = __e12
-      if _not(number63(__k17)):
+      if not number63(__k17):
         __p[__k17] = __v9
     }
     __p._stash = True
@@ -346,7 +346,7 @@ def unstash(args):
     return {}
   else:
     __l4 = last(args)
-    if _and(obj63(__l4), __l4._stash):
+    if obj63(__l4) and __l4._stash:
       __args1 = object(almost(args))
       ____o11 = __l4
       __k18 = None
@@ -358,14 +358,14 @@ def unstash(args):
         else:
           __e13 = __k18
         __k19 = __e13
-        if _not(_61(__k19, "_stash")):
+        if not( __k19 == "_stash"):
           __args1[__k19] = __v10
       }
       return __args1
     else:
       return args
 def destash33(l, args1):
-  if _and(obj63(l), l._stash):
+  if obj63(l) and l._stash:
     ____o12 = l
     __k20 = None
     for (__k20 in ____o12) {
@@ -376,7 +376,7 @@ def destash33(l, args1):
       else:
         __e14 = __k20
       __k21 = __e14
-      if _not(_61(__k21, "_stash")):
+      if not( __k21 == "_stash"):
         args1[__k21] = __v11
     }
   else:
@@ -384,7 +384,7 @@ def destash33(l, args1):
 def search(s, pattern, start):
   pass
 def split(s, sep):
-  if _or(_61(s, ""), _61(sep, "")):
+  if s == "" or sep == "":
     return []
   else:
     __l5 = []
@@ -433,7 +433,7 @@ def pairwise(f, xs):
   while __i20 < edge(xs):
     __a = xs[__i20]
     __b = xs[__i20 + 1]
-    if _not(f(__a, __b)):
+    if not f(__a, __b):
       return False
     __i20 = __i20 + 1
   return True
@@ -450,7 +450,7 @@ def _62():
 def _61():
   __xs8 = unstash([...])
   def __f11(a, b):
-    return _61(a, b)
+    return a == b
   return pairwise(__f11, __xs8)
 def _6061():
   __xs9 = unstash([...])
@@ -465,12 +465,12 @@ def _6261():
 def number(s):
   pass
 def number_code63(n):
-  return _and(n > 47, n < 58)
+  return n > 47 and n < 58
 def numeric63(s):
   __n17 = _35(s)
   __i21 = 0
   while __i21 < __n17:
-    if _not(number_code63(code(s, __i21))):
+    if not number_code63(code(s, __i21)):
       return False
     __i21 = __i21 + 1
   return some63(s)
@@ -480,19 +480,19 @@ def escape(s):
   while __i22 < _35(s):
     __c = char(s, __i22)
 
-    if _61(__c, "\n"):
+    if __c == "\n":
       __e15 = "\\n"
     else:
 
-      if _61(__c, "\r"):
+      if __c == "\r":
         __e16 = "\\r"
       else:
 
-        if _61(__c, "\""):
+        if __c == "\"":
           __e17 = "\\\""
         else:
 
-          if _61(__c, "\\"):
+          if __c == "\\":
             __e18 = "\\\\"
           else:
             __e18 = __c
@@ -510,10 +510,10 @@ def str(x, stack):
     if nan63(x):
       return "nan"
     else:
-      if _61(x, inf):
+      if x == inf:
         return "inf"
       else:
-        if _61(x, _inf):
+        if x == _inf:
           return "-inf"
         else:
           if boolean63(x):
@@ -531,7 +531,7 @@ def str(x, stack):
                 if function63(x):
                   return "function"
                 else:
-                  if _and(stack, in63(x, stack)):
+                  if stack and in63(x, stack):
                     return "circular"
                   else:
                     if escape(tostring(x)):
@@ -539,7 +539,7 @@ def str(x, stack):
                       __sp = ""
                       __xs11 = []
                       __ks = []
-                      __l6 = _or(stack, [])
+                      __l6 = stack or []
                       add(__l6, x)
                       ____o13 = x
                       __k22 = None
@@ -592,7 +592,7 @@ def setenv(k):
     else:
       __e21 = last(environment)
     __frame = __e21
-    __entry = _or(__frame[__k24], {})
+    __entry = __frame[__k24] or {}
     ____o15 = __keys
     __k25 = None
     for (__k25 in ____o15) {
@@ -644,15 +644,15 @@ def __f4():
   return join(["do"], map(__f5, pair(__args1)))
 setenv("set", {"_stash": True, "macro": __f4})
 def __f6(l, i):
-  if _and(_61(target, "lua"), number63(i)):
+  if target == "lua" and number63(i):
     i = i + 1
   else:
-    if _61(target, "lua"):
+    if target == "lua":
       i = ["+", i, 1]
   return ["get", l, i]
 setenv("at", {"_stash": True, "macro": __f6})
 def __f7(place):
-  if _61(target, "lua"):
+  if target == "lua":
     return ["set", place, "nil"]
   else:
     return ["%delete", place]
@@ -702,7 +702,7 @@ def __f10(expr):
     if nil63(__b1):
       return [__a1]
     else:
-      if _or(string63(__a1), number63(__a1)):
+      if string63(__a1) or number63(__a1):
         return [__eq1(__a1), __b1]
       else:
         if one63(__a1):
@@ -753,7 +753,7 @@ def __f17(bs):
       __val1 = ____id16[2]
       __bs12 = cut(____id16, 2)
       __renames1 = []
-      if _not(id_literal63(__id17)):
+      if not id_literal63(__id17):
         __id121 = unique(__id17)
         __renames1 = [__id17, __id121]
         __id17 = __id121
@@ -914,7 +914,7 @@ def __f35(f):
     return join([["do", "apply"], __f1], __args9)
 setenv("apply", {"_stash": True, "macro": __f35})
 def __f36(expr):
-  if _61(target, "js"):
+  if target == "js":
     return [["fn", join(), ["%try", ["list", True, expr]]]]
   else:
     ____x257 = object(["obj"])
@@ -945,7 +945,7 @@ def __f37(x, t):
   __k5 = ____id53[1]
   __v7 = ____id53[2]
 
-  if _61(target, "lua"):
+  if target == "lua":
     __e11 = __body37
   else:
     __e11 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)]
@@ -1032,7 +1032,7 @@ def __f47(form):
 setenv("with-indent", {"_stash": True, "macro": __f47})
 def __f48():
   __names5 = unstash([...])
-  if _61(target, "js"):
+  if target == "js":
     def __f50(k):
       return ["set", ["get", "exports", ["quote", k]], k]
     return join(["do"], map(__f50, __names5))
@@ -1082,7 +1082,7 @@ def eval_print(form):
   ____id = [xpcall(__f, __f1)]
   __ok = ____id[1]
   __v = ____id[2]
-  if _not(__ok):
+  if not __ok:
     if is63(__v):
       return print(str(__v))
 def rep(s):
@@ -1093,7 +1093,7 @@ def repl():
     __buf = cat(__buf, s)
     __more = []
     __form = reader["read-string"](__buf, __more)
-    if _not(_61(__form, __more)):
+    if not( __form == __more):
       eval_print(__form)
       __buf = ""
       return system.write("> ")
@@ -1110,7 +1110,7 @@ def _load(path):
   target = __previous
   return compiler.run(__code)
 def script_file63(path):
-  return _not(_or(_61("-", char(path, 0)), _61(".js", clip(path, _35(path) - 3))))
+  return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
 def run_file(path):
   if script_file63(path):
     return _load(path)
@@ -1128,10 +1128,10 @@ def usage():
   return print(" -e <expr>\tExpression to evaluate")
 def main():
   __arg = hd(system.argv)
-  if _and(__arg, script_file63(__arg)):
+  if __arg and script_file63(__arg):
     return _load(__arg)
   else:
-    if _or(_61(__arg, "-h"), _61(__arg, "--help")):
+    if __arg == "-h" or __arg == "--help":
       return usage()
     else:
       __pre = []
@@ -1143,25 +1143,25 @@ def main():
       __i = 0
       while __i < _35(__argv):
         __a = __argv[__i]
-        if _or(_61(__a, "-c"), _61(__a, "-o")):
-          if _61(__i, edge(__argv)):
+        if __a == "-c" or __a == "-o" or __a == "-t" or __a == "-e":
+          if __i == edge(__argv):
             print(cat("missing argument for ", __a))
           else:
             __i = __i + 1
             __val = __argv[__i]
-            if _61(__a, "-c"):
+            if __a == "-c":
               __input = __val
             else:
-              if _61(__a, "-o"):
+              if __a == "-o":
                 __output = __val
               else:
-                if _61(__a, "-t"):
+                if __a == "-t":
                   __target1 = __val
                 else:
-                  if _61(__a, "-e"):
+                  if __a == "-e":
                     __expr = __val
         else:
-          if _not(_61("-", char(__a, 0))):
+          if not( "-" == char(__a, 0)):
             add(__pre, __a)
         __i = __i + 1
       ____x2 = __pre
@@ -1179,7 +1179,7 @@ def main():
         if __target1:
           target = __target1
         __code1 = compile_file(__input)
-        if _or(nil63(__output), _61(__output, "-")):
+        if nil63(__output) or __output == "-":
           return print(__code1)
         else:
           return system["write-file"](__output, __code1)

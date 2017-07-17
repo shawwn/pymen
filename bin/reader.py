@@ -23,8 +23,8 @@ def skip_non_code(s):
       if whitespace[__c1]:
         read_char(s)
       else:
-        if _61(__c1, ";"):
-          while _and(__c1, _not(_61(__c1, "\n"))):
+        if __c1 == ";":
+          while __c1 and not( __c1 == "\n"):
             __c1 = read_char(s)
           skip_non_code(s)
         else:
@@ -35,25 +35,25 @@ def read(s):
   skip_non_code(s)
   __c2 = peek_char(s)
   if is63(__c2):
-    return (_or(read_table[__c2], read_table[""]))(s)
+    return (read_table[__c2] or read_table[""])(s)
   else:
     return eof
 def read_all(s):
   __l = []
   while True:
     __form = read(s)
-    if _61(__form, eof):
+    if __form == eof:
       break
     add(__l, __form)
   return __l
 def read_string(str, more):
   __x = read(stream(str, more))
-  if _not(_61(__x, eof)):
+  if not( __x == eof):
     return __x
 def key63(atom):
-  return _and(string63(atom), _35(atom) > 1)
+  return string63(atom) and _35(atom) > 1 and char(atom, edge(atom)) == ":"
 def flag63(atom):
-  return _and(string63(atom), _35(atom) > 1)
+  return string63(atom) and _35(atom) > 1 and char(atom, 0) == ":"
 def expected(s, c):
   ____id1 = s
   __more = ____id1.more
@@ -68,23 +68,23 @@ def expected(s, c):
   return __e
 def wrap(s, x):
   __y = read(s)
-  if _61(__y, s.more):
+  if __y == s.more:
     return __y
   else:
     return [x, __y]
 def hex_prefix63(str):
 
-  if _61(code(str, 0), 45):
+  if code(str, 0) == 45:
     __e1 = 1
   else:
     __e1 = 0
   __i = __e1
-  __id3 = _61(code(str, __i), 48)
+  __id3 = code(str, __i) == 48
 
   if __id3:
     __i = __i + 1
     __n = code(str, __i)
-    __e2 = _or(_61(__n, 120), _61(__n, 88))
+    __e2 = __n == 120 or __n == 88
   else:
     __e2 = __id3
   return __e2
@@ -93,19 +93,19 @@ def maybe_number(str):
     if number_code63(code(str, edge(str))):
       return number(str)
 def real63(x):
-  return _and(number63(x), _not(nan63(x)))
+  return number63(x) and not nan63(x) and not inf63(x)
 def __f(s):
   __str = ""
   while True:
     __c3 = peek_char(s)
-    if _and(__c3, _and(_not(whitespace[__c3]), _not(delimiters[__c3]))):
+    if __c3 and (not whitespace[__c3] and not delimiters[__c3]):
       __str = cat(__str, read_char(s))
     else:
       break
-  if _61(__str, "true"):
+  if __str == "true":
     return True
   else:
-    if _61(__str, "false"):
+    if __str == "false":
       return False
     else:
       __n1 = maybe_number(__str)
@@ -121,7 +121,7 @@ def __f1(s):
   while nil63(__r16):
     skip_non_code(s)
     __c4 = peek_char(s)
-    if _61(__c4, ")"):
+    if __c4 == ")":
       read_char(s)
       __r16 = __l1
     else:
@@ -151,13 +151,13 @@ def __f3(s):
   __str1 = "\""
   while nil63(__r19):
     __c5 = peek_char(s)
-    if _61(__c5, "\""):
+    if __c5 == "\"":
       __r19 = cat(__str1, read_char(s))
     else:
       if nil63(__c5):
         __r19 = expected(s, "\"")
       else:
-        if _61(__c5, "\\"):
+        if __c5 == "\\":
           __str1 = cat(__str1, read_char(s))
         __str1 = cat(__str1, read_char(s))
   return __r19
@@ -168,7 +168,7 @@ def __f4(s):
   __str2 = "|"
   while nil63(__r21):
     __c6 = peek_char(s)
-    if _61(__c6, "|"):
+    if __c6 == "|":
       __r21 = cat(__str2, read_char(s))
     else:
       if nil63(__c6):
@@ -187,7 +187,7 @@ def __f6(s):
 read_table["`"] = __f6
 def __f7(s):
   read_char(s)
-  if _61(peek_char(s), "@"):
+  if peek_char(s) == "@":
     read_char(s)
     return wrap(s, "unquote-splicing")
   else:

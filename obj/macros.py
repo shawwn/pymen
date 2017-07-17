@@ -14,15 +14,15 @@ def __f4():
   return join(["do"], map(__f5, pair(__args1)))
 setenv("set", {"_stash": True, "macro": __f4})
 def __f6(l, i):
-  if _and(_61(target, "lua"), number63(i)):
+  if target == "lua" and number63(i):
     i = i + 1
   else:
-    if _61(target, "lua"):
+    if target == "lua":
       i = ["+", i, 1]
   return ["get", l, i]
 setenv("at", {"_stash": True, "macro": __f6})
 def __f7(place):
-  if _61(target, "lua"):
+  if target == "lua":
     return ["set", place, "nil"]
   else:
     return ["%delete", place]
@@ -72,7 +72,7 @@ def __f10(expr):
     if nil63(__b1):
       return [__a1]
     else:
-      if _or(string63(__a1), number63(__a1)):
+      if string63(__a1) or number63(__a1):
         return [__eq1(__a1), __b1]
       else:
         if one63(__a1):
@@ -123,7 +123,7 @@ def __f17(bs):
       __val1 = ____id16[2]
       __bs12 = cut(____id16, 2)
       __renames1 = []
-      if _not(id_literal63(__id17)):
+      if not id_literal63(__id17):
         __id121 = unique(__id17)
         __renames1 = [__id17, __id121]
         __id17 = __id121
@@ -284,7 +284,7 @@ def __f35(f):
     return join([["do", "apply"], __f1], __args9)
 setenv("apply", {"_stash": True, "macro": __f35})
 def __f36(expr):
-  if _61(target, "js"):
+  if target == "js":
     return [["fn", join(), ["%try", ["list", True, expr]]]]
   else:
     ____x257 = object(["obj"])
@@ -315,7 +315,7 @@ def __f37(x, t):
   __k5 = ____id53[1]
   __v7 = ____id53[2]
 
-  if _61(target, "lua"):
+  if target == "lua":
     __e11 = __body37
   else:
     __e11 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)]
@@ -402,7 +402,7 @@ def __f47(form):
 setenv("with-indent", {"_stash": True, "macro": __f47})
 def __f48():
   __names5 = unstash([...])
-  if _61(target, "js"):
+  if target == "js":
     def __f50(k):
       return ["set", ["get", "exports", ["quote", k]], k]
     return join(["do"], map(__f50, __names5))

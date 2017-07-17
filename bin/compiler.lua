@@ -456,6 +456,7 @@ local ____x68 = object({})
 local ____x69 = object({})
 ____x69.js = "!"
 ____x69.lua = "not"
+____x69.py = "not"
 ____x68["not"] = ____x69
 local ____x70 = object({})
 ____x70["*"] = true
@@ -478,16 +479,19 @@ local ____x75 = object({})
 local ____x76 = object({})
 ____x76.js = "==="
 ____x76.lua = "=="
+____x76.py = "=="
 ____x75["="] = ____x76
 local ____x77 = object({})
 local ____x78 = object({})
 ____x78.js = "&&"
 ____x78.lua = "and"
+____x78.py = "and"
 ____x77["and"] = ____x78
 local ____x79 = object({})
 local ____x80 = object({})
 ____x80.js = "||"
 ____x80.lua = "or"
+____x80.py = "or"
 ____x79["or"] = ____x80
 local infix = {____x68, ____x70, ____x71, ____x73, ____x74, ____x75, ____x77, ____x79}
 local function unary63(form)

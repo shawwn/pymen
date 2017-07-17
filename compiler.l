@@ -277,14 +277,14 @@
           (add o x))))))
 
 (define infix
-  `((not: (js: ! lua: ,"not"))
+  `((not: (js: ! lua: ,"not" py: ,"not"))
     (:* :/ :%)
     (cat: (js: + lua: ..))
     (:+ :-)
     (:< :> :<= :>=)
-    (=: (js: === lua: ==))
-    (and: (js: && lua: and))
-    (or: (js: ,"||" lua: or))))
+    (=: (js: === lua: == py: ==))
+    (and: (js: && lua: and py: and))
+    (or: (js: ,"||" lua: or py: or))))
 
 (define unary? (form)
   (and (two? form) (in? (hd form) '(not -))))

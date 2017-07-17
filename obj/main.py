@@ -22,7 +22,7 @@ def eval_print(form):
   ____id = [xpcall(__f, __f1)]
   __ok = ____id[1]
   __v = ____id[2]
-  if _not(__ok):
+  if not __ok:
     if is63(__v):
       return print(str(__v))
 def rep(s):
@@ -33,7 +33,7 @@ def repl():
     __buf = cat(__buf, s)
     __more = []
     __form = reader["read-string"](__buf, __more)
-    if _not(_61(__form, __more)):
+    if not( __form == __more):
       eval_print(__form)
       __buf = ""
       return system.write("> ")
@@ -50,7 +50,7 @@ def _load(path):
   target = __previous
   return compiler.run(__code)
 def script_file63(path):
-  return _not(_or(_61("-", char(path, 0)), _61(".js", clip(path, _35(path) - 3))))
+  return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
 def run_file(path):
   if script_file63(path):
     return _load(path)
@@ -68,10 +68,10 @@ def usage():
   return print(" -e <expr>\tExpression to evaluate")
 def main():
   __arg = hd(system.argv)
-  if _and(__arg, script_file63(__arg)):
+  if __arg and script_file63(__arg):
     return _load(__arg)
   else:
-    if _or(_61(__arg, "-h"), _61(__arg, "--help")):
+    if __arg == "-h" or __arg == "--help":
       return usage()
     else:
       __pre = []
@@ -83,25 +83,25 @@ def main():
       __i = 0
       while __i < _35(__argv):
         __a = __argv[__i]
-        if _or(_61(__a, "-c"), _61(__a, "-o")):
-          if _61(__i, edge(__argv)):
+        if __a == "-c" or __a == "-o" or __a == "-t" or __a == "-e":
+          if __i == edge(__argv):
             print(cat("missing argument for ", __a))
           else:
             __i = __i + 1
             __val = __argv[__i]
-            if _61(__a, "-c"):
+            if __a == "-c":
               __input = __val
             else:
-              if _61(__a, "-o"):
+              if __a == "-o":
                 __output = __val
               else:
-                if _61(__a, "-t"):
+                if __a == "-t":
                   __target1 = __val
                 else:
-                  if _61(__a, "-e"):
+                  if __a == "-e":
                     __expr = __val
         else:
-          if _not(_61("-", char(__a, 0))):
+          if not( "-" == char(__a, 0)):
             add(__pre, __a)
         __i = __i + 1
       ____x2 = __pre
@@ -119,7 +119,7 @@ def main():
         if __target1:
           target = __target1
         __code1 = compile_file(__input)
-        if _or(nil63(__output), _61(__output, "-")):
+        if nil63(__output) or __output == "-":
           return print(__code1)
         else:
           return system["write-file"](__output, __code1)
