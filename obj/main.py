@@ -1,19 +1,19 @@
-local reader = require("reader")
-local compiler = require("compiler")
-local system = require("system")
-local eval_print = function (form)
-  local __f = function ()
+reader = require("reader")
+compiler = require("compiler")
+system = require("system")
+eval_print = function (form)
+  __f = function ()
     return compiler["eval"](form)
   end
-  local __f1 = function (m)
+  __f1 = function (m)
     if obj63(m) then
       return m
     else
-      local __e
+
       if string63(m) then
         __e = clip(m, search(m, ": ") + 2)
       else
-        local __e1
+
         if nil63(m) then
           __e1 = ""
         else
@@ -24,24 +24,24 @@ local eval_print = function (form)
       return {"stack": debug.traceback(), "message": __e}
 
   end
-  local ____id = [xpcall(__f, __f1)]
-  local __ok = ____id[1]
-  local __v = ____id[2]
+  ____id = [xpcall(__f, __f1)]
+  __ok = ____id[1]
+  __v = ____id[2]
   if _not(__ok) then
     if is63(__v) then
       return print(str(__v))
 
 
 end
-local rep = function (s)
+rep = function (s)
   return eval_print(reader["read-string"](s))
 end
-local repl = function ()
-  local __buf = ""
-  local rep1 = function (s)
+repl = function ()
+  __buf = ""
+  rep1 = function (s)
     __buf = cat(__buf, s)
-    local __more = []
-    local __form = reader["read-string"](__buf, __more)
+    __more = []
+    __form = reader["read-string"](__buf, __more)
     if _not(_61(__form, __more)) then
       eval_print(__form)
       __buf = ""
@@ -51,29 +51,29 @@ local repl = function ()
   return system.write("> ")
 end
 compile_file = function (path)
-  local __s = reader.stream(system["read-file"](path))
-  local __body = reader["read-all"](__s)
-  local __form1 = compiler.expand(join(["do"], __body))
+  __s = reader.stream(system["read-file"](path))
+  __body = reader["read-all"](__s)
+  __form1 = compiler.expand(join(["do"], __body))
   return compiler.compile(__form1, {"_stash": True, "stmt": True})
 end
 _load = function (path)
-  local __previous = target
+  __previous = target
   target = "py"
-  local __code = compile_file(path)
+  __code = compile_file(path)
   target = __previous
   return compiler.run(__code)
 end
-local script_file63 = function (path)
+script_file63 = function (path)
   return _not(_or(_61("-", char(path, 0)), _61(".js", clip(path, _35(path) - 3))))
 end
-local run_file = function (path)
+run_file = function (path)
   if script_file63(path) then
     return _load(path)
   else
     return compiler.run(system["read-file"](path))
 
 end
-local usage = function ()
+usage = function ()
   print("usage: lumen [<file> <arguments> | options <object files>]")
   print(" <file>\t\tProgram read from script file")
   print(" <arguments>\tPassed to program in system.argv")
@@ -84,29 +84,29 @@ local usage = function ()
   print(" -t <target>\tTarget language (default: lua)")
   return print(" -e <expr>\tExpression to evaluate")
 end
-local main = function ()
-  local __arg = hd(system.argv)
+main = function ()
+  __arg = hd(system.argv)
   if _and(__arg, script_file63(__arg)) then
     return _load(__arg)
   else
     if _or(_61(__arg, "-h"), _61(__arg, "--help")) then
       return usage()
     else
-      local __pre = []
-      local __input = None
-      local __output = None
-      local __target1 = None
-      local __expr = None
-      local __argv = system.argv
-      local __i = 0
+      __pre = []
+      __input = None
+      __output = None
+      __target1 = None
+      __expr = None
+      __argv = system.argv
+      __i = 0
       while __i < _35(__argv) do
-        local __a = __argv[__i]
+        __a = __argv[__i]
         if _or(_61(__a, "-c"), _61(__a, "-o")) then
           if _61(__i, edge(__argv)) then
             print(cat("missing argument for ", __a))
           else
             __i = __i + 1
-            local __val = __argv[__i]
+            __val = __argv[__i]
             if _61(__a, "-c") then
               __input = __val
             else
@@ -130,10 +130,10 @@ local main = function ()
 
         __i = __i + 1
       end
-      local ____x2 = __pre
-      local ____i1 = 0
+      ____x2 = __pre
+      ____i1 = 0
       while ____i1 < _35(____x2) do
-        local __file = ____x2[____i1]
+        __file = ____x2[____i1]
         run_file(__file)
         ____i1 = ____i1 + 1
       end
@@ -147,7 +147,7 @@ local main = function ()
         if __target1 then
           target = __target1
 
-        local __code1 = compile_file(__input)
+        __code1 = compile_file(__input)
         if _or(nil63(__output), _61(__output, "-")) then
           return print(__code1)
         else

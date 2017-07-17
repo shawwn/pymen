@@ -26,18 +26,18 @@ array = function (x)
   if array63(x) then
     return x
   else
-    local __l = []
-    local ____o = x
-    local __k = None
+    __l = []
+    ____o = x
+    __k = None
     for (__k in ____o) {
-      local __v = ____o[__k]
-      local __e
+      __v = ____o[__k]
+
       if numeric63(__k) then
         __e = parseInt(__k)
       else
         __e = __k
 
-      local __k1 = __e
+      __k1 = __e
       if number63(__k1) then
         __l[__k1] = __v
 
@@ -47,18 +47,18 @@ array = function (x)
 end
 object = function (x)
   if array63(x) then
-    local __l1 = {}
-    local ____o1 = x
-    local __k2 = None
+    __l1 = {}
+    ____o1 = x
+    __k2 = None
     for (__k2 in ____o1) {
-      local __v1 = ____o1[__k2]
-      local __e1
+      __v1 = ____o1[__k2]
+
       if numeric63(__k2) then
         __e1 = parseInt(__k2)
       else
         __e1 = __k2
 
-      local __k3 = __e1
+      __k3 = __e1
       __l1[__k3] = __v1
     }
     return __l1
@@ -67,18 +67,18 @@ object = function (x)
 
 end
 length = function (x)
-  local __n2 = -1
-  local ____o2 = x
-  local __k4 = None
+  __n2 = -1
+  ____o2 = x
+  __k4 = None
   for (__k4 in ____o2) {
-    local __v2 = ____o2[__k4]
-    local __e2
+    __v2 = ____o2[__k4]
+
     if numeric63(__k4) then
       __e2 = parseInt(__k4)
     else
       __e2 = __k4
 
-    local __k5 = __e2
+    __k5 = __e2
     if number63(__k5) then
       if __k5 > __n2 then
         __n2 = __k5
@@ -137,39 +137,39 @@ end
 dupe = function (x)
 end
 cut = function (x, from, upto)
-  local __l2 = dupe(x)
-  local __j = 0
-  local __e3
+  __l2 = dupe(x)
+  __j = 0
+
   if _or(nil63(from), from < 0) then
     __e3 = 0
   else
     __e3 = from
 
-  local __i3 = __e3
-  local __n4 = _35(x)
-  local __e4
+  __i3 = __e3
+  __n4 = _35(x)
+
   if _or(nil63(upto), upto > __n4) then
     __e4 = __n4
   else
     __e4 = upto
 
-  local __upto = __e4
+  __upto = __e4
   while __i3 < __upto do
     __l2[__j] = x[__i3]
     __i3 = __i3 + 1
     __j = __j + 1
   end
-  local ____o3 = x
-  local __k6 = None
+  ____o3 = x
+  __k6 = None
   for (__k6 in ____o3) {
-    local __v3 = ____o3[__k6]
-    local __e5
+    __v3 = ____o3[__k6]
+
     if numeric63(__k6) then
       __e5 = parseInt(__k6)
     else
       __e5 = __k6
 
-    local __k7 = __e5
+    __k7 = __e5
     if _not(number63(__k7)) then
       __l2[__k7] = __v3
 
@@ -177,18 +177,18 @@ cut = function (x, from, upto)
   return __l2
 end
 keys = function (x)
-  local __t = dupe(x)
-  local ____o4 = x
-  local __k8 = None
+  __t = dupe(x)
+  ____o4 = x
+  __k8 = None
   for (__k8 in ____o4) {
-    local __v4 = ____o4[__k8]
-    local __e6
+    __v4 = ____o4[__k8]
+
     if numeric63(__k8) then
       __e6 = parseInt(__k8)
     else
       __e6 = __k8
 
-    local __k9 = __e6
+    __k9 = __e6
     if _not(number63(__k9)) then
       __t[__k9] = __v4
 
@@ -225,8 +225,8 @@ almost = function (l)
   return cut(l, 0, edge(l))
 end
 reverse = function (l)
-  local __l11 = keys(l)
-  local __i6 = edge(l)
+  __l11 = keys(l)
+  __i6 = edge(l)
   while __i6 >= 0 do
     add(__l11, l[__i6])
     __i6 = __i6 - 1
@@ -245,25 +245,25 @@ reduce = function (f, x)
 
 end
 join = function ()
-  local __ls = unstash([...])
-  local __r41 = []
-  local ____x2 = __ls
-  local ____i7 = 0
+  __ls = unstash([...])
+  __r41 = []
+  ____x2 = __ls
+  ____i7 = 0
   while ____i7 < _35(____x2) do
-    local __l3 = ____x2[____i7]
+    __l3 = ____x2[____i7]
     if __l3 then
-      local __n7 = _35(__r41)
-      local ____o5 = __l3
-      local __k10 = None
+      __n7 = _35(__r41)
+      ____o5 = __l3
+      __k10 = None
       for (__k10 in ____o5) {
-        local __v5 = ____o5[__k10]
-        local __e7
+        __v5 = ____o5[__k10]
+
         if numeric63(__k10) then
           __e7 = parseInt(__k10)
         else
           __e7 = __k10
 
-        local __k11 = __e7
+        __k11 = __e7
         if number63(__k11) then
           __k11 = __k11 + __n7
         else
@@ -277,29 +277,29 @@ join = function ()
   return __r41
 end
 find = function (f, t)
-  local ____o6 = t
-  local ____i9 = None
+  ____o6 = t
+  ____i9 = None
   for (____i9 in ____o6) {
-    local __x3 = ____o6[____i9]
-    local __e8
+    __x3 = ____o6[____i9]
+
     if numeric63(____i9) then
       __e8 = parseInt(____i9)
     else
       __e8 = ____i9
 
-    local ____i91 = __e8
-    local __y = f(__x3)
+    ____i91 = __e8
+    __y = f(__x3)
     if __y then
       return __y
 
   }
 end
 first = function (f, l)
-  local ____x4 = l
-  local ____i10 = 0
+  ____x4 = l
+  ____i10 = 0
   while ____i10 < _35(____x4) do
-    local __x5 = ____x4[____i10]
-    local __y1 = f(__x5)
+    __x5 = ____x4[____i10]
+    __y1 = f(__x5)
     if __y1 then
       return __y1
 
@@ -307,14 +307,14 @@ first = function (f, l)
   end
 end
 in63 = function (x, t)
-  local __f1 = function (y)
+  __f1 = function (y)
     return _61(x, y)
   end
   return find(__f1, t)
 end
 pair = function (l)
-  local __l12 = dupe(l)
-  local __i11 = 0
+  __l12 = dupe(l)
+  __i11 = 0
   while __i11 < _35(l) do
     add(__l12, [l[__i11], l[__i11 + 1]])
     __i11 = __i11 + 1
@@ -325,30 +325,30 @@ end
 sort = function (l, f)
 end
 map = function (f, x)
-  local __t1 = dupe(x)
-  local ____x7 = x
-  local ____i12 = 0
+  __t1 = dupe(x)
+  ____x7 = x
+  ____i12 = 0
   while ____i12 < _35(____x7) do
-    local __v6 = ____x7[____i12]
-    local __y2 = f(__v6)
+    __v6 = ____x7[____i12]
+    __y2 = f(__v6)
     if is63(__y2) then
       add(__t1, __y2)
 
     ____i12 = ____i12 + 1
   end
-  local ____o7 = x
-  local __k12 = None
+  ____o7 = x
+  __k12 = None
   for (__k12 in ____o7) {
-    local __v7 = ____o7[__k12]
-    local __e9
+    __v7 = ____o7[__k12]
+
     if numeric63(__k12) then
       __e9 = parseInt(__k12)
     else
       __e9 = __k12
 
-    local __k13 = __e9
+    __k13 = __e9
     if _not(number63(__k13)) then
-      local __y3 = f(__v7)
+      __y3 = f(__v7)
       if is63(__y3) then
         __t1[__k13] = __y3
 
@@ -357,7 +357,7 @@ map = function (f, x)
   return __t1
 end
 keep = function (f, x)
-  local __f2 = function (v)
+  __f2 = function (v)
     if yes(f(v)) then
       return v
 
@@ -365,17 +365,17 @@ keep = function (f, x)
   return map(__f2, x)
 end
 keys63 = function (t)
-  local ____o8 = t
-  local __k14 = None
+  ____o8 = t
+  __k14 = None
   for (__k14 in ____o8) {
-    local __v8 = ____o8[__k14]
-    local __e10
+    __v8 = ____o8[__k14]
+
     if numeric63(__k14) then
       __e10 = parseInt(__k14)
     else
       __e10 = __k14
 
-    local __k15 = __e10
+    __k15 = __e10
     if _not(number63(__k15)) then
       return True
 
@@ -383,35 +383,35 @@ keys63 = function (t)
   return False
 end
 empty63 = function (t)
-  local ____o9 = t
-  local ____i15 = None
+  ____o9 = t
+  ____i15 = None
   for (____i15 in ____o9) {
-    local __x8 = ____o9[____i15]
-    local __e11
+    __x8 = ____o9[____i15]
+
     if numeric63(____i15) then
       __e11 = parseInt(____i15)
     else
       __e11 = ____i15
 
-    local ____i151 = __e11
+    ____i151 = __e11
     return False
   }
   return True
 end
 stash = function (args)
   if keys63(args) then
-    local __p = {}
-    local ____o10 = args
-    local __k16 = None
+    __p = {}
+    ____o10 = args
+    __k16 = None
     for (__k16 in ____o10) {
-      local __v9 = ____o10[__k16]
-      local __e12
+      __v9 = ____o10[__k16]
+
       if numeric63(__k16) then
         __e12 = parseInt(__k16)
       else
         __e12 = __k16
 
-      local __k17 = __e12
+      __k17 = __e12
       if _not(number63(__k17)) then
         __p[__k17] = __v9
 
@@ -429,20 +429,20 @@ unstash = function (args)
   if none63(args) then
     return {}
   else
-    local __l4 = last(args)
+    __l4 = last(args)
     if _and(obj63(__l4), __l4._stash) then
-      local __args1 = object(almost(args))
-      local ____o11 = __l4
-      local __k18 = None
+      __args1 = object(almost(args))
+      ____o11 = __l4
+      __k18 = None
       for (__k18 in ____o11) {
-        local __v10 = ____o11[__k18]
-        local __e13
+        __v10 = ____o11[__k18]
+
         if numeric63(__k18) then
           __e13 = parseInt(__k18)
         else
           __e13 = __k18
 
-        local __k19 = __e13
+        __k19 = __e13
         if _not(_61(__k19, "_stash")) then
           __args1[__k19] = __v10
 
@@ -455,17 +455,17 @@ unstash = function (args)
 end
 destash33 = function (l, args1)
   if _and(obj63(l), l._stash) then
-    local ____o12 = l
-    local __k20 = None
+    ____o12 = l
+    __k20 = None
     for (__k20 in ____o12) {
-      local __v11 = ____o12[__k20]
-      local __e14
+      __v11 = ____o12[__k20]
+
       if numeric63(__k20) then
         __e14 = parseInt(__k20)
       else
         __e14 = __k20
 
-      local __k21 = __e14
+      __k21 = __e14
       if _not(_61(__k21, "_stash")) then
         args1[__k21] = __v11
 
@@ -480,10 +480,10 @@ split = function (s, sep)
   if _or(_61(s, ""), _61(sep, "")) then
     return []
   else
-    local __l5 = []
-    local __n16 = _35(sep)
+    __l5 = []
+    __n16 = _35(sep)
     while True do
-      local __i19 = search(s, sep)
+      __i19 = search(s, sep)
       if nil63(__i19) then
         break
       else
@@ -496,52 +496,52 @@ split = function (s, sep)
 
 end
 cat = function ()
-  local __xs = unstash([...])
-  local __f3 = function (a, b)
+  __xs = unstash([...])
+  __f3 = function (a, b)
     return cat(a, b)
   end
   return either(reduce(__f3, __xs), "")
 end
 _43 = function ()
-  local __xs1 = unstash([...])
-  local __f4 = function (a, b)
+  __xs1 = unstash([...])
+  __f4 = function (a, b)
     return a + b
   end
   return either(reduce(__f4, __xs1), 0)
 end
 _45 = function ()
-  local __xs2 = unstash([...])
-  local __f5 = function (b, a)
+  __xs2 = unstash([...])
+  __f5 = function (b, a)
     return a - b
   end
   return either(reduce(__f5, reverse(__xs2)), 0)
 end
 _42 = function ()
-  local __xs3 = unstash([...])
-  local __f6 = function (a, b)
+  __xs3 = unstash([...])
+  __f6 = function (a, b)
     return a * b
   end
   return either(reduce(__f6, __xs3), 1)
 end
 _47 = function ()
-  local __xs4 = unstash([...])
-  local __f7 = function (b, a)
+  __xs4 = unstash([...])
+  __f7 = function (b, a)
     return a / b
   end
   return either(reduce(__f7, reverse(__xs4)), 1)
 end
 _37 = function ()
-  local __xs5 = unstash([...])
-  local __f8 = function (b, a)
+  __xs5 = unstash([...])
+  __f8 = function (b, a)
     return a % b
   end
   return either(reduce(__f8, reverse(__xs5)), 0)
 end
-local pairwise = function (f, xs)
-  local __i20 = 0
+pairwise = function (f, xs)
+  __i20 = 0
   while __i20 < edge(xs) do
-    local __a = xs[__i20]
-    local __b = xs[__i20 + 1]
+    __a = xs[__i20]
+    __b = xs[__i20 + 1]
     if _not(f(__a, __b)) then
       return False
 
@@ -550,36 +550,36 @@ local pairwise = function (f, xs)
   return True
 end
 _60 = function ()
-  local __xs6 = unstash([...])
-  local __f9 = function (a, b)
+  __xs6 = unstash([...])
+  __f9 = function (a, b)
     return a < b
   end
   return pairwise(__f9, __xs6)
 end
 _62 = function ()
-  local __xs7 = unstash([...])
-  local __f10 = function (a, b)
+  __xs7 = unstash([...])
+  __f10 = function (a, b)
     return a > b
   end
   return pairwise(__f10, __xs7)
 end
 _61 = function ()
-  local __xs8 = unstash([...])
-  local __f11 = function (a, b)
+  __xs8 = unstash([...])
+  __f11 = function (a, b)
     return _61(a, b)
   end
   return pairwise(__f11, __xs8)
 end
 _6061 = function ()
-  local __xs9 = unstash([...])
-  local __f12 = function (a, b)
+  __xs9 = unstash([...])
+  __f12 = function (a, b)
     return a <= b
   end
   return pairwise(__f12, __xs9)
 end
 _6261 = function ()
-  local __xs10 = unstash([...])
-  local __f13 = function (a, b)
+  __xs10 = unstash([...])
+  __f13 = function (a, b)
     return a >= b
   end
   return pairwise(__f13, __xs10)
@@ -590,8 +590,8 @@ number_code63 = function (n)
   return _and(n > 47, n < 58)
 end
 numeric63 = function (s)
-  local __n17 = _35(s)
-  local __i21 = 0
+  __n17 = _35(s)
+  __i21 = 0
   while __i21 < __n17 do
     if _not(number_code63(code(s, __i21))) then
       return False
@@ -601,23 +601,23 @@ numeric63 = function (s)
   return some63(s)
 end
 escape = function (s)
-  local __s1 = "\""
-  local __i22 = 0
+  __s1 = "\""
+  __i22 = 0
   while __i22 < _35(s) do
-    local __c = char(s, __i22)
-    local __e15
+    __c = char(s, __i22)
+
     if _61(__c, "\n") then
       __e15 = "\\n"
     else
-      local __e16
+
       if _61(__c, "\r") then
         __e16 = "\\r"
       else
-        local __e17
+
         if _61(__c, "\"") then
           __e17 = "\\\""
         else
-          local __e18
+
           if _61(__c, "\\") then
             __e18 = "\\\\"
           else
@@ -629,7 +629,7 @@ escape = function (s)
 
       __e15 = __e16
 
-    local __c1 = __e15
+    __c1 = __e15
     __s1 = cat(__s1, __c1)
     __i22 = __i22 + 1
   end
@@ -668,23 +668,23 @@ str = function (x, stack)
                     return "circular"
                   else
                     if escape(tostring(x)) then
-                      local __s = "("
-                      local __sp = ""
-                      local __xs11 = []
-                      local __ks = []
-                      local __l6 = _or(stack, [])
+                      __s = "("
+                      __sp = ""
+                      __xs11 = []
+                      __ks = []
+                      __l6 = _or(stack, [])
                       add(__l6, x)
-                      local ____o13 = x
-                      local __k22 = None
+                      ____o13 = x
+                      __k22 = None
                       for (__k22 in ____o13) {
-                        local __v12 = ____o13[__k22]
-                        local __e19
+                        __v12 = ____o13[__k22]
+
                         if numeric63(__k22) then
                           __e19 = parseInt(__k22)
                         else
                           __e19 = __k22
 
-                        local __k23 = __e19
+                        __k23 = __e19
                         if number63(__k23) then
                           __xs11[__k23] = str(__v12, __l6)
                         else
@@ -693,17 +693,17 @@ str = function (x, stack)
 
                       }
                       drop(__l6)
-                      local ____o14 = join(__xs11, __ks)
-                      local ____i24 = None
+                      ____o14 = join(__xs11, __ks)
+                      ____i24 = None
                       for (____i24 in ____o14) {
-                        local __v13 = ____o14[____i24]
-                        local __e20
+                        __v13 = ____o14[____i24]
+
                         if numeric63(____i24) then
                           __e20 = parseInt(____i24)
                         else
                           __e20 = ____i24
 
-                        local ____i241 = __e20
+                        ____i241 = __e20
                         __s = cat(__s, __sp, __v13)
                         __sp = " "
                       }
@@ -720,47 +720,47 @@ str = function (x, stack)
 
 end
 apply = function (f, args)
-  local __args = stash(args)
+  __args = stash(args)
 end
 call = function (f)
-  local ____r76 = unstash([...])
-  local __f = destash33(f, ____r76)
-  local ____id = ____r76
-  local __args11 = cut(____id, 0)
+  ____r76 = unstash([...])
+  __f = destash33(f, ____r76)
+  ____id = ____r76
+  __args11 = cut(____id, 0)
   return apply(__f, __args11)
 end
 setenv = function (k)
-  local ____r77 = unstash([...])
-  local __k24 = destash33(k, ____r77)
-  local ____id1 = ____r77
-  local __keys = cut(____id1, 0)
+  ____r77 = unstash([...])
+  __k24 = destash33(k, ____r77)
+  ____id1 = ____r77
+  __keys = cut(____id1, 0)
   if string63(__k24) then
-    local __e21
+
     if __keys.toplevel then
       __e21 = hd(environment)
     else
       __e21 = last(environment)
 
-    local __frame = __e21
-    local __entry = _or(__frame[__k24], {})
-    local ____o15 = __keys
-    local __k25 = None
+    __frame = __e21
+    __entry = _or(__frame[__k24], {})
+    ____o15 = __keys
+    __k25 = None
     for (__k25 in ____o15) {
-      local __v14 = ____o15[__k25]
-      local __e22
+      __v14 = ____o15[__k25]
+
       if numeric63(__k25) then
         __e22 = parseInt(__k25)
       else
         __e22 = __k25
 
-      local __k26 = __e22
+      __k26 = __e22
       __entry[__k26] = __v14
     }
     __frame[__k24] = __entry
     return __frame[__k24]
 
 end
-local math
+
 abs = math.abs
 acos = math.acos
 asin = math.asin

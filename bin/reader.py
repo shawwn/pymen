@@ -1,27 +1,27 @@
-local delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
-local whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
-local stream = function (str, more)
+delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
+whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
+stream = function (str, more)
   return {"pos": 0, "string": str, "len": _35(str), "more": more}
 end
-local peek_char = function (s)
-  local ____id = s
-  local __pos = ____id.pos
-  local __len = ____id.len
-  local __string = ____id.string
+peek_char = function (s)
+  ____id = s
+  __pos = ____id.pos
+  __len = ____id.len
+  __string = ____id.string
   if __pos < __len then
     return char(__string, __pos)
 
 end
-local read_char = function (s)
-  local __c = peek_char(s)
+read_char = function (s)
+  __c = peek_char(s)
   if __c then
     s.pos = s.pos + 1
     return __c
 
 end
-local skip_non_code = function (s)
+skip_non_code = function (s)
   while True do
-    local __c1 = peek_char(s)
+    __c1 = peek_char(s)
     if nil63(__c1) then
       break
     else
@@ -40,21 +40,21 @@ local skip_non_code = function (s)
 
   end
 end
-local read_table = {}
-local eof = {}
-local read = function (s)
+read_table = {}
+eof = {}
+read = function (s)
   skip_non_code(s)
-  local __c2 = peek_char(s)
+  __c2 = peek_char(s)
   if is63(__c2) then
     return (_or(read_table[__c2], read_table[""]))(s)
   else
     return eof
 
 end
-local read_all = function (s)
-  local __l = []
+read_all = function (s)
+  __l = []
   while True do
-    local __form = read(s)
+    __form = read(s)
     if _61(__form, eof) then
       break
 
@@ -63,23 +63,23 @@ local read_all = function (s)
   return __l
 end
 read_string = function (str, more)
-  local __x = read(stream(str, more))
+  __x = read(stream(str, more))
   if _not(_61(__x, eof)) then
     return __x
 
 end
-local key63 = function (atom)
+key63 = function (atom)
   return _and(string63(atom), _35(atom) > 1)
 end
-local flag63 = function (atom)
+flag63 = function (atom)
   return _and(string63(atom), _35(atom) > 1)
 end
-local expected = function (s, c)
-  local ____id1 = s
-  local __more = ____id1.more
-  local __pos1 = ____id1.pos
-  local __id2 = __more
-  local __e
+expected = function (s, c)
+  ____id1 = s
+  __more = ____id1.more
+  __pos1 = ____id1.pos
+  __id2 = __more
+
   if __id2 then
     __e = __id2
   else
@@ -88,47 +88,47 @@ local expected = function (s, c)
 
   return __e
 end
-local wrap = function (s, x)
-  local __y = read(s)
+wrap = function (s, x)
+  __y = read(s)
   if _61(__y, s.more) then
     return __y
   else
     return [x, __y]
 
 end
-local hex_prefix63 = function (str)
-  local __e1
+hex_prefix63 = function (str)
+
   if _61(code(str, 0), 45) then
     __e1 = 1
   else
     __e1 = 0
 
-  local __i = __e1
-  local __id3 = _61(code(str, __i), 48)
-  local __e2
+  __i = __e1
+  __id3 = _61(code(str, __i), 48)
+
   if __id3 then
     __i = __i + 1
-    local __n = code(str, __i)
+    __n = code(str, __i)
     __e2 = _or(_61(__n, 120), _61(__n, 88))
   else
     __e2 = __id3
 
   return __e2
 end
-local maybe_number = function (str)
+maybe_number = function (str)
   if hex_prefix63(str) then
     if number_code63(code(str, edge(str))) then
       return number(str)
 
 
 end
-local real63 = function (x)
+real63 = function (x)
   return _and(number63(x), _not(nan63(x)))
 end
-local __f = function (s)
-  local __str = ""
+__f = function (s)
+  __str = ""
   while True do
-    local __c3 = peek_char(s)
+    __c3 = peek_char(s)
     if _and(__c3, _and(_not(whitespace[__c3]), _not(delimiters[__c3]))) then
       __str = cat(__str, read_char(s))
     else
@@ -141,7 +141,7 @@ local __f = function (s)
     if _61(__str, "false") then
       return False
     else
-      local __n1 = maybe_number(__str)
+      __n1 = maybe_number(__str)
       if real63(__n1) then
         return __n1
       else
@@ -151,13 +151,13 @@ local __f = function (s)
 
 end
 read_table[""] = __f
-local __f1 = function (s)
+__f1 = function (s)
   read_char(s)
-  local __r16 = None
-  local __l1 = []
+  __r16 = None
+  __l1 = []
   while nil63(__r16) do
     skip_non_code(s)
-    local __c4 = peek_char(s)
+    __c4 = peek_char(s)
     if _61(__c4, ")") then
       read_char(s)
       __r16 = __l1
@@ -165,10 +165,10 @@ local __f1 = function (s)
       if nil63(__c4) then
         __r16 = expected(s, ")")
       else
-        local __x2 = read(s)
+        __x2 = read(s)
         if key63(__x2) then
-          local __k = clip(__x2, 0, edge(__x2))
-          local __v = read(s)
+          __k = clip(__x2, 0, edge(__x2))
+          __v = read(s)
           __l1 = object(__l1)
           __l1[__k] = __v
         else
@@ -185,16 +185,16 @@ local __f1 = function (s)
   return __r16
 end
 read_table["("] = __f1
-local __f2 = function (s)
+__f2 = function (s)
   error(cat("Unexpected ) at ", s.pos))
 end
 read_table[")"] = __f2
-local __f3 = function (s)
+__f3 = function (s)
   read_char(s)
-  local __r19 = None
-  local __str1 = "\""
+  __r19 = None
+  __str1 = "\""
   while nil63(__r19) do
-    local __c5 = peek_char(s)
+    __c5 = peek_char(s)
     if _61(__c5, "\"") then
       __r19 = cat(__str1, read_char(s))
     else
@@ -211,12 +211,12 @@ local __f3 = function (s)
   return __r19
 end
 read_table["\""] = __f3
-local __f4 = function (s)
+__f4 = function (s)
   read_char(s)
-  local __r21 = None
-  local __str2 = "|"
+  __r21 = None
+  __str2 = "|"
   while nil63(__r21) do
-    local __c6 = peek_char(s)
+    __c6 = peek_char(s)
     if _61(__c6, "|") then
       __r21 = cat(__str2, read_char(s))
     else
@@ -230,17 +230,17 @@ local __f4 = function (s)
   return __r21
 end
 read_table["|"] = __f4
-local __f5 = function (s)
+__f5 = function (s)
   read_char(s)
   return wrap(s, "quote")
 end
 read_table["'"] = __f5
-local __f6 = function (s)
+__f6 = function (s)
   read_char(s)
   return wrap(s, "quasiquote")
 end
 read_table["`"] = __f6
-local __f7 = function (s)
+__f7 = function (s)
   read_char(s)
   if _61(peek_char(s), "@") then
     read_char(s)
