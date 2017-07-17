@@ -390,6 +390,12 @@
         (cat op ao " " a ac)
       (cat ao a ac " " op " " bo b bc))))
 
+(define-global compile-body (body)
+  (let s (with-indent (compile body :stmt))
+      (if (and (= target 'py) (none? s))
+          (with-indent (cat (indentation) "pass\n"))
+        s)))
+
 (define-global compile-function (args body :name :prefix)
   (let (id (if name (compile name) "")
         args1 (if (and (= target 'lua)
@@ -397,7 +403,7 @@
                   `(,@args |...|)
                 args)
         args (compile-args args1)
-        body (with-indent (compile body :stmt))
+        body (compile-body body)
         ind (indentation)
         p (if prefix (cat prefix " ") "")
         tr (if (= target 'js) "" "end"))
@@ -405,8 +411,7 @@
     (if (= target 'js)
         (cat "function " id args " {\n" body ind "}" tr)
         (= target 'py)
-        (let body (if (none? body) (with-indent (compile "|pass|" :stmt)) body)
-          (cat "def " id args ":\n" body))
+        (cat "def " id args ":\n" body)
       (cat p "function " id args "\n" body ind tr))))
 
 (define can-return? (form)
