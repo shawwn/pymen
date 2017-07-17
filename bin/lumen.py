@@ -110,7 +110,7 @@ def inf63(n=None):
 def clip(s=None, _from=None, upto=None):
   pass
 def dupe(x=None):
-  pass
+  return {}
 def cut(x=None, _from=None, upto=None):
   __l2 = dupe(x)
   __j = 0

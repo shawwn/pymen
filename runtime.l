@@ -93,8 +93,7 @@
           lua: ((idx string sub) s (+ from 1) upto)))
 
 (define-global dupe (x)
-  (target js: (if (array? x) () (obj))
-          lua: ()))
+  (target lua: () py: (obj) js: (if (array? x) () (obj))))
 
 (define-global cut (x from upto)
   (with l (dupe x)
