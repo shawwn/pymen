@@ -1206,7 +1206,11 @@ setenv("language", {_stash: true, macro: function () {
 }});
 setenv("target", {_stash: true, macro: function () {
   var __clauses3 = unstash(Array.prototype.slice.call(arguments, 0));
-  return __clauses3[target];
+  if (has63(__clauses3, target)) {
+    return __clauses3[target];
+  } else {
+    return hd(__clauses3);
+  }
 }});
 setenv("join!", {_stash: true, macro: function (a) {
   var ____r69 = unstash(Array.prototype.slice.call(arguments, 1));

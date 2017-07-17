@@ -1205,7 +1205,11 @@ end
 setenv("language", {"_stash": true, "macro": __f41})
 local __f42 = function ()
   local __clauses3 = unstash([...])
-  return __clauses3[target]
+  if has63(__clauses3, target) then
+    return __clauses3[target]
+  else
+    return hd(__clauses3)
+
 end
 setenv("target", {"_stash": true, "macro": __f42})
 local __f43 = function (a)

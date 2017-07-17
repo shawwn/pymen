@@ -197,7 +197,9 @@
 (define-macro language () `',target)
 
 (define-macro target clauses
-  (get clauses target))
+  (if (has? clauses target)
+      (get clauses target)
+    (hd clauses)))
 
 (define-macro join! (a rest: bs)
   `(set ,a (join ,a ,@bs)))

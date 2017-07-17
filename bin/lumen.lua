@@ -1058,7 +1058,11 @@ setenv("language", {_stash = true, macro = function ()
 end})
 setenv("target", {_stash = true, macro = function (...)
   local __clauses3 = unstash({...})
-  return __clauses3[target]
+  if has63(__clauses3, target) then
+    return __clauses3[target]
+  else
+    return hd(__clauses3)
+  end
 end})
 setenv("join!", {_stash = true, macro = function (a, ...)
   local ____r69 = unstash({...})
