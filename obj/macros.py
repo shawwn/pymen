@@ -14,21 +14,18 @@ def __f4():
   return join(["do"], map(__f5, pair(__args1)))
 setenv("set", {"_stash": True, "macro": __f4})
 def __f6(l, i):
-  if _and(_61(target, "lua"), number63(i)) then
+  if _and(_61(target, "lua"), number63(i)):
     i = i + 1
-  else
-    if _61(target, "lua") then
+  else:
+    if _61(target, "lua"):
       i = ["+", i, 1]
-
-
   return ["get", l, i]
 setenv("at", {"_stash": True, "macro": __f6})
 def __f7(place):
-  if _61(target, "lua") then
+  if _61(target, "lua"):
     return ["set", place, "nil"]
-  else
+  else:
     return ["%delete", place]
-
 setenv("wipe", {"_stash": True, "macro": __f7})
 def __f8():
   __body1 = unstash([...])
@@ -40,23 +37,20 @@ def __f8():
   for (__k2 in ____o1) {
     __v1 = ____o1[__k2]
 
-    if numeric63(__k2) then
+    if numeric63(__k2):
       __e8 = parseInt(__k2)
-    else
+    else:
       __e8 = __k2
-
     __k3 = __e8
-    if number63(__k3) then
+    if number63(__k3):
       __l1[__k3] = __v1
-    else
+    else:
       add(__forms1, ["set", ["get", __x25, ["quote", __k3]], __v1])
-
   }
-  if some63(__forms1) then
+  if some63(__forms1):
     return join(["let", __x25, ["object", join(["%array"], __l1)]], __forms1, [__x25])
-  else
+  else:
     return join(["%array"], __l1)
-
 setenv("list", {"_stash": True, "macro": __f8})
 def __f9():
   __branches1 = unstash([...])
@@ -75,21 +69,17 @@ def __f10(expr):
     ____id5 = __x50
     __a1 = ____id5[1]
     __b1 = ____id5[2]
-    if nil63(__b1) then
+    if nil63(__b1):
       return [__a1]
-    else
-      if _or(string63(__a1), number63(__a1)) then
+    else:
+      if _or(string63(__a1), number63(__a1)):
         return [__eq1(__a1), __b1]
-      else
-        if one63(__a1) then
+      else:
+        if one63(__a1):
           return [__eq1(hd(__a1)), __b1]
-        else
-          if _35(__a1) > 1 then
+        else:
+          if _35(__a1) > 1:
             return [join(["or"], map(__eq1, __a1)), __b1]
-
-
-
-
   __cl1 = __f12
   return ["let", __x47, __expr1, join(["if"], apply(join, map(__cl1, pair(__clauses1))))]
 setenv("case", {"_stash": True, "macro": __f10})
@@ -118,12 +108,12 @@ def __f17(bs):
   __bs11 = destash33(bs, ____r23)
   ____id14 = ____r23
   __body9 = cut(____id14, 0)
-  if atom63(__bs11) then
+  if atom63(__bs11):
     return join(["let", [__bs11, hd(__body9)]], tl(__body9))
-  else
-    if none63(__bs11) then
+  else:
+    if none63(__bs11):
       return join(["do"], __body9)
-    else
+    else:
       ____id15 = __bs11
       __lh3 = ____id15[1]
       __rh3 = ____id15[2]
@@ -133,14 +123,11 @@ def __f17(bs):
       __val1 = ____id16[2]
       __bs12 = cut(____id16, 2)
       __renames1 = []
-      if _not(id_literal63(__id17)) then
+      if _not(id_literal63(__id17)):
         __id121 = unique(__id17)
         __renames1 = [__id17, __id121]
         __id17 = __id121
-
       return ["do", ["%local", __id17, __val1], ["let-symbol", __renames1, join(["let", join(__bs12, __bs21)], __body9)]]
-
-
 setenv("let", {"_stash": True, "macro": __f17})
 def __f18(x, v):
   ____r25 = unstash([...])
@@ -206,11 +193,10 @@ def __f24(name, x):
   ____id31 = ____r37
   __body21 = cut(____id31, 0)
   setenv(__name5, {"_stash": True, "variable": True})
-  if some63(__body21) then
+  if some63(__body21):
     return join(["%local-function", __name5], bind42(__x147, __body21))
-  else
+  else:
     return ["%local", __name5, __x147]
-
 setenv("define", {"_stash": True, "macro": __f24})
 def __f25(name, x):
   ____r39 = unstash([...])
@@ -219,11 +205,10 @@ def __f25(name, x):
   ____id33 = ____r39
   __body23 = cut(____id33, 0)
   setenv(__name7, {"_stash": True, "toplevel": True, "variable": True})
-  if some63(__body23) then
+  if some63(__body23):
     return join(["%global-function", __name7], bind42(__x154, __body23))
-  else
+  else:
     return ["set", __name7, __x154]
-
 setenv("define-global", {"_stash": True, "macro": __f25})
 def __f26():
   __body25 = unstash([...])
@@ -293,21 +278,19 @@ def __f35(f):
   __f1 = destash33(f, ____r57)
   ____id49 = ____r57
   __args9 = cut(____id49, 0)
-  if _35(__args9) > 1 then
+  if _35(__args9) > 1:
     return [["do", "apply"], __f1, ["join", join(["list"], almost(__args9)), last(__args9)]]
-  else
+  else:
     return join([["do", "apply"], __f1], __args9)
-
 setenv("apply", {"_stash": True, "macro": __f35})
 def __f36(expr):
-  if _61(target, "js") then
+  if _61(target, "js"):
     return [["fn", join(), ["%try", ["list", True, expr]]]]
-  else
+  else:
     ____x257 = object(["obj"])
     ____x257.stack = [["get", "debug", ["quote", "traceback"]]]
     ____x257.message = ["if", ["string?", "m"], ["clip", "m", ["+", ["search", "m", "\": \""], 2]], ["nil?", "m"], "\"\"", ["str", "m"]]
     return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x257]]]]
-
 setenv("guard", {"_stash": True, "macro": __f36})
 def __f37(x, t):
   ____r61 = unstash([...])
@@ -319,26 +302,23 @@ def __f37(x, t):
   __n3 = unique("n")
   __i3 = unique("i")
 
-  if atom63(__x283) then
+  if atom63(__x283):
     __e9 = [__i3, __x283]
-  else
+  else:
 
-    if _35(__x283) > 1 then
+    if _35(__x283) > 1:
       __e10 = __x283
-    else
+    else:
       __e10 = [__i3, hd(__x283)]
-
     __e9 = __e10
-
   ____id53 = __e9
   __k5 = ____id53[1]
   __v7 = ____id53[2]
 
-  if _61(target, "lua") then
+  if _61(target, "lua"):
     __e11 = __body37
-  else
+  else:
     __e11 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)]
-
   return ["let", [__o3, __t1, __k5, "nil"], ["%for", __o3, __k5, join(["let", [__v7, ["get", __o3, __k5]]], __e11)]]
 setenv("each", {"_stash": True, "macro": __f37})
 def __f38(i, to):
@@ -367,11 +347,10 @@ def __f40():
   for (____i9 in ____o5) {
     __x328 = ____o5[____i9]
 
-    if numeric63(____i9) then
+    if numeric63(____i9):
       __e12 = parseInt(____i9)
-    else
+    else:
       __e12 = ____i9
-
     ____i91 = __e12
     __l3[__x328] = True
   }
@@ -382,11 +361,10 @@ def __f41():
 setenv("language", {"_stash": True, "macro": __f41})
 def __f42():
   __clauses3 = unstash([...])
-  if has63(__clauses3, target) then
+  if has63(__clauses3, target):
     return __clauses3[target]
-  else
+  else:
     return hd(__clauses3)
-
 setenv("target", {"_stash": True, "macro": __f42})
 def __f43(a):
   ____r69 = unstash([...])
@@ -404,20 +382,18 @@ def __f44(a):
 setenv("cat!", {"_stash": True, "macro": __f44})
 def __f45(n, by):
 
-  if nil63(by) then
+  if nil63(by):
     __e13 = 1
-  else
+  else:
     __e13 = by
-
   return ["set", n, ["+", n, __e13]]
 setenv("inc", {"_stash": True, "macro": __f45})
 def __f46(n, by):
 
-  if nil63(by) then
+  if nil63(by):
     __e14 = 1
-  else
+  else:
     __e14 = by
-
   return ["set", n, ["-", n, __e14]]
 setenv("dec", {"_stash": True, "macro": __f46})
 def __f47(form):
@@ -426,29 +402,27 @@ def __f47(form):
 setenv("with-indent", {"_stash": True, "macro": __f47})
 def __f48():
   __names5 = unstash([...])
-  if _61(target, "js") then
+  if _61(target, "js"):
     def __f50(k):
       return ["set", ["get", "exports", ["quote", k]], k]
     return join(["do"], map(__f50, __names5))
-  else
+  else:
     __x373 = {}
     ____o7 = __names5
     ____i11 = None
     for (____i11 in ____o7) {
       __k7 = ____o7[____i11]
 
-      if numeric63(____i11) then
+      if numeric63(____i11):
         __e15 = parseInt(____i11)
-      else
+      else:
         __e15 = ____i11
-
       ____i111 = __e15
       __x373[__k7] = __k7
     }
     def __f49(x):
       return x
     return ["return", join(["%object"], mapo(__f49, __x373))]
-
 setenv("export", {"_stash": True, "macro": __f48})
 def __f51():
   __body43 = unstash([...])

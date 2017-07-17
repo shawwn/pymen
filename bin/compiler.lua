@@ -1104,16 +1104,10 @@ setenv("do", {_stash = true, special = function (...)
 end, stmt = true, tr = true})
 setenv("%if", {_stash = true, special = function (cond, cons, alt)
   local __cond2 = compile(cond)
-  indent_level = indent_level + 1
-  local ____x147 = compile(cons, {_stash = true, stmt = true})
-  indent_level = indent_level - 1
-  local __cons1 = ____x147
+  local __cons1 = compile_body(cons)
   local __e47
   if alt then
-    indent_level = indent_level + 1
-    local ____x148 = compile(alt, {_stash = true, stmt = true})
-    indent_level = indent_level - 1
-    __e47 = ____x148
+    __e47 = compile_body(alt)
   end
   local __alt1 = __e47
   local __ind3 = indentation()
@@ -1121,19 +1115,31 @@ setenv("%if", {_stash = true, special = function (cond, cons, alt)
   if target == "js" then
     __s6 = __s6 .. __ind3 .. "if (" .. __cond2 .. ") {\n" .. __cons1 .. __ind3 .. "}"
   else
-    __s6 = __s6 .. __ind3 .. "if " .. __cond2 .. " then\n" .. __cons1
+    if target == "py" then
+      __s6 = __s6 .. __ind3 .. "if " .. __cond2 .. ":\n" .. __cons1
+    else
+      __s6 = __s6 .. __ind3 .. "if " .. __cond2 .. " then\n" .. __cons1
+    end
   end
   if __alt1 and target == "js" then
     __s6 = __s6 .. " else {\n" .. __alt1 .. __ind3 .. "}"
   else
-    if __alt1 then
-      __s6 = __s6 .. __ind3 .. "else\n" .. __alt1
+    if __alt1 and target == "py" then
+      __s6 = __s6 .. __ind3 .. "else:\n" .. __alt1
+    else
+      if __alt1 then
+        __s6 = __s6 .. __ind3 .. "else\n" .. __alt1
+      end
     end
   end
   if target == "lua" then
     return __s6 .. __ind3 .. "end\n"
   else
-    return __s6 .. "\n"
+    if target == "js" then
+      return __s6 .. "\n"
+    else
+      return __s6
+    end
   end
 end, stmt = true, tr = true})
 setenv("while", {_stash = true, special = function (cond, form)
@@ -1154,9 +1160,9 @@ setenv("%for", {_stash = true, special = function (t, k, form)
   local __t2 = compile(t)
   local __ind7 = indentation()
   indent_level = indent_level + 1
-  local ____x150 = compile(form, {_stash = true, stmt = true})
+  local ____x146 = compile(form, {_stash = true, stmt = true})
   indent_level = indent_level - 1
-  local __body12 = ____x150
+  local __body12 = ____x146
   if target == "lua" then
     return __ind7 .. "for " .. k .. " in next, " .. __t2 .. " do\n" .. __body12 .. __ind7 .. "end\n"
   else
@@ -1167,14 +1173,14 @@ setenv("%try", {_stash = true, special = function (form)
   local __e8 = unique("e")
   local __ind9 = indentation()
   indent_level = indent_level + 1
-  local ____x155 = compile(form, {_stash = true, stmt = true})
+  local ____x151 = compile(form, {_stash = true, stmt = true})
   indent_level = indent_level - 1
-  local __body14 = ____x155
+  local __body14 = ____x151
   local __hf1 = {"return", {"%array", false, __e8}}
   indent_level = indent_level + 1
-  local ____x158 = compile(__hf1, {_stash = true, stmt = true})
+  local ____x154 = compile(__hf1, {_stash = true, stmt = true})
   indent_level = indent_level - 1
-  local __h1 = ____x158
+  local __h1 = ____x154
   return __ind9 .. "try {\n" .. __body14 .. __ind9 .. "}\n" .. __ind9 .. "catch (" .. __e8 .. ") {\n" .. __h1 .. __ind9 .. "}\n"
 end, stmt = true, tr = true})
 setenv("%delete", {_stash = true, special = function (place)
@@ -1188,16 +1194,16 @@ setenv("%function", {_stash = true, special = function (args, body)
 end})
 setenv("%global-function", {_stash = true, special = function (name, args, body)
   if target == "lua" or target == "py" then
-    local __x162 = compile_function(args, body, {_stash = true, name = name})
-    return indentation() .. __x162
+    local __x158 = compile_function(args, body, {_stash = true, name = name})
+    return indentation() .. __x158
   else
     return compile({"%set", name, {"%function", args, body}}, {_stash = true, stmt = true})
   end
 end, stmt = true, tr = true})
 setenv("%local-function", {_stash = true, special = function (name, args, body)
   if target == "lua" or target == "py" then
-    local __x168 = compile_function(args, body, {_stash = true, name = name, prefix = "local"})
-    return indentation() .. __x168
+    local __x164 = compile_function(args, body, {_stash = true, name = name, prefix = "local"})
+    return indentation() .. __x164
   else
     return compile({"%local", name, {"%function", args, body}}, {_stash = true, stmt = true})
   end
@@ -1209,8 +1215,8 @@ setenv("return", {_stash = true, special = function (x)
   else
     __e48 = "return " .. compile(x)
   end
-  local __x172 = __e48
-  return indentation() .. __x172
+  local __x168 = __e48
+  return indentation() .. __x168
 end, stmt = true})
 setenv("new", {_stash = true, special = function (x)
   return "new " .. compile(x)
