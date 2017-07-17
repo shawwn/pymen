@@ -73,8 +73,15 @@ inf63 = function (n) {
 clip = function (s, from, upto) {
   return s.substring(from, upto);
 };
+dupe = function (x) {
+  if (Array.isArray(x)) {
+    return [];
+  } else {
+    return {};
+  }
+};
 cut = function (x, from, upto) {
-  var __l = [];
+  var __l = dupe(x);
   var __j = 0;
   var __e;
   if (nil63(from) || from < 0) {
@@ -114,7 +121,7 @@ cut = function (x, from, upto) {
   return __l;
 };
 keys = function (x) {
-  var __t = [];
+  var __t = dupe(x);
   var ____o1 = x;
   var __k2 = undefined;
   for (__k2 in ____o1) {
@@ -188,13 +195,13 @@ reduce = function (f, x) {
 };
 join = function () {
   var __ls = unstash(Array.prototype.slice.call(arguments, 0));
-  var __r37 = [];
+  var __r38 = [];
   var ____x1 = __ls;
   var ____i4 = 0;
   while (____i4 < _35(____x1)) {
     var __l11 = ____x1[____i4];
     if (__l11) {
-      var __n3 = _35(__r37);
+      var __n3 = _35(__r38);
       var ____o2 = __l11;
       var __k4 = undefined;
       for (__k4 in ____o2) {
@@ -209,12 +216,12 @@ join = function () {
         if (number63(__k5)) {
           __k5 = __k5 + __n3;
         }
-        __r37[__k5] = __v2;
+        __r38[__k5] = __v2;
       }
     }
     ____i4 = ____i4 + 1;
   }
-  return __r37;
+  return __r38;
 };
 find = function (f, t) {
   var ____o3 = t;
@@ -252,7 +259,7 @@ in63 = function (x, t) {
   }, t);
 };
 pair = function (l) {
-  var __l12 = [];
+  var __l12 = dupe(l);
   var __i8 = 0;
   while (__i8 < _35(l)) {
     add(__l12, [l[__i8], l[__i8 + 1]]);
@@ -275,7 +282,7 @@ sort = function (l, f) {
   return l.sort(__e6);
 };
 map = function (f, x) {
-  var __t1 = [];
+  var __t1 = dupe(x);
   var ____x6 = x;
   var ____i9 = 0;
   while (____i9 < _35(____x6)) {
@@ -349,7 +356,7 @@ empty63 = function (t) {
 };
 stash = function (args) {
   if (keys63(args)) {
-    var __p = [];
+    var __p = dupe(args);
     var ____o7 = args;
     var __k10 = undefined;
     for (__k10 in ____o7) {
@@ -372,7 +379,7 @@ stash = function (args) {
 };
 unstash = function (args) {
   if (none63(args)) {
-    return [];
+    return dupe(args);
   } else {
     var __l2 = last(args);
     if (obj63(__l2) && __l2._stash) {
@@ -671,16 +678,16 @@ apply = function (f, args) {
   return f.apply(f, __args);
 };
 call = function (f) {
-  var ____r74 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __f = destash33(f, ____r74);
-  var ____id = ____r74;
+  var ____r75 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __f = destash33(f, ____r75);
+  var ____id = ____r75;
   var __args11 = cut(____id, 0);
   return apply(__f, __args11);
 };
 setenv = function (k) {
-  var ____r75 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __k18 = destash33(k, ____r75);
-  var ____id1 = ____r75;
+  var ____r76 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __k18 = destash33(k, ____r76);
+  var ____id1 = ____r76;
   var __keys = cut(____id1, 0);
   if (string63(__k18)) {
     var __e19;

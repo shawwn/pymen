@@ -54,8 +54,12 @@
   (target js: ((get s 'substring) from upto)
           lua: ((get string 'sub) s (+ from 1) upto)))
 
+(define-global dupe (x)
+  (target js: (if ((get Array 'isArray) x) () (obj))
+          lua: ()))
+
 (define-global cut (x from upto)
-  (with l ()
+  (with l (dupe x)
     (let (j 0
           i (if (or (nil? from) (< from 0)) 0 from)
           n (# x)
@@ -69,7 +73,7 @@
           (set (get l k) v))))))
 
 (define-global keys (x)
-  (with t ()
+  (with t (dupe x)
     (each (k v) x
       (unless (number? k)
         (set (get t k) v)))))
@@ -145,7 +149,7 @@
   (find (fn (y) (= x y)) t))
 
 (define-global pair (l)
-  (with l1 ()
+  (with l1 (dupe l)
     (for i (# l)
       (add l1 (list (at l i) (at l (+ i 1))))
       (inc i))))
@@ -156,7 +160,7 @@
     js: ((get l 'sort) (when f (fn (a b) (if (f a b) -1 1))))))
 
 (define-global map (f x)
-  (with t ()
+  (with t (dupe x)
     (step v x
       (let y (f v)
         (if (is? y)
@@ -183,7 +187,7 @@
 
 (define-global stash (args)
   (when (keys? args)
-    (let p ()
+    (let p (dupe args)
       (each (k v) args
         (unless (number? k)
           (set (get p k) v)))
@@ -192,7 +196,7 @@
   args)
 
 (define-global unstash (args)
-  (if (none? args) ()
+  (if (none? args) (dupe args)
     (let l (last args)
       (if (and (obj? l) (get l '_stash))
           (with args1 (almost args)

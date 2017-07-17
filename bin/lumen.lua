@@ -70,8 +70,11 @@ end
 function clip(s, from, upto)
   return string.sub(s, from + 1, upto)
 end
+function dupe(x)
+  return {}
+end
 function cut(x, from, upto)
-  local __l = {}
+  local __l = dupe(x)
   local __j = 0
   local __e
   if nil63(from) or from < 0 then
@@ -104,7 +107,7 @@ function cut(x, from, upto)
   return __l
 end
 function keys(x)
-  local __t = {}
+  local __t = dupe(x)
   local ____o1 = x
   local __k1 = nil
   for __k1 in next, ____o1 do
@@ -174,13 +177,13 @@ function reduce(f, x)
 end
 function join(...)
   local __ls = unstash({...})
-  local __r36 = {}
+  local __r37 = {}
   local ____x2 = __ls
   local ____i4 = 0
   while ____i4 < _35(____x2) do
     local __l11 = ____x2[____i4 + 1]
     if __l11 then
-      local __n3 = _35(__r36)
+      local __n3 = _35(__r37)
       local ____o2 = __l11
       local __k2 = nil
       for __k2 in next, ____o2 do
@@ -188,12 +191,12 @@ function join(...)
         if number63(__k2) then
           __k2 = __k2 + __n3
         end
-        __r36[__k2] = __v2
+        __r37[__k2] = __v2
       end
     end
     ____i4 = ____i4 + 1
   end
-  return __r36
+  return __r37
 end
 function find(f, t)
   local ____o3 = t
@@ -224,7 +227,7 @@ function in63(x, t)
   end, t)
 end
 function pair(l)
-  local __l12 = {}
+  local __l12 = dupe(l)
   local __i8 = 0
   while __i8 < _35(l) do
     add(__l12, {l[__i8 + 1], l[__i8 + 1 + 1]})
@@ -238,7 +241,7 @@ function sort(l, f)
   return l
 end
 function map(f, x)
-  local __t1 = {}
+  local __t1 = dupe(x)
   local ____x7 = x
   local ____i9 = 0
   while ____i9 < _35(____x7) do
@@ -291,7 +294,7 @@ function empty63(t)
 end
 function stash(args)
   if keys63(args) then
-    local __p = {}
+    local __p = dupe(args)
     local ____o7 = args
     local __k5 = nil
     for __k5 in next, ____o7 do
@@ -307,7 +310,7 @@ function stash(args)
 end
 function unstash(args)
   if none63(args) then
-    return {}
+    return dupe(args)
   else
     local __l2 = last(args)
     if obj63(__l2) and __l2._stash then
@@ -579,16 +582,16 @@ function apply(f, args)
   return f(values(__args))
 end
 function call(f, ...)
-  local ____r71 = unstash({...})
-  local __f = destash33(f, ____r71)
-  local ____id = ____r71
+  local ____r72 = unstash({...})
+  local __f = destash33(f, ____r72)
+  local ____id = ____r72
   local __args11 = cut(____id, 0)
   return apply(__f, __args11)
 end
 function setenv(k, ...)
-  local ____r72 = unstash({...})
-  local __k9 = destash33(k, ____r72)
-  local ____id1 = ____r72
+  local ____r73 = unstash({...})
+  local __k9 = destash33(k, ____r73)
+  local ____id1 = ____r73
   local __keys = cut(____id1, 0)
   if string63(__k9) then
     local __e8
