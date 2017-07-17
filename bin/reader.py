@@ -193,4 +193,3 @@ def __f7(s):
   else:
     return wrap(s, "unquote")
 read_table[","] = __f7
-return {"stream": stream, "read": read, "read-all": read_all, "read-string": read_string, "read-table": read_table}

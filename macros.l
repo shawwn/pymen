@@ -224,10 +224,11 @@
       `(do ,@(map (fn (k)
                     `(set (get exports ',k) ,k))
                   names))
-    (let x (obj)
-      (each k names
-        (set (get x k) k))
-      `(return (%object ,@(mapo (fn (x) x) x))))))
+      (= target 'lua)
+      (let x (obj)
+        (each k names
+          (set (get x k) k))
+        `(return (%object ,@(mapo (fn (x) x) x))))))
 
 (define-macro when-compiling body
   (eval `(do ,@body)))

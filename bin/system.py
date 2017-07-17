@@ -24,4 +24,3 @@ def reload(module):
   return require(module)
 def run(command):
   pass
-return {"read-file": read_file, "write-file": write_file, "file-exists?": file_exists63, "directory-exists?": directory_exists63, "path-separator": path_separator, "path-join": path_join, "get-environment-variable": get_environment_variable, "write": write, "exit": exit, "argv": argv, "reload": reload, "run": run}

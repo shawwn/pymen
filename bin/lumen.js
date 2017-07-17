@@ -1255,23 +1255,25 @@ setenv("export", {_stash: true, macro: function () {
       return ["set", ["get", "exports", ["quote", k]], k];
     }, __names5));
   } else {
-    var __x343 = {};
-    var ____o7 = __names5;
-    var ____i11 = undefined;
-    for (____i11 in ____o7) {
-      var __k7 = ____o7[____i11];
-      var __e15;
-      if (numeric63(____i11)) {
-        __e15 = parseInt(____i11);
-      } else {
-        __e15 = ____i11;
+    if (target === "lua") {
+      var __x343 = {};
+      var ____o7 = __names5;
+      var ____i11 = undefined;
+      for (____i11 in ____o7) {
+        var __k7 = ____o7[____i11];
+        var __e15;
+        if (numeric63(____i11)) {
+          __e15 = parseInt(____i11);
+        } else {
+          __e15 = ____i11;
+        }
+        var ____i111 = __e15;
+        __x343[__k7] = __k7;
       }
-      var ____i111 = __e15;
-      __x343[__k7] = __k7;
+      return ["return", join(["%object"], mapo(function (x) {
+        return x;
+      }, __x343))];
     }
-    return ["return", join(["%object"], mapo(function (x) {
-      return x;
-    }, __x343))];
   }
 }});
 setenv("when-compiling", {_stash: true, macro: function () {

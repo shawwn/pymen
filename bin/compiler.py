@@ -1159,4 +1159,3 @@ def __f28():
   __args111 = unstash([...])
   return apply(cat, map(compile, __args111))
 setenv("%literal", {"_stash": True, "special": __f28})
-return {"run": run, "eval": _eval, "expand": expand, "compile": compile}

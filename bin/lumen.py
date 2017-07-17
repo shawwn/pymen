@@ -1037,22 +1037,23 @@ def __f48():
       return ["set", ["get", "exports", ["quote", k]], k]
     return join(["do"], map(__f50, __names5))
   else:
-    __x373 = {}
-    ____o7 = __names5
-    ____i11 = None
-    for (____i11 in ____o7) {
-      __k7 = ____o7[____i11]
+    if target == "lua":
+      __x373 = {}
+      ____o7 = __names5
+      ____i11 = None
+      for (____i11 in ____o7) {
+        __k7 = ____o7[____i11]
 
-      if numeric63(____i11):
-        __e15 = parseInt(____i11)
-      else:
-        __e15 = ____i11
-      ____i111 = __e15
-      __x373[__k7] = __k7
-    }
-    def __f49(x):
-      return x
-    return ["return", join(["%object"], mapo(__f49, __x373))]
+        if numeric63(____i11):
+          __e15 = parseInt(____i11)
+        else:
+          __e15 = ____i11
+        ____i111 = __e15
+        __x373[__k7] = __k7
+      }
+      def __f49(x):
+        return x
+      return ["return", join(["%object"], mapo(__f49, __x373))]
 setenv("export", {"_stash": True, "macro": __f48})
 def __f51():
   __body43 = unstash([...])

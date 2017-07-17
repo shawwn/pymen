@@ -1107,16 +1107,18 @@ setenv("export", {_stash = true, macro = function (...)
       return {"set", {"get", "exports", {"quote", k}}, k}
     end, __names5))
   else
-    local __x373 = {}
-    local ____o7 = __names5
-    local ____i11 = nil
-    for ____i11 in next, ____o7 do
-      local __k6 = ____o7[____i11]
-      __x373[__k6] = __k6
+    if target == "lua" then
+      local __x373 = {}
+      local ____o7 = __names5
+      local ____i11 = nil
+      for ____i11 in next, ____o7 do
+        local __k6 = ____o7[____i11]
+        __x373[__k6] = __k6
+      end
+      return {"return", join({"%object"}, mapo(function (x)
+        return x
+      end, __x373))}
     end
-    return {"return", join({"%object"}, mapo(function (x)
-      return x
-    end, __x373))}
   end
 end})
 setenv("when-compiling", {_stash = true, macro = function (...)
