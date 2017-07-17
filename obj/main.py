@@ -2,9 +2,10 @@ local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
 local eval_print = function (form)
-  local ____id = [xpcall(function ()
+  local __f = function ()
     return compiler["eval"](form)
-  end, function (m)
+  end
+  local __f1 = function (m)
     if obj63(m) then
       return m
     else
@@ -22,7 +23,8 @@ local eval_print = function (form)
 
       return {stack: debug.traceback(), message: __e}
 
-  end)]
+  end
+  local ____id = [xpcall(__f, __f1)]
   local __ok = ____id[1]
   local __v = ____id[2]
   if _not(__ok) then

@@ -505,9 +505,12 @@
          `(%for ,(lower t hoist) ,k
             ,(lower-body body)))))
 
-(define lower-function (args)
-  (let ((a rest: body) args)
-    `(%function ,a ,(lower-body body true))))
+(define lower-function (args hoist)
+  (if (= target 'py)
+      (let-unique (f)
+        (lower `(do (%local-function ,f ,@args) ,f) hoist))
+    (let ((a rest: body) args)
+      `(%function ,a ,(lower-body body true)))))
 
 (define lower-definition (kind args hoist)
   (let ((name args rest: body) args)
@@ -556,7 +559,7 @@
           (= x '%try) (lower-try args hoist tail?)
           (= x 'while) (lower-while args hoist)
           (= x '%for) (lower-for args hoist)
-          (= x '%function) (lower-function args)
+          (= x '%function) (lower-function args hoist)
           (or (= x '%local-function)
               (= x '%global-function))
           (lower-definition x args hoist)

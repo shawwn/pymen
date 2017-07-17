@@ -307,9 +307,10 @@ first = function (f, l)
   end
 end
 in63 = function (x, t)
-  return find(function (y)
+  local __f1 = function (y)
     return _61(x, y)
-  end, t)
+  end
+  return find(__f1, t)
 end
 pair = function (l)
   local __l12 = dupe(l)
@@ -356,11 +357,12 @@ map = function (f, x)
   return __t1
 end
 keep = function (f, x)
-  return map(function (v)
+  local __f2 = function (v)
     if yes(f(v)) then
       return v
 
-  end, x)
+  end
+  return map(__f2, x)
 end
 keys63 = function (t)
   local ____o8 = t
@@ -495,39 +497,45 @@ split = function (s, sep)
 end
 cat = function ()
   local __xs = unstash([...])
-  return either(reduce(function (a, b)
+  local __f3 = function (a, b)
     return cat(a, b)
-  end, __xs), "")
+  end
+  return either(reduce(__f3, __xs), "")
 end
 _43 = function ()
   local __xs1 = unstash([...])
-  return either(reduce(function (a, b)
+  local __f4 = function (a, b)
     return a + b
-  end, __xs1), 0)
+  end
+  return either(reduce(__f4, __xs1), 0)
 end
 _45 = function ()
   local __xs2 = unstash([...])
-  return either(reduce(function (b, a)
+  local __f5 = function (b, a)
     return a - b
-  end, reverse(__xs2)), 0)
+  end
+  return either(reduce(__f5, reverse(__xs2)), 0)
 end
 _42 = function ()
   local __xs3 = unstash([...])
-  return either(reduce(function (a, b)
+  local __f6 = function (a, b)
     return a * b
-  end, __xs3), 1)
+  end
+  return either(reduce(__f6, __xs3), 1)
 end
 _47 = function ()
   local __xs4 = unstash([...])
-  return either(reduce(function (b, a)
+  local __f7 = function (b, a)
     return a / b
-  end, reverse(__xs4)), 1)
+  end
+  return either(reduce(__f7, reverse(__xs4)), 1)
 end
 _37 = function ()
   local __xs5 = unstash([...])
-  return either(reduce(function (b, a)
+  local __f8 = function (b, a)
     return a % b
-  end, reverse(__xs5)), 0)
+  end
+  return either(reduce(__f8, reverse(__xs5)), 0)
 end
 local pairwise = function (f, xs)
   local __i20 = 0
@@ -543,33 +551,38 @@ local pairwise = function (f, xs)
 end
 _60 = function ()
   local __xs6 = unstash([...])
-  return pairwise(function (a, b)
+  local __f9 = function (a, b)
     return a < b
-  end, __xs6)
+  end
+  return pairwise(__f9, __xs6)
 end
 _62 = function ()
   local __xs7 = unstash([...])
-  return pairwise(function (a, b)
+  local __f10 = function (a, b)
     return a > b
-  end, __xs7)
+  end
+  return pairwise(__f10, __xs7)
 end
 _61 = function ()
   local __xs8 = unstash([...])
-  return pairwise(function (a, b)
+  local __f11 = function (a, b)
     return _61(a, b)
-  end, __xs8)
+  end
+  return pairwise(__f11, __xs8)
 end
 _6061 = function ()
   local __xs9 = unstash([...])
-  return pairwise(function (a, b)
+  local __f12 = function (a, b)
     return a <= b
-  end, __xs9)
+  end
+  return pairwise(__f12, __xs9)
 end
 _6261 = function ()
   local __xs10 = unstash([...])
-  return pairwise(function (a, b)
+  local __f13 = function (a, b)
     return a >= b
-  end, __xs10)
+  end
+  return pairwise(__f13, __xs10)
 end
 number = function (s)
 end

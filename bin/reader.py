@@ -125,7 +125,7 @@ end
 local real63 = function (x)
   return _and(number63(x), _not(nan63(x)))
 end
-read_table[""] = function (s)
+local __f = function (s)
   local __str = ""
   while true do
     local __c3 = peek_char(s)
@@ -150,7 +150,8 @@ read_table[""] = function (s)
 
 
 end
-read_table["("] = function (s)
+read_table[""] = __f
+local __f1 = function (s)
   read_char(s)
   local __r16 = undefined
   local __l1 = []
@@ -183,10 +184,12 @@ read_table["("] = function (s)
   end
   return __r16
 end
-read_table[")"] = function (s)
+read_table["("] = __f1
+local __f2 = function (s)
   error(cat("Unexpected ) at ", s.pos))
 end
-read_table["\""] = function (s)
+read_table[")"] = __f2
+local __f3 = function (s)
   read_char(s)
   local __r19 = undefined
   local __str1 = "\""
@@ -207,7 +210,8 @@ read_table["\""] = function (s)
   end
   return __r19
 end
-read_table["|"] = function (s)
+read_table["\""] = __f3
+local __f4 = function (s)
   read_char(s)
   local __r21 = undefined
   local __str2 = "|"
@@ -225,15 +229,18 @@ read_table["|"] = function (s)
   end
   return __r21
 end
-read_table["'"] = function (s)
+read_table["|"] = __f4
+local __f5 = function (s)
   read_char(s)
   return wrap(s, "quote")
 end
-read_table["`"] = function (s)
+read_table["'"] = __f5
+local __f6 = function (s)
   read_char(s)
   return wrap(s, "quasiquote")
 end
-read_table[","] = function (s)
+read_table["`"] = __f6
+local __f7 = function (s)
   read_char(s)
   if _61(peek_char(s), "@") then
     read_char(s)
@@ -242,4 +249,5 @@ read_table[","] = function (s)
     return wrap(s, "unquote")
 
 end
+read_table[","] = __f7
 return {stream: stream, read: read, ["read-all"]: read_all, ["read-string"]: read_string, ["read-table"]: read_table}

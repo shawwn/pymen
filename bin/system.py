@@ -9,9 +9,10 @@ end
 local path_separator
 local path_join = function ()
   local __parts = unstash([...])
-  return _or(reduce(function (x, y)
+  local __f = function (x, y)
     return cat(x, path_separator, y)
-  end, __parts), "")
+  end
+  return _or(reduce(__f, __parts), "")
 end
 local get_environment_variable = function (name)
 end
