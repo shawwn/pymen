@@ -22,7 +22,7 @@ def skip_non_code(s=None):
     if nil63(__c1):
       break
     else:
-      if whitespace[__c1]:
+      if has63(whitespace, __c1):
         read_char(s)
       else:
         if __c1 == ";":
@@ -37,7 +37,7 @@ def read(s=None):
   skip_non_code(s)
   __c2 = peek_char(s)
   if is63(__c2):
-    return (read_table[__c2] or read_table[""])(s)
+    return (has(read_table, __c2) or has(read_table, ""))(s)
   else:
     return eof
 def read_all(s=None):
@@ -100,7 +100,7 @@ def __f(s=None):
   ___str = ""
   while True:
     __c3 = peek_char(s)
-    if __c3 and (not whitespace[__c3] and not delimiters[__c3]):
+    if __c3 and (not has63(whitespace, __c3) and not has63(delimiters, __c3)):
       ___str = cat(___str, read_char(s))
     else:
       break

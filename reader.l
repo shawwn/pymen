@@ -20,7 +20,7 @@
   (while true
     (let c (peek-char s)
       (if (nil? c) (break)
-          (get whitespace c) (read-char s)
+          (has? whitespace c) (read-char s)
           (= c ";")
           (do (while (and c (not (= c "\n")))
                 (set c (read-char s)))
@@ -34,8 +34,8 @@
   (skip-non-code s)
   (let c (peek-char s)
     (if (is? c)
-        ((or (get read-table c)
-             (get read-table ""))
+        ((or (has read-table c)
+             (has read-table ""))
          s)
       eof)))
 
@@ -88,8 +88,8 @@
   (let (str "")
     (while true
       (let c (peek-char s)
-        (if (and c (and (not (get whitespace c))
-                        (not (get delimiters c))))
+        (if (and c (and (not (has? whitespace c))
+                        (not (has? delimiters c))))
             (cat! str (read-char s))
           (break))))
   (if (= str "true") true

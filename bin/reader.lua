@@ -25,7 +25,7 @@ local function skip_non_code(s)
     if nil63(__c1) then
       break
     else
-      if whitespace[__c1] then
+      if has63(whitespace, __c1) then
         read_char(s)
       else
         if __c1 == ";" then
@@ -46,7 +46,7 @@ local function read(s)
   skip_non_code(s)
   local __c2 = peek_char(s)
   if is63(__c2) then
-    return (read_table[__c2] or read_table[""])(s)
+    return (has(read_table, __c2) or has(read_table, ""))(s)
   else
     return eof
   end
@@ -131,7 +131,7 @@ read_table[""] = function (s)
   local ___str = ""
   while true do
     local __c3 = peek_char(s)
-    if __c3 and (not whitespace[__c3] and not delimiters[__c3]) then
+    if __c3 and (not has63(whitespace, __c3) and not has63(delimiters, __c3)) then
       ___str = ___str .. read_char(s)
     else
       break
