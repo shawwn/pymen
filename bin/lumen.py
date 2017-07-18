@@ -70,14 +70,15 @@ def two63(x=None):
   return _35(x) == 2
 def hd(l=None):
   return l[0]
+import numbers
 def string63(x=None):
-  return type(x) == "string"
+  return isinstance(x, str)
 def number63(x=None):
-  return type(x) == "number"
+  return isinstance(x, numbers.Number)
 def boolean63(x=None):
-  return type(x) == "boolean"
+  return isinstance(x, bool)
 def function63(x=None):
-  return type(x) == "function"
+  return callable(x)
 def obj63(x=None):
   return is63(x) and isinstance(x, dict)
 def atom63(x=None):

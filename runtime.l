@@ -64,10 +64,16 @@
 
 (target js: (define-global type (x) (typeof x)))
 
-(define-global string? (x) (= (type x) 'string))
-(define-global number? (x) (= (type x) 'number))
-(define-global boolean? (x) (= (type x) 'boolean))
-(define-global function? (x) (= (type x) 'function))
+(target py:
+  (do (import numbers)
+      (define-global string? (x) (isinstance x |str|))
+      (define-global number? (x) (isinstance x (idx numbers Number)))
+      (define-global boolean? (x) (isinstance x |bool|))
+      (define-global function? (x) (callable x)))
+  (do (define-global string? (x) (= (type x) 'string))
+      (define-global number? (x) (= (type x) 'number))
+      (define-global boolean? (x) (= (type x) 'boolean))
+      (define-global function? (x) (= (type x) 'function))))
 
 (define-global obj? (x)
   (and (is? x)
