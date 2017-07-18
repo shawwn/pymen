@@ -142,7 +142,9 @@ def inner(x=None):
 def tl(l=None):
   return cut(l, 1)
 def char(s=None, n=None):
-  pass
+  __n6 = n or 0
+  if __n6 >= 0 and __n6 < len(s):
+    return s[__n6]
 def code(s=None, n=None):
   pass
 def string_literal63(x=None):
@@ -184,13 +186,13 @@ def join(*_rest, **_params):
   while ____i7 < _35(____x2):
     __l3 = ____x2[____i7]
     if __l3:
-      __n6 = _35(__r43)
+      __n7 = _35(__r43)
       ____o4 = __l3
       __k4 = None
       for __k4 in indices(____o4):
         __v5 = ____o4[__k4]
         if number63(__k4):
-          __k4 = __k4 + __n6
+          __k4 = __k4 + __n7
         else:
           __l3 = object(__l3)
         __r43[__k4] = __v5
@@ -314,14 +316,14 @@ def split(s=None, sep=None):
     return []
   else:
     __l5 = []
-    __n15 = _35(sep)
+    __n16 = _35(sep)
     while True:
       __i19 = search(s, sep)
       if nil63(__i19):
         break
       else:
         add(__l5, clip(s, 0, __i19))
-        s = clip(s, __i19 + __n15)
+        s = clip(s, __i19 + __n16)
     add(__l5, s)
     return __l5
 def cat(*_rest, **_params):
@@ -393,9 +395,9 @@ def number(s=None):
 def number_code63(n=None):
   return n > 47 and n < 58
 def numeric63(s=None):
-  __n16 = _35(s)
+  __n17 = _35(s)
   __i21 = 0
-  while __i21 < __n16:
+  while __i21 < __n17:
     if not number_code63(code(s, __i21)):
       return False
     __i21 = __i21 + 1

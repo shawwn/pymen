@@ -137,7 +137,11 @@
 (define-global tl (l) (cut l 1))
 
 (define-global char (s n)
-  (target js: ((idx s charAt) n) lua: (clip s n (+ n 1))))
+  (target js: ((idx s charAt) n)
+          lua: (clip s n (+ n 1))
+          py: (let n (or n 0)
+                (if (and (>= n 0) (< n (|len| s)))
+                  (get s n)))))
 
 (define-global code (s n)
   (target
