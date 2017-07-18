@@ -1,14 +1,14 @@
 from lumen import *
 import sys
 def read_file(path=None):
-  pass
+  return open(path).read()
 def write_file(path=None, data=None):
   pass
 def file_exists63(path=None):
   pass
 def directory_exists63(path=None):
   pass
-
+path_separator = None
 def path_join(*_rest, **_params):
   __parts = unstash(list(_rest))
   def __f(x=None, y=None):

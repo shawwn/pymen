@@ -78,7 +78,7 @@ def one63(x=None):
 def two63(x=None):
   return L_35(x) == 2
 def hd(l=None):
-  return l[0]
+  return has(l, 0)
 import numbers
 def string63(x=None):
   return isinstance(x, str)
@@ -108,14 +108,14 @@ def dupe(x=None):
 def cut(x=None, L_from=None, upto=None):
   __l2 = dupe(x)
   __j = 0
-
+  __e = None
   if nil63(L_from) or L_from < 0:
     __e = 0
   else:
     __e = L_from
   __i3 = __e
   __n3 = L_35(x)
-
+  __e1 = None
   if nil63(upto) or upto > __n3:
     __e1 = __n3
   else:
@@ -441,19 +441,19 @@ def escape(s=None):
   __i22 = 0
   while __i22 < L_35(s):
     __c = char(s, __i22)
-
+    __e2 = None
     if __c == "\n":
       __e2 = "\\n"
     else:
-
+      __e3 = None
       if __c == "\r":
         __e3 = "\\r"
       else:
-
+        __e4 = None
         if __c == "\"":
           __e4 = "\\\""
         else:
-
+          __e5 = None
           if __c == "\\":
             __e5 = "\\\\"
           else:
@@ -539,13 +539,13 @@ def setenv(k=None, *_rest, **_params):
   ____id1 = ____r83
   __keys = cut(____id1, 0)
   if string63(__k11):
-
+    __e6 = None
     if has63(__keys, "toplevel"):
       __e6 = hd(environment)
     else:
       __e6 = last(environment)
     __frame = __e6
-
+    __e7 = None
     if has63(__frame, __k11):
       __e7 = __frame[__k11]
     else:
@@ -902,11 +902,11 @@ def __f40(x=None, t=None, *_rest, **_params):
   __o3 = unique("o")
   __n3 = unique("n")
   __i3 = unique("i")
-
+  __e7 = None
   if atom63(__x294):
     __e7 = [__i3, __x294]
   else:
-
+    __e8 = None
     if L_35(__x294) > 1:
       __e8 = __x294
     else:
@@ -915,7 +915,7 @@ def __f40(x=None, t=None, *_rest, **_params):
   ____id53 = __e7
   __k4 = has(____id53, 0)
   __v7 = has(____id53, 1)
-
+  __e9 = None
   if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "lua" or has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "py":
     __e9 = __body37
   else:
@@ -942,7 +942,7 @@ def __f42(v=None, t=None, *_rest, **_params):
 setenv("step", {"_stash": True, "macro": __f42})
 def __f43(*_rest, **_params):
   __xs1 = unstash(list(_rest))
-  __l3 = []
+  __l3 = {}
   ____o5 = __xs1
   ____i9 = None
   for ____i9 in indices(____o5):
@@ -978,7 +978,7 @@ def __f48(a=None, *_rest, **_params):
   return ["set", __a5, join(["cat", __a5], __bs7)]
 setenv("cat!", {"_stash": True, "macro": __f48})
 def __f49(n=None, by=None):
-
+  __e10 = None
   if nil63(by):
     __e10 = 1
   else:
@@ -986,7 +986,7 @@ def __f49(n=None, by=None):
   return ["set", n, ["+", n, __e10]]
 setenv("inc", {"_stash": True, "macro": __f49})
 def __f50(n=None, by=None):
-
+  __e11 = None
   if nil63(by):
     __e11 = 1
   else:

@@ -206,7 +206,7 @@
            ,@body)))))
 
 (define-macro set-of xs
-  (let l ()
+  (let l (target py: (obj) ())
     (each x xs
       (set (get l x) true))
     `(obj ,@l)))

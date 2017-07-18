@@ -13,6 +13,7 @@
 
 (define read-file (path)
   (target
+    py: ((idx (open path) read))
     js: ((idx fs readFileSync) path 'utf8)
     lua: (call-with-file
           (fn (f) ((idx f read) f '*a))

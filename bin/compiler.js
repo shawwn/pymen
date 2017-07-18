@@ -1331,33 +1331,32 @@ setenv("error", {_stash: true, special: function (x) {
 }, stmt: true});
 setenv("%local", {_stash: true, special: function (name, value) {
   if (nil63(value) && has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-    return "";
-  } else {
-    var __id28 = compile(name);
-    var __value11 = compile(value);
-    var __e67;
-    if (is63(value)) {
-      __e67 = " = " + __value11;
-    } else {
-      __e67 = "";
-    }
-    var __rh2 = __e67;
-    var __e68;
-    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "js") {
-      __e68 = "var ";
-    } else {
-      var __e69;
-      if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua") {
-        __e69 = "local ";
-      } else {
-        __e69 = "";
-      }
-      __e68 = __e69;
-    }
-    var __keyword1 = __e68;
-    var __ind11 = indentation();
-    return __ind11 + __keyword1 + __id28 + __rh2;
+    value = "nil";
   }
+  var __id28 = compile(name);
+  var __value11 = compile(value);
+  var __e67;
+  if (is63(value)) {
+    __e67 = " = " + __value11;
+  } else {
+    __e67 = "";
+  }
+  var __rh2 = __e67;
+  var __e68;
+  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "js") {
+    __e68 = "var ";
+  } else {
+    var __e69;
+    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua") {
+      __e69 = "local ";
+    } else {
+      __e69 = "";
+    }
+    __e68 = __e69;
+  }
+  var __keyword1 = __e68;
+  var __ind11 = indentation();
+  return __ind11 + __keyword1 + __id28 + __rh2;
 }, stmt: true});
 setenv("%set", {_stash: true, special: function (lh, rh) {
   var __lh2 = compile(lh);

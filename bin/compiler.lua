@@ -1285,33 +1285,32 @@ setenv("error", {_stash = true, special = function (x)
 end, stmt = true})
 setenv("%local", {_stash = true, special = function (name, value)
   if nil63(value) and has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
-    return ""
-  else
-    local __id28 = compile(name)
-    local __value11 = compile(value)
-    local __e59
-    if is63(value) then
-      __e59 = " = " .. __value11
-    else
-      __e59 = ""
-    end
-    local __rh2 = __e59
-    local __e60
-    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "js" then
-      __e60 = "var "
-    else
-      local __e61
-      if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" then
-        __e61 = "local "
-      else
-        __e61 = ""
-      end
-      __e60 = __e61
-    end
-    local __keyword1 = __e60
-    local __ind11 = indentation()
-    return __ind11 .. __keyword1 .. __id28 .. __rh2
+    value = "nil"
   end
+  local __id28 = compile(name)
+  local __value11 = compile(value)
+  local __e59
+  if is63(value) then
+    __e59 = " = " .. __value11
+  else
+    __e59 = ""
+  end
+  local __rh2 = __e59
+  local __e60
+  if has(setenv("target", {_stash = true, toplevel = true}), "value") == "js" then
+    __e60 = "var "
+  else
+    local __e61
+    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" then
+      __e61 = "local "
+    else
+      __e61 = ""
+    end
+    __e60 = __e61
+  end
+  local __keyword1 = __e60
+  local __ind11 = indentation()
+  return __ind11 .. __keyword1 .. __id28 .. __rh2
 end, stmt = true})
 setenv("%set", {_stash = true, special = function (lh, rh)
   local __lh2 = compile(lh)

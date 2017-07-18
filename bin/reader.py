@@ -70,14 +70,14 @@ def wrap(s=None, x=None):
   else:
     return [x, __y]
 def hex_prefix63(L_str=None):
-
+  __e = None
   if code(L_str, 0) == 45:
     __e = 1
   else:
     __e = 0
   __i = __e
   __id2 = code(L_str, __i) == 48
-
+  __e1 = None
   if __id2:
     __i = __i + 1
     __n = code(L_str, __i)

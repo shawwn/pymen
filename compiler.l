@@ -742,13 +742,13 @@
     (cat (indentation) e)))
 
 (define-special %local (name value) :stmt
-  (if (and (nil? value) (target? 'py)) ""
-    (let (id (compile name)
-          value1 (compile value)
-          rh (if (is? value) (cat " = " value1) "")
-          keyword (if (target? 'js) "var " (target? 'lua) "local " "")
-          ind (indentation))
-      (cat ind keyword id rh))))
+  (if (and (nil? value) (target? 'py)) (set value "nil"))
+  (let (id (compile name)
+        value1 (compile value)
+        rh (if (is? value) (cat " = " value1) "")
+        keyword (if (target? 'js) "var " (target? 'lua) "local " "")
+        ind (indentation))
+    (cat ind keyword id rh)))
 
 (define-special %set (lh rh) :stmt
   (let (lh (compile lh)
