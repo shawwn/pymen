@@ -1179,7 +1179,7 @@ setenv("each", {_stash: true, macro: function (x, t) {
   var __k5 = ____id53[0];
   var __v7 = ____id53[1];
   var __e10;
-  if (setenv("target", {_stash: true, toplevel: true}).value === "lua") {
+  if (setenv("target", {_stash: true, toplevel: true}).value === "lua" || setenv("target", {_stash: true, toplevel: true}).value === "py") {
     __e10 = __body37;
   } else {
     __e10 = [join(["let", __k5, ["if", ["numeric?", __k5], ["parseInt", __k5], __k5]], __body37)];

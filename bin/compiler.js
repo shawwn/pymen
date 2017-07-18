@@ -137,7 +137,7 @@ bind = function (lh, rh) {
 setenv("arguments%", {_stash: true, macro: function (_from) {
   var ____x16 = object(["target"]);
   ____x16.js = [["idx", ["idx", ["idx", "Array", "prototype"], "slice"], "call"], "arguments", _from];
-  ____x16.py = ["list", "|_rest|"];
+  ____x16.py = ["|list|", "|_rest|"];
   ____x16.lua = ["list", "|...|"];
   return ____x16;
 }});

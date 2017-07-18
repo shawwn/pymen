@@ -1040,7 +1040,7 @@ setenv("each", {_stash = true, macro = function (x, t, ...)
   local __k4 = ____id53[1]
   local __v7 = ____id53[2]
   local __e9
-  if setenv("target", {_stash = true, toplevel = true}).value == "lua" then
+  if setenv("target", {_stash = true, toplevel = true}).value == "lua" or setenv("target", {_stash = true, toplevel = true}).value == "py" then
     __e9 = __body37
   else
     __e9 = {join({"let", __k4, {"if", {"numeric?", __k4}, {"parseInt", __k4}, __k4}}, __body37)}

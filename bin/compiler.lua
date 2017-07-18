@@ -123,7 +123,7 @@ end
 setenv("arguments%", {_stash = true, macro = function (_from)
   local ____x16 = object({"target"})
   ____x16.js = {{"idx", {"idx", {"idx", "Array", "prototype"}, "slice"}, "call"}, "arguments", _from}
-  ____x16.py = {"list", "|_rest|"}
+  ____x16.py = {"|list|", "|_rest|"}
   ____x16.lua = {"list", "|...|"}
   return ____x16
 end})

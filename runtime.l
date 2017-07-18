@@ -24,7 +24,7 @@
 
 (target py:
   (define-global indices (x)
-    (if (isinstance x dict) x (xrange (len x)))))
+    (if (isinstance x dict) x (range (len x)))))
 
 (define-global array (x)
   (if (array? x) x
@@ -413,4 +413,6 @@
 (define-global tanh (idx math tanh))
 (define-global trunc (idx math floor))
 
+(target py: (import pdb))
+(target py: ((idx pdb set_trace)))
 (define-variable target (language))

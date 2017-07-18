@@ -77,7 +77,7 @@
 
 (define-macro arguments% (from)
   `(target js: ((idx (idx (idx Array prototype) slice) call) arguments ,from)
-           py: (list |_rest|)
+           py: (|list| |_rest|)
            lua: (list |...|)))
 
 (define-global bind* (args body)
