@@ -18,6 +18,8 @@ def get_environment_variable(name=None):
   pass
 def write(x=None):
   return sys.stdout.write(x)
+def flush(x=None):
+  return sys.stdout.flush()
 def read_line():
   return sys.stdin.readline()
 def exit(code=None):

@@ -19,7 +19,8 @@
         (is? v) (print (str v)))))
 
 (define rep (s)
-  (eval-print ((idx reader read-string) s)))
+  (let v (eval ((idx reader read-string) s))
+    (if (is? v) (print (str v)))))
 
 (define repl ()
   (let o (obj buf: "")
@@ -30,8 +31,10 @@
           (unless (= form more)
             (eval-print form)
             (set (get o 'buf) "")
-            ((idx system write) "> ")))))
+            ((idx system write) "> ")
+            ((idx system flush))))))
   ((idx system write) "> ")
+  ((idx system flush))
   (target
     js: (let in (idx process stdin)
           ((idx in setEncoding) "utf8")

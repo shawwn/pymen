@@ -75,13 +75,10 @@ var flag63 = function (atom) {
   return string63(atom) && _35(atom) > 1 && char(atom, 0) === ":";
 };
 var expected = function (s, c) {
-  if (has63(s, "more")) {
+  if (is63(s.more)) {
     return s.more;
   } else {
-    var ____id1 = s;
-    var __more = has(____id1, "more");
-    var __pos1 = has(____id1, "pos");
-    throw new Error("Expected " + c + " at " + __pos1);
+    throw new Error("Expected " + c + " at " + s.pos);
   }
 };
 var wrap = function (s, x) {
@@ -100,14 +97,14 @@ var hex_prefix63 = function (_str) {
     __e = 0;
   }
   var __i = __e;
-  var __id2 = code(_str, __i) === 48;
+  var __id1 = code(_str, __i) === 48;
   var __e1;
-  if (__id2) {
+  if (__id1) {
     __i = __i + 1;
     var __n = code(_str, __i);
     __e1 = __n === 120 || __n === 88;
   } else {
-    __e1 = __id2;
+    __e1 = __id1;
   }
   return __e1;
 };

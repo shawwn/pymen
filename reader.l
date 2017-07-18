@@ -60,10 +60,9 @@
        (= (char atom 0) ":")))
 
 (define expected (s c)
-  (if (has? s 'more)
+  (if (is? (get s 'more))
       (get s 'more)
-    (let ((:more :pos) s)
-      (error (cat "Expected " c " at " pos)))))
+    (error (cat "Expected " c " at " (get s 'pos)))))
 
 (define wrap (s x)
   (let y (read s)
@@ -78,7 +77,10 @@
 
 (define maybe-number (str)
   (if (hex-prefix? str)
-      (target js: (parseInt str 16) lua: (tonumber str) py: (|int| str 16))
+      (target js: (parseInt str 16)
+              lua: (tonumber str)
+              py: (let ((ok v) (guard (|int| str 16)))
+                    (if ok v)))
       (number-code? (code str (edge str)))
     (number str)))
 

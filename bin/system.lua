@@ -56,6 +56,8 @@ end
 local function write(x)
   return io.write(x)
 end
+local function flush(x)
+end
 local function read_line()
   return io.read()
 end
@@ -89,6 +91,7 @@ __exports.path_join = path_join
 __exports["get-environment-variable"] = get_environment_variable
 __exports.get_environment_variable = get_environment_variable
 __exports.write = write
+__exports.flush = flush
 __exports["read-line"] = read_line
 __exports.read_line = read_line
 __exports.exit = exit

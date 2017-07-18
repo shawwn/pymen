@@ -65,6 +65,9 @@
           lua: ((idx io write) x)
           py: ((idx (idx sys stdout) write) x)))
 
+(define flush (x)
+  (target py: ((idx (idx sys stdout) flush))))
+
 (define read-line ()
   (target lua: ((idx io read))
           py: ((idx (idx sys stdin) readline))))
@@ -100,6 +103,7 @@
         path-join
         get-environment-variable
         write
+        flush
         read-line
         exit
         argv

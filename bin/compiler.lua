@@ -545,7 +545,7 @@ local function infix63(x)
   return is63(getop(x))
 end
 function infix_operator63(x)
-  return obj63(x) and infix63(hd(x))
+  return not atom63(x) and infix63(hd(x))
 end
 function compile_args(args, default63)
   local __s1 = "("
@@ -1109,7 +1109,7 @@ function _eval(form, globals)
   return eval_result(globals)
 end
 function immediate_call63(x)
-  return obj63(x) and obj63(hd(x)) and hd(hd(x)) == "%function"
+  return not atom63(x) and not atom63(hd(x)) and hd(hd(x)) == "%function"
 end
 setenv("do", {_stash = true, special = function (...)
   local __forms1 = unstash({...})

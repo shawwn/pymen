@@ -203,7 +203,7 @@ def macroexpand(form=None):
               else:
                 return map(macroexpand, form)
 def quasiquote_list(form=None, depth=None):
-  __xs = [["list"]]
+  __xs = [object(["list"])]
   ____o5 = form
   __k4 = None
   for __k4 in indices(____o5):
@@ -410,7 +410,7 @@ infix = [____x69, ____x71, ____x72, ____x74, ____x75, ____x76, ____x78, ____x80]
 def unary63(form=None):
   return two63(form) and in63(hd(form), ["not", "-"])
 def index(k=None):
-  pass
+  return k
 def precedence(form=None):
   if not( atom63(form) or unary63(form)):
     ____o8 = infix
@@ -432,7 +432,7 @@ def getop(op=None):
 def infix63(x=None):
   return is63(getop(x))
 def infix_operator63(x=None):
-  return obj63(x) and infix63(hd(x))
+  return not atom63(x) and infix63(hd(x))
 def compile_args(args=None, default63=None):
   __s1 = "("
   __c2 = ""
@@ -882,7 +882,7 @@ def L_eval(form=None, globals=None):
   run(__code, globals)
   return eval_result(globals)
 def immediate_call63(x=None):
-  return obj63(x) and obj63(hd(x)) and hd(hd(x)) == "%function"
+  return not atom63(x) and not atom63(hd(x)) and hd(hd(x)) == "%function"
 def __f9(*_rest, **_params):
   __forms1 = unstash(list(_rest))
   __s4 = ""

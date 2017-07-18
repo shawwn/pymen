@@ -285,13 +285,28 @@ function in63(x, t)
 end
 function pair(l)
   local __l12 = dupe(l)
+  local __n10 = _35(l)
   local __i11 = 0
-  while __i11 < _35(l) do
-    add(__l12, {l[__i11 + 1], l[__i11 + 1 + 1]})
+  while __i11 < __n10 do
+    local __a = l[__i11 + 1]
+    local __b = l[__i11 + 1 + 1]
+    add(__l12, {__a, __b})
     __i11 = __i11 + 1
     __i11 = __i11 + 1
   end
   return __l12
+end
+local function sortfunc(f)
+  if f then
+    local __f = function (a, b)
+      if f(a, b) then
+        return -1
+      else
+        return 1
+      end
+    end
+    return __f
+  end
 end
 function sort(l, f)
   table.sort(l, f)
@@ -418,14 +433,14 @@ function split(s, sep)
     return {}
   else
     local __l5 = {}
-    local __n16 = _35(sep)
+    local __n17 = _35(sep)
     while true do
       local __i20 = search(s, sep)
       if nil63(__i20) then
         break
       else
         add(__l5, clip(s, 0, __i20))
-        s = clip(s, __i20 + __n16)
+        s = clip(s, __i20 + __n17)
       end
     end
     add(__l5, s)
@@ -485,9 +500,9 @@ end
 local function pairwise(f, xs)
   local __i21 = 0
   while __i21 < edge(xs) do
-    local __a = xs[__i21 + 1]
-    local __b = xs[__i21 + 1 + 1]
-    if not f(__a, __b) then
+    local __a1 = xs[__i21 + 1]
+    local __b1 = xs[__i21 + 1 + 1]
+    if not f(__a1, __b1) then
       return false
     end
     __i21 = __i21 + 1
@@ -531,9 +546,9 @@ function number(s)
   return tonumber(s)
 end
 function numeric63(s)
-  local __n17 = _35(s)
+  local __n18 = _35(s)
   local __i22 = 0
-  while __i22 < __n17 do
+  while __i22 < __n18 do
     if not number_code63(code(s, __i22)) then
       return false
     end
@@ -627,17 +642,34 @@ function _str(x, stack)
                           if not string63(__k11) then
                             __k11 = _str(__k11, __l6)
                           end
-                          add(__ks, __k11 .. ":")
-                          add(__ks, _str(__v12, __l6))
+                          add(__ks, {__k11 .. ":", _str(__v12, __l6)})
                         end
                       end
+                      sort(__ks, function (__x21, __x22)
+                        local ____id = __x21
+                        local __a2 = has(____id, 1)
+                        local ____id1 = __x22
+                        local __b2 = has(____id1, 1)
+                        return __a2 < __b2
+                      end)
                       drop(__l6)
-                      local ____o14 = join(__xs11, __ks)
-                      local ____i25 = nil
-                      for ____i25 in next, ____o14 do
-                        local __v13 = ____o14[____i25]
+                      local ____x23 = __xs11
+                      local ____i25 = 0
+                      while ____i25 < _35(____x23) do
+                        local __v13 = ____x23[____i25 + 1]
                         __s = __s .. __sp .. __v13
                         __sp = " "
+                        ____i25 = ____i25 + 1
+                      end
+                      local ____x24 = __ks
+                      local ____i26 = 0
+                      while ____i26 < _35(____x24) do
+                        local ____id2 = ____x24[____i26 + 1]
+                        local __k12 = has(____id2, 1)
+                        local __v14 = has(____id2, 2)
+                        __s = __s .. __sp .. __k12 .. " " .. __v14
+                        __sp = " "
+                        ____i26 = ____i26 + 1
                       end
                       return __s .. ")"
                     end
@@ -657,18 +689,18 @@ function apply(f, args)
   return f(values(__args))
 end
 function call(f, ...)
-  local ____r79 = unstash({...})
-  local __f = destash33(f, ____r79)
-  local ____id = ____r79
-  local __args11 = cut(____id, 0)
-  return apply(__f, __args11)
+  local ____r82 = unstash({...})
+  local __f1 = destash33(f, ____r82)
+  local ____id3 = ____r82
+  local __args11 = cut(____id3, 0)
+  return apply(__f1, __args11)
 end
 function setenv(k, ...)
-  local ____r80 = unstash({...})
-  local __k12 = destash33(k, ____r80)
-  local ____id1 = ____r80
-  local __keys = cut(____id1, 0)
-  if string63(__k12) then
+  local ____r83 = unstash({...})
+  local __k13 = destash33(k, ____r83)
+  local ____id4 = ____r83
+  local __keys = cut(____id4, 0)
+  if string63(__k13) then
     local __e8
     if has63(__keys, "toplevel") then
       __e8 = hd(environment)
@@ -677,22 +709,22 @@ function setenv(k, ...)
     end
     local __frame = __e8
     local __e9
-    if has63(__frame, __k12) then
-      __e9 = __frame[__k12]
+    if has63(__frame, __k13) then
+      __e9 = __frame[__k13]
     else
       __e9 = {}
     end
     local __entry = __e9
-    local ____o15 = __keys
-    local __k13 = nil
-    for __k13 in next, ____o15 do
-      local __v14 = ____o15[__k13]
-      if not( __k13 == "toplevel") then
-        __entry[__k13] = __v14
+    local ____o14 = __keys
+    local __k14 = nil
+    for __k14 in next, ____o14 do
+      local __v15 = ____o14[__k14]
+      if not( __k14 == "toplevel") then
+        __entry[__k14] = __v15
       end
     end
-    __frame[__k12] = __entry
-    return __frame[__k12]
+    __frame[__k13] = __entry
+    return __frame[__k13]
   end
 end
 function _print(x)
@@ -1216,7 +1248,10 @@ local function eval_print(form)
   end
 end
 local function rep(s)
-  return eval_print(reader.read_string(s))
+  local __v1 = _eval(reader.read_string(s))
+  if is63(__v1) then
+    return _print(_str(__v1))
+  end
 end
 local function repl()
   local __o = {buf = ""}
@@ -1227,10 +1262,12 @@ local function repl()
     if not( __form == __more) then
       eval_print(__form)
       __o.buf = ""
-      return system.write("> ")
+      system.write("> ")
+      return system.flush()
     end
   end
   system.write("> ")
+  system.flush()
   while true do
     local __s = system.read_line()
     if __s then

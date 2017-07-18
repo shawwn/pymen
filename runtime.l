@@ -9,15 +9,15 @@
 
 (define-global is? (x) (not (nil? x)))
 
-(define-global no (x) (or (nil? x) (= x false)))
+(define-global no (x) (or (nil? x) (target py: (%literal x | is False|) (= x false))))
 (define-global yes (x) (not (no x)))
 (define-global either (x y) (if (is? x) x y))
 
 (define-global has? (l k)
   (target js: ((idx l hasOwnProperty) k)
-          py: (if (array? l)
-                  (and (number? k) (>= k 0) (< k (|len| l)))
-                  (and (or (number? k) (string? k)) (%literal |(| k | in | l |)|)))
+          py: (if (isinstance l |dict|)
+                  (and (or (number? k) (string? k)) (%literal |(| k | in | l |)|))
+                (and (number? k) (>= k 0) (< k (|len| l))))
           lua: (is? (get l k))))
 
 (define-global has (l k else)
@@ -77,7 +77,7 @@
 (target py:
   (do (import numbers)
       (define-global string? (x) (isinstance x |str|))
-      (define-global number? (x) (isinstance x (idx numbers Number)))
+      (define-global number? (x) (and (not (boolean? x)) (isinstance x (idx numbers Number))))
       (define-global boolean? (x) (isinstance x |bool|))
       (define-global function? (x) (callable x)))
   (do (define-global string? (x) (= (type x) 'string))
@@ -107,8 +107,9 @@
 (define-global clip (s from upto)
   (target js: ((idx s substring) from upto)
           lua: ((idx string sub) s (+ from 1) upto)
-          py: (let (from (or from 0)
-                    upto (or upto (# s)))
+          py: (let (n (# s)
+                    from (if (or (nil? from) (< from 0)) 0 from)
+                    upto (if (or (nil? upto) (> upto n)) n upto))
                 (%literal s |[| from |:| upto |]|))))
 
 (define-global dupe (x)
@@ -172,14 +173,17 @@
 (define-global drop (l)
   (target lua: ((idx table remove) l)
     (if (array? l)
-        ((idx l pop))
+        (when (some? l)
+          ((idx l pop)))
       (let n (edge l)
         (when (>= n 0)
           (with r (at l n)
             (wipe (at l n))))))))
 
 (define-global last (l)
-  (at l (edge l)))
+  (target py:
+    (has l (edge l))
+    (at l (edge l))))
 
 (define-global almost (l)
   (cut l 0 (edge l)))
@@ -220,14 +224,26 @@
 
 (define-global pair (l)
   (with l1 (dupe l)
-    (for i (# l)
-      (add l1 (list (at l i) (at l (+ i 1))))
-      (inc i))))
+    (let n (# l)
+      (for i n
+        (let (a (at l i)
+              b (target py: (if (< (+ i 1) n) (at l (+ i 1)))
+                  (at l (+ i 1))))
+          (add l1 (list a b)))
+        (inc i)))))
+
+(target py: (import functools))
+
+(define sortfunc (f)
+  (when f
+    (let f (fn (a b) (if (f a b) -1 1))
+      (target py: ((idx functools cmp_to_key) f) f))))
 
 (define-global sort (l f)
   (target
     lua: (do ((idx table sort) l f) l)
-    js: ((idx l sort) (when f (fn (a b) (if (f a b) -1 1))))))
+    (do ((idx l sort)
+         (%literal (target py: |key=|) (sortfunc f))) l)))
 
 (define-global map (f x)
   (with t (dupe x)
@@ -284,8 +300,8 @@
 
 (define-global search (s pattern start)
   (target
-    js: (let i ((idx s indexOf) pattern start)
-          (if (>= i 0) i))
+    (let i ((idx s (target js: indexOf py: find)) pattern start)
+      (if (>= i 0) i))
     lua: (let (start (if start (+ start 1))
                i ((idx string find) s pattern start true))
            (and i (- i 1)))))
@@ -368,6 +384,7 @@
   (some? s))
 
 (target js: (define tostring (x) ((idx x toString))))
+(target py: (define tostring (x) (|repr| x)))
 
 (define-global escape (s)
   (let s1 "\""
@@ -380,10 +397,6 @@
                  c))
         (cat! s1 c1)))
     (cat s1 "\"")))
-
-(target py:
-  (define-global tostring (x)
-    (|str| x)))
 
 (define-global str (x stack)
   (if (nil? x) "nil"
@@ -409,13 +422,16 @@
           (do (target lua:
                 (unless (string? k)
                   (set k (str k l))))
-              (add ks (cat k ":"))
-              (add ks (str v l)))))
+              (add ks (list (cat k ":") (str v l))))))
+      (sort ks (fn ((a) (b)) (< a b)))
       (drop l)
-      (each v (join xs ks)
+      (step v xs
         (cat! s sp v)
         (set sp " "))
-      (cat s  ")"))))
+      (step (k v) ks
+        (cat! s sp k " " v)
+        (set sp " "))
+      (cat s ")"))))
 
 (target lua:
   (define values (or unpack (idx table unpack))))
@@ -447,6 +463,7 @@
 
 (target js: (define math Math))
 (target py: (import math))
+(target py: (import random))
 (target py: || (define-global abs (idx math abs)))
 (define-global acos (idx math acos))
 (define-global asin (idx math asin))
@@ -460,7 +477,7 @@
 (target py: || (define-global max (idx math max)))
 (target py: || (define-global min (idx math min)))
 (target py: || (define-global pow (idx math pow)))
-(target py: || (define-global random (idx math random)))
+(define-global random (target py: (idx random random) (idx math random)))
 (define-global sin (idx math sin))
 (define-global sinh (idx math sinh))
 (define-global sqrt (idx math sqrt))
@@ -468,6 +485,4 @@
 (define-global tanh (idx math tanh))
 (define-global trunc (idx math floor))
 
-; (target py: (import pdb))
-; (target py: ((idx pdb set_trace)))
 (define-variable target (language))

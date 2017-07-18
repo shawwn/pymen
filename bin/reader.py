@@ -56,13 +56,10 @@ def key63(atom=None):
 def flag63(atom=None):
   return string63(atom) and L_35(atom) > 1 and char(atom, 0) == ":"
 def expected(s=None, c=None):
-  if has63(s, "more"):
+  if is63(s["more"]):
     return s["more"]
   else:
-    ____id1 = s
-    __more = has(____id1, "more")
-    __pos1 = has(____id1, "pos")
-    raise Exception(cat("Expected ", c, " at ", __pos1))
+    raise Exception(cat("Expected ", c, " at ", s["pos"]))
 def wrap(s=None, x=None):
   __y = read(s)
   if __y == s["more"]:
@@ -87,13 +84,23 @@ def hex_prefix63(L_str=None):
   return __e1
 def maybe_number(L_str=None):
   if hex_prefix63(L_str):
-    return int(L_str, 16)
+    def __f():
+      try:
+        return [True, int(L_str, 16)]
+      except Exception as __e2:
+        import sys
+        return [False, __e2, sys.exc_info()]
+    ____id1 = __f()
+    __ok = has(____id1, 0)
+    __v = has(____id1, 1)
+    if __ok:
+      return __v
   else:
     if number_code63(code(L_str, edge(L_str))):
       return number(L_str)
 def real63(x=None):
   return number63(x) and not nan63(x) and not inf63(x)
-def __f(s=None):
+def __f1(s=None):
   __L_str = ""
   while True:
     __c3 = peek_char(s)
@@ -112,83 +119,83 @@ def __f(s=None):
         return __n1
       else:
         return __L_str
-read_table[""] = __f
-def __f1(s=None):
+read_table[""] = __f1
+def __f2(s=None):
   read_char(s)
-  __r16 = None
+  __r17 = None
   __l1 = []
-  while nil63(__r16):
+  while nil63(__r17):
     skip_non_code(s)
     __c4 = peek_char(s)
     if __c4 == ")":
       read_char(s)
-      __r16 = __l1
+      __r17 = __l1
     else:
       if nil63(__c4):
-        __r16 = expected(s, ")")
+        __r17 = expected(s, ")")
       else:
-        __x2 = read(s)
-        if key63(__x2):
-          __k = clip(__x2, 0, edge(__x2))
-          __v = read(s)
+        __x3 = read(s)
+        if key63(__x3):
+          __k = clip(__x3, 0, edge(__x3))
+          __v1 = read(s)
           __l1 = object(__l1)
-          __l1[__k] = __v
+          __l1[__k] = __v1
         else:
-          if flag63(__x2):
+          if flag63(__x3):
             __l1 = object(__l1)
-            __l1[clip(__x2, 1)] = True
+            __l1[clip(__x3, 1)] = True
           else:
-            add(__l1, __x2)
-  return __r16
-read_table["("] = __f1
-def __f2(s=None):
-  raise Exception(cat("Unexpected ) at ", s["pos"]))
-read_table[")"] = __f2
+            add(__l1, __x3)
+  return __r17
+read_table["("] = __f2
 def __f3(s=None):
+  raise Exception(cat("Unexpected ) at ", s["pos"]))
+read_table[")"] = __f3
+def __f4(s=None):
   read_char(s)
-  __r19 = None
+  __r20 = None
   __L_str1 = "\""
-  while nil63(__r19):
+  while nil63(__r20):
     __c5 = peek_char(s)
     if __c5 == "\"":
-      __r19 = cat(__L_str1, read_char(s))
+      __r20 = cat(__L_str1, read_char(s))
     else:
       if nil63(__c5):
-        __r19 = expected(s, "\"")
+        __r20 = expected(s, "\"")
       else:
         if __c5 == "\\":
           __L_str1 = cat(__L_str1, read_char(s))
         __L_str1 = cat(__L_str1, read_char(s))
-  return __r19
-read_table["\""] = __f3
-def __f4(s=None):
-  read_char(s)
-  __r21 = None
-  __L_str2 = "|"
-  while nil63(__r21):
-    __c6 = peek_char(s)
-    if __c6 == "|":
-      __r21 = cat(__L_str2, read_char(s))
-    else:
-      if nil63(__c6):
-        __r21 = expected(s, "|")
-      else:
-        __L_str2 = cat(__L_str2, read_char(s))
-  return __r21
-read_table["|"] = __f4
+  return __r20
+read_table["\""] = __f4
 def __f5(s=None):
   read_char(s)
-  return wrap(s, "quote")
-read_table["'"] = __f5
+  __r22 = None
+  __L_str2 = "|"
+  while nil63(__r22):
+    __c6 = peek_char(s)
+    if __c6 == "|":
+      __r22 = cat(__L_str2, read_char(s))
+    else:
+      if nil63(__c6):
+        __r22 = expected(s, "|")
+      else:
+        __L_str2 = cat(__L_str2, read_char(s))
+  return __r22
+read_table["|"] = __f5
 def __f6(s=None):
   read_char(s)
-  return wrap(s, "quasiquote")
-read_table["`"] = __f6
+  return wrap(s, "quote")
+read_table["'"] = __f6
 def __f7(s=None):
+  read_char(s)
+  return wrap(s, "quasiquote")
+read_table["`"] = __f7
+def __f8(s=None):
   read_char(s)
   if peek_char(s) == "@":
     read_char(s)
     return wrap(s, "unquote-splicing")
   else:
     return wrap(s, "unquote")
-read_table[","] = __f7
+read_table[","] = __f8

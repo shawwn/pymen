@@ -75,13 +75,10 @@ local function flag63(atom)
   return string63(atom) and _35(atom) > 1 and char(atom, 0) == ":"
 end
 local function expected(s, c)
-  if has63(s, "more") then
+  if is63(s.more) then
     return s.more
   else
-    local ____id1 = s
-    local __more = has(____id1, "more")
-    local __pos1 = has(____id1, "pos")
-    error("Expected " .. c .. " at " .. __pos1)
+    error("Expected " .. c .. " at " .. s.pos)
   end
 end
 local function wrap(s, x)
@@ -100,14 +97,14 @@ local function hex_prefix63(_str)
     __e = 0
   end
   local __i = __e
-  local __id2 = code(_str, __i) == 48
+  local __id1 = code(_str, __i) == 48
   local __e1
-  if __id2 then
+  if __id1 then
     __i = __i + 1
     local __n = code(_str, __i)
     __e1 = __n == 120 or __n == 88
   else
-    __e1 = __id2
+    __e1 = __id1
   end
   return __e1
 end

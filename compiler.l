@@ -150,7 +150,7 @@
         (map macroexpand form)))))
 
 (define quasiquote-list (form depth)
-  (let xs (list '(list))
+  (let xs (list (target py: (object '(list)) '(list)))
     (each (k v) form
       (unless (number? k)
         (let v (if (quasisplice? v depth)
@@ -292,7 +292,7 @@
   (and (two? form) (in? (hd form) '(not -))))
 
 (define index (k)
-  (target js: k lua: (when (number? k) (- k 1))))
+  (target k lua: (when (number? k) (- k 1))))
 
 (define precedence (form)
   (unless (or (atom? form) (unary? form))
@@ -311,7 +311,7 @@
   (is? (getop x)))
 
 (define-global infix-operator? (x)
-  (and (obj? x) (infix? (hd x))))
+  (and (not (atom? x)) (infix? (hd x))))
 
 (define-global compile-args (args default?)
   (let (s "(" c "")
@@ -628,7 +628,7 @@
       (eval-result globals))))
 
 (define-global immediate-call? (x)
-  (and (obj? x) (obj? (hd x)) (= (hd (hd x)) '%function)))
+  (and (not (atom? x)) (not (atom? (hd x))) (= (hd (hd x)) '%function)))
 
 (define-special do forms :stmt :tr
   (with s ""

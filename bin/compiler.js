@@ -598,7 +598,7 @@ var infix63 = function (x) {
   return is63(getop(x));
 };
 infix_operator63 = function (x) {
-  return obj63(x) && infix63(hd(x));
+  return ! atom63(x) && infix63(hd(x));
 };
 compile_args = function (args, default63) {
   var __s1 = "(";
@@ -1155,7 +1155,7 @@ _eval = function (form, globals) {
   return eval_result(globals);
 };
 immediate_call63 = function (x) {
-  return obj63(x) && obj63(hd(x)) && hd(hd(x)) === "%function";
+  return ! atom63(x) && ! atom63(hd(x)) && hd(hd(x)) === "%function";
 };
 setenv("do", {_stash: true, special: function () {
   var __forms1 = unstash(Array.prototype.slice.call(arguments, 0));
