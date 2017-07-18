@@ -101,7 +101,7 @@ def __f2(_from=None):
   return ____x16
 setenv("arguments%", {"_stash": True, "macro": __f2})
 def bind42(args=None, body=None):
-  __args1 = []
+  __args1 = {}
   def rest():
     __args1["rest"] = True
     return ["unstash", ["arguments%", _35(__args1)]]

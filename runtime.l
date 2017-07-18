@@ -14,7 +14,9 @@
 
 (define-global has? (l k)
   (target js: ((idx l hasOwnProperty) k)
-          py: (%literal k | in | l)
+          py: (if (array? l)
+                  (and (number? k) (>= k 0) (< k (|len| l)))
+                (%literal k | in | l))
           lua: (is? (get l k))))
 
 (define-global has (l k else)
@@ -186,7 +188,7 @@
     (f (hd x) (reduce f (tl x)))))
 
 (define-global join ls
-  (with r ()
+  (with r (target py: (obj) ())
     (step l ls
       (when l
         (let n (# r)
@@ -410,7 +412,8 @@
 (define-global apply (f args)
   (let args (stash args)
     (target js: ((idx f apply) f args)
-            lua: (f (values args)))))
+            lua: (f (values args))
+            py: (f (%literal |*| args)))))
 
 (define-global call (f rest: args)
   (apply f args))

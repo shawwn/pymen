@@ -142,7 +142,7 @@ setenv("arguments%", {_stash: true, macro: function (_from) {
   return ____x16;
 }});
 bind42 = function (args, body) {
-  var __args1 = [];
+  var __args1 = {};
   var rest = function () {
     __args1.rest = true;
     return ["unstash", ["arguments%", _35(__args1)]];

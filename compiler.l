@@ -86,7 +86,7 @@
            lua: (list |...|)))
 
 (define-global bind* (args body)
-  (let args1 ()
+  (let args1 (obj)
     (define rest ()
       (set (get args1 'rest) true)
       `(unstash (arguments% ,(# args1))))

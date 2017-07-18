@@ -3,6 +3,8 @@
 (target py: ||
   (import system))
 
+(target py: |from compiler import bind42, bind|)
+
 (define eval-print (form)
   (let ((ok v) (guard ((idx compiler eval) form)))
     (if (not ok)

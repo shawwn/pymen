@@ -13,7 +13,10 @@ def either(x=None, y=None):
   else:
     return y
 def has63(l=None, k=None):
-  return k in l
+  if array63(l):
+    return number63(k) and k >= 0 and k < len(l)
+  else:
+    return k in l
 def has(l=None, k=None, _else=None):
   if has63(l, k):
     return l[k]
@@ -182,7 +185,7 @@ def reduce(f=None, x=None):
       return f(hd(x), reduce(f, tl(x)))
 def join(*_rest, **_params):
   __ls = unstash(list(_rest))
-  __r43 = []
+  __r43 = {}
   ____x3 = __ls
   ____i7 = 0
   while ____i7 < _35(____x3):
@@ -511,6 +514,7 @@ def _str(x=None, stack=None):
                       return cat(__s, ")")
 def apply(f=None, args=None):
   __args = stash(args)
+  return f(*__args)
 def call(f=None, *_rest, **_params):
   ____r81 = unstash(list(_rest))
   __f = destash33(f, ____r81)
@@ -1002,6 +1006,7 @@ setenv("when-compiling", {"_stash": True, "macro": __f54})
 import reader
 import compiler
 
+from compiler import bind42, bind
 def eval_print(form=None):
   def __f():
     return compiler._eval(form)
