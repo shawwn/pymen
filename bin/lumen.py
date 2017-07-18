@@ -326,8 +326,13 @@ def split(s=None, sep=None):
         s = clip(s, __i19 + __n16)
     add(__l5, s)
     return __l5
+def tostr(x=None):
+  if string63(x):
+    return x
+  else:
+    return _str(x)
 def cat2(a=None, b=None):
-  return str(a) + str(b)
+  return tostr(a) + tostr(b)
 def cat(*_rest, **_params):
   __xs = unstash(list(_rest))
   def __f3(a=None, b=None):
@@ -433,6 +438,8 @@ def escape(s=None):
     __s1 = cat(__s1, __c1)
     __i22 = __i22 + 1
   return cat(__s1, "\"")
+def tostring(x=None):
+  return str(x)
 def _str(x=None, stack=None):
   if nil63(x):
     return "nil"
@@ -491,15 +498,15 @@ def _str(x=None, stack=None):
 def apply(f=None, args=None):
   __args = stash(args)
 def call(f=None, *_rest, **_params):
-  ____r79 = unstash(list(_rest))
-  __f = destash33(f, ____r79)
-  ____id = ____r79
+  ____r81 = unstash(list(_rest))
+  __f = destash33(f, ____r81)
+  ____id = ____r81
   __args11 = cut(____id, 0)
   return apply(__f, __args11)
 def setenv(k=None, *_rest, **_params):
-  ____r80 = unstash(list(_rest))
-  __k11 = destash33(k, ____r80)
-  ____id1 = ____r80
+  ____r82 = unstash(list(_rest))
+  __k11 = destash33(k, ____r82)
+  ____id1 = ____r82
   __keys = cut(____id1, 0)
   if string63(__k11):
 

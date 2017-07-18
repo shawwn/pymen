@@ -288,8 +288,11 @@
                   (set s (clip s (+ i n)))))))
         (add l s)))))
 
+(define tostr (x)
+  (if (string? x) x (str x)))
+
 (define cat2 (a b)
-  (target py: (+ (|str| a) (|str| b))
+  (target py: (+ (tostr a) (tostr b))
     (cat a b)))
 
 (define-global cat xs
@@ -353,6 +356,10 @@
                  c))
         (cat! s1 c1)))
     (cat s1 "\"")))
+
+(target py:
+  (define-global tostring (x)
+    (|str| x)))
 
 (define-global str (x stack)
   (if (nil? x) "nil"

@@ -1,5 +1,7 @@
 (target py: |from lumen import *|)
 (target py: |from lumen import _35|)
+(target py: |from lumen import _62|)
+(target py: |from lumen import _6261|)
 
 (define getenv (k p)
   (when (string? k)
