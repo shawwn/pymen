@@ -146,7 +146,9 @@ def char(s=None, n=None):
   if __n6 >= 0 and __n6 < len(s):
     return s[__n6]
 def code(s=None, n=None):
-  pass
+  __x2 = char(s, n)
+  if __x2:
+    return ord(__x2)
 def string_literal63(x=None):
   return string63(x) and char(x, 0) == "\""
 def id_literal63(x=None):
@@ -181,10 +183,10 @@ def reduce(f=None, x=None):
 def join(*_rest, **_params):
   __ls = unstash(list(_rest))
   __r43 = []
-  ____x2 = __ls
+  ____x3 = __ls
   ____i7 = 0
-  while ____i7 < _35(____x2):
-    __l3 = ____x2[____i7]
+  while ____i7 < _35(____x3):
+    __l3 = ____x3[____i7]
     if __l3:
       __n7 = _35(__r43)
       ____o4 = __l3
@@ -202,16 +204,16 @@ def find(f=None, t=None):
   ____o5 = t
   ____i9 = None
   for ____i9 in indices(____o5):
-    __x3 = ____o5[____i9]
-    __y = f(__x3)
+    __x4 = ____o5[____i9]
+    __y = f(__x4)
     if __y:
       return __y
 def first(f=None, l=None):
-  ____x4 = l
+  ____x5 = l
   ____i10 = 0
-  while ____i10 < _35(____x4):
-    __x5 = ____x4[____i10]
-    __y1 = f(__x5)
+  while ____i10 < _35(____x5):
+    __x6 = ____x5[____i10]
+    __y1 = f(__x6)
     if __y1:
       return __y1
     ____i10 = ____i10 + 1
@@ -231,10 +233,10 @@ def sort(l=None, f=None):
   pass
 def map(f=None, x=None):
   __t1 = dupe(x)
-  ____x7 = x
+  ____x8 = x
   ____i12 = 0
-  while ____i12 < _35(____x7):
-    __v6 = ____x7[____i12]
+  while ____i12 < _35(____x8):
+    __v6 = ____x8[____i12]
     __y2 = f(__v6)
     if is63(__y2):
       add(__t1, __y2)
@@ -265,7 +267,7 @@ def empty63(t=None):
   ____o8 = t
   ____i15 = None
   for ____i15 in indices(____o8):
-    __x8 = ____o8[____i15]
+    __x9 = ____o8[____i15]
     return False
   return True
 def stash(args=None):
@@ -330,7 +332,10 @@ def tostr(x=None):
   if string63(x):
     return x
   else:
-    return _str(x)
+    if nil63(x):
+      return ""
+    else:
+      return _str(x)
 def cat2(a=None, b=None):
   return tostr(a) + tostr(b)
 def cat(*_rest, **_params):

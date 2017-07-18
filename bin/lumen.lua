@@ -436,7 +436,11 @@ local function tostr(x)
   if string63(x) then
     return x
   else
-    return _str(x)
+    if nil63(x) then
+      return ""
+    else
+      return _str(x)
+    end
   end
 end
 local function cat2(a, b)

@@ -544,7 +544,11 @@ var tostr = function (x) {
   if (string63(x)) {
     return x;
   } else {
-    return _str(x);
+    if (nil63(x)) {
+      return "";
+    } else {
+      return _str(x);
+    }
   }
 };
 var cat2 = function (a, b) {

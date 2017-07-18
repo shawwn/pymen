@@ -146,7 +146,9 @@
 (define-global code (s n)
   (target
     js: ((idx s charCodeAt) n)
-    lua: ((idx string byte) s (if n (+ n 1)))))
+    lua: ((idx string byte) s (if n (+ n 1)))
+    py: (let x (char s n)
+          (if x (|ord| x)))))
 
 (define-global string-literal? (x)
   (and (string? x) (= (char x 0) "\"")))
@@ -289,7 +291,7 @@
         (add l s)))))
 
 (define tostr (x)
-  (if (string? x) x (str x)))
+  (if (string? x) x (nil? x) "" (str x)))
 
 (define cat2 (a b)
   (target py: (+ (tostr a) (tostr b))
