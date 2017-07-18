@@ -6,9 +6,9 @@ def stream(_str=None, more=None):
   return {"pos": 0, "string": _str, "len": _35(_str), "more": more}
 def peek_char(s=None):
   ____id = s
-  __pos = ____id["pos"]
-  __len = ____id["len"]
-  __string = ____id["string"]
+  __pos = has(____id, "pos")
+  __len = has(____id, "len")
+  __string = has(____id, "string")
   if __pos < __len:
     return char(__string, __pos)
 def read_char(s=None):
@@ -58,8 +58,8 @@ def flag63(atom=None):
   return string63(atom) and _35(atom) > 1 and char(atom, 0) == ":"
 def expected(s=None, c=None):
   ____id1 = s
-  __more = ____id1["more"]
-  __pos1 = ____id1["pos"]
+  __more = has(____id1, "more")
+  __pos1 = has(____id1, "pos")
   __id2 = __more
 
   if __id2:

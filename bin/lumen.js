@@ -471,7 +471,7 @@ unstash = function (args) {
     return {};
   } else {
     var __l4 = last(args);
-    if (obj63(__l4) && __l4._stash) {
+    if (obj63(__l4) && has63(__l4, "_stash")) {
       var __args1 = object(almost(args));
       var ____o11 = __l4;
       var __k18 = undefined;
@@ -495,7 +495,7 @@ unstash = function (args) {
   }
 };
 destash33 = function (l, args1) {
-  if (obj63(l) && l._stash) {
+  if (obj63(l) && has63(l, "_stash")) {
     var ____o12 = l;
     var __k20 = undefined;
     for (__k20 in ____o12) {

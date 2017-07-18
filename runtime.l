@@ -255,7 +255,7 @@
 (define-global unstash (args)
   (if (none? args) (obj)
     (let l (last args)
-      (if (and (obj? l) (get l '_stash))
+      (if (and (obj? l) (has? l '_stash))
           (with args1 (object (almost args))
             (each (k v) l
               (unless (= k '_stash)
@@ -263,7 +263,7 @@
         args))))
 
 (define-global destash! (l args1)
-  (if (and (obj? l) (get l '_stash))
+  (if (and (obj? l) (has? l '_stash))
       (each (k v) l
         (unless (= k '_stash)
           (set (get args1 k) v)))

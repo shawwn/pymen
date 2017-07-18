@@ -73,7 +73,7 @@
         (each (k v) lh
           (let x (if (= k 'rest)
                      `(cut ,id ,(# lh))
-                   `(get ,id ',(bias k)))
+                   `(has ,id ',(bias k)))
             (when (is? k)
               (let k (if (= v true) k v)
                 (join! bs (bind k x))))))))))

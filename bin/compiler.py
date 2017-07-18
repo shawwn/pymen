@@ -79,7 +79,7 @@ def bind(lh=None, rh=None):
       if __k1 == "rest":
         __e23 = ["cut", __id, _35(lh)]
       else:
-        __e23 = ["get", __id, ["quote", bias(__k1)]]
+        __e23 = ["has", __id, ["quote", bias(__k1)]]
       __x5 = __e23
       if is63(__k1):
 
@@ -138,15 +138,15 @@ def quasisplice63(x=None, depth=None):
   return can_unquote63(depth) and not atom63(x) and hd(x) == "unquote-splicing"
 def expand_local(__x36=None):
   ____id1 = __x36
-  __x37 = ____id1[1]
-  __name = ____id1[2]
-  __value = ____id1[3]
+  __x37 = has(____id1, 1)
+  __name = has(____id1, 2)
+  __value = has(____id1, 3)
   setenv(__name, {"_stash": True, "variable": True})
   return ["%local", __name, macroexpand(__value)]
 def expand_function(__x39=None):
   ____id2 = __x39
-  __x40 = ____id2[1]
-  __args = ____id2[2]
+  __x40 = has(____id2, 1)
+  __args = has(____id2, 2)
   __body = cut(____id2, 2)
   add(environment, {})
   ____o3 = __args
@@ -159,9 +159,9 @@ def expand_function(__x39=None):
   return ____x42
 def expand_definition(__x44=None):
   ____id3 = __x44
-  __x45 = ____id3[1]
-  __name1 = ____id3[2]
-  __args11 = ____id3[3]
+  __x45 = has(____id3, 1)
+  __name1 = has(____id3, 2)
+  __args11 = has(____id3, 3)
   __body1 = cut(____id3, 3)
   add(environment, {})
   ____o4 = __args11
@@ -176,7 +176,7 @@ def expand_macro(form=None):
   return macroexpand(expand1(form))
 def expand1(__x49=None):
   ____id4 = __x49
-  __name2 = ____id4[1]
+  __name2 = has(____id4, 1)
   __body2 = cut(____id4, 1)
   return apply(macro_function(__name2), __body2)
 def macroexpand(form=None):
@@ -265,8 +265,8 @@ def quasiexpand(form=None, depth=None):
           return map(__f4, form)
 def expand_if(__x59=None):
   ____id5 = __x59
-  __a = ____id5[1]
-  __b1 = ____id5[2]
+  __a = has(____id5, 1)
+  __b1 = has(____id5, 2)
   __c = cut(____id5, 2)
   if is63(__b1):
     return [join(["%if", __a, __b1], expand_if(__c))]
@@ -512,12 +512,12 @@ def terminator(stmt63=None):
       return "\n"
 def compile_special(form=None, stmt63=None):
   ____id6 = form
-  __x85 = ____id6[1]
+  __x85 = has(____id6, 1)
   __args2 = cut(____id6, 1)
   ____id7 = getenv(__x85)
-  __special = ____id7["special"]
-  __stmt = ____id7["stmt"]
-  __self_tr63 = ____id7["tr"]
+  __special = has(____id7, "special")
+  __stmt = has(____id7, "stmt")
+  __self_tr63 = has(____id7, "tr")
   __tr = terminator(stmt63 and not __self_tr63)
   return cat(apply(__special, __args2), __tr)
 def parenthesize_call63(x=None):
@@ -535,7 +535,7 @@ def op_delims(parent=None, child=None, *_rest, **_params):
   __parent = destash33(parent, ____r59)
   __child = destash33(child, ____r59)
   ____id8 = ____r59
-  __right = ____id8["right"]
+  __right = has(____id8, "right")
 
   if __right:
     __e32 = _6261
@@ -547,16 +547,16 @@ def op_delims(parent=None, child=None, *_rest, **_params):
     return ["", ""]
 def compile_infix(form=None):
   ____id9 = form
-  __op = ____id9[1]
+  __op = has(____id9, 1)
   ____id10 = cut(____id9, 1)
-  __a1 = ____id10[1]
-  __b2 = ____id10[2]
+  __a1 = has(____id10, 1)
+  __b2 = has(____id10, 2)
   ____id111 = op_delims(form, __a1)
-  __ao = ____id111[1]
-  __ac = ____id111[2]
+  __ao = has(____id111, 1)
+  __ac = has(____id111, 2)
   ____id12 = op_delims(form, __b2, {"_stash": True, "right": True})
-  __bo = ____id12[1]
-  __bc = ____id12[2]
+  __bo = has(____id12, 1)
+  __bc = has(____id12, 2)
   __a2 = compile(__a1)
   __b3 = compile(__b2)
   __op1 = getop(__op)
@@ -581,8 +581,8 @@ def compile_function(args=None, body=None, *_rest, **_params):
   __args4 = destash33(args, ____r62)
   __body3 = destash33(body, ____r62)
   ____id13 = ____r62
-  __name3 = ____id13["name"]
-  __prefix = ____id13["prefix"]
+  __name3 = has(____id13, "name")
+  __prefix = has(____id13, "prefix")
 
   if __name3:
     __e33 = compile(__name3)
@@ -630,7 +630,7 @@ def compile(form=None, *_rest, **_params):
   ____r64 = unstash(list(_rest))
   __form = destash33(form, ____r64)
   ____id15 = ____r64
-  __stmt1 = ____id15["stmt"]
+  __stmt1 = has(____id15, "stmt")
   if nil63(__form):
     return ""
   else:
@@ -699,16 +699,16 @@ def lower_do(args=None, hoist=None, stmt63=None, tail63=None):
     return __e2
 def lower_set(args=None, hoist=None, stmt63=None, tail63=None):
   ____id16 = args
-  __lh = ____id16[1]
-  __rh = ____id16[2]
+  __lh = has(____id16, 1)
+  __rh = has(____id16, 2)
   add(hoist, ["%set", lower(__lh, hoist), lower(__rh, hoist)])
   if not( stmt63 and not tail63):
     return __lh
 def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
   ____id17 = args
-  __cond = ____id17[1]
-  ___then = ____id17[2]
-  ___else = ____id17[3]
+  __cond = has(____id17, 1)
+  ___then = has(____id17, 2)
+  ___else = has(____id17, 3)
   if stmt63:
 
     if is63(___else):
@@ -724,8 +724,8 @@ def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
     return __e3
 def lower_short(x=None, args=None, hoist=None):
   ____id18 = args
-  __a3 = ____id18[1]
-  __b4 = ____id18[2]
+  __a3 = has(____id18, 1)
+  __b4 = has(____id18, 2)
   __hoist1 = []
   __b11 = lower(__b4, __hoist1)
   if some63(__hoist1):
@@ -742,7 +742,7 @@ def lower_try(args=None, hoist=None, tail63=None):
   return add(hoist, ["%try", lower_body(args, tail63)])
 def lower_while(args=None, hoist=None):
   ____id20 = args
-  __c4 = ____id20[1]
+  __c4 = has(____id20, 1)
   __body5 = cut(____id20, 1)
   __pre = []
   __c5 = lower(__c4, __pre)
@@ -754,8 +754,8 @@ def lower_while(args=None, hoist=None):
   return add(hoist, __e47)
 def lower_for(args=None, hoist=None):
   ____id21 = args
-  __t = ____id21[1]
-  __k7 = ____id21[2]
+  __t = has(____id21, 1)
+  __k7 = has(____id21, 2)
   __body6 = cut(____id21, 2)
   return add(hoist, ["%for", lower(__t, hoist), __k7, lower_body(__body6)])
 def lower_function(args=None, hoist=None):
@@ -764,13 +764,13 @@ def lower_function(args=None, hoist=None):
     return lower(["do", join(["%local-function", __f11], args), __f11], hoist)
   else:
     ____id22 = args
-    __a4 = ____id22[1]
+    __a4 = has(____id22, 1)
     __body7 = cut(____id22, 1)
     return ["%function", __a4, lower_body(__body7, True)]
 def lower_definition(kind=None, args=None, hoist=None):
   ____id23 = args
-  __name4 = ____id23[1]
-  __args6 = ____id23[2]
+  __name4 = has(____id23, 1)
+  __args6 = has(____id23, 2)
   __body8 = cut(____id23, 2)
   return add(hoist, [kind, __name4, __args6, lower_body(__body8, True)])
 def lower_call(form=None, hoist=None):
@@ -785,7 +785,7 @@ def lower_pairwise(form=None):
   if pairwise63(form):
     __e4 = []
     ____id24 = form
-    __x129 = ____id24[1]
+    __x129 = has(____id24, 1)
     __args7 = cut(____id24, 1)
     def __f7(a=None, b=None):
       add(__e4, [__x129, a, b])
@@ -799,7 +799,7 @@ def lower_infix63(form=None):
 def lower_infix(form=None, hoist=None):
   __form3 = lower_pairwise(form)
   ____id25 = __form3
-  __x132 = ____id25[1]
+  __x132 = has(____id25, 1)
   __args8 = cut(____id25, 1)
   def __f8(a=None, b=None):
     return [__x132, b, a]
@@ -822,7 +822,7 @@ def lower(form=None, hoist=None, stmt63=None, tail63=None):
           return lower_infix(form, hoist)
         else:
           ____id26 = form
-          __x135 = ____id26[1]
+          __x135 = has(____id26, 1)
           __args9 = cut(____id26, 1)
           if __x135 == "do":
             return lower_do(__args9, hoist, stmt63, tail63)
@@ -1097,8 +1097,8 @@ def __f28(*_rest, **_params):
     __v12 = ____o12[__k141]
     if number63(__k141):
       ____id30 = __v12
-      __k15 = ____id30[1]
-      __v13 = ____id30[2]
+      __k15 = has(____id30, 1)
+      __v13 = has(____id30, 2)
       if not string63(__k15):
         error(cat("Illegal key: ", _str(__k15)))
       __s10 = cat(__s10, __c9, key(__k15), __sep1, compile(__v13))

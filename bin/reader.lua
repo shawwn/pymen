@@ -5,9 +5,9 @@ local function stream(_str, more)
 end
 local function peek_char(s)
   local ____id = s
-  local __pos = ____id.pos
-  local __len = ____id.len
-  local __string = ____id.string
+  local __pos = has(____id, "pos")
+  local __len = has(____id, "len")
+  local __string = has(____id, "string")
   if __pos < __len then
     return char(__string, __pos)
   end
@@ -76,8 +76,8 @@ local function flag63(atom)
 end
 local function expected(s, c)
   local ____id1 = s
-  local __more = ____id1.more
-  local __pos1 = ____id1.pos
+  local __more = has(____id1, "more")
+  local __pos1 = has(____id1, "pos")
   local __id2 = __more
   local __e
   if __id2 then

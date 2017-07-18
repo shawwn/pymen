@@ -374,7 +374,7 @@ function unstash(args)
     return {}
   else
     local __l4 = last(args)
-    if obj63(__l4) and __l4._stash then
+    if obj63(__l4) and has63(__l4, "_stash") then
       local __args1 = object(almost(args))
       local ____o11 = __l4
       local __k9 = nil
@@ -391,7 +391,7 @@ function unstash(args)
   end
 end
 function destash33(l, args1)
-  if obj63(l) and l._stash then
+  if obj63(l) and has63(l, "_stash") then
     local ____o12 = l
     local __k10 = nil
     for __k10 in next, ____o12 do
@@ -719,8 +719,8 @@ setenv("set", {_stash = true, macro = function (...)
   local __args1 = unstash({...})
   return join({"do"}, map(function (__x7)
     local ____id1 = __x7
-    local __lh1 = ____id1[1]
-    local __rh1 = ____id1[2]
+    local __lh1 = has(____id1, 1)
+    local __rh1 = has(____id1, 2)
     __lh1 = macroexpand(__lh1)
     if not atom63(__lh1) and hd(__lh1) == "has" then
       return {"%set", join({"get"}, tl(__lh1)), __rh1}
@@ -782,8 +782,8 @@ setenv("case", {_stash = true, macro = function (expr, ...)
   end
   local __cl1 = function (__x54)
     local ____id5 = __x54
-    local __a1 = ____id5[1]
-    local __b1 = ____id5[2]
+    local __a1 = has(____id5, 1)
+    local __b1 = has(____id5, 2)
     if nil63(__b1) then
       return {__a1}
     else
@@ -834,12 +834,12 @@ setenv("let", {_stash = true, macro = function (bs, ...)
       return join({"do"}, __body9)
     else
       local ____id15 = __bs11
-      local __lh3 = ____id15[1]
-      local __rh3 = ____id15[2]
+      local __lh3 = has(____id15, 1)
+      local __rh3 = has(____id15, 2)
       local __bs21 = cut(____id15, 2)
       local ____id16 = bind(__lh3, __rh3)
-      local __id17 = ____id16[1]
-      local __val1 = ____id16[2]
+      local __id17 = has(____id16, 1)
+      local __val1 = has(____id16, 2)
       local __bs12 = cut(____id16, 2)
       local __renames1 = {}
       if not id_literal63(__id17) then
@@ -900,8 +900,8 @@ setenv("define-symbol", {_stash = true, macro = function (name, expansion)
 end})
 setenv("define-reader", {_stash = true, macro = function (__x141, ...)
   local ____id28 = __x141
-  local __char1 = ____id28[1]
-  local __s1 = ____id28[2]
+  local __char1 = has(____id28, 1)
+  local __s1 = has(____id28, 2)
   local ____r35 = unstash({...})
   local ____x141 = destash33(__x141, ____r35)
   local ____id29 = ____r35
@@ -959,7 +959,7 @@ setenv("with-frame", {_stash = true, macro = function (...)
 end})
 setenv("with-bindings", {_stash = true, macro = function (__x213, ...)
   local ____id36 = __x213
-  local __names1 = ____id36[1]
+  local __names1 = has(____id36, 1)
   local ____r47 = unstash({...})
   local ____x213 = destash33(__x213, ____r47)
   local ____id37 = ____r47
@@ -990,8 +990,8 @@ setenv("let-symbol", {_stash = true, macro = function (expansions, ...)
   add(environment, {})
   map(function (__x232)
     local ____id43 = __x232
-    local __name9 = ____id43[1]
-    local __exp1 = ____id43[2]
+    local __name9 = has(____id43, 1)
+    local __exp1 = has(____id43, 2)
     return macroexpand({"define-symbol", __name9, __exp1})
   end, pair(__expansions1))
   local ____x231 = join({"do"}, macroexpand(__body31))
@@ -1058,8 +1058,8 @@ setenv("each", {_stash = true, macro = function (x, t, ...)
     __e7 = __e8
   end
   local ____id53 = __e7
-  local __k4 = ____id53[1]
-  local __v7 = ____id53[2]
+  local __k4 = has(____id53, 1)
+  local __v7 = has(____id53, 2)
   local __e9
   if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" or has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
     __e9 = __body37
@@ -1193,8 +1193,8 @@ local function eval_print(form)
       return {stack = debug.traceback(), message = __e}
     end
   end)}
-  local __ok = ____id[1]
-  local __v = ____id[2]
+  local __ok = has(____id, 1)
+  local __v = has(____id, 2)
   if not __ok then
     return _print("error: " .. __v.message .. "\n" .. __v.stack)
   else

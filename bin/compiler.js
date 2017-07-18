@@ -117,7 +117,7 @@ bind = function (lh, rh) {
       if (__k3 === "rest") {
         __e25 = ["cut", __id, _35(lh)];
       } else {
-        __e25 = ["get", __id, ["quote", bias(__k3)]];
+        __e25 = ["has", __id, ["quote", bias(__k3)]];
       }
       var __x5 = __e25;
       if (is63(__k3)) {
