@@ -736,6 +736,8 @@
 (define-special error (x) :stmt
   (let e (if (target? 'js)
              (cat "throw " (compile `(new (Error ,x))))
+             (target? 'py)
+             (cat "raise " (compile `(Exception ,x)))
            (cat "error(" (compile x) ")"))
     (cat (indentation) e)))
 

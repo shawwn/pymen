@@ -64,7 +64,7 @@ def expected(s=None, c=None):
   if __id2:
     __e = __id2
   else:
-    error(cat("Expected ", c, " at ", __pos1))
+    raise Exception(cat("Expected ", c, " at ", __pos1))
     __e = None
   return __e
 def wrap(s=None, x=None):
@@ -146,7 +146,7 @@ def __f1(s=None):
   return __r16
 read_table["("] = __f1
 def __f2(s=None):
-  error(cat("Unexpected ) at ", s["pos"]))
+  raise Exception(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f2
 def __f3(s=None):
   read_char(s)
