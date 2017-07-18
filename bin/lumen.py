@@ -402,10 +402,19 @@ def _6261(*_rest, **_params):
   def __f13(a=None, b=None):
     return a >= b
   return pairwise(__f13, __xs10)
-def number(s=None):
-  pass
 def number_code63(n=None):
   return n > 47 and n < 58
+def number(s=None):
+  if char(s, 0) == "-" and number_code63(code(s, 1)) or number_code63(code(s, 0)):
+    try:
+      return int(s)
+    except ValueError:
+      try:
+        return float(s)
+      except ValueError:
+        return None
+
+    return None
 def numeric63(s=None):
   __n17 = _35(s)
   __i21 = 0

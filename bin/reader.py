@@ -92,6 +92,8 @@ def hex_prefix63(_str=None):
   return __e2
 def maybe_number(_str=None):
   if hex_prefix63(_str):
+    return int(_str, 16)
+  else:
     if number_code63(code(_str, edge(_str))):
       return number(_str)
 def real63(x=None):

@@ -632,14 +632,14 @@ _6261 = function () {
     return a >= b;
   }, __xs10);
 };
+number_code63 = function (n) {
+  return n > 47 && n < 58;
+};
 number = function (s) {
   var __n17 = parseFloat(s);
   if (! isNaN(__n17)) {
     return __n17;
   }
-};
-number_code63 = function (n) {
-  return n > 47 && n < 58;
 };
 numeric63 = function (s) {
   var __n18 = _35(s);

@@ -77,7 +77,7 @@
 
 (define maybe-number (str)
   (if (hex-prefix? str)
-      (target js: (parseInt str 16) lua: (tonumber str))
+      (target js: (parseInt str 16) lua: (tonumber str) py: (|int| str 16))
       (number-code? (code str (edge str)))
     (number str)))
 

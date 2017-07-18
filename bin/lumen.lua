@@ -524,11 +524,11 @@ function _6261(...)
     return a >= b
   end, __xs10)
 end
-function number(s)
-  return tonumber(s)
-end
 function number_code63(n)
   return n > 47 and n < 58
+end
+function number(s)
+  return tonumber(s)
 end
 function numeric63(s)
   local __n17 = _35(s)

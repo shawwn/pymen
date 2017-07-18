@@ -329,14 +329,25 @@
 (define-global <= xs (pairwise (fn (a b) (<= a b)) xs))
 (define-global >= xs (pairwise (fn (a b) (>= a b)) xs))
 
+(define-global number-code? (n)
+  (and (> n 47) (< n 58)))
+
 (define-global number (s)
   (target
     js: (let n (parseFloat s)
           (unless (isNaN n) n))
-    lua: (tonumber s)))
-
-(define-global number-code? (n)
-  (and (> n 47) (< n 58)))
+    lua: (tonumber s)
+    py: (when (or (and (= (char s 0) "-")
+                       (number-code? (code s 1)))
+                  (number-code? (code s 0)))
+|try:
+      return int(s)
+    except ValueError:
+      try:
+        return float(s)
+      except ValueError:
+        return None
+| nil)))
 
 (define-global numeric? (s)
   (let n (# s)
