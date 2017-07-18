@@ -145,7 +145,11 @@ def string_literal63(x=None):
 def id_literal63(x=None):
   return string63(x) and char(x, 0) == "|"
 def add(l=None, x=None):
-  pass
+  if array63(l):
+    l.append(x)
+  else:
+    l[_35(l)] = x
+  return None
 def drop(l=None):
   pass
 def last(l=None):

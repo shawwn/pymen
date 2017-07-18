@@ -144,11 +144,11 @@
   (and (string? x) (= (char x 0) "|")))
 
 (define-global add (l x)
-  (target js: (do (if (array? l)
-                      ((idx l push) x)
-                    (set (at l (# l)) x))
-                  nil)
-          lua: ((idx table insert) l x)))
+  (target lua: ((idx table insert) l x)
+    (do (if (array? l)
+            ((idx l (target js: push py: append)) x)
+          (set (at l (# l)) x))
+        nil)))
 
 (define-global drop (l)
   (target js: ((idx l pop))
