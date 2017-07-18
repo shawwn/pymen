@@ -4,11 +4,11 @@ def getenv(k=None, p=None):
   if string63(k):
     __i = edge(environment)
     while __i >= 0:
-      __b = environment[__i][k]
-      if is63(__b):
+      if has63(environment[__i], k):
+        __b = environment[__i][k]
 
         if p:
-          __e22 = __b[p]
+          __e22 = has(__b, p)
         else:
           __e22 = __b
         return __e22
@@ -325,7 +325,7 @@ def valid_id63(x=None):
 __names = {}
 def unique(x=None):
   __x65 = id(x)
-  if __names[__x65]:
+  if has63(__names, __x65):
     __i11 = __names[__x65]
     __names[__x65] = __names[__x65] + 1
     return unique(cat(__x65, __i11))
@@ -407,17 +407,17 @@ def precedence(form=None):
     __k6 = None
     for __k6 in indices(____o8):
       __v7 = ____o8[__k6]
-      if __v7[hd(form)]:
+      if has63(__v7, hd(form)):
         return index(__k6)
   return 0
 def getop(op=None):
   def __f5(level=None):
-    __x82 = level[op]
+    __x82 = has(level, op)
     if __x82 == True:
       return op
     else:
       if is63(__x82):
-        return __x82[has(setenv("target", {"_stash": True, "toplevel": True}), "value")]
+        return has(__x82, has(setenv("target", {"_stash": True, "toplevel": True}), "value"))
   return find(__f5, infix)
 def infix63(x=None):
   return is63(getop(x))
@@ -590,11 +590,11 @@ def compile_function(args=None, body=None, *_rest, **_params):
     __e33 = ""
   __id14 = __e33
 
-  if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "lua" and __args4["rest"]:
+  if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "lua" and has63(__args4, "rest"):
     __e34 = join(__args4, ["|...|"])
   else:
 
-    if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "py" and __args4["rest"]:
+    if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "py" and has63(__args4, "rest"):
       __e35 = join(__args4, ["|*_rest|", "|**_params|"])
     else:
       __e35 = __args4

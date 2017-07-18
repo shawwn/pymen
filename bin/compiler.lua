@@ -2,11 +2,11 @@ local function getenv(k, p)
   if string63(k) then
     local __i = edge(environment)
     while __i >= 0 do
-      local __b = environment[__i + 1][k]
-      if is63(__b) then
+      if has63(environment[__i + 1], k) then
+        local __b = environment[__i + 1][k]
         local __e22
         if p then
-          __e22 = __b[p]
+          __e22 = has(__b, p)
         else
           __e22 = __b
         end
@@ -413,7 +413,7 @@ end
 local __names = {}
 function unique(x)
   local __x65 = id(x)
-  if __names[__x65] then
+  if has63(__names, __x65) then
     local __i11 = __names[__x65]
     __names[__x65] = __names[__x65] + 1
     return unique(__x65 .. __i11)
@@ -508,7 +508,7 @@ local function precedence(form)
     local __k6 = nil
     for __k6 in next, ____o8 do
       local __v7 = ____o8[__k6]
-      if __v7[hd(form)] then
+      if has63(__v7, hd(form)) then
         return index(__k6)
       end
     end
@@ -517,12 +517,12 @@ local function precedence(form)
 end
 local function getop(op)
   return find(function (level)
-    local __x82 = level[op]
+    local __x82 = has(level, op)
     if __x82 == true then
       return op
     else
       if is63(__x82) then
-        return __x82[has(setenv("target", {_stash = true, toplevel = true}), "value")]
+        return has(__x82, has(setenv("target", {_stash = true, toplevel = true}), "value"))
       end
     end
   end, infix)
@@ -739,11 +739,11 @@ function compile_function(args, body, ...)
   end
   local __id14 = __e33
   local __e34
-  if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" and __args4.rest then
+  if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" and has63(__args4, "rest") then
     __e34 = join(__args4, {"|...|"})
   else
     local __e35
-    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" and __args4.rest then
+    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" and has63(__args4, "rest") then
       __e35 = join(__args4, {"|*_rest|", "|**_params|"})
     else
       __e35 = __args4

@@ -2,11 +2,11 @@ var getenv = function (k, p) {
   if (string63(k)) {
     var __i = edge(environment);
     while (__i >= 0) {
-      var __b = environment[__i][k];
-      if (is63(__b)) {
+      if (has63(environment[__i], k)) {
+        var __b = environment[__i][k];
         var __e22;
         if (p) {
-          __e22 = __b[p];
+          __e22 = has(__b, p);
         } else {
           __e22 = __b;
         }
@@ -455,7 +455,7 @@ valid_id63 = function (x) {
 var __names = {};
 unique = function (x) {
   var __x65 = id(x);
-  if (__names[__x65]) {
+  if (has63(__names, __x65)) {
     var __i11 = __names[__x65];
     __names[__x65] = __names[__x65] + 1;
     return unique(__x65 + __i11);
@@ -562,7 +562,7 @@ var precedence = function (form) {
         __e37 = __k11;
       }
       var __k12 = __e37;
-      if (__v7[hd(form)]) {
+      if (has63(__v7, hd(form))) {
         return index(__k12);
       }
     }
@@ -571,12 +571,12 @@ var precedence = function (form) {
 };
 var getop = function (op) {
   return find(function (level) {
-    var __x82 = level[op];
+    var __x82 = has(level, op);
     if (__x82 === true) {
       return op;
     } else {
       if (is63(__x82)) {
-        return __x82[has(setenv("target", {_stash: true, toplevel: true}), "value")];
+        return has(__x82, has(setenv("target", {_stash: true, toplevel: true}), "value"));
       }
     }
   }, infix);
@@ -793,11 +793,11 @@ compile_function = function (args, body) {
   }
   var __id14 = __e41;
   var __e42;
-  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && __args4.rest) {
+  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && has63(__args4, "rest")) {
     __e42 = join(__args4, ["|...|"]);
   } else {
     var __e43;
-    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py" && __args4.rest) {
+    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py" && has63(__args4, "rest")) {
       __e43 = join(__args4, ["|*_rest|", "|**_params|"]);
     } else {
       __e43 = __args4;
