@@ -1,9 +1,16 @@
 from lumen import *
 import sys
+def call_with_file(f=None, path=None, mode=None):
+  with open(path, mode) as h: return f(h)
+  return None
 def read_file(path=None):
-  return open(path).read()
+  def __f(f=None):
+    return f.read()
+  return call_with_file(__f, path, "r")
 def write_file(path=None, data=None):
-  pass
+  def __f1(f=None):
+    return f.write(data)
+  return call_with_file(__f1, path, "w")
 def file_exists63(path=None):
   pass
 def directory_exists63(path=None):
@@ -11,9 +18,9 @@ def directory_exists63(path=None):
 path_separator = None
 def path_join(*_rest, **_params):
   __parts = unstash(list(_rest))
-  def __f(x=None, y=None):
+  def __f2(x=None, y=None):
     return cat(x, path_separator, y)
-  return reduce(__f, __parts) or ""
+  return reduce(__f2, __parts) or ""
 def get_environment_variable(name=None):
   pass
 def write(x=None):

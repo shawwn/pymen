@@ -10,7 +10,7 @@ end
 local function read_file(path)
   return call_with_file(function (f)
     return f.read(f, "*a")
-  end, path)
+  end, path, "r")
 end
 local function write_file(path, data)
   return call_with_file(function (f)

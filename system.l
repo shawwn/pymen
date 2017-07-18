@@ -11,20 +11,24 @@
       (with x (f h)
         ((idx h close) h)))))
 
+(target py:
+  (define call-with-file (f path mode)
+    (%literal |  with | (open path mode) | as h: return | (f |h|))
+    nil))
+
 (define read-file (path)
   (target
-    py: ((idx (open path) read))
     js: ((idx fs readFileSync) path 'utf8)
-    lua: (call-with-file
-          (fn (f) ((idx f read) f '*a))
-          path)))
+    (call-with-file
+     (fn (f) ((idx f read) (target lua: f) (target lua: '*a)))
+     path "r")))
 
 (define write-file (path data)
   (target
     js: ((idx fs writeFileSync) path data 'utf8)
-    lua: (call-with-file
-          (fn (f) ((idx f write) f data))
-          path 'w)))
+    (call-with-file
+     (fn (f) ((idx f write) (target lua: f) data))
+     path "w")))
 
 (define file-exists? (path)
   (target
