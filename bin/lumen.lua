@@ -1038,7 +1038,7 @@ setenv("apply", {_stash = true, macro = function (f, ...)
   end
 end})
 setenv("guard", {_stash = true, macro = function (expr)
-  if has(setenv("target", {_stash = true, toplevel = true}), "value") == "js" then
+  if has(setenv("target", {_stash = true, toplevel = true}), "value") == "js" or has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
     return {{"fn", join(), {"%try", {"list", true, expr}}}}
   else
     local ____x292 = object({"obj"})
@@ -1206,6 +1206,7 @@ local function eval_print(form)
   end)}
   local __ok = has(____id, 1)
   local __v = has(____id, 2)
+  local __ex = has(____id, 3)
   if not __ok then
     return _print("error: " .. __v.message .. "\n" .. __v.stack)
   else
@@ -1218,20 +1219,20 @@ local function rep(s)
   return eval_print(reader.read_string(s))
 end
 local function repl()
-  local __buf = ""
+  local __o = {buf = ""}
   local function rep1(s)
-    __buf = __buf .. s
+    __o.buf = __o.buf .. s
     local __more = {}
-    local __form = reader.read_string(__buf, __more)
+    local __form = reader.read_string(__o.buf, __more)
     if not( __form == __more) then
       eval_print(__form)
-      __buf = ""
+      __o.buf = ""
       return system.write("> ")
     end
   end
   system.write("> ")
   while true do
-    local __s = io.read()
+    local __s = system.read_line()
     if __s then
       rep1(__s .. "\n")
     else

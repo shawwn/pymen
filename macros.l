@@ -166,7 +166,7 @@
       `((do apply) ,f ,@args)))
 
 (define-macro guard (expr)
-  (if (target? 'js)
+  (if (or (target? 'js) (target? 'py))
       `((fn () (%try (list true ,expr))))
     `(list (xpcall
              (fn () ,expr)

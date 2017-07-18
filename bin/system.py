@@ -1,3 +1,5 @@
+from lumen import *
+import sys
 def read_file(path=None):
   pass
 def write_file(path=None, data=None):
@@ -15,12 +17,13 @@ def path_join(*_rest, **_params):
 def get_environment_variable(name=None):
   pass
 def write(x=None):
-  pass
+  return sys.stdout.write(x)
+def read_line():
+  return sys.stdin.readline()
 def exit(code=None):
   pass
-
+argv = cut(sys.argv, 1)
 def reload(module=None):
-  del 
-  return require(module)
+  return 
 def run(command=None):
   pass

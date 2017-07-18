@@ -1,4 +1,4 @@
-(target py: (%set globals% (|globals|)))
+(target py: (%set lumen-globals (|globals|)))
 (define-global environment (list (obj)))
 
 (define-global nil? (x)
@@ -395,10 +395,12 @@
       (atom? x) (tostring x)
       (function? x) "function"
       (and stack (in? x stack)) "circular"
-      (target js: false lua: (not (= (type x) 'table)))
+      (target js: false
+              lua: (not (= (type x) 'table))
+              py: (not (or (array? x) (obj? x))))
       (escape (tostring x))
     (let (s "(" sp ""
-          xs () ks ()
+          xs (obj) ks ()
           l (or stack ()))
       (add l x)
       (each (k v) x

@@ -1,14 +1,19 @@
 (import reader)
 (import compiler)
-(target py: ||
-  (import system))
+(import system)
+(target py: (import traceback))
 
 (target py: |from compiler import *|)
 
+(target py:
+  (define-global lumen-set-globals (x)
+    (set (idx compiler lumen-globals) x)))
+
 (define eval-print (form)
-  (let ((ok v) (guard ((idx compiler eval) form)))
+  (let ((ok v ex) (guard ((idx compiler eval) form)))
     (if (not ok)
         (target
+          py: ((idx traceback print_exception) (%literal |*| ex))
           js: (print (idx v stack))
           lua: (print (cat "error: " (idx v message) "\n" (idx v stack))))
         (is? v) (print (str v)))))
@@ -17,23 +22,23 @@
   (eval-print ((idx reader read-string) s)))
 
 (define repl ()
-  (let buf ""
+  (let o (obj buf: "")
     (define rep1 (s)
-      (cat! buf s)
+      (cat! (get o 'buf) s)
       (let (more ()
-            form ((idx reader read-string) buf more))
+            form ((idx reader read-string) (get o 'buf) more))
           (unless (= form more)
             (eval-print form)
-            (set buf "")
+            (set (get o 'buf) "")
             ((idx system write) "> ")))))
   ((idx system write) "> ")
   (target
     js: (let in (idx process stdin)
           ((idx in setEncoding) "utf8")
           ((idx in on) "data" rep1))
-    lua: (while true
-           (let s ((idx io read))
-             (if s (rep1 (cat s "\n")) (break))))))
+    (while true
+      (let s ((idx system read-line))
+        (if s (rep1 (cat s "\n")) (break))))))
 
 (define-global compile-file (path)
   (let (s ((idx reader stream) ((idx system read-file) path))

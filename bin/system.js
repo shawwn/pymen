@@ -26,6 +26,8 @@ var write = function (x) {
   var __out = process.stdout;
   return __out.write(x);
 };
+var read_line = function () {
+};
 var exit = function (code) {
   return process.exit(code);
 };
@@ -52,6 +54,8 @@ exports.path_join = path_join;
 exports["get-environment-variable"] = get_environment_variable;
 exports.get_environment_variable = get_environment_variable;
 exports.write = write;
+exports["read-line"] = read_line;
+exports.read_line = read_line;
 exports.exit = exit;
 exports.argv = argv;
 exports.reload = reload;

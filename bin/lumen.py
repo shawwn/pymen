@@ -1,4 +1,4 @@
-globals37 = globals()
+lumen_globals = globals()
 environment = [{}]
 def nil63(x=None):
   return x is None
@@ -498,10 +498,12 @@ def L_str(x=None, stack=None):
                   if stack and in63(x, stack):
                     return "circular"
                   else:
-                    if escape(tostring(x)):
+                    if not( array63(x) or obj63(x)):
+                      return escape(tostring(x))
+                    else:
                       __s = "("
                       __sp = ""
-                      __xs11 = []
+                      __xs11 = {}
                       __ks = []
                       __l6 = stack or []
                       add(__l6, x)
@@ -883,7 +885,7 @@ def __f38(f=None, *_rest, **_params):
     return join([["do", "apply"], __f1], __args9)
 setenv("apply", {"_stash": True, "macro": __f38})
 def __f39(expr=None):
-  if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "js":
+  if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "js" or has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "py":
     return [["fn", join(), ["%try", ["list", True, expr]]]]
   else:
     ____x270 = object(["obj"])
@@ -1015,48 +1017,50 @@ def __f54(*_rest, **_params):
 setenv("when-compiling", {"_stash": True, "macro": __f54})
 import reader
 import compiler
-
+import system
+import traceback
 from compiler import *
+def lumen_set_globals(x=None):
+  compiler.lumen_globals = x
+  return compiler.lumen_globals
 def eval_print(form=None):
   def __f():
-    return compiler.L_eval(form)
-  def __f1(m=None):
-    if obj63(m):
-      return m
-    else:
-
-      if string63(m):
-        __e = clip(m, search(m, ": ") + 2)
-      else:
-
-        if nil63(m):
-          __e1 = ""
-        else:
-          __e1 = L_str(m)
-        __e = __e1
-      return {"stack": debug.traceback(), "message": __e}
-  ____id = [xpcall(__f, __f1)]
+    try:
+      return [True, compiler.L_eval(form)]
+    except Exception as __e:
+      import sys
+      return [False, __e, sys.exc_info()]
+  ____id = __f()
   __ok = has(____id, 0)
   __v = has(____id, 1)
+  __ex = has(____id, 2)
   if not __ok:
+    return traceback.print_exception(*__ex)
+  else:
     if is63(__v):
       return L_print(L_str(__v))
 def rep(s=None):
   return eval_print(reader.read_string(s))
 def repl():
-  __buf = ""
+  __o = {"buf": ""}
   def rep1(s=None):
-    __buf = cat(__buf, s)
+    __o["buf"] = cat(__o["buf"], s)
     __more = []
-    __form = reader.read_string(__buf, __more)
+    __form = reader.read_string(__o["buf"], __more)
     if not( __form == __more):
       eval_print(__form)
-      __buf = ""
+      __o["buf"] = ""
       return system.write("> ")
-  return system.write("> ")
+  system.write("> ")
+  while True:
+    __s = system.read_line()
+    if __s:
+      rep1(cat(__s, "\n"))
+    else:
+      break
 def compile_file(path=None):
-  __s = reader.stream(system.read_file(path))
-  __body = reader.read_all(__s)
+  __s1 = reader.stream(system.read_file(path))
+  __body = reader.read_all(__s1)
   __form1 = compiler.expand(join(["do"], __body))
   return compiler.compile(__form1, {"_stash": True, "stmt": True})
 def L_load(path=None):

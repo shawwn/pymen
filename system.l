@@ -1,3 +1,5 @@
+(target py: |from lumen import *|)
+(target py: (import sys))
 (target js: (define fs (require 'fs)))
 (target js: (define child_process (require 'child_process)))
 
@@ -59,20 +61,28 @@
 (define write (x)
   (target js: (let out (idx process stdout)
                 ((idx out write) x))
-          lua: ((idx io write) x)))
+          lua: ((idx io write) x)
+          py: ((idx (idx sys stdout) write) x)))
+
+(define read-line ()
+  (target lua: ((idx io read))
+          py: ((idx (idx sys stdin) readline))))
 
 (define exit (code)
   (target js: ((idx process exit) code)
           lua: ((idx os exit) code)))
 
 (define argv
-  (target js: (cut (idx process argv) 2) lua: arg))
+  (target js: (cut (idx process argv) 2)
+          py: (cut (idx sys argv) 1)
+          lua: arg))
 
 (define reload (module)
-  (wipe (target
-          lua: (get (idx package loaded) module)
-          js: (get (idx require cache) ((idx require resolve) module))))
-  (require module))
+  (target py: ||
+    (do (wipe (target
+                lua: (get (idx package loaded) module)
+                js: (get (idx require cache) ((idx require resolve) module))))
+        (require module))))
 
 (define run (command)
   (target
@@ -89,6 +99,7 @@
         path-join
         get-environment-variable
         write
+        read-line
         exit
         argv
         reload

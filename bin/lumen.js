@@ -736,7 +736,7 @@ _str = function (x, stack) {
                     } else {
                       var __s = "(";
                       var __sp = "";
-                      var __xs11 = [];
+                      var __xs11 = {};
                       var __ks = [];
                       var __l6 = stack || [];
                       add(__l6, x);
@@ -1186,7 +1186,7 @@ setenv("apply", {_stash: true, macro: function (f) {
   }
 }});
 setenv("guard", {_stash: true, macro: function (expr) {
-  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "js") {
+  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "js" || has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
     return [["fn", join(), ["%try", ["list", true, expr]]]];
   } else {
     var ____x270 = object(["obj"]);
@@ -1348,6 +1348,7 @@ var eval_print = function (form) {
   })();
   var __ok = has(____id, 0);
   var __v = has(____id, 1);
+  var __ex = has(____id, 2);
   if (! __ok) {
     return _print(__v.stack);
   } else {
@@ -1360,14 +1361,14 @@ var rep = function (s) {
   return eval_print(reader.read_string(s));
 };
 var repl = function () {
-  var __buf = "";
+  var __o = {buf: ""};
   var rep1 = function (s) {
-    __buf = __buf + s;
+    __o.buf = __o.buf + s;
     var __more = [];
-    var __form = reader.read_string(__buf, __more);
+    var __form = reader.read_string(__o.buf, __more);
     if (!( __form === __more)) {
       eval_print(__form);
-      __buf = "";
+      __o.buf = "";
       return system.write("> ");
     }
   };

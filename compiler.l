@@ -609,13 +609,13 @@
 
 (target py:
   (define run (code globals)
-    (let state (or globals globals%)
+    (let state (or globals lumen-globals)
       (|exec| code state state)
       nil)))
 
 (define eval-result (globals)
   (target py:
-    (let state (or globals globals%)
+    (let state (or globals lumen-globals)
       (get state "lumen_result"))
     lumen-result))
 
@@ -678,7 +678,7 @@
 (define-special %for (t k form) :stmt :tr
   (let (t (compile t)
         ind (indentation)
-        body (with-indent (compile form :stmt)))
+        body (compile-body form))
     (if (target? 'lua)
         (cat ind "for " k " in next, " t " do\n" body ind "end\n")
         (target? 'py)
@@ -688,11 +688,17 @@
 (define-special %try (form) :stmt :tr
   (let-unique (e)
     (let (ind (indentation)
-          body (with-indent (compile form :stmt))
-          hf `(return (%array false ,e))
+          body (compile-body form)
+          hf (if (target? 'py)
+                 `(do (import sys)
+                      (return (%array false ,e ((idx sys exc_info)))))
+               `(return (%array false ,e)))
           h (with-indent (compile hf :stmt)))
-      (cat ind "try {\n" body ind "}\n"
-           ind "catch (" e ") {\n" h ind "}\n"))))
+      (if (target? 'js)
+          (cat ind "try {\n" body ind "}\n"
+               ind "catch (" e ") {\n" h ind "}\n")
+        (cat ind "try:\n" body
+             ind "except Exception as " e ":\n" h)))))
 
 (define-special %delete (place) :stmt
   (cat (indentation) (if (target? 'py) "del " "delete ") (compile place)))
