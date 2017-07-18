@@ -29,9 +29,12 @@
 (define-global array (x)
   (if (array? x) x
     (with l ()
-      (each (k v) x
-        (when (number? k)
-          (set (get l k) v))))))
+      (target py:
+        (step v x
+          (add l v))
+        (each (k v) x
+          (when (number? k)
+            (set (get l k) v)))))))
 
 (define-global object (x)
   (if (array? x)

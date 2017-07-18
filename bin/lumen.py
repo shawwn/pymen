@@ -26,35 +26,35 @@ def array(x=None):
     return x
   else:
     __l = []
-    ____o = x
-    __k = None
-    for __k in indices(____o):
-      __v = ____o[__k]
-      if number63(__k):
-        __l[__k] = __v
+    ____x1 = x
+    ____i = 0
+    while ____i < _35(____x1):
+      __v = ____x1[____i]
+      add(__l, __v)
+      ____i = ____i + 1
     return __l
 def object(x=None):
   if array63(x):
     __l1 = {}
-    ____o1 = x
-    __k1 = None
-    for __k1 in indices(____o1):
-      __v1 = ____o1[__k1]
-      __l1[__k1] = __v1
+    ____o = x
+    __k = None
+    for __k in indices(____o):
+      __v1 = ____o[__k]
+      __l1[__k] = __v1
     return __l1
   else:
     return x
 def length(x=None):
-  __n2 = -1
-  ____o2 = x
-  __k2 = None
-  for __k2 in indices(____o2):
-    __v2 = ____o2[__k2]
-    if number63(__k2):
-      if __k2 > __n2:
-        __n2 = __k2
-  __n2 = __n2 + 1
-  return __n2
+  __n1 = -1
+  ____o1 = x
+  __k1 = None
+  for __k1 in indices(____o1):
+    __v2 = ____o1[__k1]
+    if number63(__k1):
+      if __k1 > __n1:
+        __n1 = __k1
+  __n1 = __n1 + 1
+  return __n1
 def _35(x=None):
   if string63(x) or array63(x):
     return len(x)
@@ -103,10 +103,10 @@ def cut(x=None, _from=None, upto=None):
   else:
     __e = _from
   __i3 = __e
-  __n4 = _35(x)
+  __n3 = _35(x)
 
-  if nil63(upto) or upto > __n4:
-    __e1 = __n4
+  if nil63(upto) or upto > __n3:
+    __e1 = __n3
   else:
     __e1 = upto
   __upto = __e1
@@ -114,21 +114,21 @@ def cut(x=None, _from=None, upto=None):
     __l2[__j] = x[__i3]
     __i3 = __i3 + 1
     __j = __j + 1
-  ____o3 = x
-  __k3 = None
-  for __k3 in indices(____o3):
-    __v3 = ____o3[__k3]
-    if not number63(__k3):
-      __l2[__k3] = __v3
+  ____o2 = x
+  __k2 = None
+  for __k2 in indices(____o2):
+    __v3 = ____o2[__k2]
+    if not number63(__k2):
+      __l2[__k2] = __v3
   return __l2
 def keys(x=None):
   __t = dupe(x)
-  ____o4 = x
-  __k4 = None
-  for __k4 in indices(____o4):
-    __v4 = ____o4[__k4]
-    if not number63(__k4):
-      __t[__k4] = __v4
+  ____o3 = x
+  __k3 = None
+  for __k3 in indices(____o3):
+    __v4 = ____o3[__k3]
+    if not number63(__k3):
+      __t[__k3] = __v4
   return __t
 def edge(x=None):
   return _35(x) - 1
@@ -174,37 +174,37 @@ def reduce(f=None, x=None):
 def join(*_rest, **_params):
   __ls = unstash(list(_rest))
   __r42 = []
-  ____x1 = __ls
+  ____x2 = __ls
   ____i7 = 0
-  while ____i7 < _35(____x1):
-    __l3 = ____x1[____i7]
+  while ____i7 < _35(____x2):
+    __l3 = ____x2[____i7]
     if __l3:
-      __n7 = _35(__r42)
-      ____o5 = __l3
-      __k5 = None
-      for __k5 in indices(____o5):
-        __v5 = ____o5[__k5]
-        if number63(__k5):
-          __k5 = __k5 + __n7
+      __n6 = _35(__r42)
+      ____o4 = __l3
+      __k4 = None
+      for __k4 in indices(____o4):
+        __v5 = ____o4[__k4]
+        if number63(__k4):
+          __k4 = __k4 + __n6
         else:
           __l3 = object(__l3)
-        __r42[__k5] = __v5
+        __r42[__k4] = __v5
     ____i7 = ____i7 + 1
   return __r42
 def find(f=None, t=None):
-  ____o6 = t
+  ____o5 = t
   ____i9 = None
-  for ____i9 in indices(____o6):
-    __x2 = ____o6[____i9]
-    __y = f(__x2)
+  for ____i9 in indices(____o5):
+    __x3 = ____o5[____i9]
+    __y = f(__x3)
     if __y:
       return __y
 def first(f=None, l=None):
-  ____x3 = l
+  ____x4 = l
   ____i10 = 0
-  while ____i10 < _35(____x3):
-    __x4 = ____x3[____i10]
-    __y1 = f(__x4)
+  while ____i10 < _35(____x4):
+    __x5 = ____x4[____i10]
+    __y1 = f(__x5)
     if __y1:
       return __y1
     ____i10 = ____i10 + 1
@@ -224,22 +224,22 @@ def sort(l=None, f=None):
   pass
 def map(f=None, x=None):
   __t1 = dupe(x)
-  ____x6 = x
+  ____x7 = x
   ____i12 = 0
-  while ____i12 < _35(____x6):
-    __v6 = ____x6[____i12]
+  while ____i12 < _35(____x7):
+    __v6 = ____x7[____i12]
     __y2 = f(__v6)
     if is63(__y2):
       add(__t1, __y2)
     ____i12 = ____i12 + 1
-  ____o7 = x
-  __k6 = None
-  for __k6 in indices(____o7):
-    __v7 = ____o7[__k6]
-    if not number63(__k6):
+  ____o6 = x
+  __k5 = None
+  for __k5 in indices(____o6):
+    __v7 = ____o6[__k5]
+    if not number63(__k5):
       __y3 = f(__v7)
       if is63(__y3):
-        __t1[__k6] = __y3
+        __t1[__k5] = __y3
   return __t1
 def keep(f=None, x=None):
   def __f2(v=None):
@@ -247,29 +247,29 @@ def keep(f=None, x=None):
       return v
   return map(__f2, x)
 def keys63(t=None):
-  ____o8 = t
-  __k7 = None
-  for __k7 in indices(____o8):
-    __v8 = ____o8[__k7]
-    if not number63(__k7):
+  ____o7 = t
+  __k6 = None
+  for __k6 in indices(____o7):
+    __v8 = ____o7[__k6]
+    if not number63(__k6):
       return True
   return False
 def empty63(t=None):
-  ____o9 = t
+  ____o8 = t
   ____i15 = None
-  for ____i15 in indices(____o9):
-    __x7 = ____o9[____i15]
+  for ____i15 in indices(____o8):
+    __x8 = ____o8[____i15]
     return False
   return True
 def stash(args=None):
   if keys63(args):
     __p = {}
-    ____o10 = args
-    __k8 = None
-    for __k8 in indices(____o10):
-      __v9 = ____o10[__k8]
-      if not number63(__k8):
-        __p[__k8] = __v9
+    ____o9 = args
+    __k7 = None
+    for __k7 in indices(____o9):
+      __v9 = ____o9[__k7]
+      if not number63(__k7):
+        __p[__k7] = __v9
     __p["_stash"] = True
     add(args, __p)
   if array63(args):
@@ -283,23 +283,23 @@ def unstash(args=None):
     __l4 = last(args)
     if obj63(__l4) and __l4["_stash"]:
       __args1 = object(almost(args))
-      ____o11 = __l4
-      __k9 = None
-      for __k9 in indices(____o11):
-        __v10 = ____o11[__k9]
-        if not( __k9 == "_stash"):
-          __args1[__k9] = __v10
+      ____o10 = __l4
+      __k8 = None
+      for __k8 in indices(____o10):
+        __v10 = ____o10[__k8]
+        if not( __k8 == "_stash"):
+          __args1[__k8] = __v10
       return __args1
     else:
       return args
 def destash33(l=None, args1=None):
   if obj63(l) and l["_stash"]:
-    ____o12 = l
-    __k10 = None
-    for __k10 in indices(____o12):
-      __v11 = ____o12[__k10]
-      if not( __k10 == "_stash"):
-        args1[__k10] = __v11
+    ____o11 = l
+    __k9 = None
+    for __k9 in indices(____o11):
+      __v11 = ____o11[__k9]
+      if not( __k9 == "_stash"):
+        args1[__k9] = __v11
   else:
     return l
 def search(s=None, pattern=None, start=None):
@@ -309,14 +309,14 @@ def split(s=None, sep=None):
     return []
   else:
     __l5 = []
-    __n16 = _35(sep)
+    __n15 = _35(sep)
     while True:
       __i19 = search(s, sep)
       if nil63(__i19):
         break
       else:
         add(__l5, clip(s, 0, __i19))
-        s = clip(s, __i19 + __n16)
+        s = clip(s, __i19 + __n15)
     add(__l5, s)
     return __l5
 def cat(*_rest, **_params):
@@ -388,9 +388,9 @@ def number(s=None):
 def number_code63(n=None):
   return n > 47 and n < 58
 def numeric63(s=None):
-  __n17 = _35(s)
+  __n16 = _35(s)
   __i21 = 0
-  while __i21 < __n17:
+  while __i21 < __n16:
     if not number_code63(code(s, __i21)):
       return False
     __i21 = __i21 + 1
@@ -462,20 +462,20 @@ def _str(x=None, stack=None):
                       __ks = []
                       __l6 = stack or []
                       add(__l6, x)
-                      ____o13 = x
-                      __k11 = None
-                      for __k11 in indices(____o13):
-                        __v12 = ____o13[__k11]
-                        if number63(__k11):
-                          __xs11[__k11] = _str(__v12, __l6)
+                      ____o12 = x
+                      __k10 = None
+                      for __k10 in indices(____o12):
+                        __v12 = ____o12[__k10]
+                        if number63(__k10):
+                          __xs11[__k10] = _str(__v12, __l6)
                         else:
-                          add(__ks, cat(__k11, ":"))
+                          add(__ks, cat(__k10, ":"))
                           add(__ks, _str(__v12, __l6))
                       drop(__l6)
-                      ____o14 = join(__xs11, __ks)
+                      ____o13 = join(__xs11, __ks)
                       ____i24 = None
-                      for ____i24 in indices(____o14):
-                        __v13 = ____o14[____i24]
+                      for ____i24 in indices(____o13):
+                        __v13 = ____o13[____i24]
                         __s = cat(__s, __sp, __v13)
                         __sp = " "
                       return cat(__s, ")")
@@ -489,25 +489,25 @@ def call(f=None, *_rest, **_params):
   return apply(__f, __args11)
 def setenv(k=None, *_rest, **_params):
   ____r78 = unstash(list(_rest))
-  __k12 = destash33(k, ____r78)
+  __k11 = destash33(k, ____r78)
   ____id1 = ____r78
   __keys = cut(____id1, 0)
-  if string63(__k12):
+  if string63(__k11):
 
     if __keys["toplevel"]:
       __e6 = hd(environment)
     else:
       __e6 = last(environment)
     __frame = __e6
-    __entry = __frame[__k12] or {}
-    ____o15 = __keys
-    __k13 = None
-    for __k13 in indices(____o15):
-      __v14 = ____o15[__k13]
-      if not( __k13 == "toplevel"):
-        __entry[__k13] = __v14
-    __frame[__k12] = __entry
-    return __frame[__k12]
+    __entry = __frame[__k11] or {}
+    ____o14 = __keys
+    __k12 = None
+    for __k12 in indices(____o14):
+      __v14 = ____o14[__k12]
+      if not( __k12 == "toplevel"):
+        __entry[__k12] = __v14
+    __frame[__k11] = __entry
+    return __frame[__k11]
 def _print(x=None):
   print(x)
   return None
