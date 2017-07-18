@@ -14,6 +14,7 @@
 
 (define-global has? (l k)
   (target js: ((idx l hasOwnProperty) k)
+          py: (%literal k | in | l)
           lua: (is? (get l k))))
 
 (define-global array? (x)

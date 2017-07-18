@@ -13,7 +13,7 @@ def either(x=None, y=None):
   else:
     return y
 def has63(l=None, k=None):
-  pass
+  return k in l
 def array63(x=None):
   return isinstance(x, list) or isinstance(x, tuple)
 def indices(x=None):
@@ -964,7 +964,6 @@ def __f54(*_rest, **_params):
 setenv("when-compiling", {"_stash": True, "macro": __f54})
 import reader
 import compiler
-
 def eval_print(form=None):
   def __f():
     return compiler._eval(form)
