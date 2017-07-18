@@ -59,12 +59,11 @@
     args))
 
 (define bias (k)
-  (when (and (number? k)
-             (not (target? (language))))
-    (if (target? 'js)
-        (dec k)
-      (inc k)))
-  k)
+  (if (number? k)
+      (do (target lua: (dec k))
+          (if (target? 'lua) (inc k))
+          k)
+    k))
 
 (define-global bind (lh rh)
   (if (atom? lh) `(,lh ,rh)

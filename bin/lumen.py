@@ -558,8 +558,8 @@ def __f4(*_rest, **_params):
   __args1 = unstash(list(_rest))
   def __f5(__x6=None):
     ____id1 = __x6
-    __lh1 = has(____id1, 1)
-    __rh1 = has(____id1, 2)
+    __lh1 = has(____id1, 0)
+    __rh1 = has(____id1, 1)
     __lh1 = macroexpand(__lh1)
     if not atom63(__lh1) and hd(__lh1) == "has":
       return ["%set", join(["get"], tl(__lh1)), __rh1]
@@ -614,8 +614,8 @@ def __f10(expr=None, *_rest, **_params):
   __eq1 = __f11
   def __f12(__x50=None):
     ____id5 = __x50
-    __a1 = has(____id5, 1)
-    __b1 = has(____id5, 2)
+    __a1 = has(____id5, 0)
+    __b1 = has(____id5, 1)
     if nil63(__b1):
       return [__a1]
     else:
@@ -662,12 +662,12 @@ def __f17(bs=None, *_rest, **_params):
       return join(["do"], __body9)
     else:
       ____id15 = __bs11
-      __lh3 = has(____id15, 1)
-      __rh3 = has(____id15, 2)
+      __lh3 = has(____id15, 0)
+      __rh3 = has(____id15, 1)
       __bs21 = cut(____id15, 2)
       ____id16 = bind(__lh3, __rh3)
-      __id17 = has(____id16, 1)
-      __val1 = has(____id16, 2)
+      __id17 = has(____id16, 0)
+      __val1 = has(____id16, 1)
       __bs12 = cut(____id16, 2)
       __renames1 = []
       if not id_literal63(__id17):
@@ -725,8 +725,8 @@ def __f22(name=None, expansion=None):
 setenv("define-symbol", {"_stash": True, "macro": __f22})
 def __f23(__x129=None, *_rest, **_params):
   ____id28 = __x129
-  __char1 = has(____id28, 1)
-  __s1 = has(____id28, 2)
+  __char1 = has(____id28, 0)
+  __s1 = has(____id28, 1)
   ____r35 = unstash(list(_rest))
   ____x129 = destash33(__x129, ____r35)
   ____id29 = ____r35
@@ -781,7 +781,7 @@ def __f29(*_rest, **_params):
 setenv("with-frame", {"_stash": True, "macro": __f29})
 def __f30(__x197=None, *_rest, **_params):
   ____id36 = __x197
-  __names1 = has(____id36, 1)
+  __names1 = has(____id36, 0)
   ____r47 = unstash(list(_rest))
   ____x197 = destash33(__x197, ____r47)
   ____id37 = ____r47
@@ -812,8 +812,8 @@ def __f33(expansions=None, *_rest, **_params):
   add(environment, {})
   def __f34(__x213=None):
     ____id43 = __x213
-    __name9 = has(____id43, 1)
-    __exp1 = has(____id43, 2)
+    __name9 = has(____id43, 0)
+    __exp1 = has(____id43, 1)
     return macroexpand(["define-symbol", __name9, __exp1])
   map(__f34, pair(__expansions1))
   ____x212 = join(["do"], macroexpand(__body31))
@@ -876,8 +876,8 @@ def __f40(x=None, t=None, *_rest, **_params):
       __e8 = [__i3, hd(__x294)]
     __e7 = __e8
   ____id53 = __e7
-  __k4 = has(____id53, 1)
-  __v7 = has(____id53, 2)
+  __k4 = has(____id53, 0)
+  __v7 = has(____id53, 1)
 
   if has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "lua" or has(setenv("target", {"_stash": True, "toplevel": True}), "value") == "py":
     __e9 = __body37
@@ -1000,8 +1000,8 @@ def eval_print(form=None):
         __e = __e1
       return {"stack": debug.traceback(), "message": __e}
   ____id = [xpcall(__f, __f1)]
-  __ok = has(____id, 1)
-  __v = has(____id, 2)
+  __ok = has(____id, 0)
+  __v = has(____id, 1)
   if not __ok:
     if is63(__v):
       return _print(_str(__v))

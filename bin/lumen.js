@@ -851,8 +851,8 @@ setenv("set", {_stash: true, macro: function () {
   var __args1 = unstash(Array.prototype.slice.call(arguments, 0));
   return join(["do"], map(function (__x6) {
     var ____id1 = __x6;
-    var __lh1 = ____id1[0];
-    var __rh1 = ____id1[1];
+    var __lh1 = has(____id1, 0);
+    var __rh1 = has(____id1, 1);
     __lh1 = macroexpand(__lh1);
     if (! atom63(__lh1) && hd(__lh1) === "has") {
       return ["%set", join(["get"], tl(__lh1)), __rh1];
@@ -921,8 +921,8 @@ setenv("case", {_stash: true, macro: function (expr) {
   };
   var __cl1 = function (__x50) {
     var ____id5 = __x50;
-    var __a1 = ____id5[0];
-    var __b1 = ____id5[1];
+    var __a1 = has(____id5, 0);
+    var __b1 = has(____id5, 1);
     if (nil63(__b1)) {
       return [__a1];
     } else {
@@ -973,12 +973,12 @@ setenv("let", {_stash: true, macro: function (bs) {
       return join(["do"], __body9);
     } else {
       var ____id15 = __bs11;
-      var __lh3 = ____id15[0];
-      var __rh3 = ____id15[1];
+      var __lh3 = has(____id15, 0);
+      var __rh3 = has(____id15, 1);
       var __bs21 = cut(____id15, 2);
       var ____id16 = bind(__lh3, __rh3);
-      var __id17 = ____id16[0];
-      var __val1 = ____id16[1];
+      var __id17 = has(____id16, 0);
+      var __val1 = has(____id16, 1);
       var __bs12 = cut(____id16, 2);
       var __renames1 = [];
       if (! id_literal63(__id17)) {
@@ -1039,8 +1039,8 @@ setenv("define-symbol", {_stash: true, macro: function (name, expansion) {
 }});
 setenv("define-reader", {_stash: true, macro: function (__x129) {
   var ____id28 = __x129;
-  var __char1 = ____id28[0];
-  var __s1 = ____id28[1];
+  var __char1 = has(____id28, 0);
+  var __s1 = has(____id28, 1);
   var ____r35 = unstash(Array.prototype.slice.call(arguments, 1));
   var ____x129 = destash33(__x129, ____r35);
   var ____id29 = ____r35;
@@ -1098,7 +1098,7 @@ setenv("with-frame", {_stash: true, macro: function () {
 }});
 setenv("with-bindings", {_stash: true, macro: function (__x197) {
   var ____id36 = __x197;
-  var __names1 = ____id36[0];
+  var __names1 = has(____id36, 0);
   var ____r47 = unstash(Array.prototype.slice.call(arguments, 1));
   var ____x197 = destash33(__x197, ____r47);
   var ____id37 = ____r47;
@@ -1129,8 +1129,8 @@ setenv("let-symbol", {_stash: true, macro: function (expansions) {
   add(environment, {});
   map(function (__x213) {
     var ____id43 = __x213;
-    var __name9 = ____id43[0];
-    var __exp1 = ____id43[1];
+    var __name9 = has(____id43, 0);
+    var __exp1 = has(____id43, 1);
     return macroexpand(["define-symbol", __name9, __exp1]);
   }, pair(__expansions1));
   var ____x212 = join(["do"], macroexpand(__body31));
@@ -1197,8 +1197,8 @@ setenv("each", {_stash: true, macro: function (x, t) {
     __e8 = __e9;
   }
   var ____id53 = __e8;
-  var __k5 = ____id53[0];
-  var __v7 = ____id53[1];
+  var __k5 = has(____id53, 0);
+  var __v7 = has(____id53, 1);
   var __e10;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" || has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
     __e10 = __body37;
@@ -1326,8 +1326,8 @@ var eval_print = function (form) {
       return [false, __e];
     }
   })();
-  var __ok = ____id[0];
-  var __v = ____id[1];
+  var __ok = has(____id, 0);
+  var __v = has(____id, 1);
   if (! __ok) {
     return _print(__v.stack);
   } else {

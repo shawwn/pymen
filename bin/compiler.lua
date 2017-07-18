@@ -80,14 +80,15 @@ local function stash42(args)
   end
 end
 local function bias(k)
-  if number63(k) and not( has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua") then
-    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "js" then
-      k = k - 1
-    else
+  if number63(k) then
+    k = k - 1
+    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" then
       k = k + 1
     end
+    return k
+  else
+    return k
   end
-  return k
 end
 function bind(lh, rh)
   if atom63(lh) then
