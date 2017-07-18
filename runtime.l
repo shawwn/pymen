@@ -17,6 +17,9 @@
           py: (%literal k | in | l)
           lua: (is? (get l k))))
 
+(define-global has (l k else)
+  (if (has? l k) (get l k) else))
+
 (define-global array? (x)
   (target js: ((idx Array isArray) x)
           py: (or (isinstance x |list|)
@@ -423,6 +426,6 @@
 (define-global tanh (idx math tanh))
 (define-global trunc (idx math floor))
 
-(target py: (import pdb))
-(target py: ((idx pdb set_trace)))
+; (target py: (import pdb))
+; (target py: ((idx pdb set_trace)))
 (define-variable target (language))

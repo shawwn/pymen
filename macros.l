@@ -5,7 +5,11 @@
   (quasiexpand form 1))
 
 (define-macro set args
-  `(do ,@(map (fn ((lh rh)) `(%set ,lh ,rh))
+  `(do ,@(map (fn ((lh rh))
+                (set lh (macroexpand lh))
+                (if (and (not (atom? lh)) (= (hd lh) 'has))
+                    `(%set (get ,@(tl lh)) ,rh)
+                  `(%set ,lh ,rh)))
               (pair args))))
 
 (define-macro at (l i)
@@ -108,7 +112,7 @@
     `(set ,name ,x)))
 
 (define-macro get-value (x)
-  `(get (setenv ,x :toplevel) 'value))
+  `(has (setenv ,x :toplevel) 'value))
 
 (define-macro define-constant (name x)
   `(do (setenv ',name :toplevel value: ,(either x `(get-value ',name)))

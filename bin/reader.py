@@ -1,3 +1,5 @@
+from lumen import *
+from lumen import _35
 delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
 whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
 def stream(_str=None, more=None):

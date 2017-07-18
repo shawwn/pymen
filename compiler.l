@@ -1,3 +1,6 @@
+(target py: |from lumen import *|)
+(target py: |from lumen import _35|)
+
 (define getenv (k p)
   (when (string? k)
     (let i (edge environment)
