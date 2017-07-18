@@ -60,8 +60,10 @@
        (= (char atom 0) ":")))
 
 (define expected (s c)
-  (let ((:more :pos) s)
-    (or more (error (cat "Expected " c " at " pos)))))
+  (if (has? s 'more)
+      (get s 'more)
+    (let ((:more :pos) s)
+      (error (cat "Expected " c " at " pos)))))
 
 (define wrap (s x)
   (let y (read s)

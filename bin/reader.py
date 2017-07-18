@@ -56,17 +56,13 @@ def key63(atom=None):
 def flag63(atom=None):
   return string63(atom) and L_35(atom) > 1 and char(atom, 0) == ":"
 def expected(s=None, c=None):
-  ____id1 = s
-  __more = has(____id1, "more")
-  __pos1 = has(____id1, "pos")
-  __id2 = __more
-
-  if __id2:
-    __e = __id2
+  if has63(s, "more"):
+    return s["more"]
   else:
+    ____id1 = s
+    __more = has(____id1, "more")
+    __pos1 = has(____id1, "pos")
     raise Exception(cat("Expected ", c, " at ", __pos1))
-    __e = None
-  return __e
 def wrap(s=None, x=None):
   __y = read(s)
   if __y == s["more"]:
@@ -76,19 +72,19 @@ def wrap(s=None, x=None):
 def hex_prefix63(L_str=None):
 
   if code(L_str, 0) == 45:
-    __e1 = 1
+    __e = 1
   else:
-    __e1 = 0
-  __i = __e1
-  __id3 = code(L_str, __i) == 48
+    __e = 0
+  __i = __e
+  __id2 = code(L_str, __i) == 48
 
-  if __id3:
+  if __id2:
     __i = __i + 1
     __n = code(L_str, __i)
-    __e2 = __n == 120 or __n == 88
+    __e1 = __n == 120 or __n == 88
   else:
-    __e2 = __id3
-  return __e2
+    __e1 = __id2
+  return __e1
 def maybe_number(L_str=None):
   if hex_prefix63(L_str):
     return int(L_str, 16)
