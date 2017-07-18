@@ -386,10 +386,10 @@
 
 (define-global setenv (k rest: keys)
   (when (string? k)
-    (let (frame (if (get keys 'toplevel)
+    (let (frame (if (has? keys 'toplevel)
                     (hd |environment|)
                   (last |environment|))
-          entry (or (get frame k) (obj)))
+          entry (if (has? frame k) (get frame k) (obj)))
       (each (k v) keys
         (unless (= k 'toplevel)
           (set (get entry k) v)))

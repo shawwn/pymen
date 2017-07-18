@@ -494,12 +494,17 @@ def setenv(k=None, *_rest, **_params):
   __keys = cut(____id1, 0)
   if string63(__k11):
 
-    if __keys["toplevel"]:
+    if has63(__keys, "toplevel"):
       __e6 = hd(environment)
     else:
       __e6 = last(environment)
     __frame = __e6
-    __entry = __frame[__k11] or {}
+
+    if has63(__frame, __k11):
+      __e7 = __frame[__k11]
+    else:
+      __e7 = {}
+    __entry = __e7
     ____o14 = __keys
     __k12 = None
     for __k12 in indices(____o14):

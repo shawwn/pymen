@@ -649,13 +649,19 @@ function setenv(k, ...)
   local __keys = cut(____id1, 0)
   if string63(__k12) then
     local __e8
-    if __keys.toplevel then
+    if has63(__keys, "toplevel") then
       __e8 = hd(environment)
     else
       __e8 = last(environment)
     end
     local __frame = __e8
-    local __entry = __frame[__k12] or {}
+    local __e9
+    if has63(__frame, __k12) then
+      __e9 = __frame[__k12]
+    else
+      __e9 = {}
+    end
+    local __entry = __e9
     local ____o15 = __keys
     local __k13 = nil
     for __k13 in next, ____o15 do

@@ -773,24 +773,30 @@ setenv = function (k) {
   var __keys = cut(____id1, 0);
   if (string63(__k24)) {
     var __e22;
-    if (__keys.toplevel) {
+    if (has63(__keys, "toplevel")) {
       __e22 = hd(environment);
     } else {
       __e22 = last(environment);
     }
     var __frame = __e22;
-    var __entry = __frame[__k24] || {};
+    var __e23;
+    if (has63(__frame, __k24)) {
+      __e23 = __frame[__k24];
+    } else {
+      __e23 = {};
+    }
+    var __entry = __e23;
     var ____o15 = __keys;
     var __k25 = undefined;
     for (__k25 in ____o15) {
       var __v14 = ____o15[__k25];
-      var __e23;
+      var __e24;
       if (numeric63(__k25)) {
-        __e23 = parseInt(__k25);
+        __e24 = parseInt(__k25);
       } else {
-        __e23 = __k25;
+        __e24 = __k25;
       }
-      var __k26 = __e23;
+      var __k26 = __e24;
       if (!( __k26 === "toplevel")) {
         __entry[__k26] = __v14;
       }
