@@ -1,3 +1,4 @@
+(target py: (%set globals% (|globals|)))
 (define-global environment (list (obj)))
 
 (define-global nil? (x)
@@ -16,7 +17,7 @@
   (target js: ((idx l hasOwnProperty) k)
           py: (if (array? l)
                   (and (number? k) (>= k 0) (< k (|len| l)))
-                (%literal k | in | l))
+                  (and (or (number? k) (string? k)) (%literal |(| k | in | l |)|)))
           lua: (is? (get l k))))
 
 (define-global has (l k else)
@@ -105,7 +106,10 @@
 
 (define-global clip (s from upto)
   (target js: ((idx s substring) from upto)
-          lua: ((idx string sub) s (+ from 1) upto)))
+          lua: ((idx string sub) s (+ from 1) upto)
+          py: (let (from (or from 0)
+                    upto (or upto (# s)))
+                (%literal s |[| from |:| upto |]|))))
 
 (define-global dupe (x)
   (target lua: () py: (obj) js: (if (array? x) () (obj))))
@@ -166,8 +170,13 @@
         nil)))
 
 (define-global drop (l)
-  (target js: ((idx l pop))
-          lua: ((idx table remove) l)))
+  (target lua: ((idx table remove) l)
+    (if (array? l)
+        ((idx l pop))
+      (let n (edge l)
+        (when (>= n 0)
+          (with r (at l n)
+            (wipe (at l n))))))))
 
 (define-global last (l)
   (at l (edge l)))

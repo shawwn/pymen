@@ -26,7 +26,7 @@
 
 (define-macro list body
   (let-unique (x)
-    (let (l () forms ())
+    (let (l (target py: (obj) ()) forms ())
       (each (k v) body
         (if (number? k)
             (set (get l k) v)

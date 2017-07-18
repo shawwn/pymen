@@ -1,8 +1,4 @@
 (target py: |from lumen import *|)
-(target py: |from lumen import _35|)
-(target py: |from lumen import _62|)
-(target py: |from lumen import _6261|)
-(target py: |from lumen import _inf|)
 
 (define getenv (k p)
   (when (string? k)
@@ -238,19 +234,20 @@
       (= n 95)))               ; _
 
 (define id (id)
-  (let id1 (if (number-code? (code id 0)) "_" "")
+  (let (x (if (= target 'py) "L_" "_")
+        id1 (if (number-code? (code id 0)) x ""))
     (for i (# id)
       (let (c (char id i)
             n (code c)
             c1 (if (and (= c "-")
                         (not (= id "-")))
-                   "_"
+                   (if (= i 0) x "_")
                    (valid-code? n) c
-                   (= i 0) (cat "_" n)
+                   (= i 0) (cat x n)
                  n))
         (cat! id1 c1)))
     (if (reserved? id1)
-        (cat "_" id1)
+        (cat x id1)
         id1)))
 
 (define-global valid-id? (x)
@@ -610,15 +607,25 @@
     (let |f,e| (load1 code)
       (if f (f) (error (cat e " in " code))))))
 
-(define-global %result)
+(target py:
+  (define run (code globals)
+    (let state (or globals globals%)
+      (|exec| code state state)
+      nil)))
 
-(define-global eval (form)
+(define eval-result (globals)
+  (target py:
+    (let state (or globals globals%)
+      (get state "lumen_result"))
+    lumen-result))
+
+(define-global eval (form globals)
   (let previous target
     (set target (language))
-    (let code (compile (expand `(set %result ,form)))
+    (let code (compile (expand `(set lumen-result ,form)))
       (set target previous)
-      (run code)
-      %result)))
+      (run code globals)
+      (eval-result globals))))
 
 (define-global immediate-call? (x)
   (and (obj? x) (obj? (hd x)) (= (hd (hd x)) '%function)))
@@ -688,7 +695,7 @@
            ind "catch (" e ") {\n" h ind "}\n"))))
 
 (define-special %delete (place) :stmt
-  (cat (indentation) "delete " (compile place)))
+  (cat (indentation) (if (target? 'py) "del " "delete ") (compile place)))
 
 (define-special break () :stmt
   (cat (indentation) "break"))

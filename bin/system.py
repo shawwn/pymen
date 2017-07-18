@@ -20,7 +20,7 @@ def exit(code=None):
   pass
 
 def reload(module=None):
-  delete 
+  del 
   return require(module)
 def run(command=None):
   pass

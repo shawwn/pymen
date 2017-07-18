@@ -248,7 +248,16 @@ add = function (l, x) {
   return undefined;
 };
 drop = function (l) {
-  return l.pop();
+  if (array63(l)) {
+    return l.pop();
+  } else {
+    var __n7 = edge(l);
+    if (__n7 >= 0) {
+      var __r39 = l[__n7];
+      delete l[__n7];
+      return __r39;
+    }
+  }
 };
 last = function (l) {
   return l[edge(l)];
@@ -278,13 +287,13 @@ reduce = function (f, x) {
 };
 join = function () {
   var __ls = unstash(Array.prototype.slice.call(arguments, 0));
-  var __r43 = [];
+  var __r44 = [];
   var ____x1 = __ls;
   var ____i7 = 0;
   while (____i7 < _35(____x1)) {
     var __l3 = ____x1[____i7];
     if (__l3) {
-      var __n7 = _35(__r43);
+      var __n8 = _35(__r44);
       var ____o5 = __l3;
       var __k10 = undefined;
       for (__k10 in ____o5) {
@@ -297,16 +306,16 @@ join = function () {
         }
         var __k11 = __e7;
         if (number63(__k11)) {
-          __k11 = __k11 + __n7;
+          __k11 = __k11 + __n8;
         } else {
           __l3 = object(__l3);
         }
-        __r43[__k11] = __v5;
+        __r44[__k11] = __v5;
       }
     }
     ____i7 = ____i7 + 1;
   }
-  return __r43;
+  return __r44;
 };
 find = function (f, t) {
   var ____o6 = t;
@@ -526,14 +535,14 @@ split = function (s, sep) {
     return [];
   } else {
     var __l5 = [];
-    var __n16 = _35(sep);
+    var __n17 = _35(sep);
     while (true) {
       var __i20 = search(s, sep);
       if (nil63(__i20)) {
         break;
       } else {
         add(__l5, clip(s, 0, __i20));
-        s = clip(s, __i20 + __n16);
+        s = clip(s, __i20 + __n17);
       }
     }
     add(__l5, s);
@@ -636,15 +645,15 @@ number_code63 = function (n) {
   return n > 47 && n < 58;
 };
 number = function (s) {
-  var __n17 = parseFloat(s);
-  if (! isNaN(__n17)) {
-    return __n17;
+  var __n18 = parseFloat(s);
+  if (! isNaN(__n18)) {
+    return __n18;
   }
 };
 numeric63 = function (s) {
-  var __n18 = _35(s);
+  var __n19 = _35(s);
   var __i22 = 0;
-  while (__i22 < __n18) {
+  while (__i22 < __n19) {
     if (! number_code63(code(s, __i22))) {
       return false;
     }
@@ -781,16 +790,16 @@ apply = function (f, args) {
   return f.apply(f, __args);
 };
 call = function (f) {
-  var ____r82 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __f = destash33(f, ____r82);
-  var ____id = ____r82;
+  var ____r83 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __f = destash33(f, ____r83);
+  var ____id = ____r83;
   var __args11 = cut(____id, 0);
   return apply(__f, __args11);
 };
 setenv = function (k) {
-  var ____r83 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __k24 = destash33(k, ____r83);
-  var ____id1 = ____r83;
+  var ____r84 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __k24 = destash33(k, ____r84);
+  var ____id1 = ____r84;
   var __keys = cut(____id1, 0);
   if (string63(__k24)) {
     var __e22;

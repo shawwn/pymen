@@ -1,3 +1,4 @@
+globals37 = globals()
 environment = [{}]
 def nil63(x=None):
   return x is None
@@ -16,12 +17,12 @@ def has63(l=None, k=None):
   if array63(l):
     return number63(k) and k >= 0 and k < len(l)
   else:
-    return k in l
-def has(l=None, k=None, _else=None):
+    return (number63(k) or string63(k)) and (k in l)
+def has(l=None, k=None, L_else=None):
   if has63(l, k):
     return l[k]
   else:
-    return _else
+    return L_else
 def array63(x=None):
   return isinstance(x, list) or isinstance(x, tuple)
 def indices(x=None):
@@ -36,7 +37,7 @@ def array(x=None):
     __l = []
     ____x1 = x
     ____i = 0
-    while ____i < _35(____x1):
+    while ____i < L_35(____x1):
       __v = ____x1[____i]
       add(__l, __v)
       ____i = ____i + 1
@@ -63,19 +64,19 @@ def length(x=None):
         __n1 = __k1
   __n1 = __n1 + 1
   return __n1
-def _35(x=None):
+def L_35(x=None):
   if string63(x) or array63(x):
     return len(x)
   else:
     return length(x)
 def none63(x=None):
-  return _35(x) == 0
+  return L_35(x) == 0
 def some63(x=None):
-  return _35(x) > 0
+  return L_35(x) > 0
 def one63(x=None):
-  return _35(x) == 1
+  return L_35(x) == 1
 def two63(x=None):
-  return _35(x) == 2
+  return L_35(x) == 2
 def hd(l=None):
   return l[0]
 import numbers
@@ -93,32 +94,34 @@ def atom63(x=None):
   return nil63(x) or string63(x) or number63(x) or boolean63(x)
 nan = float("nan")
 inf = float("inf")
-_inf = - inf
+L_inf = - inf
 def nan63(n=None):
   return not( n == n)
 def inf63(n=None):
-  return n == inf or n == _inf
-def clip(s=None, _from=None, upto=None):
-  pass
+  return n == inf or n == L_inf
+def clip(s=None, L_from=None, upto=None):
+  __L_from = L_from or 0
+  __upto = upto or L_35(s)
+  return s[__L_from:__upto]
 def dupe(x=None):
   return {}
-def cut(x=None, _from=None, upto=None):
+def cut(x=None, L_from=None, upto=None):
   __l2 = dupe(x)
   __j = 0
 
-  if nil63(_from) or _from < 0:
+  if nil63(L_from) or L_from < 0:
     __e = 0
   else:
-    __e = _from
+    __e = L_from
   __i3 = __e
-  __n3 = _35(x)
+  __n3 = L_35(x)
 
   if nil63(upto) or upto > __n3:
     __e1 = __n3
   else:
     __e1 = upto
-  __upto = __e1
-  while __i3 < __upto:
+  __upto1 = __e1
+  while __i3 < __upto1:
     __l2[__j] = x[__i3]
     __i3 = __i3 + 1
     __j = __j + 1
@@ -139,7 +142,7 @@ def keys(x=None):
       __t[__k3] = __v4
   return __t
 def edge(x=None):
-  return _35(x) - 1
+  return L_35(x) - 1
 def inner(x=None):
   return clip(x, 1, edge(x))
 def tl(l=None):
@@ -160,10 +163,17 @@ def add(l=None, x=None):
   if array63(l):
     l.append(x)
   else:
-    l[_35(l)] = x
+    l[L_35(l)] = x
   return None
 def drop(l=None):
-  pass
+  if array63(l):
+    return l.pop()
+  else:
+    __n7 = edge(l)
+    if __n7 >= 0:
+      __r39 = l[__n7]
+      del l[__n7]
+      return __r39
 def last(l=None):
   return l[edge(l)]
 def almost(l=None):
@@ -185,24 +195,24 @@ def reduce(f=None, x=None):
       return f(hd(x), reduce(f, tl(x)))
 def join(*_rest, **_params):
   __ls = unstash(list(_rest))
-  __r43 = {}
+  __r44 = {}
   ____x3 = __ls
   ____i7 = 0
-  while ____i7 < _35(____x3):
+  while ____i7 < L_35(____x3):
     __l3 = ____x3[____i7]
     if __l3:
-      __n7 = _35(__r43)
+      __n8 = L_35(__r44)
       ____o4 = __l3
       __k4 = None
       for __k4 in indices(____o4):
         __v5 = ____o4[__k4]
         if number63(__k4):
-          __k4 = __k4 + __n7
+          __k4 = __k4 + __n8
         else:
           __l3 = object(__l3)
-        __r43[__k4] = __v5
+        __r44[__k4] = __v5
     ____i7 = ____i7 + 1
-  return __r43
+  return __r44
 def find(f=None, t=None):
   ____o5 = t
   ____i9 = None
@@ -214,7 +224,7 @@ def find(f=None, t=None):
 def first(f=None, l=None):
   ____x5 = l
   ____i10 = 0
-  while ____i10 < _35(____x5):
+  while ____i10 < L_35(____x5):
     __x6 = ____x5[____i10]
     __y1 = f(__x6)
     if __y1:
@@ -227,7 +237,7 @@ def in63(x=None, t=None):
 def pair(l=None):
   __l12 = dupe(l)
   __i11 = 0
-  while __i11 < _35(l):
+  while __i11 < L_35(l):
     add(__l12, [l[__i11], l[__i11 + 1]])
     __i11 = __i11 + 1
     __i11 = __i11 + 1
@@ -238,7 +248,7 @@ def map(f=None, x=None):
   __t1 = dupe(x)
   ____x8 = x
   ____i12 = 0
-  while ____i12 < _35(____x8):
+  while ____i12 < L_35(____x8):
     __v6 = ____x8[____i12]
     __y2 = f(__v6)
     if is63(__y2):
@@ -321,14 +331,14 @@ def split(s=None, sep=None):
     return []
   else:
     __l5 = []
-    __n16 = _35(sep)
+    __n17 = L_35(sep)
     while True:
       __i19 = search(s, sep)
       if nil63(__i19):
         break
       else:
         add(__l5, clip(s, 0, __i19))
-        s = clip(s, __i19 + __n16)
+        s = clip(s, __i19 + __n17)
     add(__l5, s)
     return __l5
 def tostr(x=None):
@@ -338,7 +348,7 @@ def tostr(x=None):
     if nil63(x):
       return ""
     else:
-      return _str(x)
+      return L_str(x)
 def cat2(a=None, b=None):
   return tostr(a) + tostr(b)
 def cat(*_rest, **_params):
@@ -346,27 +356,27 @@ def cat(*_rest, **_params):
   def __f3(a=None, b=None):
     return cat2(a, b)
   return either(reduce(__f3, __xs), "")
-def _43(*_rest, **_params):
+def L_43(*_rest, **_params):
   __xs1 = unstash(list(_rest))
   def __f4(a=None, b=None):
     return a + b
   return either(reduce(__f4, __xs1), 0)
-def _45(*_rest, **_params):
+def L_45(*_rest, **_params):
   __xs2 = unstash(list(_rest))
   def __f5(b=None, a=None):
     return a - b
   return either(reduce(__f5, reverse(__xs2)), 0)
-def _42(*_rest, **_params):
+def L_42(*_rest, **_params):
   __xs3 = unstash(list(_rest))
   def __f6(a=None, b=None):
     return a * b
   return either(reduce(__f6, __xs3), 1)
-def _47(*_rest, **_params):
+def L_47(*_rest, **_params):
   __xs4 = unstash(list(_rest))
   def __f7(b=None, a=None):
     return a / b
   return either(reduce(__f7, reverse(__xs4)), 1)
-def _37(*_rest, **_params):
+def L_37(*_rest, **_params):
   __xs5 = unstash(list(_rest))
   def __f8(b=None, a=None):
     return a % b
@@ -380,27 +390,27 @@ def pairwise(f=None, xs=None):
       return False
     __i20 = __i20 + 1
   return True
-def _60(*_rest, **_params):
+def L_60(*_rest, **_params):
   __xs6 = unstash(list(_rest))
   def __f9(a=None, b=None):
     return a < b
   return pairwise(__f9, __xs6)
-def _62(*_rest, **_params):
+def L_62(*_rest, **_params):
   __xs7 = unstash(list(_rest))
   def __f10(a=None, b=None):
     return a > b
   return pairwise(__f10, __xs7)
-def _61(*_rest, **_params):
+def L_61(*_rest, **_params):
   __xs8 = unstash(list(_rest))
   def __f11(a=None, b=None):
     return a == b
   return pairwise(__f11, __xs8)
-def _6061(*_rest, **_params):
+def L_6061(*_rest, **_params):
   __xs9 = unstash(list(_rest))
   def __f12(a=None, b=None):
     return a <= b
   return pairwise(__f12, __xs9)
-def _6261(*_rest, **_params):
+def L_6261(*_rest, **_params):
   __xs10 = unstash(list(_rest))
   def __f13(a=None, b=None):
     return a >= b
@@ -419,9 +429,9 @@ def number(s=None):
 
     return None
 def numeric63(s=None):
-  __n17 = _35(s)
+  __n18 = L_35(s)
   __i21 = 0
-  while __i21 < __n17:
+  while __i21 < __n18:
     if not number_code63(code(s, __i21)):
       return False
     __i21 = __i21 + 1
@@ -429,7 +439,7 @@ def numeric63(s=None):
 def escape(s=None):
   __s1 = "\""
   __i22 = 0
-  while __i22 < _35(s):
+  while __i22 < L_35(s):
     __c = char(s, __i22)
 
     if __c == "\n":
@@ -457,7 +467,7 @@ def escape(s=None):
   return cat(__s1, "\"")
 def tostring(x=None):
   return str(x)
-def _str(x=None, stack=None):
+def L_str(x=None, stack=None):
   if nil63(x):
     return "nil"
   else:
@@ -467,7 +477,7 @@ def _str(x=None, stack=None):
       if x == inf:
         return "inf"
       else:
-        if x == _inf:
+        if x == L_inf:
           return "-inf"
         else:
           if boolean63(x):
@@ -500,10 +510,10 @@ def _str(x=None, stack=None):
                       for __k10 in indices(____o12):
                         __v12 = ____o12[__k10]
                         if number63(__k10):
-                          __xs11[__k10] = _str(__v12, __l6)
+                          __xs11[__k10] = L_str(__v12, __l6)
                         else:
                           add(__ks, cat(__k10, ":"))
-                          add(__ks, _str(__v12, __l6))
+                          add(__ks, L_str(__v12, __l6))
                       drop(__l6)
                       ____o13 = join(__xs11, __ks)
                       ____i24 = None
@@ -516,15 +526,15 @@ def apply(f=None, args=None):
   __args = stash(args)
   return f(*__args)
 def call(f=None, *_rest, **_params):
-  ____r81 = unstash(list(_rest))
-  __f = destash33(f, ____r81)
-  ____id = ____r81
+  ____r82 = unstash(list(_rest))
+  __f = destash33(f, ____r82)
+  ____id = ____r82
   __args11 = cut(____id, 0)
   return apply(__f, __args11)
 def setenv(k=None, *_rest, **_params):
-  ____r82 = unstash(list(_rest))
-  __k11 = destash33(k, ____r82)
-  ____id1 = ____r82
+  ____r83 = unstash(list(_rest))
+  __k11 = destash33(k, ____r83)
+  ____id1 = ____r83
   __keys = cut(____id1, 0)
   if string63(__k11):
 
@@ -547,7 +557,7 @@ def setenv(k=None, *_rest, **_params):
         __entry[__k12] = __v14
     __frame[__k11] = __entry
     return __frame[__k11]
-def _print(x=None):
+def L_print(x=None):
   print(x)
   return None
 import math
@@ -609,7 +619,7 @@ setenv("wipe", {"_stash": True, "macro": __f7})
 def __f8(*_rest, **_params):
   __body1 = unstash(list(_rest))
   __x27 = unique("x")
-  __l1 = []
+  __l1 = {}
   __forms1 = []
   ____o1 = __body1
   __k2 = None
@@ -650,7 +660,7 @@ def __f10(expr=None, *_rest, **_params):
         if one63(__a1):
           return [__eq1(hd(__a1)), __b1]
         else:
-          if _35(__a1) > 1:
+          if L_35(__a1) > 1:
             return [join(["or"], map(__eq1, __a1)), __b1]
   __cl1 = __f12
   return ["let", __x47, __expr1, join(["if"], apply(join, map(__cl1, pair(__clauses1))))]
@@ -727,7 +737,7 @@ def __f20(name=None, args=None, *_rest, **_params):
   ____x109 = object(["setenv", ["quote", __name1]])
   ____x109["macro"] = join(["fn", __args3], __body15)
   __form1 = ____x109
-  _eval(__form1)
+  L_eval(__form1)
   return __form1
 setenv("define-macro", {"_stash": True, "macro": __f20})
 def __f21(name=None, args=None, *_rest, **_params):
@@ -739,7 +749,7 @@ def __f21(name=None, args=None, *_rest, **_params):
   ____x115 = object(["setenv", ["quote", __name3]])
   ____x115["special"] = join(["fn", __args5], __body17)
   __form3 = join(____x115, keys(__body17))
-  _eval(__form3)
+  L_eval(__form3)
   return __form3
 setenv("define-special", {"_stash": True, "macro": __f21})
 def __f22(name=None, expansion=None):
@@ -867,7 +877,7 @@ def __f38(f=None, *_rest, **_params):
   __f1 = destash33(f, ____r63)
   ____id49 = ____r63
   __args9 = cut(____id49, 0)
-  if _35(__args9) > 1:
+  if L_35(__args9) > 1:
     return [["do", "apply"], __f1, ["join", join(["list"], almost(__args9)), last(__args9)]]
   else:
     return join([["do", "apply"], __f1], __args9)
@@ -895,7 +905,7 @@ def __f40(x=None, t=None, *_rest, **_params):
     __e7 = [__i3, __x294]
   else:
 
-    if _35(__x294) > 1:
+    if L_35(__x294) > 1:
       __e8 = __x294
     else:
       __e8 = [__i3, hd(__x294)]
@@ -1001,15 +1011,15 @@ def __f52(*_rest, **_params):
 setenv("export", {"_stash": True, "macro": __f52})
 def __f54(*_rest, **_params):
   __body43 = unstash(list(_rest))
-  return _eval(join(["do"], __body43))
+  return L_eval(join(["do"], __body43))
 setenv("when-compiling", {"_stash": True, "macro": __f54})
 import reader
 import compiler
 
-from compiler import bind42, bind
+from compiler import *
 def eval_print(form=None):
   def __f():
-    return compiler._eval(form)
+    return compiler.L_eval(form)
   def __f1(m=None):
     if obj63(m):
       return m
@@ -1022,7 +1032,7 @@ def eval_print(form=None):
         if nil63(m):
           __e1 = ""
         else:
-          __e1 = _str(m)
+          __e1 = L_str(m)
         __e = __e1
       return {"stack": debug.traceback(), "message": __e}
   ____id = [xpcall(__f, __f1)]
@@ -1030,7 +1040,7 @@ def eval_print(form=None):
   __v = has(____id, 1)
   if not __ok:
     if is63(__v):
-      return _print(_str(__v))
+      return L_print(L_str(__v))
 def rep(s=None):
   return eval_print(reader.read_string(s))
 def repl():
@@ -1049,33 +1059,33 @@ def compile_file(path=None):
   __body = reader.read_all(__s)
   __form1 = compiler.expand(join(["do"], __body))
   return compiler.compile(__form1, {"_stash": True, "stmt": True})
-def _load(path=None):
+def L_load(path=None):
   __previous = has(setenv("target", {"_stash": True, "toplevel": True}), "value")
   setenv("target", {"_stash": True, "toplevel": True})["value"] = "py"
   __code = compile_file(path)
   setenv("target", {"_stash": True, "toplevel": True})["value"] = __previous
   return compiler.run(__code)
 def script_file63(path=None):
-  return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
+  return not( "-" == char(path, 0) or ".js" == clip(path, L_35(path) - 3) or ".lua" == clip(path, L_35(path) - 4))
 def run_file(path=None):
   if script_file63(path):
-    return _load(path)
+    return L_load(path)
   else:
     return compiler.run(system.read_file(path))
 def usage():
-  _print("usage: lumen [<file> <arguments> | options <object files>]")
-  _print(" <file>\t\tProgram read from script file")
-  _print(" <arguments>\tPassed to program in system.argv")
-  _print(" <object files>\tLoaded before compiling <input>")
-  _print("options:")
-  _print(" -c <input>\tCompile input file")
-  _print(" -o <output>\tOutput file")
-  _print(" -t <target>\tTarget language (default: lua)")
-  return _print(" -e <expr>\tExpression to evaluate")
+  L_print("usage: lumen [<file> <arguments> | options <object files>]")
+  L_print(" <file>\t\tProgram read from script file")
+  L_print(" <arguments>\tPassed to program in system.argv")
+  L_print(" <object files>\tLoaded before compiling <input>")
+  L_print("options:")
+  L_print(" -c <input>\tCompile input file")
+  L_print(" -o <output>\tOutput file")
+  L_print(" -t <target>\tTarget language (default: lua)")
+  return L_print(" -e <expr>\tExpression to evaluate")
 def main():
   __arg = hd(system.argv)
   if __arg and script_file63(__arg):
-    return _load(__arg)
+    return L_load(__arg)
   else:
     if __arg == "-h" or __arg == "--help":
       return usage()
@@ -1087,11 +1097,11 @@ def main():
       __expr = None
       __argv = system.argv
       __i = 0
-      while __i < _35(__argv):
+      while __i < L_35(__argv):
         __a = __argv[__i]
         if __a == "-c" or __a == "-o" or __a == "-t" or __a == "-e":
           if __i == edge(__argv):
-            _print(cat("missing argument for ", __a))
+            L_print(cat("missing argument for ", __a))
           else:
             __i = __i + 1
             __val = __argv[__i]
@@ -1112,7 +1122,7 @@ def main():
         __i = __i + 1
       ____x2 = __pre
       ____i1 = 0
-      while ____i1 < _35(____x2):
+      while ____i1 < L_35(____x2):
         __file = ____x2[____i1]
         run_file(__file)
         ____i1 = ____i1 + 1
@@ -1126,7 +1136,7 @@ def main():
           setenv("target", {"_stash": True, "toplevel": True})["value"] = __target1
         __code1 = compile_file(__input)
         if nil63(__output) or __output == "-":
-          return _print(__code1)
+          return L_print(__code1)
         else:
           return system.write_file(__output, __code1)
 def main63():
