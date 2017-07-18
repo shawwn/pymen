@@ -288,8 +288,12 @@
                   (set s (clip s (+ i n)))))))
         (add l s)))))
 
+(define cat2 (a b)
+  (target py: (+ (|str| a) (|str| b))
+    (cat a b)))
+
 (define-global cat xs
-  (either (reduce (fn (a b) (cat a b)) xs) ""))
+  (either (reduce (fn (a b) (cat2 a b)) xs) ""))
 
 (define-global + xs
   (either (reduce (fn (a b) (+ a b)) xs) 0))

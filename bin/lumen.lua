@@ -432,10 +432,13 @@ function split(s, sep)
     return __l5
   end
 end
+local function cat2(a, b)
+  return a .. b
+end
 function cat(...)
   local __xs = unstash({...})
   return either(reduce(function (a, b)
-    return a .. b
+    return cat2(a, b)
   end, __xs), "")
 end
 function _43(...)
@@ -643,16 +646,16 @@ function apply(f, args)
   return f(values(__args))
 end
 function call(f, ...)
-  local ____r77 = unstash({...})
-  local __f = destash33(f, ____r77)
-  local ____id = ____r77
+  local ____r78 = unstash({...})
+  local __f = destash33(f, ____r78)
+  local ____id = ____r78
   local __args11 = cut(____id, 0)
   return apply(__f, __args11)
 end
 function setenv(k, ...)
-  local ____r78 = unstash({...})
-  local __k12 = destash33(k, ____r78)
-  local ____id1 = ____r78
+  local ____r79 = unstash({...})
+  local __k12 = destash33(k, ____r79)
+  local ____id1 = ____r79
   local __keys = cut(____id1, 0)
   if string63(__k12) then
     local __e8

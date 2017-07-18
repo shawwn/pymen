@@ -326,10 +326,12 @@ def split(s=None, sep=None):
         s = clip(s, __i19 + __n16)
     add(__l5, s)
     return __l5
+def cat2(a=None, b=None):
+  return str(a) + str(b)
 def cat(*_rest, **_params):
   __xs = unstash(list(_rest))
   def __f3(a=None, b=None):
-    return cat(a, b)
+    return cat2(a, b)
   return either(reduce(__f3, __xs), "")
 def _43(*_rest, **_params):
   __xs1 = unstash(list(_rest))
@@ -489,15 +491,15 @@ def _str(x=None, stack=None):
 def apply(f=None, args=None):
   __args = stash(args)
 def call(f=None, *_rest, **_params):
-  ____r78 = unstash(list(_rest))
-  __f = destash33(f, ____r78)
-  ____id = ____r78
+  ____r79 = unstash(list(_rest))
+  __f = destash33(f, ____r79)
+  ____id = ____r79
   __args11 = cut(____id, 0)
   return apply(__f, __args11)
 def setenv(k=None, *_rest, **_params):
-  ____r79 = unstash(list(_rest))
-  __k11 = destash33(k, ____r79)
-  ____id1 = ____r79
+  ____r80 = unstash(list(_rest))
+  __k11 = destash33(k, ____r80)
+  ____id1 = ____r80
   __keys = cut(____id1, 0)
   if string63(__k11):
 

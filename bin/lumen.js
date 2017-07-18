@@ -540,10 +540,13 @@ split = function (s, sep) {
     return __l5;
   }
 };
+var cat2 = function (a, b) {
+  return a + b;
+};
 cat = function () {
   var __xs = unstash(Array.prototype.slice.call(arguments, 0));
   return either(reduce(function (a, b) {
-    return a + b;
+    return cat2(a, b);
   }, __xs), "");
 };
 _43 = function () {
@@ -767,16 +770,16 @@ apply = function (f, args) {
   return f.apply(f, __args);
 };
 call = function (f) {
-  var ____r80 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __f = destash33(f, ____r80);
-  var ____id = ____r80;
+  var ____r81 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __f = destash33(f, ____r81);
+  var ____id = ____r81;
   var __args11 = cut(____id, 0);
   return apply(__f, __args11);
 };
 setenv = function (k) {
-  var ____r81 = unstash(Array.prototype.slice.call(arguments, 1));
-  var __k24 = destash33(k, ____r81);
-  var ____id1 = ____r81;
+  var ____r82 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __k24 = destash33(k, ____r82);
+  var ____id1 = ____r82;
   var __keys = cut(____id1, 0);
   if (string63(__k24)) {
     var __e22;
