@@ -384,9 +384,9 @@ function stash(args)
     return array(args)
   end
 end
-function unstash(args)
+function unstash(args, params)
   if none63(args) then
-    return {}
+    return params or {}
   else
     local __l4 = last(args)
     if obj63(__l4) and has63(__l4, "_stash") then
@@ -399,20 +399,39 @@ function unstash(args)
           __args1[__k9] = __v10
         end
       end
+      if params then
+        local ____o12 = params
+        local __k10 = nil
+        for __k10 in next, ____o12 do
+          local __v11 = ____o12[__k10]
+          __args1[__k10] = __v11
+        end
+      end
       return __args1
     else
-      return args
+      if params then
+        local __args11 = object(args)
+        local ____o13 = params
+        local __k11 = nil
+        for __k11 in next, ____o13 do
+          local __v12 = ____o13[__k11]
+          __args11[__k11] = __v12
+        end
+        return __args11
+      else
+        return args
+      end
     end
   end
 end
 function destash33(l, args1)
   if obj63(l) and has63(l, "_stash") then
-    local ____o12 = l
-    local __k10 = nil
-    for __k10 in next, ____o12 do
-      local __v11 = ____o12[__k10]
-      if not( __k10 == "_stash") then
-        args1[__k10] = __v11
+    local ____o14 = l
+    local __k12 = nil
+    for __k12 in next, ____o14 do
+      local __v13 = ____o14[__k12]
+      if not( __k12 == "_stash") then
+        args1[__k12] = __v13
       end
     end
   else
@@ -425,22 +444,22 @@ function search(s, pattern, start)
     __e3 = start + 1
   end
   local __start = __e3
-  local __i19 = string.find(s, pattern, __start, true)
-  return __i19 and __i19 - 1
+  local __i21 = string.find(s, pattern, __start, true)
+  return __i21 and __i21 - 1
 end
 function split(s, sep)
   if s == "" or sep == "" then
     return {}
   else
     local __l5 = {}
-    local __n17 = _35(sep)
+    local __n19 = _35(sep)
     while true do
-      local __i20 = search(s, sep)
-      if nil63(__i20) then
+      local __i22 = search(s, sep)
+      if nil63(__i22) then
         break
       else
-        add(__l5, clip(s, 0, __i20))
-        s = clip(s, __i20 + __n17)
+        add(__l5, clip(s, 0, __i22))
+        s = clip(s, __i22 + __n19)
       end
     end
     add(__l5, s)
@@ -498,14 +517,14 @@ function _37(...)
   end, reverse(__xs5)), 0)
 end
 local function pairwise(f, xs)
-  local __i21 = 0
-  while __i21 < edge(xs) do
-    local __a1 = xs[__i21 + 1]
-    local __b1 = xs[__i21 + 1 + 1]
+  local __i23 = 0
+  while __i23 < edge(xs) do
+    local __a1 = xs[__i23 + 1]
+    local __b1 = xs[__i23 + 1 + 1]
     if not f(__a1, __b1) then
       return false
     end
-    __i21 = __i21 + 1
+    __i23 = __i23 + 1
   end
   return true
 end
@@ -546,21 +565,21 @@ function number(s)
   return tonumber(s)
 end
 function numeric63(s)
-  local __n18 = _35(s)
-  local __i22 = 0
-  while __i22 < __n18 do
-    if not number_code63(code(s, __i22)) then
+  local __n20 = _35(s)
+  local __i24 = 0
+  while __i24 < __n20 do
+    if not number_code63(code(s, __i24)) then
       return false
     end
-    __i22 = __i22 + 1
+    __i24 = __i24 + 1
   end
   return some63(s)
 end
 function escape(s)
   local __s1 = "\""
-  local __i23 = 0
-  while __i23 < _35(s) do
-    local __c = char(s, __i23)
+  local __i25 = 0
+  while __i25 < _35(s) do
+    local __c = char(s, __i25)
     local __e4
     if __c == "\n" then
       __e4 = "\\n"
@@ -587,7 +606,7 @@ function escape(s)
     end
     local __c1 = __e4
     __s1 = __s1 .. __c1
-    __i23 = __i23 + 1
+    __i25 = __i25 + 1
   end
   return __s1 .. "\""
 end
@@ -632,17 +651,17 @@ function _str(x, stack)
                       local __ks = {}
                       local __l6 = stack or {}
                       add(__l6, x)
-                      local ____o13 = x
-                      local __k11 = nil
-                      for __k11 in next, ____o13 do
-                        local __v12 = ____o13[__k11]
-                        if number63(__k11) then
-                          __xs11[__k11] = _str(__v12, __l6)
+                      local ____o15 = x
+                      local __k13 = nil
+                      for __k13 in next, ____o15 do
+                        local __v14 = ____o15[__k13]
+                        if number63(__k13) then
+                          __xs11[__k13] = _str(__v14, __l6)
                         else
-                          if not string63(__k11) then
-                            __k11 = _str(__k11, __l6)
+                          if not string63(__k13) then
+                            __k13 = _str(__k13, __l6)
                           end
-                          add(__ks, {__k11 .. ":", _str(__v12, __l6)})
+                          add(__ks, {__k13 .. ":", _str(__v14, __l6)})
                         end
                       end
                       sort(__ks, function (__x21, __x22)
@@ -654,22 +673,22 @@ function _str(x, stack)
                       end)
                       drop(__l6)
                       local ____x23 = __xs11
-                      local ____i25 = 0
-                      while ____i25 < _35(____x23) do
-                        local __v13 = ____x23[____i25 + 1]
-                        __s = __s .. __sp .. __v13
+                      local ____i27 = 0
+                      while ____i27 < _35(____x23) do
+                        local __v15 = ____x23[____i27 + 1]
+                        __s = __s .. __sp .. __v15
                         __sp = " "
-                        ____i25 = ____i25 + 1
+                        ____i27 = ____i27 + 1
                       end
                       local ____x24 = __ks
-                      local ____i26 = 0
-                      while ____i26 < _35(____x24) do
-                        local ____id2 = ____x24[____i26 + 1]
-                        local __k12 = has(____id2, 1)
-                        local __v14 = has(____id2, 2)
-                        __s = __s .. __sp .. __k12 .. " " .. __v14
+                      local ____i28 = 0
+                      while ____i28 < _35(____x24) do
+                        local ____id2 = ____x24[____i28 + 1]
+                        local __k14 = has(____id2, 1)
+                        local __v16 = has(____id2, 2)
+                        __s = __s .. __sp .. __k14 .. " " .. __v16
                         __sp = " "
-                        ____i26 = ____i26 + 1
+                        ____i28 = ____i28 + 1
                       end
                       return __s .. ")"
                     end
@@ -692,15 +711,15 @@ function call(f, ...)
   local ____r82 = unstash({...})
   local __f1 = destash33(f, ____r82)
   local ____id3 = ____r82
-  local __args11 = cut(____id3, 0)
-  return apply(__f1, __args11)
+  local __args12 = cut(____id3, 0)
+  return apply(__f1, __args12)
 end
 function setenv(k, ...)
   local ____r83 = unstash({...})
-  local __k13 = destash33(k, ____r83)
+  local __k15 = destash33(k, ____r83)
   local ____id4 = ____r83
   local __keys = cut(____id4, 0)
-  if string63(__k13) then
+  if string63(__k15) then
     local __e8
     if has63(__keys, "toplevel") then
       __e8 = hd(environment)
@@ -709,22 +728,22 @@ function setenv(k, ...)
     end
     local __frame = __e8
     local __e9
-    if has63(__frame, __k13) then
-      __e9 = __frame[__k13]
+    if has63(__frame, __k15) then
+      __e9 = __frame[__k15]
     else
       __e9 = {}
     end
     local __entry = __e9
-    local ____o14 = __keys
-    local __k14 = nil
-    for __k14 in next, ____o14 do
-      local __v15 = ____o14[__k14]
-      if not( __k14 == "toplevel") then
-        __entry[__k14] = __v15
+    local ____o16 = __keys
+    local __k16 = nil
+    for __k16 in next, ____o16 do
+      local __v17 = ____o16[__k16]
+      if not( __k16 == "toplevel") then
+        __entry[__k16] = __v17
       end
     end
-    __frame[__k13] = __entry
-    return __frame[__k13]
+    __frame[__k15] = __entry
+    return __frame[__k15]
   end
 end
 function _print(x)

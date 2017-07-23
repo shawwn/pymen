@@ -49,12 +49,17 @@
 
 (define stash* (args)
   (if (keys? args)
-      (let l '(%object "_stash" true)
-        (each (k v) args
-          (unless (number? k)
-            (add l (literal k))
-            (add l v)))
-        (join args (list l)))
+      (if (= target 'py)
+          (with l (array args)
+            (each (k v) args
+              (unless (number? k)
+                (add l `(%literal ,k |=| ,v)))))
+        (let l '(%object "_stash" true)
+          (each (k v) args
+            (unless (number? k)
+              (add l (literal k))
+              (add l v)))
+          (join args (list l))))
     args))
 
 (define bias (k)
@@ -78,14 +83,14 @@
 
 (define-macro arguments% (from)
   `(target js: ((idx (idx (idx Array prototype) slice) call) arguments ,from)
-           py: (|list| |_rest|)
+           py: (|list| |_args|)
            lua: (list |...|)))
 
 (define-global bind* (args body)
   (let args1 (obj)
     (define rest ()
       (set (get args1 'rest) true)
-      `(unstash (arguments% ,(# args1))))
+      `(unstash (arguments% ,(# args1)) (target py: |_keys|)))
     (if (atom? args)
         (list args1 `(let ,(list args (rest)) ,@body))
       (let bs ()
@@ -409,7 +414,7 @@
                   `(,@args |...|)
                   (and (target? 'py)
                        (has? args 'rest))
-                  `(,@args |*_rest| |**_params|)
+                  `(,@args |*_args| |**_keys|)
                 args)
         args (compile-args args1 true)
         body (compile-body body)

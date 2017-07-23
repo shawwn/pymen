@@ -281,14 +281,21 @@
       (add args p)))
   (if (array? args) args (array args)))
 
-(define-global unstash (args)
-  (if (none? args) (obj)
+(define-global unstash (args params)
+  (if (none? args) (or params (obj))
     (let l (last args)
       (if (and (obj? l) (has? l '_stash))
           (with args1 (object (almost args))
             (each (k v) l
               (unless (= k '_stash)
+                (set (get args1 k) v)))
+            (when params
+              (each (k v) params
                 (set (get args1 k) v))))
+          params
+          (with args1 (object args)
+            (each (k v) params
+              (set (get args1 k) v)))
         args))))
 
 (define-global destash! (l args1)
