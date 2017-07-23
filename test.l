@@ -1102,6 +1102,11 @@ c"
     (define f (x rest: ys) (set (at l 0) ys))
     (define g () nil)
     (f 1 'x g)
-    (test= (list (list 'x g)) l)))
+    (test= (list (list 'x g)) l))
+  (let l (list nil)
+    (define f x (set (at l 0) x) 10)
+    (define g (a b :c rest: ls) (list (+ (f) a b) ls))
+    (test= '(13 (3 4 foo: 7)) (g 1 2 3 4 foo: 7))
+    (test= '(()) l)))
 
 (run)
