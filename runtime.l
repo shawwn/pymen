@@ -241,9 +241,10 @@
 
 (define-global sort (l f)
   (target
-    lua: (do ((idx table sort) l f) l)
-    (do ((idx l sort)
-         (%literal (target py: |key=|) (sortfunc f))) l)))
+    lua: ((idx table sort) l f)
+    js: ((idx l sort) (sortfunc f))
+    py: ((idx l sort) key: (sortfunc f)))
+  l)
 
 (define-global map (f x)
   (with t (dupe x)
