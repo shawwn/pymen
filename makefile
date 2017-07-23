@@ -2,6 +2,7 @@
 
 LUMEN_LUA  ?= lua
 LUMEN_NODE ?= node
+LUMEN_PYTHON ?= python
 LUMEN_HOST ?= $(LUMEN_LUA)
 
 LUMEN := LUMEN_HOST="$(LUMEN_HOST)" bin/lumen
@@ -67,3 +68,5 @@ test: all
 	@LUMEN_HOST=$(LUMEN_NODE) ./test.l
 	@echo lua:
 	@LUMEN_HOST=$(LUMEN_LUA) ./test.l
+	@echo py:
+	@LUMEN_HOST=$(LUMEN_PYTHON) ./test.l
