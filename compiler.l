@@ -686,19 +686,19 @@
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
 
 (define-special %try (form) :stmt :tr
-  (let-unique (e)
-    (let (ind (indentation)
-          body (compile-body form)
-          hf (if (target? 'py)
-                 `(do (import sys)
-                      (return (%array false ,e ((idx sys exc_info)))))
-               `(return (%array false ,e)))
-          h (with-indent (compile hf :stmt)))
-      (if (target? 'js)
-          (cat ind "try {\n" body ind "}\n"
-               ind "catch (" e ") {\n" h ind "}\n")
-        (cat ind "try:\n" body
-             ind "except Exception as " e ":\n" h)))))
+  (let (ind (indentation)
+        body (compile-body form)
+        hf (if (target? 'py)
+               `(do (import sys)
+                    (%local e ((idx sys exc_info)))
+                    (return (%array false (get e 1) e)))
+             `(return (%array false e)))
+        h (with-indent (compile hf :stmt)))
+    (if (target? 'js)
+        (cat ind "try {\n" body ind "}\n"
+             ind "catch (e) {\n" h ind "}\n")
+      (cat ind "try:\n" body
+           ind "except:\n" h))))
 
 (define-special %delete (place) :stmt
   (cat (indentation) (if (target? 'py) "del " "delete ") (compile place)))

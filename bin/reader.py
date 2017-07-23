@@ -87,9 +87,10 @@ def maybe_number(L_str=None):
     def __f():
       try:
         return [True, int(L_str, 16)]
-      except Exception as __e2:
+      except:
         import sys
-        return [False, __e2, sys.exc_info()]
+        e = sys.exc_info()
+        return [False, e[1], e]
     ____id1 = __f()
     __ok = has(____id1, 0)
     __v = has(____id1, 1)

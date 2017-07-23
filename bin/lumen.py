@@ -1075,9 +1075,10 @@ def eval_print(form=None):
   def __f():
     try:
       return [True, compiler.L_eval(form)]
-    except Exception as __e:
+    except:
       import sys
-      return [False, __e, sys.exc_info()]
+      e = sys.exc_info()
+      return [False, e[1], e]
   ____id = __f()
   __ok = has(____id, 0)
   __v = has(____id, 1)

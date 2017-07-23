@@ -1360,8 +1360,8 @@ var eval_print = function (form) {
     try {
       return [true, compiler._eval(form)];
     }
-    catch (__e) {
-      return [false, __e];
+    catch (e) {
+      return [false, e];
     }
   })();
   var __ok = has(____id, 0);
