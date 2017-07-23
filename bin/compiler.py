@@ -53,7 +53,7 @@ def stash42(args=None):
       for __k in indices(____o):
         __v = ____o[__k]
         if not number63(__k):
-          add(__l, ["%literal", __k, "|=|", __v])
+          add(__l, ["%literal", cat("|", __k, "=|"), __v])
       return __l
     else:
       __l1 = ["%object", "\"_stash\"", True]

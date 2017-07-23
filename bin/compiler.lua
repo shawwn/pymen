@@ -71,7 +71,7 @@ local function stash42(args)
       for __k in next, ____o do
         local __v = ____o[__k]
         if not number63(__k) then
-          add(__l, {"%literal", __k, "|=|", __v})
+          add(__l, {"%literal", "|" .. __k .. "=|", __v})
         end
       end
       return __l

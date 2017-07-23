@@ -53,7 +53,7 @@
           (with l (array args)
             (each (k v) args
               (unless (number? k)
-                (add l `(%literal ,k |=| ,v)))))
+                (add l `(%literal ,(cat "|" k "=|") ,v)))))
         (let l '(%object "_stash" true)
           (each (k v) args
             (unless (number? k)

@@ -78,7 +78,7 @@ var stash42 = function (args) {
         }
         var __k1 = __e25;
         if (! number63(__k1)) {
-          add(__l, ["%literal", __k1, "|=|", __v]);
+          add(__l, ["%literal", "|" + __k1 + "=|", __v]);
         }
       }
       return __l;
