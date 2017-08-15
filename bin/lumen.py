@@ -15,7 +15,7 @@ def either(x=None, y=None):
     return y
 def has63(l=None, k=None):
   if isinstance(l, dict):
-    return (number63(k) or string63(k)) and (k in l)
+    return (number63(k) or string63(k)) and k in l
   else:
     return number63(k) and k >= 0 and k < len(l)
 def has(l=None, k=None, L_else=None):

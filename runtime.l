@@ -1,23 +1,24 @@
-(target py: (%set lumen-globals (|globals|)))
+(target py: (set lumen-globals (globals)))
 (define-global environment (list (obj)))
 
 (define-global nil? (x)
   (target
-    py: (%literal x | is None|)
+    py: (%literal x | is | None)
     js: (or (= x nil) (= x null))
     lua: (= x nil)))
 
 (define-global is? (x) (not (nil? x)))
 
-(define-global no (x) (or (nil? x) (target py: (%literal x | is False|) (= x false))))
+(define-global no (x) (or (nil? x) (target py: (%literal x | is | false) (= x false))))
 (define-global yes (x) (not (no x)))
 (define-global either (x y) (if (is? x) x y))
 
 (define-global has? (l k)
   (target js: ((idx l hasOwnProperty) k)
-          py: (if (isinstance l |dict|)
-                  (and (or (number? k) (string? k)) (%literal |(| k | in | l |)|))
-                (and (number? k) (>= k 0) (< k (|len| l))))
+          py: (if (isinstance l dict)
+                  (and (or (number? k) (string? k))
+                       (%literal k | in | l))
+                (and (number? k) (>= k 0) (< k (len l))))
           lua: (is? (get l k))))
 
 (define-global has (l k else)
@@ -25,8 +26,8 @@
 
 (define-global array? (x)
   (target js: ((idx Array isArray) x)
-          py: (or (isinstance x |list|)
-                  (isinstance x |tuple|))
+          py: (or (isinstance x list)
+                  (isinstance x tuple))
           lua: (= (type x) 'table)))
 
 (target py:
@@ -62,7 +63,8 @@
   (target lua: |#x|
     (if (or (string? x)
             (array? x))
-        (target js: (idx x length) py: (|len| x))
+        (target js: (idx x length)
+                py: (len x))
       (length x))))
 
 (define-global none? (x) (= (# x) 0))
@@ -78,7 +80,7 @@
   (do (import numbers)
       (define-global string? (x) (isinstance x |str|))
       (define-global number? (x) (and (not (boolean? x)) (isinstance x (idx numbers Number))))
-      (define-global boolean? (x) (isinstance x |bool|))
+      (define-global boolean? (x) (isinstance x bool))
       (define-global function? (x) (callable x)))
   (do (define-global string? (x) (= (type x) 'string))
       (define-global number? (x) (= (type x) 'number))
@@ -89,7 +91,7 @@
   (and (is? x)
        (target lua: (= (type x) 'table)
                js: (= (type x) 'object)
-               py: (isinstance x |dict|))))
+               py: (isinstance x dict))))
 
 (define-global atom? (x)
   (or (nil? x) (string? x) (number? x) (boolean? x)))
@@ -147,7 +149,7 @@
   (target js: ((idx s charAt) n)
           lua: (clip s n (+ n 1))
           py: (let n (or n 0)
-                (if (and (>= n 0) (< n (|len| s)))
+                (if (and (>= n 0) (< n (len s)))
                   (get s n)))))
 
 (define-global code (s n)
@@ -155,7 +157,7 @@
     js: ((idx s charCodeAt) n)
     lua: ((idx string byte) s (if n (+ n 1)))
     py: (let x (char s n)
-          (if x (|ord| x)))))
+          (if x (ord x)))))
 
 (define-global string-literal? (x)
   (and (string? x) (= (char x 0) "\"")))
@@ -392,7 +394,7 @@
   (some? s))
 
 (target js: (define tostring (x) ((idx x toString))))
-(target py: (define tostring (x) (|repr| x)))
+(target py: (define tostring (x) (repr x)))
 
 (define-global escape (s)
   (let s1 "\""
@@ -456,8 +458,8 @@
 (define-global setenv (k rest: keys)
   (when (string? k)
     (let (frame (if (has? keys 'toplevel)
-                    (hd |environment|)
-                  (last |environment|))
+                    (hd environment)
+                  (last environment))
           entry (if (has? frame k) (get frame k) (obj)))
       (each (k v) keys
         (unless (= k 'toplevel)
