@@ -1447,7 +1447,7 @@ _load = function (path) {
   return compiler.run(__code);
 };
 var script_file63 = function (path) {
-  return !( "-" === char(path, 0) || ".js" === clip(path, _35(path) - 3) || ".lua" === clip(path, _35(path) - 4));
+  return !( "-" === char(path, 0) || ".py" === clip(path, _35(path) - 3) || ".js" === clip(path, _35(path) - 3) || ".lua" === clip(path, _35(path) - 4));
 };
 var run_file = function (path) {
   if (script_file63(path)) {

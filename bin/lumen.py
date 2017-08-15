@@ -1138,7 +1138,7 @@ def L_load(path=None):
   setenv("target", toplevel=True)["value"] = __previous
   return compiler.run(__code)
 def script_file63(path=None):
-  return not( "-" == char(path, 0) or ".js" == clip(path, L_35(path) - 3) or ".lua" == clip(path, L_35(path) - 4))
+  return not( "-" == char(path, 0) or ".py" == clip(path, L_35(path) - 3) or ".js" == clip(path, L_35(path) - 3) or ".lua" == clip(path, L_35(path) - 4))
 def run_file(path=None):
   if script_file63(path):
     return L_load(path)

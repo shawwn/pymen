@@ -1310,7 +1310,7 @@ function _load(path)
   return compiler.run(__code)
 end
 local function script_file63(path)
-  return not( "-" == char(path, 0) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
+  return not( "-" == char(path, 0) or ".py" == clip(path, _35(path) - 3) or ".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))
 end
 local function run_file(path)
   if script_file63(path) then

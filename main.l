@@ -58,6 +58,7 @@
 
 (define script-file? (path)
   (not (or (= "-" (char path 0))
+           (= ".py" (clip path (- (# path) 3)))
            (= ".js" (clip path (- (# path) 3)))
            (= ".lua" (clip path (- (# path) 4))))))
 
