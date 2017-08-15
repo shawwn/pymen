@@ -1153,9 +1153,18 @@ def __f30(x=None):
   else:
     return ""
 setenv("global", special=__f30, stmt=True, tr=True)
-def __f31(x=None):
+def __f31(name=None, *_args, **_keys):
+  ____r130 = unstash(list(_args), _keys)
+  __name6 = destash33(name, ____r130)
+  ____id33 = ____r130
+  __as1 = has(____id33, "as")
+  __ind13 = indentation()
+  __id34 = __as1 or __name6
   if has(setenv("target", toplevel=True), "value") == "py":
-    return cat(indentation(), "import ", compile(x))
+    __s12 = cat(__ind13, "import ", compile(__name6))
+    if __as1:
+      __s12 = cat(__s12, " as ", compile(__id34))
+    return __s12
   else:
-    return cat(indentation(), compile(["%local", x, ["require", escape(x)]]))
+    return cat(__ind13, compile(["%local", __id34, ["require", escape(__name6)]]))
 setenv("import", special=__f31, stmt=True)

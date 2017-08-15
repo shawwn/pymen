@@ -812,10 +812,13 @@
       (cat (indentation) "global " (compile x) "\n")
     ""))
 
-(define-special import (x) :stmt
-  (if (target? 'py)
-      (cat (indentation) "import " (compile x))
-    (cat (indentation) (compile `(%local ,x (require ,(escape x)))))))
+(define-special import (name :as) :stmt
+  (let (ind (indentation)
+        id (or as name))
+    (if (target? 'py)
+        (with s (cat ind "import " (compile name))
+          (if as (cat! s " as " (compile id))))
+      (cat ind (compile `(%local ,id (require ,(escape name))))))))
 
 (export run
         eval

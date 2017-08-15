@@ -1492,11 +1492,21 @@ setenv("global", {_stash: true, special: function (x) {
     return "";
   }
 }, stmt: true, tr: true});
-setenv("import", {_stash: true, special: function (x) {
+setenv("import", {_stash: true, special: function (name) {
+  var ____r129 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __name6 = destash33(name, ____r129);
+  var ____id33 = ____r129;
+  var __as1 = has(____id33, "as");
+  var __ind13 = indentation();
+  var __id34 = __as1 || __name6;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-    return indentation() + "import " + compile(x);
+    var __s12 = __ind13 + "import " + compile(__name6);
+    if (__as1) {
+      __s12 = __s12 + " as " + compile(__id34);
+    }
+    return __s12;
   } else {
-    return indentation() + compile(["%local", x, ["require", escape(x)]]);
+    return __ind13 + compile(["%local", __id34, ["require", escape(__name6)]]);
   }
 }, stmt: true});
 exports.run = run;

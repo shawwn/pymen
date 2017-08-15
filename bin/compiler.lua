@@ -1425,11 +1425,21 @@ setenv("global", {_stash = true, special = function (x)
     return ""
   end
 end, stmt = true, tr = true})
-setenv("import", {_stash = true, special = function (x)
+setenv("import", {_stash = true, special = function (name, ...)
+  local ____r130 = unstash({...})
+  local __name6 = destash33(name, ____r130)
+  local ____id33 = ____r130
+  local __as1 = has(____id33, "as")
+  local __ind13 = indentation()
+  local __id34 = __as1 or __name6
   if has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
-    return indentation() .. "import " .. compile(x)
+    local __s12 = __ind13 .. "import " .. compile(__name6)
+    if __as1 then
+      __s12 = __s12 .. " as " .. compile(__id34)
+    end
+    return __s12
   else
-    return indentation() .. compile({"%local", x, {"require", escape(x)}})
+    return __ind13 .. compile({"%local", __id34, {"require", escape(__name6)}})
   end
 end, stmt = true})
 local __exports = exports or {}
