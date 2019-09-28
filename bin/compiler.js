@@ -1305,7 +1305,7 @@ setenv("%for", {_stash: true, special: function (t, k, form) {
     return __ind7 + "for " + k + " in next, " + __t3 + " do\n" + __body13 + __ind7 + "end\n";
   } else {
     if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-      return __ind7 + "for " + k + " in indices(" + __t3 + "):\n" + __body13;
+      return __ind7 + "for " + k + " in " + __t3 + ":\n" + __body13;
     } else {
       return __ind7 + "for (" + k + " in " + __t3 + ") {\n" + __body13 + __ind7 + "}\n";
     }

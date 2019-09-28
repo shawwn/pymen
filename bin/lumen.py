@@ -1004,7 +1004,7 @@ def __f39(expr=None):
 setenv("guard", macro=__f39)
 def __f40(x=None, t=None, *_args, **_keys):
   ____r67 = unstash(list(_args), _keys)
-  __x302 = destash33(x, ____r67)
+  __x304 = destash33(x, ____r67)
   __t1 = destash33(t, ____r67)
   ____id58 = ____r67
   __body39 = cut(____id58, 0)
@@ -1012,24 +1012,26 @@ def __f40(x=None, t=None, *_args, **_keys):
   __n3 = unique("n")
   __i3 = unique("i")
   __e7 = None
-  if atom63(__x302):
-    __e7 = [__i3, __x302]
+  if atom63(__x304):
+    __e7 = [__i3, __x304]
   else:
     __e8 = None
-    if L_35(__x302) > 1:
-      __e8 = __x302
+    if L_35(__x304) > 1:
+      __e8 = __x304
     else:
-      __e8 = [__i3, hd(__x302)]
+      __e8 = [__i3, hd(__x304)]
     __e7 = __e8
   ____id59 = __e7
   __k4 = has(____id59, 0)
   __v7 = has(____id59, 1)
+  ____x310 = object(["target", __o3])
+  ____x310["py"] = ["indices", __o3]
   __e9 = None
   if has(setenv("target", toplevel=True), "value") == "lua" or has(setenv("target", toplevel=True), "value") == "py":
     __e9 = __body39
   else:
     __e9 = [join(["let", __k4, ["if", ["numeric?", __k4], ["parseInt", __k4], __k4]], __body39)]
-  return ["let", [__o3, __t1, __k4, "nil"], ["%for", __o3, __k4, join(["let", [__v7, ["get", __o3, __k4]]], __e9)]]
+  return ["let", [__o3, __t1, __k4, "nil"], ["%for", ____x310, __k4, join(["let", [__v7, ["get", __o3, __k4]]], __e9)]]
 setenv("each", macro=__f40)
 def __f41(i=None, to=None, *_args, **_keys):
   ____r69 = unstash(list(_args), _keys)
@@ -1037,7 +1039,10 @@ def __f41(i=None, to=None, *_args, **_keys):
   __to1 = destash33(to, ____r69)
   ____id61 = ____r69
   __body41 = cut(____id61, 0)
-  return ["let", __i5, 0, join(["while", ["<", __i5, __to1]], __body41, [["inc", __i5]])]
+  if __to1 == "in":
+    return ["%for", hd(__body41), __i5, join(["do"], tl(__body41))]
+  else:
+    return ["let", __i5, 0, join(["while", ["<", __i5, __to1]], __body41, [["inc", __i5]])]
 setenv("for", macro=__f41)
 def __f42(v=None, t=None, *_args, **_keys):
   ____r71 = unstash(list(_args), _keys)
@@ -1045,9 +1050,9 @@ def __f42(v=None, t=None, *_args, **_keys):
   __t3 = destash33(t, ____r71)
   ____id63 = ____r71
   __body43 = cut(____id63, 0)
-  __x334 = unique("x")
+  __x342 = unique("x")
   __i7 = unique("i")
-  return ["let", [__x334, __t3], ["for", __i7, ["#", __x334], join(["let", [__v9, ["at", __x334, __i7]]], __body43)]]
+  return ["let", [__x342, __t3], ["for", __i7, ["#", __x342], join(["let", [__v9, ["at", __x342, __i7]]], __body43)]]
 setenv("step", macro=__f42)
 def __f43(*_args, **_keys):
   __xs1 = unstash(list(_args), _keys)
@@ -1055,8 +1060,8 @@ def __f43(*_args, **_keys):
   ____o5 = __xs1
   ____i9 = None
   for ____i9 in indices(____o5):
-    __x344 = ____o5[____i9]
-    __l5[__x344] = True
+    __x352 = ____o5[____i9]
+    __l5[__x352] = True
   return join(["obj"], __l5)
 setenv("set-of", macro=__f43)
 def __f44(x=None):
@@ -1103,8 +1108,8 @@ def __f50(n=None, by=None):
   return ["set", n, ["-", n, __e11]]
 setenv("dec", macro=__f50)
 def __f51(form=None):
-  __x371 = unique("x")
-  return ["do", ["inc", "indent-level"], ["with", __x371, form, ["dec", "indent-level"]]]
+  __x379 = unique("x")
+  return ["do", ["inc", "indent-level"], ["with", __x379, form, ["dec", "indent-level"]]]
 setenv("with-indent", macro=__f51)
 def __f52(*_args, **_keys):
   __names7 = unstash(list(_args), _keys)
@@ -1124,6 +1129,20 @@ def __f54(*_args, **_keys):
   __body45 = unstash(list(_args), _keys)
   return L_eval(join(["do"], __body45))
 setenv("when-compiling", macro=__f54)
+def __f55(name=None, *_args, **_keys):
+  ____r89 = unstash(list(_args), _keys)
+  __name11 = destash33(name, ____r89)
+  ____id69 = ____r89
+  __body47 = cut(____id69, 0)
+  return join(["define-global", __name11], __body47)
+setenv("def", macro=__f55)
+def __f56(name=None, *_args, **_keys):
+  ____r91 = unstash(list(_args), _keys)
+  __name13 = destash33(name, ____r91)
+  ____id71 = ____r91
+  __body49 = cut(____id71, 0)
+  return join(["define-macro", __name13], __body49)
+setenv("mac", macro=__f56)
 import reader
 import compiler
 import system

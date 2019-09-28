@@ -200,7 +200,7 @@
                   (if (> (# x) 1) x
                       (list i (hd x)))))
       `(let (,o ,t ,k nil)
-         (%for ,o ,k
+         (%for (target py: (indices ,o) ,o) ,k
            (let (,v (get ,o ,k))
              ,@(if (or (target? 'lua) (target? 'py))
                    body
@@ -210,10 +210,12 @@
                      ,@body)))))))))
 
 (define-macro for (i to rest: body)
-  `(let ,i 0
-     (while (< ,i ,to)
-       ,@body
-       (inc ,i))))
+  (if (= to 'in)
+      `(%for ,(hd body) ,i (do ,@(tl body)))
+    `(let ,i 0
+       (while (< ,i ,to)
+         ,@body
+         (inc ,i)))))
 
 (define-macro step (v t rest: body)
   (let-unique (x i)
@@ -272,3 +274,9 @@
 
 (define-macro when-compiling body
   (eval `(do ,@body)))
+
+(define-macro def (name rest: body)
+  `(define-global ,name ,@body))
+
+(define-macro mac (name rest: body)
+  `(define-macro ,name ,@body))

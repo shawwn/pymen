@@ -997,7 +997,7 @@ def __f13(t=None, k=None, form=None):
     return cat(__ind7, "for ", k, " in next, ", __t3, " do\n", __body13, __ind7, "end\n")
   else:
     if has(setenv("target", toplevel=True), "value") == "py":
-      return cat(__ind7, "for ", k, " in indices(", __t3, "):\n", __body13)
+      return cat(__ind7, "for ", k, " in ", __t3, ":\n", __body13)
     else:
       return cat(__ind7, "for (", k, " in ", __t3, ") {\n", __body13, __ind7, "}\n")
 setenv("%for", special=__f13, stmt=True, tr=True)

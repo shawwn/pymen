@@ -727,7 +727,7 @@
     (if (target? 'lua)
         (cat ind "for " k " in next, " t " do\n" body ind "end\n")
         (target? 'py)
-        (cat ind "for " k " in indices(" t "):\n" body)
+        (cat ind "for " k " in " t ":\n" body)
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
 
 (define-special %with (t form) :stmt :tr
