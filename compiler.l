@@ -245,7 +245,7 @@
           "break" "case" "catch" "class" "const" "continue"
           "debugger" "default" "delete" "do" "else" "eval"
           "finally" "for" "function" "if" "import" "in"
-          "instanceof" "let" "new" "return" "switch" "throw"
+          "instanceof" "let" "return" "switch" "throw"
           "try" "typeof" "var" "void" "with"
           ;; lua
           "and" "end" "in" "load" "repeat" "while" "break"
@@ -563,6 +563,18 @@
          `(%for ,(lower t hoist) ,k
             ,(lower-body body)))))
 
+(define lower-with (args hoist stmt? tail?)
+  (let ((t rest: body) args)
+    (if (and stmt? (not tail?))
+        (add hoist
+           `(%with ,(lower t hoist)
+              ,(lower-body body tail?)))
+      (let-unique (e)
+        (add hoist `(%local ,e))
+        (add hoist `(%with ,(lower t hoist)
+                     ,(lower `(%set ,e (do ,@body)))))
+        e))))
+
 (define lower-function (args hoist)
   (if (target? 'py)
       (let-unique (f)
@@ -617,6 +629,7 @@
           (= x '%try) (lower-try args hoist tail?)
           (= x 'while) (lower-while args hoist)
           (= x '%for) (lower-for args hoist)
+          (= x '%with) (lower-with args hoist stmt? tail?)
           (= x '%function) (lower-function args hoist)
           (or (= x '%local-function)
               (= x '%global-function))
@@ -715,6 +728,14 @@
         (target? 'py)
         (cat ind "for " k " in indices(" t "):\n" body)
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
+
+(define-special %with (t form) :stmt :tr
+  (let (t (compile t)
+        ind (indentation)
+        body (compile-body form))
+    (if (target? 'py)
+        (cat ind "with " t ":\n" body)
+      "")))
 
 (define-special %try (form) :stmt :tr
   (let (ind (indentation)
@@ -838,13 +859,36 @@
       (cat (indentation) "global " (compile x) "\n")
     ""))
 
-(define-special import (name :as) :stmt
+(define-special import (name rest: alias) :stmt
   (let (ind (indentation)
+        as (if (= (hd alias) "as") (at alias 1) (hd alias))
         id (or as name))
     (if (target? 'py)
         (with s (cat ind "import " (compile name))
           (if as (cat! s " as " (compile id))))
       (cat ind (compile `(%local ,id (require ,(escape name))))))))
+
+(define-special from (name rest: imports) :stmt
+  (let (ind (indentation)
+        id name
+        names (if (= (hd imports) "import") (tl imports) imports)
+        names (mapcat (fn (x) (if (= x "*") x (compile x))) names ", "))
+    (if (target? 'py)
+        (cat ind "from " (compile name) " import " names)
+      "")))
+
+(define-special \, args
+  (if (none? args) ","
+      (one? args) (cat "," (compile (hd args)))
+    (mapcat compile args ",")))
+
+(define-special : args
+  (if (none? args) ":"
+      (one? args) (cat ":" (compile (hd args)))
+    (mapcat compile args ":")))
+
+(define-special %as (form id)
+  (cat (compile form) " as " (compile id)))
 
 (export run
         eval

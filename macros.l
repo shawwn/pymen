@@ -73,7 +73,9 @@
                (let ,(join bs1 bs2) ,@body)))))))
 
 (define-macro with (x v rest: body)
-  `(let (,x ,v) ,@body ,x))
+  (if (= v 'as)
+      `(%with (%as ,x ,(hd body)) ,@(tl body))
+    `(let (,x ,v) ,@body ,x)))
 
 (define-macro let-when (x v rest: body)
   (let-unique (y)

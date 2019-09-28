@@ -260,6 +260,15 @@
           (when (is? y)
             (set (get t k) y)))))))
 
+(define-global mapcat (f x sep)
+  (with r ""
+    (let c ""
+      (step v x
+        (let y (if f (f v) v)
+          (when (is? y)
+            (cat! r c y)
+            (set c (or sep ""))))))))
+
 (define-global keep (f x)
   (map (fn (v) (when (yes (f v)) v)) x))
 
