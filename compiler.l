@@ -142,8 +142,33 @@
 (define-global expand1 ((name rest: body))
   (apply (macro-function name) body))
 
+(define-global real? (x)
+  (and (number? x) (not (nan? x)) (not (inf? x))))
+
+(define-global valid-access? (str)
+  (and (> (# str) 2)
+       (not (= "." (char str 0)))
+       (not (= "." (char str (edge str))))
+       (not (search str ".."))))
+
+(define-global parse-access (str)
+  (reduce (fn (a b)
+            (let n (number a)
+              (if (is? n)
+                  `(at ,b ,n)
+                `(idx ,b ,a))))
+          (reverse (split str "."))))
+
+(define-global parse-access? (form)
+  (and (string? form)
+       (not (string-literal? form))
+       (not (id-literal? form))
+       (search form ".")
+       (valid-access? form)))
+
 (define-global macroexpand (form)
-  (if (symbol? form)
+  (if (parse-access? form) (macroexpand (parse-access form))
+      (symbol? form)
       (macroexpand (symbol-expansion form))
       (atom? form) form
     (let x (hd form)
@@ -152,6 +177,7 @@
           (= x '%global-function) (expand-definition form)
           (= x '%local-function) (expand-definition form)
           (macro? x) (expand-macro form)
+          (parse-access? x) (macroexpand `(,(parse-access x) ,@(tl form)))
         (map macroexpand form)))))
 
 (define quasiquote-list (form depth)
