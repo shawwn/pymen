@@ -280,3 +280,16 @@
 
 (define-macro mac (name rest: body)
   `(define-macro ,name ,@body))
+
+(define-macro defconst (name rest: value)
+  `(def ,name ,@value))
+
+(define-macro undefined? (name)
+  `(target js: (= (typeof ,name) "undefined")
+           lua: (= (idx _G ,name) nil)
+           py: (not (%in ',(compile name) (globals)))))
+
+(define-macro defvar (name rest: value)
+  `(when (undefined? ,name)
+     (target py: (global ,name))
+     (defconst ,name ,@value)))

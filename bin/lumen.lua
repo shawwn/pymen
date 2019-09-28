@@ -1305,6 +1305,29 @@ setenv("mac", {_stash = true, macro = function (name, ...)
   local __body49 = cut(____id71, 0)
   return join({"define-macro", __name13}, __body49)
 end})
+setenv("defconst", {_stash = true, macro = function (name, ...)
+  local ____r93 = unstash({...})
+  local __name15 = destash33(name, ____r93)
+  local ____id73 = ____r93
+  local __value1 = cut(____id73, 0)
+  return join({"def", __name15}, __value1)
+end})
+setenv("undefined?", {_stash = true, macro = function (name)
+  local ____x459 = object({"target"})
+  ____x459.js = {"=", {"typeof", name}, "\"undefined\""}
+  ____x459.lua = {"=", {"idx", "_G", name}, "nil"}
+  ____x459.py = {"not", {"%in", {"quote", compile(name)}, {"globals"}}}
+  return ____x459
+end})
+setenv("defvar", {_stash = true, macro = function (name, ...)
+  local ____r97 = unstash({...})
+  local __name17 = destash33(name, ____r97)
+  local ____id75 = ____r97
+  local __value3 = cut(____id75, 0)
+  local ____x476 = object({"target"})
+  ____x476.py = {"global", __name17}
+  return {"when", {"undefined?", __name17}, ____x476, join({"defconst", __name17}, __value3)}
+end})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
@@ -1377,10 +1400,16 @@ local function repl()
     end
   end
 end
-function compile_file(path)
+function read_file(path)
   local __s1 = reader.stream(system.read_file(path))
-  local __body = reader.read_all(__s1)
-  local __form1 = compiler.expand(join({"do"}, __body))
+  return reader.read_all(__s1)
+end
+function expand_file(path)
+  local __body = read_file(path)
+  return compiler.expand(join({"do"}, __body))
+end
+function compile_file(path)
+  local __form1 = expand_file(path)
   return compiler.compile(__form1, {_stash = true, stmt = true})
 end
 function _load(path)

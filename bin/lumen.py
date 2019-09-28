@@ -1143,6 +1143,29 @@ def __f56(name=None, *_args, **_keys):
   __body49 = cut(____id71, 0)
   return join(["define-macro", __name13], __body49)
 setenv("mac", macro=__f56)
+def __f57(name=None, *_args, **_keys):
+  ____r93 = unstash(list(_args), _keys)
+  __name15 = destash33(name, ____r93)
+  ____id73 = ____r93
+  __value1 = cut(____id73, 0)
+  return join(["def", __name15], __value1)
+setenv("defconst", macro=__f57)
+def __f58(name=None):
+  ____x425 = object(["target"])
+  ____x425["js"] = ["=", ["typeof", name], "\"undefined\""]
+  ____x425["lua"] = ["=", ["idx", "_G", name], "nil"]
+  ____x425["py"] = ["not", ["%in", ["quote", compile(name)], ["globals"]]]
+  return ____x425
+setenv("undefined?", macro=__f58)
+def __f59(name=None, *_args, **_keys):
+  ____r97 = unstash(list(_args), _keys)
+  __name17 = destash33(name, ____r97)
+  ____id75 = ____r97
+  __value3 = cut(____id75, 0)
+  ____x441 = object(["target"])
+  ____x441["py"] = ["global", __name17]
+  return ["when", ["undefined?", __name17], ____x441, join(["defconst", __name17], __value3)]
+setenv("defvar", macro=__f59)
 import reader
 import compiler
 import system
@@ -1195,10 +1218,14 @@ def repl():
       rep1(cat(__s, "\n"))
     else:
       break
-def compile_file(path=None):
+def read_file(path=None):
   __s1 = reader.stream(system.read_file(path))
-  __body = reader.read_all(__s1)
-  __form1 = compiler.expand(join(["do"], __body))
+  return reader.read_all(__s1)
+def expand_file(path=None):
+  __body = read_file(path)
+  return compiler.expand(join(["do"], __body))
+def compile_file(path=None):
+  __form1 = expand_file(path)
   return compiler.compile(__form1, stmt=True)
 def L_load(path=None):
   __previous = has(setenv("target", toplevel=True), "value")

@@ -1460,6 +1460,29 @@ setenv("mac", {_stash: true, macro: function (name) {
   var __body49 = cut(____id71, 0);
   return join(["define-macro", __name13], __body49);
 }});
+setenv("defconst", {_stash: true, macro: function (name) {
+  var ____r93 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __name15 = destash33(name, ____r93);
+  var ____id73 = ____r93;
+  var __value1 = cut(____id73, 0);
+  return join(["def", __name15], __value1);
+}});
+setenv("undefined?", {_stash: true, macro: function (name) {
+  var ____x425 = object(["target"]);
+  ____x425.js = ["=", ["typeof", name], "\"undefined\""];
+  ____x425.lua = ["=", ["idx", "_G", name], "nil"];
+  ____x425.py = ["not", ["%in", ["quote", compile(name)], ["globals"]]];
+  return ____x425;
+}});
+setenv("defvar", {_stash: true, macro: function (name) {
+  var ____r97 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __name17 = destash33(name, ____r97);
+  var ____id75 = ____r97;
+  var __value3 = cut(____id75, 0);
+  var ____x441 = object(["target"]);
+  ____x441.py = ["global", __name17];
+  return ["when", ["undefined?", __name17], ____x441, join(["defconst", __name17], __value3)];
+}});
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
@@ -1514,10 +1537,16 @@ var repl = function () {
   ___in.setEncoding("utf8");
   return ___in.on("data", rep1);
 };
-compile_file = function (path) {
+read_file = function (path) {
   var __s = reader.stream(system.read_file(path));
-  var __body = reader.read_all(__s);
-  var __form1 = compiler.expand(join(["do"], __body));
+  return reader.read_all(__s);
+};
+expand_file = function (path) {
+  var __body = read_file(path);
+  return compiler.expand(join(["do"], __body));
+};
+compile_file = function (path) {
+  var __form1 = expand_file(path);
   return compiler.compile(__form1, {_stash: true, stmt: true});
 };
 _load = function (path) {

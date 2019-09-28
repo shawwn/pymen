@@ -722,6 +722,7 @@
 
 (define-special %for (t k form) :stmt :tr
   (let (t (compile t)
+        k (if (atom? k) (compile k) (mapcat compile k ", "))
         ind (indentation)
         body (compile-body form))
     (if (target? 'lua)
@@ -899,6 +900,12 @@
 
 (define-special %as (form id)
   (cat (compile form) " as " (compile id)))
+
+(define-special %in (x l)
+  (cat (compile x) " in " (compile l)))
+
+(define-special yield args :stmt
+  (cat (indentation) "yield " (mapcat compile args ", ")))
 
 (export run
         eval

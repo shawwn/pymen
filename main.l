@@ -49,10 +49,16 @@
       (let s ((idx system read-line))
         (if s (rep1 (cat s "\n")) (break))))))
 
+(define-global read-file (path)
+  (let s ((idx reader stream) ((idx system read-file) path))
+    ((idx reader read-all) s)))
+
+(define-global expand-file (path)
+  (let body (read-file path)
+    ((idx compiler expand) `(do ,@body))))
+
 (define-global compile-file (path)
-  (let (s ((idx reader stream) ((idx system read-file) path))
-        body ((idx reader read-all) s)
-        form ((idx compiler expand) `(do ,@body)))
+  (let form (expand-file path)
     ((idx compiler compile) form :stmt)))
 
 (define-global load (path)
