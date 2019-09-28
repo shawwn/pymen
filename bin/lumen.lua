@@ -610,7 +610,7 @@ function escape(s)
   end
   return __s1 .. "\""
 end
-function _str(x, stack)
+function _str(x, repr, stack)
   if nil63(x) then
     return "nil"
   else
@@ -643,7 +643,11 @@ function _str(x, stack)
                     return "circular"
                   else
                     if not( type(x) == "table") then
-                      return escape(tostring(x))
+                      if repr then
+                        return repr(x)
+                      else
+                        return "|" .. tostring(x) .. "|"
+                      end
                     else
                       local __s = "("
                       local __sp = ""
@@ -656,12 +660,12 @@ function _str(x, stack)
                       for __k13 in next, ____o15 do
                         local __v14 = ____o15[__k13]
                         if number63(__k13) then
-                          __xs11[__k13] = _str(__v14, __l6)
+                          __xs11[__k13] = _str(__v14, repr, __l6)
                         else
                           if not string63(__k13) then
-                            __k13 = _str(__k13, __l6)
+                            __k13 = _str(__k13, repr, __l6)
                           end
-                          add(__ks, {__k13 .. ":", _str(__v14, __l6)})
+                          add(__ks, {__k13 .. ":", _str(__v14, repr, __l6)})
                         end
                       end
                       sort(__ks, function (__x21, __x22)
@@ -1233,6 +1237,12 @@ end})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
+function toplevel_repr(v)
+  return _str(v)
+end
+function toplevel_print(v)
+  return _print(toplevel_repr(v))
+end
 local function eval_print(form)
   local ____id = {xpcall(function ()
     return compiler._eval(form)
@@ -1262,14 +1272,14 @@ local function eval_print(form)
     return _print("error: " .. __v.message .. "\n" .. __v.stack)
   else
     if is63(__v) then
-      return _print(_str(__v))
+      return toplevel_print(__v)
     end
   end
 end
 local function rep(s)
   local __v1 = _eval(reader.read_string(s))
   if is63(__v1) then
-    return _print(_str(__v1))
+    return toplevel_print(__v1)
   end
 end
 local function repl()

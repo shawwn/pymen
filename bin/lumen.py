@@ -513,7 +513,7 @@ def escape(s=None):
     __s1 = cat(__s1, __c1)
     __i25 = __i25 + 1
   return cat(__s1, "\"")
-def L_str(x=None, stack=None):
+def L_str(x=None, repr=None, stack=None):
   if nil63(x):
     return "nil"
   else:
@@ -545,7 +545,10 @@ def L_str(x=None, stack=None):
                     return "circular"
                   else:
                     if not( array63(x) or obj63(x)):
-                      return escape(tostring(x))
+                      if repr:
+                        return repr(x)
+                      else:
+                        return cat("|", tostring(x), "|")
                     else:
                       __s = "("
                       __sp = ""
@@ -558,9 +561,9 @@ def L_str(x=None, stack=None):
                       for __k12 in indices(____o14):
                         __v14 = ____o14[__k12]
                         if number63(__k12):
-                          __xs11[__k12] = L_str(__v14, __l6)
+                          __xs11[__k12] = L_str(__v14, repr, __l6)
                         else:
-                          add(__ks, [cat(__k12, ":"), L_str(__v14, __l6)])
+                          add(__ks, [cat(__k12, ":"), L_str(__v14, repr, __l6)])
                       def __f16(__x11=None, __x12=None):
                         ____id = __x11
                         __a2 = has(____id, 0)
@@ -1086,27 +1089,44 @@ from compiler import *
 def lumen_set_globals(x=None):
   compiler.lumen_globals = x
   return compiler.lumen_globals
-def eval_print(form=None):
+def toplevel_repr(v=None):
   def __f():
     try:
-      return [True, compiler.L_eval(form)]
+      return [True, L_str(v, repr)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
   ____id = __f()
   __ok = has(____id, 0)
-  __v = has(____id, 1)
-  __ex = has(____id, 2)
-  if not __ok:
+  __s = has(____id, 1)
+  if __ok:
+    return __s
+  else:
+    return repr(v)
+def toplevel_print(v=None):
+  return L_print(toplevel_repr(v))
+def eval_print(form=None):
+  def __f1():
+    try:
+      return [True, compiler.L_eval(form)]
+    except:
+      import sys
+      e = sys.exc_info()
+      return [False, e[1], e]
+  ____id1 = __f1()
+  __ok1 = has(____id1, 0)
+  __v = has(____id1, 1)
+  __ex = has(____id1, 2)
+  if not __ok1:
     return traceback.print_exception(*__ex)
   else:
     if is63(__v):
-      return L_print(L_str(__v))
+      return toplevel_print(__v)
 def rep(s=None):
   __v1 = L_eval(reader.read_string(s))
   if is63(__v1):
-    return L_print(L_str(__v1))
+    return toplevel_print(__v1)
 def repl():
   __o = {"buf": ""}
   def rep1(s=None):
@@ -1121,14 +1141,14 @@ def repl():
   system.write("> ")
   system.flush()
   while True:
-    __s = system.read_line()
-    if __s:
-      rep1(cat(__s, "\n"))
+    __s1 = system.read_line()
+    if __s1:
+      rep1(cat(__s1, "\n"))
     else:
       break
 def compile_file(path=None):
-  __s1 = reader.stream(system.read_file(path))
-  __body = reader.read_all(__s1)
+  __s2 = reader.stream(system.read_file(path))
+  __body = reader.read_all(__s2)
   __form1 = compiler.expand(join(["do"], __body))
   return compiler.compile(__form1, stmt=True)
 def L_load(path=None):
@@ -1192,10 +1212,10 @@ def main():
           if not( "-" == char(__a, 0)):
             add(__pre, __a)
         __i = __i + 1
-      ____x2 = __pre
+      ____x3 = __pre
       ____i1 = 0
-      while ____i1 < L_35(____x2):
-        __file = ____x2[____i1]
+      while ____i1 < L_35(____x3):
+        __file = ____x3[____i1]
         run_file(__file)
         ____i1 = ____i1 + 1
       if nil63(__input):

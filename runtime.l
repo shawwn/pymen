@@ -408,7 +408,7 @@
         (cat! s1 c1)))
     (cat s1 "\"")))
 
-(define-global str (x stack)
+(define-global str (x repr stack)
   (if (nil? x) "nil"
       (nan? x) "nan"
       (= x inf) "inf"
@@ -421,18 +421,18 @@
       (target js: false
               lua: (not (= (type x) 'table))
               py: (not (or (array? x) (obj? x))))
-      (escape (tostring x))
+      (if repr (repr x) (cat "|" (tostring x) "|"))
     (let (s "(" sp ""
           xs (obj) ks ()
           l (or stack ()))
       (add l x)
       (each (k v) x
         (if (number? k)
-            (set (get xs k) (str v l))
+            (set (get xs k) (str v repr l))
           (do (target lua:
                 (unless (string? k)
-                  (set k (str k l))))
-              (add ks (list (cat k ":") (str v l))))))
+                  (set k (str k repr l))))
+              (add ks (list (cat k ":") (str v repr l))))))
       (sort ks (fn ((a) (b)) (< a b)))
       (drop l)
       (step v xs

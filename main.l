@@ -9,6 +9,15 @@
   (define-global lumen-set-globals (x)
     (set (idx compiler lumen-globals) x)))
 
+(define-global toplevel-repr (v)
+  (target py:
+    (let ((ok s) (guard (str v repr)))
+      (if ok s (repr v)))
+    (str v)))
+
+(define-global toplevel-print (v)
+  (print (toplevel-repr v)))
+
 (define eval-print (form)
   (let ((ok v ex) (guard ((idx compiler eval) form)))
     (if (not ok)
@@ -16,11 +25,11 @@
           py: ((idx traceback print_exception) (%literal |*| ex))
           js: (print (idx v stack))
           lua: (print (cat "error: " (idx v message) "\n" (idx v stack))))
-        (is? v) (print (str v)))))
+        (is? v) (toplevel-print v))))
 
 (define rep (s)
   (let v (eval ((idx reader read-string) s))
-    (if (is? v) (print (str v)))))
+    (if (is? v) (toplevel-print v))))
 
 (define repl ()
   (let o (obj buf: "")

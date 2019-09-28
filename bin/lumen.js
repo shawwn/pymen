@@ -740,7 +740,7 @@ escape = function (s) {
   }
   return __s1 + "\"";
 };
-_str = function (x, stack) {
+_str = function (x, repr, stack) {
   if (nil63(x)) {
     return "nil";
   } else {
@@ -773,7 +773,11 @@ _str = function (x, stack) {
                     return "circular";
                   } else {
                     if (false) {
-                      return escape(tostring(x));
+                      if (repr) {
+                        return repr(x);
+                      } else {
+                        return "|" + tostring(x) + "|";
+                      }
                     } else {
                       var __s = "(";
                       var __sp = "";
@@ -793,9 +797,9 @@ _str = function (x, stack) {
                         }
                         var __k27 = __e21;
                         if (number63(__k27)) {
-                          __xs11[__k27] = _str(__v14, __l6);
+                          __xs11[__k27] = _str(__v14, repr, __l6);
                         } else {
-                          add(__ks, [__k27 + ":", _str(__v14, __l6)]);
+                          add(__ks, [__k27 + ":", _str(__v14, repr, __l6)]);
                         }
                       }
                       sort(__ks, function (__x9, __x10) {
@@ -1388,6 +1392,12 @@ setenv("when-compiling", {_stash: true, macro: function () {
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
+toplevel_repr = function (v) {
+  return _str(v);
+};
+toplevel_print = function (v) {
+  return _print(toplevel_repr(v));
+};
 var eval_print = function (form) {
   var ____id = (function () {
     try {
@@ -1404,14 +1414,14 @@ var eval_print = function (form) {
     return _print(__v.stack);
   } else {
     if (is63(__v)) {
-      return _print(_str(__v));
+      return toplevel_print(__v);
     }
   }
 };
 var rep = function (s) {
   var __v1 = _eval(reader.read_string(s));
   if (is63(__v1)) {
-    return _print(_str(__v1));
+    return toplevel_print(__v1);
   }
 };
 var repl = function () {
