@@ -34,7 +34,7 @@ case $host in
         export NODE_PATH="$NODE_PATH:${home}:${dir}/lib:${dir}/node_modules";;
     py*)
         code=lumen.py
-        export PYTHON_PATH="$PYTHON_PATH:${home}:${dir}/lib";;
+        export PYTHONPATH="${PYTHONPATH}:${home}:${dir}";;
     *)
         code=lumen.lua
         export LUA_PATH="$LUA_PATH;${home}/?.lua;${dir}/lib/?.lua;;";;
