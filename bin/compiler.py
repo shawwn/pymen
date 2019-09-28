@@ -5,12 +5,12 @@ def getenv(k=None, p=None):
     while __i >= 0:
       if has63(environment[__i], k):
         __b = environment[__i][k]
-        __e26 = None
+        __e27 = None
         if p:
-          __e26 = has(__b, p)
+          __e27 = has(__b, p)
         else:
-          __e26 = __b
-        return __e26
+          __e27 = __b
+        return __e27
       else:
         __i = __i - 1
 def macro_function(k=None):
@@ -84,19 +84,19 @@ def bind(lh=None, rh=None):
     __k2 = None
     for __k2 in indices(____o2):
       __v2 = ____o2[__k2]
-      __e27 = None
+      __e28 = None
       if __k2 == "rest":
-        __e27 = ["cut", __id, L_35(lh)]
+        __e28 = ["cut", __id, L_35(lh)]
       else:
-        __e27 = ["has", __id, ["quote", bias(__k2)]]
-      __x6 = __e27
+        __e28 = ["has", __id, ["quote", bias(__k2)]]
+      __x6 = __e28
       if is63(__k2):
-        __e28 = None
+        __e29 = None
         if __v2 == True:
-          __e28 = __k2
+          __e29 = __k2
         else:
-          __e28 = __v2
-        __k3 = __e28
+          __e29 = __v2
+        __k3 = __e29
         __bs = join(__bs, bind(__k3, __x6))
     return __bs
 def __f2(L_from=None):
@@ -241,12 +241,12 @@ def quasiquote_list(form=None, depth=None):
   for __k5 in indices(____o6):
     __v5 = ____o6[__k5]
     if not number63(__k5):
-      __e29 = None
+      __e30 = None
       if quasisplice63(__v5, depth):
-        __e29 = quasiexpand(__v5[1])
+        __e30 = quasiexpand(__v5[1])
       else:
-        __e29 = quasiexpand(__v5, depth)
-      __v6 = __e29
+        __e30 = quasiexpand(__v5, depth)
+      __v6 = __e30
       last(__xs)[__k5] = __v6
   ____x58 = form
   ____i9 = 0
@@ -319,43 +319,43 @@ def reserved63(x=None):
 def valid_code63(n=None):
   return number_code63(n) or n > 64 and n < 91 or n > 96 and n < 123 or n == 95
 def id(id=None):
-  __e30 = None
-  if has(setenv("target", toplevel=True), "value") == "py":
-    __e30 = "L_"
-  else:
-    __e30 = "_"
-  __x70 = __e30
   __e31 = None
-  if number_code63(code(id, 0)):
-    __e31 = __x70
+  if has(setenv("target", toplevel=True), "value") == "py":
+    __e31 = "L_"
   else:
-    __e31 = ""
-  __id11 = __e31
+    __e31 = "_"
+  __x70 = __e31
+  __e32 = None
+  if number_code63(code(id, 0)):
+    __e32 = __x70
+  else:
+    __e32 = ""
+  __id11 = __e32
   __i11 = 0
   while __i11 < L_35(id):
     __c1 = char(id, __i11)
     __n9 = code(__c1)
-    __e32 = None
+    __e33 = None
     if __c1 == "-" and not( id == "-"):
-      __e35 = None
+      __e36 = None
       if __i11 == 0:
-        __e35 = __x70
+        __e36 = __x70
       else:
-        __e35 = "_"
-      __e32 = __e35
+        __e36 = "_"
+      __e33 = __e36
     else:
-      __e33 = None
+      __e34 = None
       if valid_code63(__n9):
-        __e33 = __c1
+        __e34 = __c1
       else:
-        __e34 = None
+        __e35 = None
         if __i11 == 0:
-          __e34 = cat(__x70, __n9)
+          __e35 = cat(__x70, __n9)
         else:
-          __e34 = __n9
-        __e33 = __e34
-      __e32 = __e33
-    __c11 = __e32
+          __e35 = __n9
+        __e34 = __e35
+      __e33 = __e34
+    __c11 = __e33
     __id11 = cat(__id11, __c11)
     __i11 = __i11 + 1
   if reserved63(__id11):
@@ -483,17 +483,17 @@ def escape_newlines(s=None):
   __i17 = 0
   while __i17 < L_35(s):
     __c3 = char(s, __i17)
-    __e36 = None
+    __e37 = None
     if __c3 == "\n":
-      __e36 = "\\n"
+      __e37 = "\\n"
     else:
-      __e37 = None
+      __e38 = None
       if __c3 == "\r":
-        __e37 = "\\r"
+        __e38 = "\\r"
       else:
-        __e37 = __c3
-      __e36 = __e37
-    __s11 = cat(__s11, __e36)
+        __e38 = __c3
+      __e37 = __e38
+    __s11 = cat(__s11, __e37)
     __i17 = __i17 + 1
   return __s11
 def compile_nil():
@@ -578,12 +578,12 @@ def op_delims(parent=None, child=None, *_args, **_keys):
   __child = destash33(child, ____r64)
   ____id8 = ____r64
   __right = has(____id8, "right")
-  __e38 = None
+  __e39 = None
   if __right:
-    __e38 = L_6261
+    __e39 = L_6261
   else:
-    __e38 = L_62
-  if __e38(precedence(__child), precedence(__parent)):
+    __e39 = L_62
+  if __e39(precedence(__child), precedence(__parent)):
     return ["(", ")"]
   else:
     return ["", ""]
@@ -625,38 +625,38 @@ def compile_function(args=None, body=None, *_args, **_keys):
   ____id13 = ____r67
   __name3 = has(____id13, "name")
   __prefix = has(____id13, "prefix")
-  __e39 = None
-  if __name3:
-    __e39 = compile(__name3)
-  else:
-    __e39 = ""
-  __id14 = __e39
   __e40 = None
-  if has(setenv("target", toplevel=True), "value") == "lua" and has63(__args4, "rest"):
-    __e40 = join(__args4, ["|...|"])
+  if __name3:
+    __e40 = compile(__name3)
   else:
-    __e41 = None
+    __e40 = ""
+  __id14 = __e40
+  __e41 = None
+  if has(setenv("target", toplevel=True), "value") == "lua" and has63(__args4, "rest"):
+    __e41 = join(__args4, ["|...|"])
+  else:
+    __e42 = None
     if has(setenv("target", toplevel=True), "value") == "py" and has63(__args4, "rest"):
-      __e41 = join(__args4, ["|*_args|", "|**_keys|"])
+      __e42 = join(__args4, ["|*_args|", "|**_keys|"])
     else:
-      __e41 = __args4
-    __e40 = __e41
-  __args12 = __e40
+      __e42 = __args4
+    __e41 = __e42
+  __args12 = __e41
   __args5 = compile_args(__args12, True)
   __body4 = compile_body(__body3)
   __ind = indentation()
-  __e42 = None
-  if __prefix:
-    __e42 = cat(__prefix, " ")
-  else:
-    __e42 = ""
-  __p = __e42
   __e43 = None
-  if has(setenv("target", toplevel=True), "value") == "js":
-    __e43 = ""
+  if __prefix:
+    __e43 = cat(__prefix, " ")
   else:
-    __e43 = "end"
-  __tr1 = __e43
+    __e43 = ""
+  __p = __e43
+  __e44 = None
+  if has(setenv("target", toplevel=True), "value") == "js":
+    __e44 = ""
+  else:
+    __e44 = "end"
+  __tr1 = __e44
   if __name3:
     __tr1 = cat(__tr1, "\n")
   if has(setenv("target", toplevel=True), "value") == "js":
@@ -680,47 +680,47 @@ def compile(form=None, *_args, **_keys):
       return compile_special(__form, __stmt1)
     else:
       __tr2 = terminator(__stmt1)
-      __e44 = None
-      if __stmt1:
-        __e44 = indentation()
-      else:
-        __e44 = ""
-      __ind1 = __e44
       __e45 = None
-      if atom63(__form):
-        __e45 = compile_atom(__form)
+      if __stmt1:
+        __e45 = indentation()
       else:
-        __e46 = None
+        __e45 = ""
+      __ind1 = __e45
+      __e46 = None
+      if atom63(__form):
+        __e46 = compile_atom(__form)
+      else:
+        __e47 = None
         if infix63(hd(__form)):
-          __e46 = compile_infix(__form)
+          __e47 = compile_infix(__form)
         else:
-          __e46 = compile_call(__form)
-        __e45 = __e46
-      __form1 = __e45
+          __e47 = compile_call(__form)
+        __e46 = __e47
+      __form1 = __e46
       return cat(__ind1, __form1, __tr2)
 def lower_statement(form=None, tail63=None):
   __hoist = []
   __e = lower(form, __hoist, True, tail63)
-  __e47 = None
+  __e48 = None
   if some63(__hoist) and is63(__e):
-    __e47 = join(["do"], __hoist, [__e])
+    __e48 = join(["do"], __hoist, [__e])
   else:
-    __e48 = None
+    __e49 = None
     if is63(__e):
-      __e48 = __e
+      __e49 = __e
     else:
-      __e49 = None
+      __e50 = None
       if L_35(__hoist) > 1:
-        __e49 = join(["do"], __hoist)
+        __e50 = join(["do"], __hoist)
       else:
-        __e49 = hd(__hoist)
-      __e48 = __e49
-    __e47 = __e48
-  return either(__e47, ["do"])
+        __e50 = hd(__hoist)
+      __e49 = __e50
+    __e48 = __e49
+  return either(__e48, ["do"])
 def lower_body(body=None, tail63=None):
   return lower_statement(join(["do"], body), tail63)
 def literal63(form=None):
-  return atom63(form) or hd(form) == "%array" or hd(form) == "%object"
+  return atom63(form) or hd(form) == "%array" or hd(form) == "%object" or hd(form) == "%list"
 def standalone63(form=None):
   return not atom63(form) and not infix63(hd(form)) and not literal63(form) and not( "get" == hd(form)) or id_literal63(form)
 def lower_do(args=None, hoist=None, stmt63=None, tail63=None):
@@ -752,17 +752,17 @@ def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
   __L_then = has(____id17, 1)
   __L_else = has(____id17, 2)
   if stmt63:
-    __e51 = None
+    __e52 = None
     if is63(__L_else):
-      __e51 = [lower_body([__L_else], tail63)]
-    return add(hoist, join(["%if", lower(__cond, hoist), lower_body([__L_then], tail63)], __e51))
+      __e52 = [lower_body([__L_else], tail63)]
+    return add(hoist, join(["%if", lower(__cond, hoist), lower_body([__L_then], tail63)], __e52))
   else:
     __e3 = unique("e")
     add(hoist, ["%local", __e3])
-    __e50 = None
+    __e51 = None
     if is63(__L_else):
-      __e50 = [lower(["%set", __e3, __L_else])]
-    add(hoist, join(["%if", lower(__cond, hoist), lower(["%set", __e3, __L_then])], __e50))
+      __e51 = [lower(["%set", __e3, __L_else])]
+    add(hoist, join(["%if", lower(__cond, hoist), lower(["%set", __e3, __L_then])], __e51))
     return __e3
 def lower_short(x=None, args=None, hoist=None):
   ____id18 = args
@@ -772,12 +772,12 @@ def lower_short(x=None, args=None, hoist=None):
   __b11 = lower(__b4, __hoist1)
   if some63(__hoist1):
     __id19 = unique("id")
-    __e52 = None
+    __e53 = None
     if x == "and":
-      __e52 = ["%if", __id19, __b4, __id19]
+      __e53 = ["%if", __id19, __b4, __id19]
     else:
-      __e52 = ["%if", __id19, __id19, __b4]
-    return lower(["do", ["%local", __id19, __a3], __e52], hoist)
+      __e53 = ["%if", __id19, __id19, __b4]
+    return lower(["do", ["%local", __id19, __a3], __e53], hoist)
   else:
     return [x, lower(__a3, hoist), __b11]
 def lower_try(args=None, hoist=None, tail63=None):
@@ -788,12 +788,12 @@ def lower_while(args=None, hoist=None):
   __body5 = cut(____id20, 1)
   __pre = []
   __c5 = lower(__c4, __pre)
-  __e53 = None
+  __e54 = None
   if none63(__pre):
-    __e53 = ["while", __c5, lower_body(__body5)]
+    __e54 = ["while", __c5, lower_body(__body5)]
   else:
-    __e53 = ["while", True, join(["do"], __pre, [["%if", ["not", __c5], ["break"]], lower_body(__body5)])]
-  return add(hoist, __e53)
+    __e54 = ["while", True, join(["do"], __pre, [["%if", ["not", __c5], ["break"]], lower_body(__body5)])]
+  return add(hoist, __e54)
 def lower_for(args=None, hoist=None):
   ____id21 = args
   __t = has(____id21, 0)
@@ -948,10 +948,10 @@ setenv("do", special=__f10, stmt=True, tr=True)
 def __f111(cond=None, cons=None, alt=None):
   __cond2 = compile(cond)
   __cons1 = compile_body(cons)
-  __e54 = None
+  __e55 = None
   if alt:
-    __e54 = compile_body(alt)
-  __alt1 = __e54
+    __e55 = compile_body(alt)
+  __alt1 = __e55
   __ind3 = indentation()
   __s6 = ""
   if has(setenv("target", toplevel=True), "value") == "js":
@@ -1013,12 +1013,12 @@ setenv("%with", special=__f14, stmt=True, tr=True)
 def __f15(form=None):
   __ind11 = indentation()
   __body17 = compile_body(form)
-  __e55 = None
+  __e56 = None
   if has(setenv("target", toplevel=True), "value") == "py":
-    __e55 = ["do", ["import", "sys"], ["%local", "e", [["idx", "sys", "exc_info"]]], ["return", ["%array", False, ["get", "e", 1], "e"]]]
+    __e56 = ["do", ["import", "sys"], ["%local", "e", [["idx", "sys", "exc_info"]]], ["return", ["%array", False, ["get", "e", 1], "e"]]]
   else:
-    __e55 = ["return", ["%array", False, "e"]]
-  __hf1 = __e55
+    __e56 = ["return", ["%array", False, "e"]]
+  __hf1 = __e56
   setenv("indent-level", toplevel=True)["value"] = has(setenv("indent-level", toplevel=True), "value") + 1
   ____x174 = compile(__hf1, stmt=True)
   setenv("indent-level", toplevel=True)["value"] = has(setenv("indent-level", toplevel=True), "value") - 1
@@ -1029,12 +1029,12 @@ def __f15(form=None):
     return cat(__ind11, "try:\n", __body17, __ind11, "except:\n", __h1)
 setenv("%try", special=__f15, stmt=True, tr=True)
 def __f16(place=None):
-  __e56 = None
+  __e57 = None
   if has(setenv("target", toplevel=True), "value") == "py":
-    __e56 = "del "
+    __e57 = "del "
   else:
-    __e56 = "delete "
-  return cat(indentation(), __e56, compile(place))
+    __e57 = "delete "
+  return cat(indentation(), __e57, compile(place))
 setenv("%delete", special=__f16, stmt=True)
 def __f17():
   return cat(indentation(), "break")
@@ -1057,12 +1057,12 @@ def __f20(name=None, args=None, body=None):
     return compile(["%local", name, ["%function", args, body]], stmt=True)
 setenv("%local-function", special=__f20, stmt=True, tr=True)
 def __f21(x=None):
-  __e57 = None
+  __e58 = None
   if nil63(x):
-    __e57 = "return"
+    __e58 = "return"
   else:
-    __e57 = cat("return ", compile(x))
-  __x188 = __e57
+    __e58 = cat("return ", compile(x))
+  __x188 = __e58
   return cat(indentation(), __x188)
 setenv("return", special=__f21, stmt=True)
 def __f22(x=None):
@@ -1072,17 +1072,17 @@ def __f23(x=None):
   return cat("typeof(", compile(x), ")")
 setenv("typeof", special=__f23)
 def __f24(x=None):
-  __e58 = None
+  __e59 = None
   if has(setenv("target", toplevel=True), "value") == "js":
-    __e58 = cat("throw ", compile(["new", ["Error", x]]))
+    __e59 = cat("throw ", compile(["new", ["Error", x]]))
   else:
-    __e59 = None
+    __e60 = None
     if has(setenv("target", toplevel=True), "value") == "py":
-      __e59 = cat("raise ", compile(["Exception", x]))
+      __e60 = cat("raise ", compile(["Exception", x]))
     else:
-      __e59 = cat("error(", compile(x), ")")
-    __e58 = __e59
-  __e14 = __e58
+      __e60 = cat("error(", compile(x), ")")
+    __e59 = __e60
+  __e14 = __e59
   return cat(indentation(), __e14)
 setenv("error", special=__f24, stmt=True)
 def __f25(name=None, value=None):
@@ -1090,34 +1090,34 @@ def __f25(name=None, value=None):
     value = "nil"
   __id29 = compile(name)
   __value11 = compile(value)
-  __e60 = None
-  if is63(value):
-    __e60 = cat(" = ", __value11)
-  else:
-    __e60 = ""
-  __rh2 = __e60
   __e61 = None
-  if has(setenv("target", toplevel=True), "value") == "js":
-    __e61 = "var "
+  if is63(value):
+    __e61 = cat(" = ", __value11)
   else:
-    __e62 = None
+    __e61 = ""
+  __rh2 = __e61
+  __e62 = None
+  if has(setenv("target", toplevel=True), "value") == "js":
+    __e62 = "var "
+  else:
+    __e63 = None
     if has(setenv("target", toplevel=True), "value") == "lua":
-      __e62 = "local "
+      __e63 = "local "
     else:
-      __e62 = ""
-    __e61 = __e62
-  __keyword1 = __e61
+      __e63 = ""
+    __e62 = __e63
+  __keyword1 = __e62
   __ind13 = indentation()
   return cat(__ind13, __keyword1, __id29, __rh2)
 setenv("%local", special=__f25, stmt=True)
 def __f26(lh=None, rh=None):
   __lh2 = compile(lh)
-  __e63 = None
+  __e64 = None
   if nil63(rh):
-    __e63 = "nil"
+    __e64 = "nil"
   else:
-    __e63 = rh
-  __rh4 = compile(__e63)
+    __e64 = rh
+  __rh4 = compile(__e64)
   return cat(indentation(), __lh2, " = ", __rh4)
 setenv("%set", special=__f26, stmt=True)
 def __f27(t=None, k=None):
@@ -1139,18 +1139,18 @@ def __f28(t=None, k=None):
 setenv("idx", special=__f28)
 def __f29(*_args, **_keys):
   __forms3 = unstash(list(_args), _keys)
-  __e64 = None
-  if has(setenv("target", toplevel=True), "value") == "lua":
-    __e64 = "{"
-  else:
-    __e64 = "["
-  __open1 = __e64
   __e65 = None
   if has(setenv("target", toplevel=True), "value") == "lua":
-    __e65 = "}"
+    __e65 = "{"
   else:
-    __e65 = "]"
-  __close1 = __e65
+    __e65 = "["
+  __open1 = __e65
+  __e66 = None
+  if has(setenv("target", toplevel=True), "value") == "lua":
+    __e66 = "}"
+  else:
+    __e66 = "]"
+  __close1 = __e66
   __s8 = ""
   __c7 = ""
   ____o11 = __forms3
@@ -1166,12 +1166,12 @@ def __f30(*_args, **_keys):
   __forms5 = unstash(list(_args), _keys)
   __s10 = "{"
   __c9 = ""
-  __e66 = None
+  __e67 = None
   if has(setenv("target", toplevel=True), "value") == "lua":
-    __e66 = " = "
+    __e67 = " = "
   else:
-    __e66 = ": "
-  __sep1 = __e66
+    __e67 = ": "
+  __sep1 = __e67
   ____o13 = pair(__forms5)
   __k15 = None
   for __k15 in indices(____o13):
@@ -1186,62 +1186,82 @@ def __f30(*_args, **_keys):
       __c9 = ", "
   return cat(__s10, "}")
 setenv("%object", special=__f30)
-def __f31(*_args, **_keys):
+def __f31(form=None, comps=None, cond=None):
+  __s12 = compile(form)
+  ____x196 = comps
+  ____i26 = 0
+  while ____i26 < L_35(____x196):
+    ____id33 = ____x196[____i26]
+    __k18 = has(____id33, 0)
+    __v16 = has(____id33, 1)
+    __e68 = None
+    if obj63(__k18):
+      __e68 = mapcat(compile, __k18, ", ")
+    else:
+      __e68 = compile(__k18)
+    __k161 = __e68
+    __s12 = cat(__s12, " for ", __k161, " in ", compile(__v16))
+    ____i26 = ____i26 + 1
+  if is63(cond):
+    __s12 = cat(__s12, " if ", compile(cond))
+  return cat("[", __s12, "]")
+setenv("%list", special=__f31)
+def __f32(*_args, **_keys):
   __args111 = unstash(list(_args), _keys)
   return apply(cat, map(compile, __args111))
-setenv("%literal", special=__f31)
-def __f32(x=None):
+setenv("%literal", special=__f32)
+def __f33(x=None):
   if has(setenv("target", toplevel=True), "value") == "py":
     return cat(indentation(), "global ", compile(x), "\n")
   else:
     return ""
-setenv("global", special=__f32, stmt=True, tr=True)
-def __f33(name=None, *_args, **_keys):
-  ____r138 = unstash(list(_args), _keys)
-  __name6 = destash33(name, ____r138)
-  ____id34 = ____r138
-  __alias1 = cut(____id34, 0)
-  __ind15 = indentation()
-  __e67 = None
-  if hd(__alias1) == "as":
-    __e67 = __alias1[1]
-  else:
-    __e67 = hd(__alias1)
-  __as1 = __e67
-  __id35 = __as1 or __name6
-  if has(setenv("target", toplevel=True), "value") == "py":
-    __s12 = cat(__ind15, "import ", compile(__name6))
-    if __as1:
-      __s12 = cat(__s12, " as ", compile(__id35))
-    return __s12
-  else:
-    return cat(__ind15, compile(["%local", __id35, ["require", escape(__name6)]]))
-setenv("import", special=__f33, stmt=True)
+setenv("global", special=__f33, stmt=True, tr=True)
 def __f34(name=None, *_args, **_keys):
-  ____r141 = unstash(list(_args), _keys)
-  __name8 = destash33(name, ____r141)
-  ____id38 = ____r141
-  __imports1 = cut(____id38, 0)
-  __ind17 = indentation()
-  __id39 = __name8
-  __e68 = None
-  if hd(__imports1) == "import":
-    __e68 = tl(__imports1)
+  ____r140 = unstash(list(_args), _keys)
+  __name6 = destash33(name, ____r140)
+  ____id36 = ____r140
+  __alias1 = cut(____id36, 0)
+  __ind15 = indentation()
+  __e69 = None
+  if hd(__alias1) == "as":
+    __e69 = __alias1[1]
   else:
-    __e68 = __imports1
-  __names3 = __e68
-  def __f35(x=None):
+    __e69 = hd(__alias1)
+  __as1 = __e69
+  __id37 = __as1 or __name6
+  if has(setenv("target", toplevel=True), "value") == "py":
+    __s14 = cat(__ind15, "import ", compile(__name6))
+    if __as1:
+      __s14 = cat(__s14, " as ", compile(__id37))
+    return __s14
+  else:
+    return cat(__ind15, compile(["%local", __id37, ["require", escape(__name6)]]))
+setenv("import", special=__f34, stmt=True)
+def __f35(name=None, *_args, **_keys):
+  ____r143 = unstash(list(_args), _keys)
+  __name8 = destash33(name, ____r143)
+  ____id40 = ____r143
+  __imports1 = cut(____id40, 0)
+  __ind17 = indentation()
+  __id41 = __name8
+  __e70 = None
+  if hd(__imports1) == "import":
+    __e70 = tl(__imports1)
+  else:
+    __e70 = __imports1
+  __names3 = __e70
+  def __f36(x=None):
     if x == "*":
       return x
     else:
       return compile(x)
-  __names4 = mapcat(__f35, __names3, ", ")
+  __names4 = mapcat(__f36, __names3, ", ")
   if has(setenv("target", toplevel=True), "value") == "py":
     return cat(__ind17, "from ", compile(__name8), " import ", __names4)
   else:
     return ""
-setenv("from", special=__f34, stmt=True)
-def __f36(*_args, **_keys):
+setenv("from", special=__f35, stmt=True)
+def __f37(*_args, **_keys):
   __args13 = unstash(list(_args), _keys)
   if none63(__args13):
     return ","
@@ -1250,8 +1270,8 @@ def __f36(*_args, **_keys):
       return cat(",", compile(hd(__args13)))
     else:
       return mapcat(compile, __args13, ",")
-setenv("\\,", special=__f36)
-def __f37(*_args, **_keys):
+setenv("\\,", special=__f37)
+def __f38(*_args, **_keys):
   __args15 = unstash(list(_args), _keys)
   if none63(__args15):
     return ":"
@@ -1260,7 +1280,7 @@ def __f37(*_args, **_keys):
       return cat(":", compile(hd(__args15)))
     else:
       return mapcat(compile, __args15, ":")
-setenv(":", special=__f37)
-def __f38(form=None, id=None):
+setenv(":", special=__f38)
+def __f39(form=None, id=None):
   return cat(compile(form), " as ", compile(id))
-setenv("%as", special=__f38)
+setenv("%as", special=__f39)

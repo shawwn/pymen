@@ -25,15 +25,29 @@
     `(%delete ,place)))
 
 (define-macro list body
-  (let-unique (x)
-    (let (l (target py: (obj) ()) forms ())
-      (each (k v) body
-        (if (number? k)
-            (set (get l k) v)
-          (add forms `(set (get ,x ',k) ,v))))
-      (if (some? forms)
-          `(let ,x (object (%array ,@l)) ,@forms ,x)
-        `(%array ,@l)))))
+  (if (and (= (at body 1) 'for)
+           (= (at body 3) 'in))
+      (let ((expr rest: body) body
+            comps () cond nil)
+        (while (and (> (# body) 2)
+                    (= (at body 0) 'for)
+                    (= (at body 2) 'in))
+          (let ((_for names _in l rest: body1) body)
+            (add comps (list names l))
+            (set body body1)))
+        (when (= (hd body) 'if)
+          (let ((_if expr) body)
+            (set cond expr)))
+        `(%list ,expr ,comps ,cond))
+    (let-unique (x)
+      (let (l (target py: (obj) ()) forms ())
+        (each (k v) body
+          (if (number? k)
+              (set (get l k) v)
+            (add forms `(set (get ,x ',k) ,v))))
+        (if (some? forms)
+            `(let ,x (object (%array ,@l)) ,@forms ,x)
+          `(%array ,@l))))))
 
 (define-macro if branches
   (hd (expand-if branches)))

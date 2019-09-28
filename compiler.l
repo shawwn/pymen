@@ -487,7 +487,8 @@
 (define literal? (form)
   (or (atom? form)
       (= (hd form) '%array)
-      (= (hd form) '%object)))
+      (= (hd form) '%object)
+      (= (hd form) '%list)))
 
 (define standalone? (form)
   (or (and (not (atom? form))
@@ -850,6 +851,15 @@
           (cat! s c (key k) sep (compile v))
           (set c ", "))))
     (cat s "}")))
+
+(define-special %list (form comps cond)
+  (let s (compile form)
+    (step (k v) comps
+      (let k1 (if (obj? k) (mapcat compile k ", ") (compile k))
+        (cat! s " for " k1 " in " (compile v))))
+    (when (is? cond)
+      (cat! s " if " (compile cond)))
+    (cat "[" s "]")))
 
 (define-special %literal args
   (apply cat (map compile args)))
