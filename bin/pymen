@@ -1,0 +1,25 @@
+#!/bin/sh
+
+dir="$(pwd)"
+bin="$0"
+while [ -L "${bin}" ]
+do
+    x="$(readlink "${bin}")"
+    cd "$(dirname "${bin}")"
+    bin="${x}"
+done
+cd "$(dirname "${bin}")"
+home="$(pwd)"
+cd "${dir}"
+
+if [ ! -z "${LUMEN_HOST}" ]
+then
+    host="${LUMEN_HOST}"
+else
+    host=python3
+fi
+
+code=lumen.py
+export PYTHON_PATH="$PYTHON_PATH:${home}:${dir}/lib"
+
+exec ${host} "${home}/${code}" "$@"
