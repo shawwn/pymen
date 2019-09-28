@@ -704,7 +704,7 @@ def __f7(place=None):
 setenv("wipe", macro=__f7)
 def __f8(*_args, **_keys):
   __body2 = unstash(list(_args), _keys)
-  if __body2[1] == "for" and __body2[3] == "in":
+  if L_35(__body2) > 2 and __body2[1] == "for" and __body2[3] == "in":
     ____id5 = __body2
     __expr2 = has(____id5, 0)
     __body3 = cut(____id5, 1)
@@ -1133,35 +1133,22 @@ def lumen_set_globals(x=None):
   compiler.lumen_globals = x
   return compiler.lumen_globals
 def toplevel_repr(v=None):
-  def __f():
-    try:
-      return [True, L_str(v, repr)]
-    except:
-      import sys
-      e = sys.exc_info()
-      return [False, e[1], e]
-  ____id = __f()
-  __ok = has(____id, 0)
-  __s = has(____id, 1)
-  if __ok:
-    return __s
-  else:
-    return repr(v)
+  return repr(v)
 def toplevel_print(v=None):
   return L_print(toplevel_repr(v))
 def eval_print(form=None):
-  def __f1():
+  def __f():
     try:
       return [True, compiler.L_eval(form)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id1 = __f1()
-  __ok1 = has(____id1, 0)
-  __v = has(____id1, 1)
-  __ex = has(____id1, 2)
-  if not __ok1:
+  ____id = __f()
+  __ok = has(____id, 0)
+  __v = has(____id, 1)
+  __ex = has(____id, 2)
+  if not __ok:
     return traceback.print_exception(*__ex)
   else:
     if is63(__v):
@@ -1184,14 +1171,14 @@ def repl():
   system.write("> ")
   system.flush()
   while True:
-    __s1 = system.read_line()
-    if __s1:
-      rep1(cat(__s1, "\n"))
+    __s = system.read_line()
+    if __s:
+      rep1(cat(__s, "\n"))
     else:
       break
 def compile_file(path=None):
-  __s2 = reader.stream(system.read_file(path))
-  __body = reader.read_all(__s2)
+  __s1 = reader.stream(system.read_file(path))
+  __body = reader.read_all(__s1)
   __form1 = compiler.expand(join(["do"], __body))
   return compiler.compile(__form1, stmt=True)
 def L_load(path=None):
@@ -1255,10 +1242,10 @@ def main():
           if not( "-" == char(__a, 0)):
             add(__pre, __a)
         __i = __i + 1
-      ____x3 = __pre
+      ____x2 = __pre
       ____i1 = 0
-      while ____i1 < L_35(____x3):
-        __file = ____x3[____i1]
+      while ____i1 < L_35(____x2):
+        __file = ____x2[____i1]
         run_file(__file)
         ____i1 = ____i1 + 1
       if nil63(__input):

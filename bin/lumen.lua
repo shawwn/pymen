@@ -836,7 +836,7 @@ setenv("wipe", {_stash = true, macro = function (place)
 end})
 setenv("list", {_stash = true, macro = function (...)
   local __body2 = unstash({...})
-  if __body2[2] == "for" and __body2[4] == "in" then
+  if _35(__body2) > 2 and __body2[2] == "for" and __body2[4] == "in" then
     local ____id5 = __body2
     local __expr2 = has(____id5, 1)
     local __body3 = cut(____id5, 1)

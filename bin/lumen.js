@@ -977,7 +977,7 @@ setenv("wipe", {_stash: true, macro: function (place) {
 }});
 setenv("list", {_stash: true, macro: function () {
   var __body2 = unstash(Array.prototype.slice.call(arguments, 0));
-  if (__body2[1] === "for" && __body2[3] === "in") {
+  if (_35(__body2) > 2 && __body2[1] === "for" && __body2[3] === "in") {
     var ____id5 = __body2;
     var __expr2 = has(____id5, 0);
     var __body3 = cut(____id5, 1);

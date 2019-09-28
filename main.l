@@ -10,10 +10,7 @@
     (set (idx compiler lumen-globals) x)))
 
 (define-global toplevel-repr (v)
-  (target py:
-    (let ((ok s) (guard (str v repr)))
-      (if ok s (repr v)))
-    (str v)))
+  (target py: (repr v) (str v)))
 
 (define-global toplevel-print (v)
   (print (toplevel-repr v)))

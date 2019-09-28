@@ -25,7 +25,8 @@
     `(%delete ,place)))
 
 (define-macro list body
-  (if (and (= (at body 1) 'for)
+  (if (and (> (# body) 2)
+           (= (at body 1) 'for)
            (= (at body 3) 'in))
       (let ((expr rest: body) body
             comps () cond nil)
