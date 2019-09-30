@@ -1218,11 +1218,11 @@ def repl():
       rep1(cat(__s, "\n"))
     else:
       break
-def read_file(path=None):
+def read_from_file(path=None):
   __s1 = reader.stream(system.read_file(path))
   return reader.read_all(__s1)
 def expand_file(path=None):
-  __body = read_file(path)
+  __body = read_from_file(path)
   return compiler.expand(join(["do"], __body))
 def compile_file(path=None):
   __form1 = expand_file(path)

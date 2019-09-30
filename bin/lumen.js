@@ -1537,12 +1537,12 @@ var repl = function () {
   ___in.setEncoding("utf8");
   return ___in.on("data", rep1);
 };
-read_file = function (path) {
+read_from_file = function (path) {
   var __s = reader.stream(system.read_file(path));
   return reader.read_all(__s);
 };
 expand_file = function (path) {
-  var __body = read_file(path);
+  var __body = read_from_file(path);
   return compiler.expand(join(["do"], __body));
 };
 compile_file = function (path) {

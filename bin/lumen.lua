@@ -1400,12 +1400,12 @@ local function repl()
     end
   end
 end
-function read_file(path)
+function read_from_file(path)
   local __s1 = reader.stream(system.read_file(path))
   return reader.read_all(__s1)
 end
 function expand_file(path)
-  local __body = read_file(path)
+  local __body = read_from_file(path)
   return compiler.expand(join({"do"}, __body))
 end
 function compile_file(path)
