@@ -1483,6 +1483,54 @@ setenv("defvar", {_stash: true, macro: function (name) {
   ____x441.py = ["global", __name17];
   return ["when", ["undefined?", __name17], ____x441, join(["defconst", __name17], __value3)];
 }});
+setenv("+", {_stash: true, macro: function () {
+  var __args11 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (none63(__args11)) {
+    return 0;
+  } else {
+    if (one63(__args11)) {
+      return hd(__args11);
+    } else {
+      return join(["%add"], __args11);
+    }
+  }
+}});
+setenv("-", {_stash: true, macro: function () {
+  var __args13 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (none63(__args13)) {
+    return 0;
+  } else {
+    if (one63(__args13)) {
+      return ["%unm", hd(__args13)];
+    } else {
+      return join(["%sub"], __args13);
+    }
+  }
+}});
+setenv("*", {_stash: true, macro: function () {
+  var __args15 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (none63(__args15)) {
+    return 1;
+  } else {
+    if (one63(__args15)) {
+      return hd(__args15);
+    } else {
+      return join(["%mul"], __args15);
+    }
+  }
+}});
+setenv("/", {_stash: true, macro: function () {
+  var __args17 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (none63(__args17)) {
+    return 1;
+  } else {
+    if (one63(__args17)) {
+      return hd(__args17);
+    } else {
+      return join(["%div"], __args17);
+    }
+  }
+}});
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");

@@ -311,17 +311,17 @@
           (add o x))))))
 
 (define infix
-  `((not: (js: ! lua: ,"not" py: ,"not"))
-    (:* :/ :%)
-    (cat: (js: + lua: ..))
-    (:+ :-)
-    (:< :> :<= :>=)
-    (=: (js: === lua: == py: ==))
-    (and: (js: && lua: and py: and))
-    (or: (js: ,"||" lua: or py: or))))
+  `((not: (js: ! lua: ,"not" py: ,"not") %not: (js: ! lua: ,"not" py: ,"not") %unm: -)
+    (:* :/ :% %mul: * %div: / %mod: %)
+    (cat: (js: + lua: ..) %cat: (js: + lua: ..))
+    (:+ :- %add: + %sub: -)
+    (:< :> :<= :>= %lt: < %gt: > %le: <= %ge: >=)
+    (=: (js: === lua: == py: ==) %eq: (js: === lua: == py: ==))
+    (and: (js: && lua: and py: and) %and: (js: && lua: and py: and))
+    (or: (js: ,"||" lua: or py: or) %or: (js: ,"||" lua: or py: or))))
 
 (define unary? (form)
-  (and (two? form) (in? (hd form) '(not -))))
+  (and (two? form) (in? (hd form) '(not - %not %unm))))
 
 (define index (k)
   (target k lua: (when (number? k) (- k 1))))
@@ -336,6 +336,7 @@
   (find (fn (level)
           (let x (has level op)
             (if (= x true) op
+                (string? x) x
                 (is? x) (has x target))))
         infix))
 

@@ -293,3 +293,23 @@
   `(when (undefined? ,name)
      (target py: (global ,name))
      (defconst ,name ,@value)))
+
+(define-macro + args
+  (if (none? args) 0
+      (one? args) (hd args)
+    `(%add ,@args)))
+
+(define-macro - args
+  (if (none? args) 0
+      (one? args) `(%unm ,(hd args))
+    `(%sub ,@args)))
+
+(define-macro * args
+  (if (none? args) 1
+      (one? args) (hd args)
+    `(%mul ,@args)))
+
+(define-macro / args
+  (if (none? args) 1
+      (one? args) (hd args)
+    `(%div ,@args)))

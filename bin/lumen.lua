@@ -1328,6 +1328,54 @@ setenv("defvar", {_stash = true, macro = function (name, ...)
   ____x476.py = {"global", __name17}
   return {"when", {"undefined?", __name17}, ____x476, join({"defconst", __name17}, __value3)}
 end})
+setenv("+", {_stash = true, macro = function (...)
+  local __args11 = unstash({...})
+  if none63(__args11) then
+    return 0
+  else
+    if one63(__args11) then
+      return hd(__args11)
+    else
+      return join({"%add"}, __args11)
+    end
+  end
+end})
+setenv("-", {_stash = true, macro = function (...)
+  local __args13 = unstash({...})
+  if none63(__args13) then
+    return 0
+  else
+    if one63(__args13) then
+      return {"%unm", hd(__args13)}
+    else
+      return join({"%sub"}, __args13)
+    end
+  end
+end})
+setenv("*", {_stash = true, macro = function (...)
+  local __args15 = unstash({...})
+  if none63(__args15) then
+    return 1
+  else
+    if one63(__args15) then
+      return hd(__args15)
+    else
+      return join({"%mul"}, __args15)
+    end
+  end
+end})
+setenv("/", {_stash = true, macro = function (...)
+  local __args17 = unstash({...})
+  if none63(__args17) then
+    return 1
+  else
+    if one63(__args17) then
+      return hd(__args17)
+    else
+      return join({"%div"}, __args17)
+    end
+  end
+end})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
