@@ -286,13 +286,17 @@ function macroexpand(form)
               if __x54 == "%local-function" then
                 return expand_definition(form)
               else
-                if macro63(__x54) then
-                  return expand_macro(form)
+                if __x54 == "%expansion" then
+                  return form[2]
                 else
-                  if parse_access63(__x54) then
-                    return macroexpand(join({parse_access(__x54)}, tl(form)))
+                  if macro63(__x54) then
+                    return expand_macro(form)
                   else
-                    return map(macroexpand, form)
+                    if parse_access63(__x54) then
+                      return macroexpand(join({parse_access(__x54)}, tl(form)))
+                    else
+                      return map(macroexpand, form)
+                    end
                   end
                 end
               end

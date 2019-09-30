@@ -176,6 +176,7 @@
           (= x '%function) (expand-function form)
           (= x '%global-function) (expand-definition form)
           (= x '%local-function) (expand-definition form)
+          (= x '%expansion) (at form 1)
           (macro? x) (expand-macro form)
           (parse-access? x) (macroexpand `(,(parse-access x) ,@(tl form)))
         (map macroexpand form)))))

@@ -227,13 +227,16 @@ def macroexpand(form=None):
               if __x54 == "%local-function":
                 return expand_definition(form)
               else:
-                if macro63(__x54):
-                  return expand_macro(form)
+                if __x54 == "%expansion":
+                  return form[1]
                 else:
-                  if parse_access63(__x54):
-                    return macroexpand(join([parse_access(__x54)], tl(form)))
+                  if macro63(__x54):
+                    return expand_macro(form)
                   else:
-                    return map(macroexpand, form)
+                    if parse_access63(__x54):
+                      return macroexpand(join([parse_access(__x54)], tl(form)))
+                    else:
+                      return map(macroexpand, form)
 def quasiquote_list(form=None, depth=None):
   __xs = [object(["list"])]
   ____o6 = form
