@@ -1,6 +1,6 @@
 (target py: (from lumen import *))
 
-(define delimiters (set-of "(" ")" ";" "\r" "\n"))
+(define delimiters (set-of "(" ")" ";" "," "\r" "\n"))
 (define whitespace (set-of " " "\t" "\r" "\n"))
 
 (define stream (str more)
@@ -29,7 +29,7 @@
 (define read-table (obj))
 (define eof (obj))
 
-(define read (s)
+(define read-1 (s)
   (skip-non-code s)
   (let c (peek-char s)
     (if (is? c)
@@ -37,6 +37,19 @@
              (has read-table ""))
          s)
       eof)))
+
+(define read (s)
+  (let form (read-1 s)
+    (if (= "," (peek-char s))
+        (with r (list "," form)
+          (while true
+            (read-char s)
+            (set form (read-1 s))
+            (if (= form eof) (return (expected s "tuple")))
+            (add r form)
+            (unless (= "," (peek-char s))
+              (break))))
+      form)))
 
 (define read-all (s)
   (with l ()

@@ -1,4 +1,4 @@
-local delimiters = {["("] = true, [")"] = true, [";"] = true, ["\r"] = true, ["\n"] = true}
+local delimiters = {["("] = true, [")"] = true, [";"] = true, [","] = true, ["\r"] = true, ["\n"] = true}
 local whitespace = {[" "] = true, ["\t"] = true, ["\r"] = true, ["\n"] = true}
 local function stream(_str, more)
   return {pos = 0, string = _str, len = _35(_str), more = more}
@@ -42,7 +42,7 @@ local function skip_non_code(s)
 end
 local read_table = {}
 local eof = {}
-local function read(s)
+local function read_1(s)
   skip_non_code(s)
   local __c2 = peek_char(s)
   if is63(__c2) then
@@ -51,21 +51,41 @@ local function read(s)
     return eof
   end
 end
+local function read(s)
+  local __form = read_1(s)
+  if "," == peek_char(s) then
+    local __r6 = {",", __form}
+    while true do
+      read_char(s)
+      __form = read_1(s)
+      if __form == eof then
+        return expected(s, "tuple")
+      end
+      add(__r6, __form)
+      if not( "," == peek_char(s)) then
+        break
+      end
+    end
+    return __r6
+  else
+    return __form
+  end
+end
 local function read_all(s)
   local __l = {}
   while true do
-    local __form = read(s)
-    if __form == eof then
+    local __form1 = read(s)
+    if __form1 == eof then
       break
     end
-    add(__l, __form)
+    add(__l, __form1)
   end
   return __l
 end
 function read_string(_str, more)
-  local __x = read(stream(_str, more))
-  if not( __x == eof) then
-    return __x
+  local __x1 = read(stream(_str, more))
+  if not( __x1 == eof) then
+    return __x1
   end
 end
 local function key63(atom)
@@ -147,51 +167,51 @@ read_table[""] = function (s)
 end
 read_table["("] = function (s)
   read_char(s)
-  local __r16 = nil
+  local __r18 = nil
   local __l1 = {}
-  while nil63(__r16) do
+  while nil63(__r18) do
     skip_non_code(s)
     local __c4 = peek_char(s)
     if __c4 == ")" then
       read_char(s)
-      __r16 = __l1
+      __r18 = __l1
     else
       if nil63(__c4) then
-        __r16 = expected(s, ")")
+        __r18 = expected(s, ")")
       else
-        local __x2 = read(s)
-        if key63(__x2) then
-          local __k = clip(__x2, 0, edge(__x2))
+        local __x3 = read(s)
+        if key63(__x3) then
+          local __k = clip(__x3, 0, edge(__x3))
           local __v = read(s)
           __l1 = object(__l1)
           __l1[__k] = __v
         else
-          if flag63(__x2) then
+          if flag63(__x3) then
             __l1 = object(__l1)
-            __l1[clip(__x2, 1)] = true
+            __l1[clip(__x3, 1)] = true
           else
-            add(__l1, __x2)
+            add(__l1, __x3)
           end
         end
       end
     end
   end
-  return __r16
+  return __r18
 end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end
 read_table["\""] = function (s)
   read_char(s)
-  local __r19 = nil
+  local __r21 = nil
   local ___str1 = "\""
-  while nil63(__r19) do
+  while nil63(__r21) do
     local __c5 = peek_char(s)
     if __c5 == "\"" then
-      __r19 = ___str1 .. read_char(s)
+      __r21 = ___str1 .. read_char(s)
     else
       if nil63(__c5) then
-        __r19 = expected(s, "\"")
+        __r21 = expected(s, "\"")
       else
         if __c5 == "\\" then
           ___str1 = ___str1 .. read_char(s)
@@ -200,25 +220,25 @@ read_table["\""] = function (s)
       end
     end
   end
-  return __r19
+  return __r21
 end
 read_table["|"] = function (s)
   read_char(s)
-  local __r21 = nil
+  local __r23 = nil
   local ___str2 = "|"
-  while nil63(__r21) do
+  while nil63(__r23) do
     local __c6 = peek_char(s)
     if __c6 == "|" then
-      __r21 = ___str2 .. read_char(s)
+      __r23 = ___str2 .. read_char(s)
     else
       if nil63(__c6) then
-        __r21 = expected(s, "|")
+        __r23 = expected(s, "|")
       else
         ___str2 = ___str2 .. read_char(s)
       end
     end
   end
-  return __r21
+  return __r23
 end
 read_table["'"] = function (s)
   read_char(s)

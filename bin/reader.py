@@ -1,5 +1,5 @@
 from lumen import *
-delimiters = {"(": True, ")": True, ";": True, "\r": True, "\n": True}
+delimiters = {"(": True, ")": True, ";": True, ",": True, "\r": True, "\n": True}
 whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
 def stream(L_str=None, more=None):
   return {"pos": 0, "string": L_str, "len": L_35(L_str), "more": more}
@@ -32,25 +32,40 @@ def skip_non_code(s=None):
           break
 read_table = {}
 eof = {}
-def read(s=None):
+def read_1(s=None):
   skip_non_code(s)
   __c2 = peek_char(s)
   if is63(__c2):
     return (has(read_table, __c2) or has(read_table, ""))(s)
   else:
     return eof
+def read(s=None):
+  __form = read_1(s)
+  if "," == peek_char(s):
+    __r6 = [",", __form]
+    while True:
+      read_char(s)
+      __form = read_1(s)
+      if __form == eof:
+        return expected(s, "tuple")
+      add(__r6, __form)
+      if not( "," == peek_char(s)):
+        break
+    return __r6
+  else:
+    return __form
 def read_all(s=None):
   __l = []
   while True:
-    __form = read(s)
-    if __form == eof:
+    __form1 = read(s)
+    if __form1 == eof:
       break
-    add(__l, __form)
+    add(__l, __form1)
   return __l
 def read_string(L_str=None, more=None):
-  __x = read(stream(L_str, more))
-  if not( __x == eof):
-    return __x
+  __x1 = read(stream(L_str, more))
+  if not( __x1 == eof):
+    return __x1
 def key63(atom=None):
   return string63(atom) and L_35(atom) > 1 and char(atom, edge(atom)) == ":"
 def flag63(atom=None):
@@ -123,66 +138,66 @@ def __f1(s=None):
 read_table[""] = __f1
 def __f2(s=None):
   read_char(s)
-  __r17 = None
+  __r19 = None
   __l1 = []
-  while nil63(__r17):
+  while nil63(__r19):
     skip_non_code(s)
     __c4 = peek_char(s)
     if __c4 == ")":
       read_char(s)
-      __r17 = __l1
+      __r19 = __l1
     else:
       if nil63(__c4):
-        __r17 = expected(s, ")")
+        __r19 = expected(s, ")")
       else:
-        __x3 = read(s)
-        if key63(__x3):
-          __k = clip(__x3, 0, edge(__x3))
+        __x4 = read(s)
+        if key63(__x4):
+          __k = clip(__x4, 0, edge(__x4))
           __v1 = read(s)
           __l1 = object(__l1)
           __l1[__k] = __v1
         else:
-          if flag63(__x3):
+          if flag63(__x4):
             __l1 = object(__l1)
-            __l1[clip(__x3, 1)] = True
+            __l1[clip(__x4, 1)] = True
           else:
-            add(__l1, __x3)
-  return __r17
+            add(__l1, __x4)
+  return __r19
 read_table["("] = __f2
 def __f3(s=None):
   raise Exception(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f3
 def __f4(s=None):
   read_char(s)
-  __r20 = None
+  __r22 = None
   __L_str1 = "\""
-  while nil63(__r20):
+  while nil63(__r22):
     __c5 = peek_char(s)
     if __c5 == "\"":
-      __r20 = cat(__L_str1, read_char(s))
+      __r22 = cat(__L_str1, read_char(s))
     else:
       if nil63(__c5):
-        __r20 = expected(s, "\"")
+        __r22 = expected(s, "\"")
       else:
         if __c5 == "\\":
           __L_str1 = cat(__L_str1, read_char(s))
         __L_str1 = cat(__L_str1, read_char(s))
-  return __r20
+  return __r22
 read_table["\""] = __f4
 def __f5(s=None):
   read_char(s)
-  __r22 = None
+  __r24 = None
   __L_str2 = "|"
-  while nil63(__r22):
+  while nil63(__r24):
     __c6 = peek_char(s)
     if __c6 == "|":
-      __r22 = cat(__L_str2, read_char(s))
+      __r24 = cat(__L_str2, read_char(s))
     else:
       if nil63(__c6):
-        __r22 = expected(s, "|")
+        __r24 = expected(s, "|")
       else:
         __L_str2 = cat(__L_str2, read_char(s))
-  return __r22
+  return __r24
 read_table["|"] = __f5
 def __f6(s=None):
   read_char(s)
