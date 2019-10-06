@@ -181,10 +181,10 @@
 
 (define-macro apply (f rest: args)
   (if (> (# args) 1)
-      `((do apply) ,f (join (list ,@(almost args)) ,(last args) (list ,@(keys args))))
+      `(%call apply ,f (join (list ,@(almost args)) ,(last args) (list ,@(keys args))))
       (keys? args)
-      `((do apply) ,f (join ,@args (list ,@(keys args))))
-      `((do apply) ,f ,@args)))
+      `(%call apply ,f (join ,@args (list ,@(keys args))))
+      `(%call apply ,f ,@args)))
 
 (define-macro guard (expr)
   (if (or (target? 'js) (target? 'py))

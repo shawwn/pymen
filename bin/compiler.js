@@ -1214,37 +1214,41 @@ lower = function (form, hoist, stmt63, tail63) {
           if (__x151 === "do") {
             return lower_do(__args9, hoist, stmt63, tail63);
           } else {
-            if (__x151 === "%set") {
-              return lower_set(__args9, hoist, stmt63, tail63);
+            if (__x151 === "%call") {
+              return lower(__args9, hoist, stmt63, tail63);
             } else {
-              if (__x151 === "%if") {
-                return lower_if(__args9, hoist, stmt63, tail63);
+              if (__x151 === "%set") {
+                return lower_set(__args9, hoist, stmt63, tail63);
               } else {
-                if (__x151 === "%try") {
-                  return lower_try(__args9, hoist, tail63);
+                if (__x151 === "%if") {
+                  return lower_if(__args9, hoist, stmt63, tail63);
                 } else {
-                  if (__x151 === "while") {
-                    return lower_while(__args9, hoist);
+                  if (__x151 === "%try") {
+                    return lower_try(__args9, hoist, tail63);
                   } else {
-                    if (__x151 === "%for") {
-                      return lower_for(__args9, hoist);
+                    if (__x151 === "while") {
+                      return lower_while(__args9, hoist);
                     } else {
-                      if (__x151 === "%with") {
-                        return lower_with(__args9, hoist, stmt63, tail63);
+                      if (__x151 === "%for") {
+                        return lower_for(__args9, hoist);
                       } else {
-                        if (__x151 === "%function") {
-                          return lower_function(__args9, hoist);
+                        if (__x151 === "%with") {
+                          return lower_with(__args9, hoist, stmt63, tail63);
                         } else {
-                          if (__x151 === "%local-function" || __x151 === "%global-function") {
-                            return lower_definition(__x151, __args9, hoist);
+                          if (__x151 === "%function") {
+                            return lower_function(__args9, hoist);
                           } else {
-                            if (in63(__x151, ["and", "or"])) {
-                              return lower_short(__x151, __args9, hoist);
+                            if (__x151 === "%local-function" || __x151 === "%global-function") {
+                              return lower_definition(__x151, __args9, hoist);
                             } else {
-                              if (statement63(__x151)) {
-                                return lower_special(form, hoist);
+                              if (in63(__x151, ["and", "or"])) {
+                                return lower_short(__x151, __args9, hoist);
                               } else {
-                                return lower_call(form, hoist);
+                                if (statement63(__x151)) {
+                                  return lower_special(form, hoist);
+                                } else {
+                                  return lower_call(form, hoist);
+                                }
                               }
                             }
                           }

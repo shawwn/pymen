@@ -1154,37 +1154,41 @@ function lower(form, hoist, stmt63, tail63)
           if __x154 == "do" then
             return lower_do(__args9, hoist, stmt63, tail63)
           else
-            if __x154 == "%set" then
-              return lower_set(__args9, hoist, stmt63, tail63)
+            if __x154 == "%call" then
+              return lower(__args9, hoist, stmt63, tail63)
             else
-              if __x154 == "%if" then
-                return lower_if(__args9, hoist, stmt63, tail63)
+              if __x154 == "%set" then
+                return lower_set(__args9, hoist, stmt63, tail63)
               else
-                if __x154 == "%try" then
-                  return lower_try(__args9, hoist, tail63)
+                if __x154 == "%if" then
+                  return lower_if(__args9, hoist, stmt63, tail63)
                 else
-                  if __x154 == "while" then
-                    return lower_while(__args9, hoist)
+                  if __x154 == "%try" then
+                    return lower_try(__args9, hoist, tail63)
                   else
-                    if __x154 == "%for" then
-                      return lower_for(__args9, hoist)
+                    if __x154 == "while" then
+                      return lower_while(__args9, hoist)
                     else
-                      if __x154 == "%with" then
-                        return lower_with(__args9, hoist, stmt63, tail63)
+                      if __x154 == "%for" then
+                        return lower_for(__args9, hoist)
                       else
-                        if __x154 == "%function" then
-                          return lower_function(__args9, hoist)
+                        if __x154 == "%with" then
+                          return lower_with(__args9, hoist, stmt63, tail63)
                         else
-                          if __x154 == "%local-function" or __x154 == "%global-function" then
-                            return lower_definition(__x154, __args9, hoist)
+                          if __x154 == "%function" then
+                            return lower_function(__args9, hoist)
                           else
-                            if in63(__x154, {"and", "or"}) then
-                              return lower_short(__x154, __args9, hoist)
+                            if __x154 == "%local-function" or __x154 == "%global-function" then
+                              return lower_definition(__x154, __args9, hoist)
                             else
-                              if statement63(__x154) then
-                                return lower_special(form, hoist)
+                              if in63(__x154, {"and", "or"}) then
+                                return lower_short(__x154, __args9, hoist)
                               else
-                                return lower_call(form, hoist)
+                                if statement63(__x154) then
+                                  return lower_special(form, hoist)
+                                else
+                                  return lower_call(form, hoist)
+                                end
                               end
                             end
                           end
