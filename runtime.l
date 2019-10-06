@@ -51,26 +51,29 @@
           (set (get l k) v)))
     x))
 
-(define-global length (x)
+(define-global length (x upto)
   (with n -1
-    (each (k v) x
-      (when (number? k)
-        (target lua: (dec k))
-        (if (> k n) (set n k))))
-    (inc n)))
+    (let upto (either upto inf)
+      (each (k v) x
+        (when (number? k)
+          (target lua: (dec k))
+          (when (> k n)
+            (set n k)
+            (if (>= n upto) (break)))))
+      (inc n))))
 
-(define-global # (x)
+(define-global # (x upto)
   (target lua: |#x|
     (if (or (string? x)
             (array? x))
         (target js: (idx x length)
                 py: (len x))
-      (length x))))
+      (length x upto))))
 
-(define-global none? (x) (= (# x) 0))
-(define-global some? (x) (> (# x) 0))
-(define-global one? (x) (= (# x) 1))
-(define-global two? (x) (= (# x) 2))
+(define-global none? (x) (= (# x 0) 0))
+(define-global some? (x) (> (# x 0) 0))
+(define-global one? (x) (= (# x 1) 1))
+(define-global two? (x) (= (# x 2) 2))
 
 (define-global hd (l) (target py: (has l 0) (at l 0)))
 
@@ -93,8 +96,16 @@
                js: (= (type x) 'object)
                py: (isinstance x dict))))
 
+(define-global list? (x)
+  (or (obj? x) (array? x)))
+
 (define-global atom? (x)
   (or (nil? x) (string? x) (number? x) (boolean? x)))
+
+(define-global hd? (l x)
+  (if (function? x) (x (hd l))
+      (nil? x) (some? l)
+    (= x (hd l))))
 
 (define-global nan (target js: (/ 0 0) lua: (/ 0 0) py: (float "nan")))
 (define-global inf (target js: (/ 1 0) lua: (/ 1 0) py: (float "inf")))

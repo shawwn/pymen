@@ -53,8 +53,9 @@ def object(x=None):
     return __l1
   else:
     return x
-def length(x=None):
+def length(x=None, upto=None):
   __n1 = -1
+  __upto = either(upto, inf)
   ____o1 = x
   __k1 = None
   for __k1 in indices(____o1):
@@ -62,21 +63,23 @@ def length(x=None):
     if number63(__k1):
       if __k1 > __n1:
         __n1 = __k1
+        if __n1 >= __upto:
+          break
   __n1 = __n1 + 1
   return __n1
-def L_35(x=None):
+def L_35(x=None, upto=None):
   if string63(x) or array63(x):
     return len(x)
   else:
-    return length(x)
+    return length(x, upto)
 def none63(x=None):
-  return L_35(x) == 0
+  return L_35(x, 0) == 0
 def some63(x=None):
-  return L_35(x) > 0
+  return L_35(x, 0) > 0
 def one63(x=None):
-  return L_35(x) == 1
+  return L_35(x, 1) == 1
 def two63(x=None):
-  return L_35(x) == 2
+  return L_35(x, 2) == 2
 def hd(l=None):
   return has(l, 0)
 import numbers
@@ -90,8 +93,18 @@ def function63(x=None):
   return callable(x)
 def obj63(x=None):
   return is63(x) and isinstance(x, dict)
+def list63(x=None):
+  return obj63(x) or array63(x)
 def atom63(x=None):
   return nil63(x) or string63(x) or number63(x) or boolean63(x)
+def hd63(l=None, x=None):
+  if function63(x):
+    return x(hd(l))
+  else:
+    if nil63(x):
+      return some63(l)
+    else:
+      return x == hd(l)
 nan = float("nan")
 inf = float("inf")
 L_inf = - inf
@@ -112,8 +125,8 @@ def clip(s=None, L_from=None, upto=None):
     __e8 = __n3
   else:
     __e8 = upto
-  __upto = __e8
-  return s[__L_from:__upto]
+  __upto1 = __e8
+  return s[__L_from:__upto1]
 def dupe(x=None):
   return {}
 def cut(x=None, L_from=None, upto=None):
@@ -131,8 +144,8 @@ def cut(x=None, L_from=None, upto=None):
     __e10 = __n4
   else:
     __e10 = upto
-  __upto1 = __e10
-  while __i3 < __upto1:
+  __upto2 = __e10
+  while __i3 < __upto2:
     __l2[__j] = x[__i3]
     __i3 = __i3 + 1
     __j = __j + 1
@@ -183,9 +196,9 @@ def drop(l=None):
   else:
     __n8 = edge(l)
     if __n8 >= 0:
-      __r39 = l[__n8]
+      __r41 = l[__n8]
       del l[__n8]
-      return __r39
+      return __r41
 def last(l=None):
   return has(l, edge(l))
 def almost(l=None):
@@ -207,13 +220,13 @@ def reduce(f=None, x=None):
       return f(hd(x), reduce(f, tl(x)))
 def join(*_args, **_keys):
   __ls = unstash(list(_args), _keys)
-  __r44 = {}
+  __r46 = {}
   ____x4 = __ls
   ____i7 = 0
   while ____i7 < L_35(____x4):
     __l3 = ____x4[____i7]
     if __l3:
-      __n9 = L_35(__r44)
+      __n9 = L_35(__r46)
       ____o4 = __l3
       __k4 = None
       for __k4 in indices(____o4):
@@ -222,9 +235,9 @@ def join(*_args, **_keys):
           __k4 = __k4 + __n9
         else:
           __l3 = object(__l3)
-        __r44[__k4] = __v5
+        __r46[__k4] = __v5
     ____i7 = ____i7 + 1
-  return __r44
+  return __r46
 def find(f=None, t=None):
   ____o5 = t
   ____i9 = None
@@ -293,7 +306,7 @@ def map(f=None, x=None):
         __t1[__k5] = __y3
   return __t1
 def mapcat(f=None, x=None, sep=None):
-  __r55 = ""
+  __r57 = ""
   __c = ""
   ____x10 = x
   ____i14 = 0
@@ -306,10 +319,10 @@ def mapcat(f=None, x=None, sep=None):
       __e12 = __v8
     __y4 = __e12
     if is63(__y4):
-      __r55 = cat(__r55, __c, __y4)
+      __r57 = cat(__r57, __c, __y4)
       __c = sep or ""
     ____i14 = ____i14 + 1
-  return __r55
+  return __r57
 def keep(f=None, x=None):
   def __f6(v=None):
     if yes(f(v)):
@@ -611,15 +624,15 @@ def apply(f=None, args=None):
   __args = stash(args)
   return f(*__args)
 def call(f=None, *_args, **_keys):
-  ____r87 = unstash(list(_args), _keys)
-  __f1 = destash33(f, ____r87)
-  ____id3 = ____r87
+  ____r89 = unstash(list(_args), _keys)
+  __f1 = destash33(f, ____r89)
+  ____id3 = ____r89
   __args12 = cut(____id3, 0)
   return apply(__f1, __args12)
 def setenv(k=None, *_args, **_keys):
-  ____r88 = unstash(list(_args), _keys)
-  __k14 = destash33(k, ____r88)
-  ____id4 = ____r88
+  ____r90 = unstash(list(_args), _keys)
+  __k14 = destash33(k, ____r90)
+  ____id4 = ____r90
   __keys = cut(____id4, 0)
   if string63(__k14):
     __e17 = None
@@ -747,9 +760,9 @@ def __f26(*_args, **_keys):
   return hd(expand_if(__branches1))
 setenv("if", macro=__f26)
 def __f27(expr=None, *_args, **_keys):
-  ____r103 = unstash(list(_args), _keys)
-  __expr5 = destash33(expr, ____r103)
-  ____id15 = ____r103
+  ____r105 = unstash(list(_args), _keys)
+  __expr5 = destash33(expr, ____r105)
+  ____id15 = ____r105
   __clauses1 = cut(____id15, 0)
   __x70 = unique("x")
   def __f28(_=None):
@@ -774,16 +787,16 @@ def __f27(expr=None, *_args, **_keys):
   return ["let", __x70, __expr5, join(["if"], apply(join, map(__cl1, pair(__clauses1))))]
 setenv("case", macro=__f27)
 def __f30(cond=None, *_args, **_keys):
-  ____r107 = unstash(list(_args), _keys)
-  __cond3 = destash33(cond, ____r107)
-  ____id18 = ____r107
+  ____r109 = unstash(list(_args), _keys)
+  __cond3 = destash33(cond, ____r109)
+  ____id18 = ____r109
   __body5 = cut(____id18, 0)
   return ["if", __cond3, join(["do"], __body5)]
 setenv("when", macro=__f30)
 def __f31(cond=None, *_args, **_keys):
-  ____r109 = unstash(list(_args), _keys)
-  __cond5 = destash33(cond, ____r109)
-  ____id20 = ____r109
+  ____r111 = unstash(list(_args), _keys)
+  __cond5 = destash33(cond, ____r111)
+  ____id20 = ____r111
   __body7 = cut(____id20, 0)
   return ["if", ["not", __cond5], join(["do"], __body7)]
 setenv("unless", macro=__f31)
@@ -794,9 +807,9 @@ def __f32(*_args, **_keys):
   return join(["%object"], mapo(__f33, __body9))
 setenv("obj", macro=__f32)
 def __f34(bs=None, *_args, **_keys):
-  ____r113 = unstash(list(_args), _keys)
-  __bs11 = destash33(bs, ____r113)
-  ____id25 = ____r113
+  ____r115 = unstash(list(_args), _keys)
+  __bs11 = destash33(bs, ____r115)
+  ____id25 = ____r115
   __body111 = cut(____id25, 0)
   if atom63(__bs11):
     return join(["let", [__bs11, hd(__body111)]], tl(__body111))
@@ -820,10 +833,10 @@ def __f34(bs=None, *_args, **_keys):
       return ["do", ["%local", __id28, __val1], ["let-symbol", __renames1, join(["let", join(__bs12, __bs21)], __body111)]]
 setenv("let", macro=__f34)
 def __f35(x=None, v=None, *_args, **_keys):
-  ____r115 = unstash(list(_args), _keys)
-  __x116 = destash33(x, ____r115)
-  __v22 = destash33(v, ____r115)
-  ____id30 = ____r115
+  ____r117 = unstash(list(_args), _keys)
+  __x116 = destash33(x, ____r117)
+  __v22 = destash33(v, ____r117)
+  ____id30 = ____r117
   __body13 = cut(____id30, 0)
   if __v22 == "as":
     return join(["%with", ["%as", __x116, hd(__body13)]], tl(__body13))
@@ -834,19 +847,19 @@ def __f35(x=None, v=None, *_args, **_keys):
       return join(["let", [__x116, __v22]], __body13, [__x116])
 setenv("with", macro=__f35)
 def __f36(x=None, v=None, *_args, **_keys):
-  ____r117 = unstash(list(_args), _keys)
-  __x129 = destash33(x, ____r117)
-  __v24 = destash33(v, ____r117)
-  ____id32 = ____r117
+  ____r119 = unstash(list(_args), _keys)
+  __x129 = destash33(x, ____r119)
+  __v24 = destash33(v, ____r119)
+  ____id32 = ____r119
   __body15 = cut(____id32, 0)
   __y6 = unique("y")
   return ["let", __y6, __v24, ["when", ["yes", __y6], join(["let", [__x129, __y6]], __body15)]]
 setenv("let-when", macro=__f36)
 def __f37(name=None, args=None, *_args, **_keys):
-  ____r119 = unstash(list(_args), _keys)
-  __name1 = destash33(name, ____r119)
-  __args5 = destash33(args, ____r119)
-  ____id34 = ____r119
+  ____r121 = unstash(list(_args), _keys)
+  __name1 = destash33(name, ____r121)
+  __args5 = destash33(args, ____r121)
+  ____id34 = ____r121
   __body17 = cut(____id34, 0)
   ____x138 = object(["setenv", ["quote", __name1]])
   ____x138["macro"] = join(["fn", __args5], __body17)
@@ -855,10 +868,10 @@ def __f37(name=None, args=None, *_args, **_keys):
   return __form1
 setenv("define-macro", macro=__f37)
 def __f38(name=None, args=None, *_args, **_keys):
-  ____r121 = unstash(list(_args), _keys)
-  __name3 = destash33(name, ____r121)
-  __args7 = destash33(args, ____r121)
-  ____id36 = ____r121
+  ____r123 = unstash(list(_args), _keys)
+  __name3 = destash33(name, ____r123)
+  __args7 = destash33(args, ____r123)
+  ____id36 = ____r123
   __body19 = cut(____id36, 0)
   ____x144 = object(["setenv", ["quote", __name3]])
   ____x144["special"] = join(["fn", __args7], __body19)
@@ -876,17 +889,17 @@ def __f40(__x158=None, *_args, **_keys):
   ____id39 = __x158
   __char1 = has(____id39, 0)
   __s2 = has(____id39, 1)
-  ____r125 = unstash(list(_args), _keys)
-  ____x158 = destash33(__x158, ____r125)
-  ____id40 = ____r125
+  ____r127 = unstash(list(_args), _keys)
+  ____x158 = destash33(__x158, ____r127)
+  ____id40 = ____r127
   __body21 = cut(____id40, 0)
   return ["set", ["get", "read-table", __char1], join(["fn", [__s2]], __body21)]
 setenv("define-reader", macro=__f40)
 def __f41(name=None, x=None, *_args, **_keys):
-  ____r127 = unstash(list(_args), _keys)
-  __name5 = destash33(name, ____r127)
-  __x166 = destash33(x, ____r127)
-  ____id42 = ____r127
+  ____r129 = unstash(list(_args), _keys)
+  __name5 = destash33(name, ____r129)
+  __x166 = destash33(x, ____r129)
+  ____id42 = ____r129
   __body23 = cut(____id42, 0)
   setenv(__name5, variable=True)
   if some63(__body23):
@@ -895,10 +908,10 @@ def __f41(name=None, x=None, *_args, **_keys):
     return join(["%local", __name5, __x166], keys(__body23))
 setenv("define", macro=__f41)
 def __f42(name=None, x=None, *_args, **_keys):
-  ____r129 = unstash(list(_args), _keys)
-  __name7 = destash33(name, ____r129)
-  __x172 = destash33(x, ____r129)
-  ____id44 = ____r129
+  ____r131 = unstash(list(_args), _keys)
+  __name7 = destash33(name, ____r131)
+  __x172 = destash33(x, ____r131)
+  ____id44 = ____r131
   __body25 = cut(____id44, 0)
   setenv(__name7, toplevel=True, variable=True)
   if some63(__body25):
@@ -931,9 +944,9 @@ setenv("with-frame", macro=__f46)
 def __f47(__x226=None, *_args, **_keys):
   ____id47 = __x226
   __names3 = has(____id47, 0)
-  ____r137 = unstash(list(_args), _keys)
-  ____x226 = destash33(__x226, ____r137)
-  ____id48 = ____r137
+  ____r139 = unstash(list(_args), _keys)
+  ____x226 = destash33(__x226, ____r139)
+  ____id48 = ____r139
   __body29 = cut(____id48, 0)
   __x227 = unique("x")
   ____x230 = object(["setenv", __x227])
@@ -941,9 +954,9 @@ def __f47(__x226=None, *_args, **_keys):
   return join(["with-frame", ["each", __x227, __names3, ____x230]], __body29)
 setenv("with-bindings", macro=__f47)
 def __f48(definitions=None, *_args, **_keys):
-  ____r140 = unstash(list(_args), _keys)
-  __definitions1 = destash33(definitions, ____r140)
-  ____id50 = ____r140
+  ____r142 = unstash(list(_args), _keys)
+  __definitions1 = destash33(definitions, ____r142)
+  ____id50 = ____r142
   __body31 = cut(____id50, 0)
   add(environment, {})
   def __f49(m=None):
@@ -954,9 +967,9 @@ def __f48(definitions=None, *_args, **_keys):
   return ____x234
 setenv("let-macro", macro=__f48)
 def __f50(expansions=None, *_args, **_keys):
-  ____r144 = unstash(list(_args), _keys)
-  __expansions1 = destash33(expansions, ____r144)
-  ____id53 = ____r144
+  ____r146 = unstash(list(_args), _keys)
+  __expansions1 = destash33(expansions, ____r146)
+  ____id53 = ____r146
   __body33 = cut(____id53, 0)
   add(environment, {})
   def __f51(__x242=None):
@@ -970,9 +983,9 @@ def __f50(expansions=None, *_args, **_keys):
   return ____x241
 setenv("let-symbol", macro=__f50)
 def __f52(names=None, *_args, **_keys):
-  ____r148 = unstash(list(_args), _keys)
-  __names5 = destash33(names, ____r148)
-  ____id56 = ____r148
+  ____r150 = unstash(list(_args), _keys)
+  __names5 = destash33(names, ____r150)
+  ____id56 = ____r150
   __body35 = cut(____id56, 0)
   def __f53(n=None):
     return [n, ["unique", ["quote", n]]]
@@ -980,16 +993,16 @@ def __f52(names=None, *_args, **_keys):
   return join(["let", apply(join, __bs3)], __body35)
 setenv("let-unique", macro=__f52)
 def __f54(args=None, *_args, **_keys):
-  ____r151 = unstash(list(_args), _keys)
-  __args9 = destash33(args, ____r151)
-  ____id58 = ____r151
+  ____r153 = unstash(list(_args), _keys)
+  __args9 = destash33(args, ____r153)
+  ____id58 = ____r153
   __body37 = cut(____id58, 0)
   return join(["%function"], bind42(__args9, __body37), keys(__body37))
 setenv("fn", macro=__f54)
 def __f55(f=None, *_args, **_keys):
-  ____r153 = unstash(list(_args), _keys)
-  __f3 = destash33(f, ____r153)
-  ____id60 = ____r153
+  ____r155 = unstash(list(_args), _keys)
+  __f3 = destash33(f, ____r155)
+  ____id60 = ____r155
   __args111 = cut(____id60, 0)
   if L_35(__args111) > 1:
     return ["%call", "apply", __f3, ["join", join(["list"], almost(__args111)), last(__args111), join(["list"], keys(__args111))]]
@@ -1009,10 +1022,10 @@ def __f56(expr=None):
     return ["list", ["xpcall", ["fn", join(), expr], ["fn", ["m"], ["if", ["obj?", "m"], "m", ____x305]]]]
 setenv("guard", macro=__f56)
 def __f57(x=None, t=None, *_args, **_keys):
-  ____r157 = unstash(list(_args), _keys)
-  __x331 = destash33(x, ____r157)
-  __t3 = destash33(t, ____r157)
-  ____id63 = ____r157
+  ____r159 = unstash(list(_args), _keys)
+  __x331 = destash33(x, ____r159)
+  __t3 = destash33(t, ____r159)
+  ____id63 = ____r159
   __body39 = cut(____id63, 0)
   __o19 = unique("o")
   __n28 = unique("n")
@@ -1040,10 +1053,10 @@ def __f57(x=None, t=None, *_args, **_keys):
   return ["let", [__o19, __t3, __k20, "nil"], ["%for", ____x337, __k20, join(["let", [__v26, ["get", __o19, __k20]]], __e21)]]
 setenv("each", macro=__f57)
 def __f58(i=None, to=None, *_args, **_keys):
-  ____r159 = unstash(list(_args), _keys)
-  __i36 = destash33(i, ____r159)
-  __to1 = destash33(to, ____r159)
-  ____id66 = ____r159
+  ____r161 = unstash(list(_args), _keys)
+  __i36 = destash33(i, ____r161)
+  __to1 = destash33(to, ____r161)
+  ____id66 = ____r161
   __body41 = cut(____id66, 0)
   if __to1 == "in":
     return ["%for", hd(__body41), __i36, join(["do"], tl(__body41))]
@@ -1051,10 +1064,10 @@ def __f58(i=None, to=None, *_args, **_keys):
     return ["let", __i36, 0, join(["while", ["<", __i36, __to1]], __body41, [["inc", __i36]])]
 setenv("for", macro=__f58)
 def __f59(v=None, t=None, *_args, **_keys):
-  ____r161 = unstash(list(_args), _keys)
-  __v28 = destash33(v, ____r161)
-  __t5 = destash33(t, ____r161)
-  ____id68 = ____r161
+  ____r163 = unstash(list(_args), _keys)
+  __v28 = destash33(v, ____r163)
+  __t5 = destash33(t, ____r163)
+  ____id68 = ____r163
   __body43 = cut(____id68, 0)
   __x369 = unique("x")
   __i38 = unique("i")
@@ -1084,16 +1097,16 @@ def __f63():
   return ["quote", has(setenv("target", toplevel=True), "value")]
 setenv("language", macro=__f63)
 def __f64(a=None, *_args, **_keys):
-  ____r167 = unstash(list(_args), _keys)
-  __a6 = destash33(a, ____r167)
-  ____id70 = ____r167
+  ____r169 = unstash(list(_args), _keys)
+  __a6 = destash33(a, ____r169)
+  ____id70 = ____r169
   __bs5 = cut(____id70, 0)
   return ["set", __a6, join(["join", __a6], __bs5)]
 setenv("join!", macro=__f64)
 def __f65(a=None, *_args, **_keys):
-  ____r169 = unstash(list(_args), _keys)
-  __a8 = destash33(a, ____r169)
-  ____id72 = ____r169
+  ____r171 = unstash(list(_args), _keys)
+  __a8 = destash33(a, ____r171)
+  ____id72 = ____r171
   __bs7 = cut(____id72, 0)
   return ["set", __a8, join(["cat", __a8], __bs7)]
 setenv("cat!", macro=__f65)
@@ -1142,23 +1155,23 @@ def __f72(*_args, **_keys):
   return __form5
 setenv("during-compilation", macro=__f72)
 def __f73(name=None, *_args, **_keys):
-  ____r179 = unstash(list(_args), _keys)
-  __name11 = destash33(name, ____r179)
-  ____id74 = ____r179
+  ____r181 = unstash(list(_args), _keys)
+  __name11 = destash33(name, ____r181)
+  ____id74 = ____r181
   __body49 = cut(____id74, 0)
   return join(["define-global", __name11], __body49)
 setenv("def", macro=__f73)
 def __f74(name=None, *_args, **_keys):
-  ____r181 = unstash(list(_args), _keys)
-  __name13 = destash33(name, ____r181)
-  ____id76 = ____r181
+  ____r183 = unstash(list(_args), _keys)
+  __name13 = destash33(name, ____r183)
+  ____id76 = ____r183
   __body51 = cut(____id76, 0)
   return join(["define-macro", __name13], __body51)
 setenv("mac", macro=__f74)
 def __f75(name=None, *_args, **_keys):
-  ____r183 = unstash(list(_args), _keys)
-  __name15 = destash33(name, ____r183)
-  ____id78 = ____r183
+  ____r185 = unstash(list(_args), _keys)
+  __name15 = destash33(name, ____r185)
+  ____id78 = ____r185
   __value1 = cut(____id78, 0)
   return join(["def", __name15], __value1)
 setenv("defconst", macro=__f75)
@@ -1170,9 +1183,9 @@ def __f76(name=None):
   return ____x454
 setenv("undefined?", macro=__f76)
 def __f77(name=None, *_args, **_keys):
-  ____r187 = unstash(list(_args), _keys)
-  __name17 = destash33(name, ____r187)
-  ____id80 = ____r187
+  ____r189 = unstash(list(_args), _keys)
+  __name17 = destash33(name, ____r189)
+  ____id80 = ____r189
   __value3 = cut(____id80, 0)
   ____x470 = object(["target"])
   ____x470["py"] = ["global", __name17]
@@ -1219,9 +1232,9 @@ def __f81(*_args, **_keys):
       return join(["%div"], __args19)
 setenv("/", macro=__f81)
 def __f82(keyword=None, *_args, **_keys):
-  ____r189 = unstash(list(_args), _keys)
-  __keyword1 = destash33(keyword, ____r189)
-  ____id82 = ____r189
+  ____r191 = unstash(list(_args), _keys)
+  __keyword1 = destash33(keyword, ____r191)
+  ____id82 = ____r191
   __body53 = cut(____id82, 0)
   ____x484 = object([__keyword1])
   ____x484["async"] = True
