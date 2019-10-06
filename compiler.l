@@ -914,6 +914,15 @@
 (define-special await (x)
   (cat "await " (compile x)))
 
+(define-special %b (x)
+  (cat "b" (compile x)))
+
+(define-special %f (x)
+  (cat "f" (compile x)))
+
+(define-special %r (x)
+  (cat "r" (compile x)))
+
 (export run
         eval
         expand

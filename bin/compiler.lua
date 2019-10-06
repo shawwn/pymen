@@ -1678,6 +1678,15 @@ end, stmt = true})
 setenv("await", {_stash = true, special = function (x)
   return "await " .. compile(x)
 end})
+setenv("%b", {_stash = true, special = function (x)
+  return "b" .. compile(x)
+end})
+setenv("%f", {_stash = true, special = function (x)
+  return "f" .. compile(x)
+end})
+setenv("%r", {_stash = true, special = function (x)
+  return "r" .. compile(x)
+end})
 local __exports = exports or {}
 __exports.run = run
 __exports["eval"] = _eval

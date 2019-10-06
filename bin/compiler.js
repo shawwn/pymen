@@ -1745,6 +1745,15 @@ setenv("yield", {_stash: true, special: function () {
 setenv("await", {_stash: true, special: function (x) {
   return "await " + compile(x);
 }});
+setenv("%b", {_stash: true, special: function (x) {
+  return "b" + compile(x);
+}});
+setenv("%f", {_stash: true, special: function (x) {
+  return "f" + compile(x);
+}});
+setenv("%r", {_stash: true, special: function (x) {
+  return "r" + compile(x);
+}});
 exports.run = run;
 exports["eval"] = _eval;
 exports._eval = _eval;

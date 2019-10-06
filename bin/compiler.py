@@ -1377,3 +1377,12 @@ setenv("yield", special=__f41, stmt=True)
 def __f42(x=None):
   return cat("await ", compile(x))
 setenv("await", special=__f42)
+def __f43(x=None):
+  return cat("b", compile(x))
+setenv("%b", special=__f43)
+def __f44(x=None):
+  return cat("f", compile(x))
+setenv("%f", special=__f44)
+def __f45(x=None):
+  return cat("r", compile(x))
+setenv("%r", special=__f45)
