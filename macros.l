@@ -181,7 +181,7 @@
   (if (> (# args) 1)
       `((do apply) ,f (join (list ,@(almost args)) ,(last args) (list ,@(keys args))))
       (keys? args)
-      `((do apply) ,f (list ,@args))
+      `((do apply) ,f (join ,@args (list ,@(keys args))))
       `((do apply) ,f ,@args)))
 
 (define-macro guard (expr)
