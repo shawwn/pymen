@@ -1,8 +1,10 @@
 from lumen import *
 import sys
 def call_with_file(f=None, path=None, mode=None):
-  with open(path, mode) as h: return f(h)
-  return None
+  __e = None
+  with open(path, mode) as h:
+    __e = f(h)
+  return __e
 def read_file(path=None):
   def __f(f=None):
     return f.read()

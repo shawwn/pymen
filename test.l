@@ -206,7 +206,7 @@
     (test= 10 x))
   (test= 12 (do (get but zz) 12))
   (let y nil
-    (let ignore (do (%literal |  | y | = 10;|) 42)
+    (let ignore (do (%literal y | = 10;|) 42)
       (test= 10 y))))
 
 (define-test string

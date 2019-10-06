@@ -13,8 +13,8 @@
 
 (target py:
   (define call-with-file (f path mode)
-    (%literal |  with | (open path mode) | as h: return | (f |h|))
-    nil))
+    (with (open path mode) as h
+      (f h))))
 
 (define read-file (path)
   (target
