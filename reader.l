@@ -1,4 +1,4 @@
-(target py: |from lumen import *|)
+(target py: (from lumen import *))
 
 (define delimiters (set-of "(" ")" ";" "\r" "\n"))
 (define whitespace (set-of " " "\t" "\r" "\n"))

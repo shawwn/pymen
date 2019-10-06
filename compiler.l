@@ -1,4 +1,4 @@
-(target py: |from lumen import *|)
+(target py: (from lumen import *))
 
 (define getenv (k p)
   (when (string? k)
