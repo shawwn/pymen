@@ -265,29 +265,32 @@
       (and (> n 96) (< n 123)) ; a-z
       (= n 95)))               ; _
 
-(define id (id)
-  (let (x (if (= target 'py) "L_" "_")
-        id1 (if (number-code? (code id 0)) x ""))
-    (for i (# id)
-      (let (c (char id i)
-            n (code c)
-            c1 (if (and (= c "-")
-                        (not (= id "-")))
-                   (if (= i 0) x "_")
-                   (valid-code? n) c
-                   (= i 0) (cat x n)
-                 n))
-        (cat! id1 c1)))
-    (if (reserved? id1)
-        (cat x id1)
-        id1)))
+(define-global compile-id (id raw?)
+  (if (= (code id 0) 46) ; .
+      (cat "." (compile-id (clip id 1) true))
+    (let (x (if (= target 'py) "L_" "_")
+          id1 (if (number-code? (code id 0)) x ""))
+      (for i (# id)
+        (let (c (char id i)
+              n (code c)
+              c1 (if (and (= c "-")
+                          (not (= id "-")))
+                     (if (= i 0) x "_")
+                     (valid-code? n) c
+                     (= i 0) (cat x n)
+                   n))
+          (cat! id1 c1)))
+      (if raw? id1
+          (reserved? id1)
+          (cat x id1)
+          id1))))
 
 (define-global valid-id? (x)
-  (and (some? x) (= x (id x))))
+  (and (some? x) (= x (compile-id x))))
 
 (let (names (obj))
   (define-global unique (x)
-    (let x (id x)
+    (let x (compile-id x)
       (if (has? names x)
           (let i (get names x)
             (inc (get names x))
@@ -379,7 +382,7 @@
   (if (= x "nil") (compile-nil)
       (id-literal? x) (inner x)
       (string-literal? x) (escape-newlines x)
-      (string? x) (id x)
+      (string? x) (compile-id x)
       (boolean? x) (compile-boolean x)
       (nan? x) "nan"
       (= x inf) "inf"
@@ -404,10 +407,19 @@
            (= (hd x) '%function))
       (> (precedence x) 0)))
 
+(define method-call? (form)
+  (let x (if (list? form) (hd form) form)
+    (and (string? x)
+         (> (# x 1) 1)
+         (= (char x 0) "."))))
+
 (define compile-call (form)
   (let (f (hd form)
         f1 (compile f)
-        args (compile-args (stash* (tl form))))
+        args (stash* (tl form))
+        args (if (method-call? (hd args))
+                 (mapcat compile args "")
+                 (compile-args args)))
     (if (parenthesize-call? f)
         (cat "(" f1 ")" args)
       (cat f1 args))))
