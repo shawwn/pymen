@@ -436,7 +436,7 @@
           (with-indent (cat (indentation) "pass\n"))
         s)))
 
-(define-global compile-function (args body :name :prefix)
+(define-global compile-function (args body :name :prefix :async)
   (let (id (if name (compile name) "")
         args1 (if (and (target? 'lua)
                        (has? args 'rest))
@@ -449,12 +449,13 @@
         body (compile-body body)
         ind (indentation)
         p (if prefix (cat prefix " ") "")
-        tr (if (target? 'js) "" "end"))
+        tr (if (target? 'js) "" "end")
+        a (if async "async " ""))
     (if name (cat! tr "\n"))
     (if (target? 'js)
-        (cat "function " id args " {\n" body ind "}" tr)
+        (cat a "function " id args " {\n" body ind "}" tr)
         (target? 'py)
-        (cat "def " id args ":\n" body)
+        (cat a "def " id args ":\n" body)
       (cat p "function " id args "\n" body ind tr))))
 
 (define can-return? (form)
@@ -909,6 +910,9 @@
 
 (define-special yield args :stmt
   (cat (indentation) "yield " (mapcat compile args ", ")))
+
+(define-special await (x)
+  (cat "await " (compile x)))
 
 (export run
         eval

@@ -1380,6 +1380,15 @@ setenv("/", {_stash = true, macro = function (...)
     end
   end
 end})
+setenv("async", {_stash = true, macro = function (keyword, ...)
+  local ____r99 = unstash({...})
+  local __keyword1 = destash33(keyword, ____r99)
+  local ____id77 = ____r99
+  local __body51 = cut(____id77, 0)
+  local ____x503 = object({__keyword1})
+  ____x503.async = true
+  return join(____x503, __body51)
+end})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")

@@ -1535,6 +1535,15 @@ setenv("/", {_stash: true, macro: function () {
     }
   }
 }});
+setenv("async", {_stash: true, macro: function (keyword) {
+  var ____r99 = unstash(Array.prototype.slice.call(arguments, 1));
+  var __keyword1 = destash33(keyword, ____r99);
+  var ____id77 = ____r99;
+  var __body51 = cut(____id77, 0);
+  var ____x463 = object([__keyword1]);
+  ____x463.async = true;
+  return join(____x463, __body51);
+}});
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");

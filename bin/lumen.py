@@ -1209,6 +1209,15 @@ def __f63(*_args, **_keys):
     else:
       return join(["%div"], __args17)
 setenv("/", macro=__f63)
+def __f64(keyword=None, *_args, **_keys):
+  ____r99 = unstash(list(_args), _keys)
+  __keyword1 = destash33(keyword, ____r99)
+  ____id77 = ____r99
+  __body51 = cut(____id77, 0)
+  ____x463 = object([__keyword1])
+  ____x463["async"] = True
+  return join(____x463, __body51)
+setenv("async", macro=__f64)
 import reader
 import compiler
 import system
