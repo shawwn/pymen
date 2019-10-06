@@ -279,6 +279,10 @@
 (define-macro when-compiling body
   (eval `(do ,@body)))
 
+(define-macro during-compilation body
+  (with form `(do ,@body)
+    (eval form)))
+
 (define-macro def (name rest: body)
   `(define-global ,name ,@body))
 

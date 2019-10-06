@@ -1135,44 +1135,50 @@ def __f54(*_args, **_keys):
   __body45 = unstash(list(_args), _keys)
   return L_eval(join(["do"], __body45))
 setenv("when-compiling", macro=__f54)
-def __f55(name=None, *_args, **_keys):
+def __f55(*_args, **_keys):
+  __body47 = unstash(list(_args), _keys)
+  __form5 = join(["do"], __body47)
+  L_eval(__form5)
+  return __form5
+setenv("during-compilation", macro=__f55)
+def __f56(name=None, *_args, **_keys):
   ____r89 = unstash(list(_args), _keys)
   __name11 = destash33(name, ____r89)
   ____id69 = ____r89
-  __body47 = cut(____id69, 0)
-  return join(["define-global", __name11], __body47)
-setenv("def", macro=__f55)
-def __f56(name=None, *_args, **_keys):
+  __body49 = cut(____id69, 0)
+  return join(["define-global", __name11], __body49)
+setenv("def", macro=__f56)
+def __f57(name=None, *_args, **_keys):
   ____r91 = unstash(list(_args), _keys)
   __name13 = destash33(name, ____r91)
   ____id71 = ____r91
-  __body49 = cut(____id71, 0)
-  return join(["define-macro", __name13], __body49)
-setenv("mac", macro=__f56)
-def __f57(name=None, *_args, **_keys):
+  __body51 = cut(____id71, 0)
+  return join(["define-macro", __name13], __body51)
+setenv("mac", macro=__f57)
+def __f58(name=None, *_args, **_keys):
   ____r93 = unstash(list(_args), _keys)
   __name15 = destash33(name, ____r93)
   ____id73 = ____r93
   __value1 = cut(____id73, 0)
   return join(["def", __name15], __value1)
-setenv("defconst", macro=__f57)
-def __f58(name=None):
-  ____x439 = object(["target"])
-  ____x439["js"] = ["=", ["typeof", name], "\"undefined\""]
-  ____x439["lua"] = ["=", ["idx", "_G", name], "nil"]
-  ____x439["py"] = ["not", ["%in", ["quote", compile(name)], ["globals"]]]
-  return ____x439
-setenv("undefined?", macro=__f58)
-def __f59(name=None, *_args, **_keys):
+setenv("defconst", macro=__f58)
+def __f59(name=None):
+  ____x441 = object(["target"])
+  ____x441["js"] = ["=", ["typeof", name], "\"undefined\""]
+  ____x441["lua"] = ["=", ["idx", "_G", name], "nil"]
+  ____x441["py"] = ["not", ["%in", ["quote", compile(name)], ["globals"]]]
+  return ____x441
+setenv("undefined?", macro=__f59)
+def __f60(name=None, *_args, **_keys):
   ____r97 = unstash(list(_args), _keys)
   __name17 = destash33(name, ____r97)
   ____id75 = ____r97
   __value3 = cut(____id75, 0)
-  ____x455 = object(["target"])
-  ____x455["py"] = ["global", __name17]
-  return ["when", ["undefined?", __name17], ____x455, join(["defconst", __name17], __value3)]
-setenv("defvar", macro=__f59)
-def __f60(*_args, **_keys):
+  ____x457 = object(["target"])
+  ____x457["py"] = ["global", __name17]
+  return ["when", ["undefined?", __name17], ____x457, join(["defconst", __name17], __value3)]
+setenv("defvar", macro=__f60)
+def __f61(*_args, **_keys):
   __args11 = unstash(list(_args), _keys)
   if none63(__args11):
     return 0
@@ -1181,8 +1187,8 @@ def __f60(*_args, **_keys):
       return hd(__args11)
     else:
       return join(["%add"], __args11)
-setenv("+", macro=__f60)
-def __f61(*_args, **_keys):
+setenv("+", macro=__f61)
+def __f62(*_args, **_keys):
   __args13 = unstash(list(_args), _keys)
   if none63(__args13):
     return 0
@@ -1191,8 +1197,8 @@ def __f61(*_args, **_keys):
       return ["%unm", hd(__args13)]
     else:
       return join(["%sub"], __args13)
-setenv("-", macro=__f61)
-def __f62(*_args, **_keys):
+setenv("-", macro=__f62)
+def __f63(*_args, **_keys):
   __args15 = unstash(list(_args), _keys)
   if none63(__args15):
     return 1
@@ -1201,8 +1207,8 @@ def __f62(*_args, **_keys):
       return hd(__args15)
     else:
       return join(["%mul"], __args15)
-setenv("*", macro=__f62)
-def __f63(*_args, **_keys):
+setenv("*", macro=__f63)
+def __f64(*_args, **_keys):
   __args17 = unstash(list(_args), _keys)
   if none63(__args17):
     return 1
@@ -1211,16 +1217,16 @@ def __f63(*_args, **_keys):
       return hd(__args17)
     else:
       return join(["%div"], __args17)
-setenv("/", macro=__f63)
-def __f64(keyword=None, *_args, **_keys):
+setenv("/", macro=__f64)
+def __f65(keyword=None, *_args, **_keys):
   ____r99 = unstash(list(_args), _keys)
   __keyword1 = destash33(keyword, ____r99)
   ____id77 = ____r99
-  __body51 = cut(____id77, 0)
-  ____x469 = object([__keyword1])
-  ____x469["async"] = True
-  return join(____x469, __body51)
-setenv("async", macro=__f64)
+  __body53 = cut(____id77, 0)
+  ____x471 = object([__keyword1])
+  ____x471["async"] = True
+  return join(____x471, __body53)
+setenv("async", macro=__f65)
 import reader
 import compiler
 import system

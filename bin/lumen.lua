@@ -1299,19 +1299,25 @@ setenv("when-compiling", {_stash = true, macro = function (...)
   local __body45 = unstash({...})
   return _eval(join({"do"}, __body45))
 end})
+setenv("during-compilation", {_stash = true, macro = function (...)
+  local __body47 = unstash({...})
+  local __form5 = join({"do"}, __body47)
+  _eval(__form5)
+  return __form5
+end})
 setenv("def", {_stash = true, macro = function (name, ...)
   local ____r89 = unstash({...})
   local __name11 = destash33(name, ____r89)
   local ____id69 = ____r89
-  local __body47 = cut(____id69, 0)
-  return join({"define-global", __name11}, __body47)
+  local __body49 = cut(____id69, 0)
+  return join({"define-global", __name11}, __body49)
 end})
 setenv("mac", {_stash = true, macro = function (name, ...)
   local ____r91 = unstash({...})
   local __name13 = destash33(name, ____r91)
   local ____id71 = ____r91
-  local __body49 = cut(____id71, 0)
-  return join({"define-macro", __name13}, __body49)
+  local __body51 = cut(____id71, 0)
+  return join({"define-macro", __name13}, __body51)
 end})
 setenv("defconst", {_stash = true, macro = function (name, ...)
   local ____r93 = unstash({...})
@@ -1321,20 +1327,20 @@ setenv("defconst", {_stash = true, macro = function (name, ...)
   return join({"def", __name15}, __value1)
 end})
 setenv("undefined?", {_stash = true, macro = function (name)
-  local ____x473 = object({"target"})
-  ____x473.js = {"=", {"typeof", name}, "\"undefined\""}
-  ____x473.lua = {"=", {"idx", "_G", name}, "nil"}
-  ____x473.py = {"not", {"%in", {"quote", compile(name)}, {"globals"}}}
-  return ____x473
+  local ____x476 = object({"target"})
+  ____x476.js = {"=", {"typeof", name}, "\"undefined\""}
+  ____x476.lua = {"=", {"idx", "_G", name}, "nil"}
+  ____x476.py = {"not", {"%in", {"quote", compile(name)}, {"globals"}}}
+  return ____x476
 end})
 setenv("defvar", {_stash = true, macro = function (name, ...)
   local ____r97 = unstash({...})
   local __name17 = destash33(name, ____r97)
   local ____id75 = ____r97
   local __value3 = cut(____id75, 0)
-  local ____x490 = object({"target"})
-  ____x490.py = {"global", __name17}
-  return {"when", {"undefined?", __name17}, ____x490, join({"defconst", __name17}, __value3)}
+  local ____x493 = object({"target"})
+  ____x493.py = {"global", __name17}
+  return {"when", {"undefined?", __name17}, ____x493, join({"defconst", __name17}, __value3)}
 end})
 setenv("+", {_stash = true, macro = function (...)
   local __args11 = unstash({...})
@@ -1388,10 +1394,10 @@ setenv("async", {_stash = true, macro = function (keyword, ...)
   local ____r99 = unstash({...})
   local __keyword1 = destash33(keyword, ____r99)
   local ____id77 = ____r99
-  local __body51 = cut(____id77, 0)
-  local ____x509 = object({__keyword1})
-  ____x509.async = true
-  return join(____x509, __body51)
+  local __body53 = cut(____id77, 0)
+  local ____x512 = object({__keyword1})
+  ____x512.async = true
+  return join(____x512, __body53)
 end})
 local reader = require("reader")
 local compiler = require("compiler")
