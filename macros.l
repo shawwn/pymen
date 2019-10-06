@@ -90,6 +90,8 @@
 (define-macro with (x v rest: body)
   (if (= v 'as)
       `(%with (%as ,x ,(hd body)) ,@(tl body))
+      (not (atom? x))
+      `(%with ,x ,v ,@body)
     `(let (,x ,v) ,@body ,x)))
 
 (define-macro let-when (x v rest: body)
