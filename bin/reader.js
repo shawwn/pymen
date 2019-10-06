@@ -230,11 +230,16 @@ read_table["`"] = function (s) {
 };
 read_table[","] = function (s) {
   read_char(s);
-  if (peek_char(s) === "@") {
-    read_char(s);
-    return wrap(s, "unquote-splicing");
+  var __c7 = peek_char(s);
+  if (nil63(__c7) || has63(whitespace, __c7)) {
+    return ",";
   } else {
-    return wrap(s, "unquote");
+    if (__c7 === "@") {
+      read_char(s);
+      return wrap(s, "unquote-splicing");
+    } else {
+      return wrap(s, "unquote");
+    }
   }
 };
 exports.stream = stream;

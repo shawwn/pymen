@@ -194,9 +194,13 @@ def __f7(s=None):
 read_table["`"] = __f7
 def __f8(s=None):
   read_char(s)
-  if peek_char(s) == "@":
-    read_char(s)
-    return wrap(s, "unquote-splicing")
+  __c7 = peek_char(s)
+  if nil63(__c7) or has63(whitespace, __c7):
+    return ","
   else:
-    return wrap(s, "unquote")
+    if __c7 == "@":
+      read_char(s)
+      return wrap(s, "unquote-splicing")
+    else:
+      return wrap(s, "unquote")
 read_table[","] = __f8

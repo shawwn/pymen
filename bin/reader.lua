@@ -230,11 +230,16 @@ read_table["`"] = function (s)
 end
 read_table[","] = function (s)
   read_char(s)
-  if peek_char(s) == "@" then
-    read_char(s)
-    return wrap(s, "unquote-splicing")
+  local __c7 = peek_char(s)
+  if nil63(__c7) or has63(whitespace, __c7) then
+    return ","
   else
-    return wrap(s, "unquote")
+    if __c7 == "@" then
+      read_char(s)
+      return wrap(s, "unquote-splicing")
+    else
+      return wrap(s, "unquote")
+    end
   end
 end
 local __exports = exports or {}

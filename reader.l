@@ -152,10 +152,13 @@
 
 (define-reader ("," s)
   (read-char s)
-  (if (= (peek-char s) "@")
-      (do (read-char s)
-          (wrap s 'unquote-splicing))
-    (wrap s 'unquote)))
+  (let c (peek-char s)
+    (if (or (nil? c) (has? whitespace c))
+        ","
+        (= c "@")
+        (do (read-char s)
+            (wrap s 'unquote-splicing))
+      (wrap s 'unquote))))
 
 (export stream
         read

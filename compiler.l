@@ -727,7 +727,7 @@
 
 (define-special %for (t k form) :stmt :tr
   (let (t (compile t)
-        k (if (atom? k) (compile k) (mapcat compile k ", "))
+        k (compile k)
         ind (indentation)
         body (compile-body form))
     (if (target? 'lua)
@@ -861,8 +861,7 @@
 (define-special %list (form comps cond)
   (let s (compile form)
     (step (k v) comps
-      (let k1 (if (obj? k) (mapcat compile k ", ") (compile k))
-        (cat! s " for " k1 " in " (compile v))))
+      (cat! s " for " (compile k) " in " (compile v)))
     (when (is? cond)
       (cat! s " if " (compile cond)))
     (cat "[" s "]")))
@@ -893,10 +892,10 @@
         (cat ind "from " (compile name) " import " names)
       "")))
 
-(define-special \, args
-  (if (none? args) ","
-      (one? args) (cat "," (compile (hd args)))
-    (mapcat compile args ",")))
+(define-special , args
+  (if (none? args) ", "
+      (one? args) (cat ", " (compile (hd args)))
+    (mapcat compile args ", ")))
 
 (define-special : args
   (if (none? args) ":"
