@@ -7,9 +7,9 @@ LUMEN_HOST ?= $(LUMEN_NODE)
 
 LUMEN := LUMEN_HOST="$(LUMEN_HOST)" bin/lumen
 
-OBJS :=	obj/runtime.o	\
-	obj/macros.o	\
-	obj/main.o
+OBJS :=	runtime.o	\
+	macros.o	\
+	main.o
 
 MODS := bin/lumen.x	\
 	bin/reader.x	\
@@ -22,34 +22,12 @@ clean:
 	@git checkout bin/*.js
 	@git checkout bin/*.lua
 	@git checkout bin/*.py
-	@rm -f obj/*
 
-bin/lumen.js: $(OBJS:.o=.js)
-	@echo $@
-	@cat $^ > $@.tmp
-	@mv $@.tmp $@
+bin/lumen.js: $(OBJS:.o=.l)
 
-bin/lumen.lua: $(OBJS:.o=.lua)
-	@echo $@
-	@cat $^ > $@.tmp
-	@mv $@.tmp $@
+bin/lumen.lua: $(OBJS:.o=.l)
 
-bin/lumen.py: $(OBJS:.o=.py)
-	@echo $@
-	@cat $^ > $@.tmp
-	@mv $@.tmp $@
-
-obj/%.js : %.l
-	@echo "  $@"
-	@$(LUMEN) -c $< -o $@ -t js
-
-obj/%.lua : %.l
-	@echo "  $@"
-	@$(LUMEN) -c $< -o $@ -t lua
-
-obj/%.py : %.l
-	@echo "  $@"
-	@$(LUMEN) -c $< -o $@ -t py
+bin/lumen.py: $(OBJS:.o=.l)
 
 bin/%.js : %.l
 	@echo $@
