@@ -1181,9 +1181,9 @@ setenv("define", {_stash: true, macro: function (name, x) {
   var __body23 = cut(____id37, 0);
   setenv(__name5, {_stash: true, variable: true});
   if (some63(__body23)) {
-    return join(["%local-function", __name5], bind42(__x145, __body23));
+    return join(["%local-function", __name5], bind42(__x145, __body23), keys(__body23));
   } else {
-    return ["%local", __name5, __x145];
+    return join(["%local", __name5, __x145], keys(__body23));
   }
 }});
 setenv("define-global", {_stash: true, macro: function (name, x) {
@@ -1194,9 +1194,9 @@ setenv("define-global", {_stash: true, macro: function (name, x) {
   var __body25 = cut(____id39, 0);
   setenv(__name7, {_stash: true, toplevel: true, variable: true});
   if (some63(__body25)) {
-    return join(["%global-function", __name7], bind42(__x151, __body25));
+    return join(["%global-function", __name7], bind42(__x151, __body25), keys(__body25));
   } else {
-    return ["set", __name7, __x151];
+    return join(["set", __name7, __x151], keys(__body25));
   }
 }});
 setenv("get-value", {_stash: true, macro: function (x) {
@@ -1278,7 +1278,7 @@ setenv("fn", {_stash: true, macro: function (args) {
   var __args7 = destash33(args, ____r61);
   var ____id53 = ____r61;
   var __body37 = cut(____id53, 0);
-  return join(["%function"], bind42(__args7, __body37));
+  return join(["%function"], bind42(__args7, __body37), keys(__body37));
 }});
 setenv("apply", {_stash: true, macro: function (f) {
   var ____r63 = unstash(Array.prototype.slice.call(arguments, 1));

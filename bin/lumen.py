@@ -887,9 +887,9 @@ def __f24(name=None, x=None, *_args, **_keys):
   __body23 = cut(____id37, 0)
   setenv(__name5, variable=True)
   if some63(__body23):
-    return join(["%local-function", __name5], bind42(__x145, __body23))
+    return join(["%local-function", __name5], bind42(__x145, __body23), keys(__body23))
   else:
-    return ["%local", __name5, __x145]
+    return join(["%local", __name5, __x145], keys(__body23))
 setenv("define", macro=__f24)
 def __f25(name=None, x=None, *_args, **_keys):
   ____r39 = unstash(list(_args), _keys)
@@ -899,9 +899,9 @@ def __f25(name=None, x=None, *_args, **_keys):
   __body25 = cut(____id39, 0)
   setenv(__name7, toplevel=True, variable=True)
   if some63(__body25):
-    return join(["%global-function", __name7], bind42(__x151, __body25))
+    return join(["%global-function", __name7], bind42(__x151, __body25), keys(__body25))
   else:
-    return ["set", __name7, __x151]
+    return join(["set", __name7, __x151], keys(__body25))
 setenv("define-global", macro=__f25)
 def __f26(x=None):
   ____x158 = object(["setenv", x])
@@ -981,7 +981,7 @@ def __f37(args=None, *_args, **_keys):
   __args7 = destash33(args, ____r61)
   ____id53 = ____r61
   __body37 = cut(____id53, 0)
-  return join(["%function"], bind42(__args7, __body37))
+  return join(["%function"], bind42(__args7, __body37), keys(__body37))
 setenv("fn", macro=__f37)
 def __f38(f=None, *_args, **_keys):
   ____r63 = unstash(list(_args), _keys)

@@ -119,14 +119,14 @@
 (define-macro define (name x rest: body)
   (setenv name :variable)
   (if (some? body)
-      `(%local-function ,name ,@(bind* x body))
-    `(%local ,name ,x)))
+      `(%local-function ,name ,@(bind* x body) ,@(keys body))
+    `(%local ,name ,x ,@(keys body))))
 
 (define-macro define-global (name x rest: body)
   (setenv name :toplevel :variable)
   (if (some? body)
-      `(%global-function ,name ,@(bind* x body))
-    `(set ,name ,x)))
+      `(%global-function ,name ,@(bind* x body) ,@(keys body))
+    `(set ,name ,x ,@(keys body))))
 
 (define-macro get-value (x)
   `(has (setenv ,x :toplevel) 'value))
@@ -175,7 +175,7 @@
        ,@body)))
 
 (define-macro fn (args rest: body)
-  `(%function ,@(bind* args body)))
+  `(%function ,@(bind* args body) ,@(keys body)))
 
 (define-macro apply (f rest: args)
   (if (> (# args) 1)

@@ -584,11 +584,11 @@
       (let-unique (f)
         (lower `(do (%local-function ,f ,@args) ,f) hoist))
     (let ((a rest: body) args)
-      `(%function ,a ,(lower-body body true)))))
+      `(%function ,a ,(lower-body body true) ,@(keys body)))))
 
 (define lower-definition (kind args hoist)
   (let ((name args rest: body) args)
-    (add hoist `(,kind ,name ,args ,(lower-body body true)))))
+    (add hoist `(,kind ,name ,args ,(lower-body body true) ,@(keys body)))))
 
 (define lower-call (form hoist)
   (let form (map (fn (x) (lower x hoist)) form)
@@ -763,20 +763,20 @@
 (define-special break () :stmt
   (cat (indentation) "break"))
 
-(define-special %function (args body)
-  (compile-function args body))
+(define-special %function (args rest: body)
+  (apply compile-function args body))
 
-(define-special %global-function (name args body) :stmt :tr
+(define-special %global-function (name args rest: body) :stmt :tr
   (if (or (target? 'lua) (target? 'py))
-      (let x (compile-function args body name: name)
+      (let x (apply compile-function args body name: name)
         (cat (indentation) x))
-    (compile `(%set ,name (%function ,args ,body)) :stmt)))
+    (compile `(%set ,name (%function ,args ,@body)) :stmt)))
 
-(define-special %local-function (name args body) :stmt :tr
+(define-special %local-function (name args rest: body) :stmt :tr
   (if (or (target? 'lua) (target? 'py))
-      (let x (compile-function args body name: name prefix: 'local)
+      (let x (apply compile-function args body name: name prefix: 'local)
         (cat (indentation) x))
-    (compile `(%local ,name (%function ,args ,body)) :stmt)))
+    (compile `(%local ,name (%function ,args ,@body)) :stmt)))
 
 (define-special return (x) :stmt
   (let x (if (nil? x)
