@@ -1540,8 +1540,8 @@ local function usage()
   _print(" -t <target>\tTarget language (default: lua)")
   return _print(" -e <expr>\tExpression to evaluate")
 end
-local function main()
-  local __arg = hd(system.argv)
+local function main(args)
+  local __arg = hd(args)
   if __arg and script_file63(__arg) then
     return _load(__arg)
   else
@@ -1617,5 +1617,11 @@ local function main63()
   return true
 end
 if main63() then
-  main()
+  main(system.argv)
 end
+local __exports = exports or {}
+__exports.main = main
+__exports.reader = reader
+__exports.compiler = compiler
+__exports.system = system
+return __exports

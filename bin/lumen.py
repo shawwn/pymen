@@ -1334,8 +1334,8 @@ def usage():
   L_print(" -o <output>\tOutput file")
   L_print(" -t <target>\tTarget language (default: lua)")
   return L_print(" -e <expr>\tExpression to evaluate")
-def main():
-  __arg = hd(system.argv)
+def main(args=None):
+  __arg = hd(args)
   if __arg and script_file63(__arg):
     return L_load(__arg)
   else:
@@ -1394,4 +1394,4 @@ def main():
 def main63():
   return __name__ == "__main__"
 if main63():
-  main()
+  main(system.argv)

@@ -1677,8 +1677,8 @@ var usage = function () {
   _print(" -t <target>\tTarget language (default: lua)");
   return _print(" -e <expr>\tExpression to evaluate");
 };
-var main = function () {
-  var __arg = hd(system.argv);
+var main = function (args) {
+  var __arg = hd(args);
   if (__arg && script_file63(__arg)) {
     return _load(__arg);
   } else {
@@ -1751,8 +1751,12 @@ var main = function () {
   }
 };
 var main63 = function () {
-  return require.main === module;
+  return !( typeof(require) === "undefined") && !( typeof(module) === "undefined") && require.main === module;
 };
 if (main63()) {
-  main();
+  main(system.argv);
 }
+exports.main = main;
+exports.reader = reader;
+exports.compiler = compiler;
+exports.system = system;

@@ -97,8 +97,8 @@
   (print " -t <target>\tTarget language (default: lua)")
   (print " -e <expr>\tExpression to evaluate"))
 
-(define main ()
-  (let arg (hd (idx system argv))
+(define main (args)
+  (let arg (hd args)
     (if (and arg (script-file? arg))
         (load arg)
         (or (= arg "-h")
@@ -134,8 +134,15 @@
 (define main? ()
   (target
     lua: true
-    js: (= (get |require| 'main) |module|)
-    py: (= |__name__| "__main__")))
+    js: (and (not (undefined? require))
+             (not (undefined? module))
+             (= (idx require main) module))
+    py: (= __name__ "__main__")))
 
 (when (main?)
-  (main))
+  (main (idx system argv)))
+
+(export main
+        reader
+        compiler
+        system)

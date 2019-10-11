@@ -1321,11 +1321,14 @@ if (typeof(global) === "undefined") {
 }
 if (!( typeof(require) === "undefined")) {
   global.require = require;
+  if (!( typeof(module) === "undefined")) {
+    module.filename = require("path").resolve("repl");
+    module.paths = require("module")._nodeModulePaths(module.filename);
+  }
 }
 var run = function (code, context) {
   var __f2 = new Function("with(this) {\n" + code + "\n}");
-  __f2.call(context || global);
-  return __f2;
+  return __f2.call(either(context, global));
 };
 var eval_result = function (globals) {
   return lumen_result;
