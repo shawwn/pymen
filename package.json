@@ -1,0 +1,10 @@
+{
+  "name": "pymen",
+  "version": "0.0.1",
+  "description": "A Lisp for JavaScript, Lua, and Python",
+  "main": "index.js",
+  "repository": "https://github.com/shawwn/pymen",
+  "author": "Shawn Presser <shawnpresser@gmail.com>",
+  "license": "BSD-2-Clause",
+  "private": false
+}
