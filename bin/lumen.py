@@ -1240,6 +1240,9 @@ def __f82(keyword=None, *_args, **_keys):
   ____x486["async"] = True
   return join(____x486, __body53)
 setenv("async", macro=__f82)
+def __f83(name=None):
+  return ["when-compiling", ["quasiquote", ["do", ["unquote-splicing", ["read-from-file", name]]]]]
+setenv("%read-from-file", macro=__f83)
 import reader
 import compiler
 import system
@@ -1257,14 +1260,14 @@ def print_exception(v=None, ex=None):
   traceback.print_exception(*ex)
   return None
 def eval_print(form=None):
-  def __f83():
+  def __f84():
     try:
       return [True, compiler.L_eval(form)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id83 = __f83()
+  ____id83 = __f84()
   __ok = has(____id83, 0)
   __v29 = has(____id83, 1)
   __ex = has(____id83, 2)
@@ -1369,10 +1372,10 @@ def main():
           if not( "-" == char(__a9, 0)):
             add(__pre, __a9)
         __i41 = __i41 + 1
-      ____x489 = __pre
+      ____x499 = __pre
       ____i42 = 0
-      while ____i42 < L_35(____x489):
-        __file = ____x489[____i42]
+      while ____i42 < L_35(____x499):
+        __file = ____x499[____i42]
         run_file(__file)
         ____i42 = ____i42 + 1
       if nil63(__input):

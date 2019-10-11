@@ -325,3 +325,7 @@
 
 (define-macro async (keyword rest: body)
   `(,keyword ,@body async: true))
+
+(define-macro %read-from-file (name)
+  `(when-compiling
+     `(do ,@(read-from-file ,name))))

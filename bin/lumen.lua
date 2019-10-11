@@ -1417,6 +1417,9 @@ setenv("async", {_stash = true, macro = function (keyword, ...)
   ____x539.async = true
   return join(____x539, __body53)
 end})
+setenv("%read-from-file", {_stash = true, macro = function (name)
+  return {"when-compiling", {"quasiquote", {"do", {"unquote-splicing", {"read-from-file", name}}}}}
+end})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
@@ -1583,10 +1586,10 @@ local function main()
         end
         __i41 = __i41 + 1
       end
-      local ____x542 = __pre
+      local ____x552 = __pre
       local ____i42 = 0
-      while ____i42 < _35(____x542) do
-        local __file = ____x542[____i42 + 1]
+      while ____i42 < _35(____x552) do
+        local __file = ____x552[____i42 + 1]
         run_file(__file)
         ____i42 = ____i42 + 1
       end

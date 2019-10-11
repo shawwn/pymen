@@ -1572,6 +1572,9 @@ setenv("async", {_stash: true, macro: function (keyword) {
   ____x484.async = true;
   return join(____x484, __body53);
 }});
+setenv("%read-from-file", {_stash: true, macro: function (name) {
+  return ["when-compiling", ["quasiquote", ["do", ["unquote-splicing", ["read-from-file", name]]]]];
+}});
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
@@ -1720,10 +1723,10 @@ var main = function () {
         }
         __i41 = __i41 + 1;
       }
-      var ____x487 = __pre;
+      var ____x497 = __pre;
       var ____i42 = 0;
-      while (____i42 < _35(____x487)) {
-        var __file = ____x487[____i42];
+      while (____i42 < _35(____x497)) {
+        var __file = ____x497[____i42];
         run_file(__file);
         ____i42 = ____i42 + 1;
       }
