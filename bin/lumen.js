@@ -1139,7 +1139,7 @@ setenv("with", {_stash: true, macro: function (x, v) {
   if (__v22 === "as") {
     return join(["%with", ["%as", __x114, hd(__body13)]], tl(__body13));
   } else {
-    if (! atom63(__x114)) {
+    if (! atom63(__x114) || has(__body13, "async")) {
       return join(["%with", __x114, __v22], __body13);
     } else {
       return join(["let", [__x114, __v22]], __body13, [__x114]);
@@ -1329,7 +1329,7 @@ setenv("guard", {_stash: true, macro: function (expr) {
 }});
 setenv("each", {_stash: true, macro: function (x, t) {
   var ____r159 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __x329 = destash33(x, ____r159);
+  var __x330 = destash33(x, ____r159);
   var __t3 = destash33(t, ____r159);
   var ____id63 = ____r159;
   var __body39 = cut(____id63, 0);
@@ -1337,29 +1337,29 @@ setenv("each", {_stash: true, macro: function (x, t) {
   var __n28 = unique("n");
   var __i34 = unique("i");
   var __e34;
-  if (atom63(__x329)) {
-    __e34 = [__i34, __x329];
+  if (atom63(__x330)) {
+    __e34 = [__i34, __x330];
   } else {
     var __e35;
-    if (_35(__x329) > 1) {
-      __e35 = __x329;
+    if (_35(__x330) > 1) {
+      __e35 = __x330;
     } else {
-      __e35 = [__i34, hd(__x329)];
+      __e35 = [__i34, hd(__x330)];
     }
     __e34 = __e35;
   }
   var ____id64 = __e34;
   var __k37 = has(____id64, 0);
   var __v26 = has(____id64, 1);
-  var ____x335 = object(["target", __o20]);
-  ____x335.py = ["indices", __o20];
+  var ____x336 = object(["target", __o20]);
+  ____x336.py = ["indices", __o20];
   var __e36;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" || has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
     __e36 = __body39;
   } else {
     __e36 = [join(["let", __k37, ["if", ["numeric?", __k37], ["parseInt", __k37], __k37]], __body39)];
   }
-  return ["let", [__o20, __t3, __k37, "nil"], ["%for", ____x335, __k37, join(["let", [__v26, ["get", __o20, __k37]]], __e36)]];
+  return ["let", [__o20, __t3, __k37, "nil"], join(["%for", ____x336, __k37], keys(__body39), [join(["let", [__v26, ["get", __o20, __k37]]], __e36)])];
 }});
 setenv("for", {_stash: true, macro: function (i, to) {
   var ____r161 = unstash(Array.prototype.slice.call(arguments, 2));
@@ -1368,7 +1368,7 @@ setenv("for", {_stash: true, macro: function (i, to) {
   var ____id66 = ____r161;
   var __body41 = cut(____id66, 0);
   if (__to1 === "in") {
-    return ["%for", hd(__body41), __i36, join(["do"], tl(__body41))];
+    return join(["%for", hd(__body41), __i36, join(["do"], tl(__body41))], keys(__body41));
   } else {
     return ["let", __i36, 0, join(["while", ["<", __i36, __to1]], __body41, [["inc", __i36]])];
   }
@@ -1379,9 +1379,9 @@ setenv("step", {_stash: true, macro: function (v, t) {
   var __t5 = destash33(t, ____r163);
   var ____id68 = ____r163;
   var __body43 = cut(____id68, 0);
-  var __x367 = unique("x");
+  var __x369 = unique("x");
   var __i38 = unique("i");
-  return ["let", [__x367, __t5], ["for", __i38, ["#", __x367], join(["let", [__v28, ["at", __x367, __i38]]], __body43)]];
+  return ["let", [__x369, __t5], ["for", __i38, ["#", __x369], join(["let", [__v28, ["at", __x369, __i38]]], __body43)]];
 }});
 setenv("set-of", {_stash: true, macro: function () {
   var __xs13 = unstash(Array.prototype.slice.call(arguments, 0));
@@ -1389,7 +1389,7 @@ setenv("set-of", {_stash: true, macro: function () {
   var ____o22 = __xs13;
   var ____i40 = undefined;
   for (____i40 in ____o22) {
-    var __x377 = ____o22[____i40];
+    var __x379 = ____o22[____i40];
     var __e37;
     if (numeric63(____i40)) {
       __e37 = parseInt(____i40);
@@ -1397,7 +1397,7 @@ setenv("set-of", {_stash: true, macro: function () {
       __e37 = ____i40;
     }
     var ____i401 = __e37;
-    __l121[__x377] = true;
+    __l121[__x379] = true;
   }
   return join(["obj"], __l121);
 }});
@@ -1448,8 +1448,8 @@ setenv("dec", {_stash: true, macro: function (n, by) {
   return ["set", n, ["-", n, __e39]];
 }});
 setenv("with-indent", {_stash: true, macro: function (form) {
-  var __x404 = unique("x");
-  return ["do", ["inc", "indent-level"], ["with", __x404, form, ["dec", "indent-level"]]];
+  var __x406 = unique("x");
+  return ["do", ["inc", "indent-level"], ["with", __x406, form, ["dec", "indent-level"]]];
 }});
 setenv("export", {_stash: true, macro: function () {
   var __names7 = unstash(Array.prototype.slice.call(arguments, 0));
@@ -1500,20 +1500,20 @@ setenv("defconst", {_stash: true, macro: function (name) {
   return join(["def", __name15], __value1);
 }});
 setenv("undefined?", {_stash: true, macro: function (name) {
-  var ____x452 = object(["target"]);
-  ____x452.js = ["=", ["typeof", name], "\"undefined\""];
-  ____x452.lua = ["=", ["idx", "_G", name], "nil"];
-  ____x452.py = ["not", ["%in", ["quote", compile(name)], ["globals"]]];
-  return ____x452;
+  var ____x454 = object(["target"]);
+  ____x454.js = ["=", ["typeof", name], "\"undefined\""];
+  ____x454.lua = ["=", ["idx", "_G", name], "nil"];
+  ____x454.py = ["not", ["%in", ["quote", compile(name)], ["globals"]]];
+  return ____x454;
 }});
 setenv("defvar", {_stash: true, macro: function (name) {
   var ____r189 = unstash(Array.prototype.slice.call(arguments, 1));
   var __name17 = destash33(name, ____r189);
   var ____id80 = ____r189;
   var __value3 = cut(____id80, 0);
-  var ____x468 = object(["target"]);
-  ____x468.py = ["global", __name17];
-  return ["when", ["undefined?", __name17], ____x468, join(["defconst", __name17], __value3)];
+  var ____x470 = object(["target"]);
+  ____x470.py = ["global", __name17];
+  return ["when", ["undefined?", __name17], ____x470, join(["defconst", __name17], __value3)];
 }});
 setenv("+", {_stash: true, macro: function () {
   var __args13 = unstash(Array.prototype.slice.call(arguments, 0));
@@ -1568,9 +1568,9 @@ setenv("async", {_stash: true, macro: function (keyword) {
   var __keyword1 = destash33(keyword, ____r191);
   var ____id82 = ____r191;
   var __body53 = cut(____id82, 0);
-  var ____x482 = object([__keyword1]);
-  ____x482.async = true;
-  return join(____x482, __body53);
+  var ____x484 = object([__keyword1]);
+  ____x484.async = true;
+  return join(____x484, __body53);
 }});
 var reader = require("reader");
 var compiler = require("compiler");
@@ -1712,10 +1712,10 @@ var main = function () {
         }
         __i41 = __i41 + 1;
       }
-      var ____x485 = __pre;
+      var ____x487 = __pre;
       var ____i42 = 0;
-      while (____i42 < _35(____x485)) {
-        var __file = ____x485[____i42];
+      while (____i42 < _35(____x487)) {
+        var __file = ____x487[____i42];
         run_file(__file);
         ____i42 = ____i42 + 1;
       }

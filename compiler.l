@@ -741,23 +741,25 @@
         (cat ind "while " cond ":\n" body)
       (cat ind "while " cond " do\n" body ind "end\n"))))
 
-(define-special %for (t k form) :stmt :tr
+(define-special %for (t k form :async) :stmt :tr
   (let (t (compile t)
         k (compile k)
         ind (indentation)
-        body (compile-body form))
+        body (compile-body form)
+        a (if async "async " ""))
     (if (target? 'lua)
         (cat ind "for " k " in next, " t " do\n" body ind "end\n")
         (target? 'py)
-        (cat ind "for " k " in " t ":\n" body)
+        (cat ind a "for " k " in " t ":\n" body)
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
 
-(define-special %with (t form) :stmt :tr
+(define-special %with (t form :async) :stmt :tr
   (let (t (compile t)
         ind (indentation)
-        body (compile-body form))
+        body (compile-body form)
+        a (if async "async " ""))
     (if (target? 'py)
-        (cat ind "with " t ":\n" body)
+        (cat ind a "with " t ":\n" body)
       "")))
 
 (define-special %try (form) :stmt :tr

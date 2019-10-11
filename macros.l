@@ -90,7 +90,8 @@
 (define-macro with (x v rest: body)
   (if (= v 'as)
       `(%with (%as ,x ,(hd body)) ,@(tl body))
-      (not (atom? x))
+      (or (not (atom? x))
+          (has body 'async))
       `(%with ,x ,v ,@body)
     `(let (,x ,v) ,@body ,x)))
 
@@ -204,7 +205,7 @@
                   (if (> (# x) 1) x
                       (list i (hd x)))))
       `(let (,o ,t ,k nil)
-         (%for (target py: (indices ,o) ,o) ,k
+         (%for (target py: (indices ,o) ,o) ,k ,@(keys body)
            (let (,v (get ,o ,k))
              ,@(if (or (target? 'lua) (target? 'py))
                    body
@@ -215,7 +216,7 @@
 
 (define-macro for (i to rest: body)
   (if (= to 'in)
-      `(%for ,(hd body) ,i (do ,@(tl body)))
+      `(%for ,(hd body) ,i (do ,@(tl body)) ,@(keys body))
     `(let ,i 0
        (while (< ,i ,to)
          ,@body
