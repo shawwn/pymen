@@ -16,7 +16,7 @@ MODS := bin/lumen.x	\
 	bin/compiler.x	\
 	bin/system.x
 
-all: $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py)
+all: $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py) bin/pymen.js
 
 clean:
 	@git checkout bin/*.js
