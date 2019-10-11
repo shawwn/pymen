@@ -595,6 +595,12 @@
                      ,@(keys body)))
         e))))
 
+(define lower-block (args hoist stmt? tail?)
+  (let ((name t rest: body) args)
+    (add hoist
+       `(%block ,name ,(lower t hoist)
+          ,(lower-body body tail?)))))
+
 (define lower-function (args hoist)
   (if (target? 'py)
       (let-unique (f)
@@ -651,6 +657,7 @@
           (= x 'while) (lower-while args hoist)
           (= x '%for) (lower-for args hoist)
           (= x '%with) (lower-with args hoist stmt? tail?)
+          (= x '%block) (lower-block args hoist stmt? tail?)
           (= x '%function) (lower-function args hoist)
           (or (= x '%local-function)
               (= x '%global-function))
@@ -764,6 +771,13 @@
     (if (target? 'py)
         (cat ind a "with " t ":\n" body)
       "")))
+
+(define-special %block (name t form) :stmt :tr
+  (let (t (compile t)
+        ind (indentation)
+        body (compile-body form)
+        sep (if (some? t) " " ""))
+    (cat ind name sep t ":\n" body)))
 
 (define-special %try (form) :stmt :tr
   (let (ind (indentation)
