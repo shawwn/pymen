@@ -660,8 +660,12 @@
 (define-global expand (form)
   (lower (macroexpand form)))
 
-(target js: (set (idx global require) |require|))
-(target js: (define run |eval|))
+(target js: (defvar global (if (not (undefined? window)) window
+                               (not (undefined? self)) self this)))
+(target js: (unless (undefined? require) (set (idx global require) |require|)))
+(target js: (define run (code context)
+              (with f (new (Function (cat "with(this) {\n" code "\n}" )))
+                (f (.call (or context global))))))
 
 (target lua: (define load1 (or |loadstring| |load|)))
 (target lua:
