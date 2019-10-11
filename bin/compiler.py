@@ -872,17 +872,17 @@ def lower_for(args=None, hoist=None):
   __t = has(____id21, 0)
   __k8 = has(____id21, 1)
   __body6 = cut(____id21, 2)
-  return add(hoist, ["%for", lower(__t, hoist), __k8, lower_body(__body6)])
+  return add(hoist, join(["%for", lower(__t, hoist), __k8, lower_body(__body6)], keys(__body6)))
 def lower_with(args=None, hoist=None, stmt63=None, tail63=None):
   ____id22 = args
   __t1 = has(____id22, 0)
   __body7 = cut(____id22, 1)
   if stmt63 and not tail63:
-    return add(hoist, ["%with", lower(__t1, hoist), lower_body(__body7, tail63)])
+    return add(hoist, join(["%with", lower(__t1, hoist), lower_body(__body7, tail63)], keys(__body7)))
   else:
     __e4 = unique("e")
     add(hoist, ["%local", __e4])
-    add(hoist, ["%with", lower(__t1, hoist), lower(["%set", __e4, join(["do"], __body7)])])
+    add(hoist, join(["%with", lower(__t1, hoist), lower(["%set", __e4, join(["do"], __body7)])], keys(__body7)))
     return __e4
 def lower_function(args=None, hoist=None):
   if has(setenv("target", toplevel=True), "value") == "py":

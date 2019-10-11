@@ -1143,18 +1143,18 @@ var lower_for = function (args, hoist) {
   var __t = has(____id21, 0);
   var __k15 = has(____id21, 1);
   var __body6 = cut(____id21, 2);
-  return add(hoist, ["%for", lower(__t, hoist), __k15, lower_body(__body6)]);
+  return add(hoist, join(["%for", lower(__t, hoist), __k15, lower_body(__body6)], keys(__body6)));
 };
 var lower_with = function (args, hoist, stmt63, tail63) {
   var ____id22 = args;
   var __t1 = has(____id22, 0);
   var __body7 = cut(____id22, 1);
   if (stmt63 && ! tail63) {
-    return add(hoist, ["%with", lower(__t1, hoist), lower_body(__body7, tail63)]);
+    return add(hoist, join(["%with", lower(__t1, hoist), lower_body(__body7, tail63)], keys(__body7)));
   } else {
     var __e4 = unique("e");
     add(hoist, ["%local", __e4]);
-    add(hoist, ["%with", lower(__t1, hoist), lower(["%set", __e4, join(["do"], __body7)])]);
+    add(hoist, join(["%with", lower(__t1, hoist), lower(["%set", __e4, join(["do"], __body7)])], keys(__body7)));
     return __e4;
   }
 };

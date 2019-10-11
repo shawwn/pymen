@@ -1083,18 +1083,18 @@ local function lower_for(args, hoist)
   local __t = has(____id21, 1)
   local __k8 = has(____id21, 2)
   local __body6 = cut(____id21, 2)
-  return add(hoist, {"%for", lower(__t, hoist), __k8, lower_body(__body6)})
+  return add(hoist, join({"%for", lower(__t, hoist), __k8, lower_body(__body6)}, keys(__body6)))
 end
 local function lower_with(args, hoist, stmt63, tail63)
   local ____id22 = args
   local __t1 = has(____id22, 1)
   local __body7 = cut(____id22, 1)
   if stmt63 and not tail63 then
-    return add(hoist, {"%with", lower(__t1, hoist), lower_body(__body7, tail63)})
+    return add(hoist, join({"%with", lower(__t1, hoist), lower_body(__body7, tail63)}, keys(__body7)))
   else
     local __e4 = unique("e")
     add(hoist, {"%local", __e4})
-    add(hoist, {"%with", lower(__t1, hoist), lower({"%set", __e4, join({"do"}, __body7)})})
+    add(hoist, join({"%with", lower(__t1, hoist), lower({"%set", __e4, join({"do"}, __body7)})}, keys(__body7)))
     return __e4
   end
 end

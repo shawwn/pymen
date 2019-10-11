@@ -578,18 +578,21 @@
   (let ((t k rest: body) args)
     (add hoist
          `(%for ,(lower t hoist) ,k
-            ,(lower-body body)))))
+            ,(lower-body body)
+            ,@(keys body)))))
 
 (define lower-with (args hoist stmt? tail?)
   (let ((t rest: body) args)
     (if (and stmt? (not tail?))
         (add hoist
            `(%with ,(lower t hoist)
-              ,(lower-body body tail?)))
+              ,(lower-body body tail?)
+              ,@(keys body)))
       (let-unique (e)
         (add hoist `(%local ,e))
         (add hoist `(%with ,(lower t hoist)
-                     ,(lower `(%set ,e (do ,@body)))))
+                     ,(lower `(%set ,e (do ,@body)))
+                     ,@(keys body)))
         e))))
 
 (define lower-function (args hoist)
