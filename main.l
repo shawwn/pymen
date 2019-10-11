@@ -67,9 +67,11 @@
     ((idx compiler compile) form :stmt)))
 
 (define-global load (path)
-  (let previous target
+  (let (previous target previous-indent indent-level)
     (set target (language))
+    (set indent-level 0)
     (let code (compile-file path)
+      (set indent-level previous-indent)
       (set target previous)
       ((idx compiler run) code))))
 

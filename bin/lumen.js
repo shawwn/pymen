@@ -1645,8 +1645,11 @@ compile_file = function (path) {
 };
 _load = function (path) {
   var __previous = has(setenv("target", {_stash: true, toplevel: true}), "value");
+  var __previous_indent = has(setenv("indent-level", {_stash: true, toplevel: true}), "value");
   setenv("target", {_stash: true, toplevel: true}).value = "js";
+  setenv("indent-level", {_stash: true, toplevel: true}).value = 0;
   var __code = compile_file(path);
+  setenv("indent-level", {_stash: true, toplevel: true}).value = __previous_indent;
   setenv("target", {_stash: true, toplevel: true}).value = __previous;
   return compiler.run(__code);
 };

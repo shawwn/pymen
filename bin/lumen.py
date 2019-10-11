@@ -1307,8 +1307,11 @@ def compile_file(path=None):
   return compiler.compile(__form7, stmt=True)
 def L_load(path=None):
   __previous = has(setenv("target", toplevel=True), "value")
+  __previous_indent = has(setenv("indent-level", toplevel=True), "value")
   setenv("target", toplevel=True)["value"] = "py"
+  setenv("indent-level", toplevel=True)["value"] = 0
   __code = compile_file(path)
+  setenv("indent-level", toplevel=True)["value"] = __previous_indent
   setenv("target", toplevel=True)["value"] = __previous
   return compiler.run(__code)
 def script_file63(path=None):

@@ -1508,8 +1508,11 @@ function compile_file(path)
 end
 function _load(path)
   local __previous = has(setenv("target", {_stash = true, toplevel = true}), "value")
+  local __previous_indent = has(setenv("indent-level", {_stash = true, toplevel = true}), "value")
   setenv("target", {_stash = true, toplevel = true}).value = "lua"
+  setenv("indent-level", {_stash = true, toplevel = true}).value = 0
   local __code = compile_file(path)
+  setenv("indent-level", {_stash = true, toplevel = true}).value = __previous_indent
   setenv("target", {_stash = true, toplevel = true}).value = __previous
   return compiler.run(__code)
 end
