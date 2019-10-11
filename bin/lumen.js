@@ -1579,9 +1579,14 @@ toplevel_repr = function (v) {
   return _str(v);
 };
 toplevel_print = function (v) {
-  return _print(toplevel_repr(v));
+  _print(toplevel_repr(v));
+  return v;
 };
-var eval_print = function (form) {
+print_exception = function (v, ex) {
+  _print(v.stack);
+  return undefined;
+};
+eval_print = function (form) {
   var ____id83 = (function () {
     try {
       return [true, compiler._eval(form)];
@@ -1594,7 +1599,7 @@ var eval_print = function (form) {
   var __v29 = has(____id83, 1);
   var __ex = has(____id83, 2);
   if (! __ok) {
-    return _print(__v29.stack);
+    return print_exception(__v29, __ex);
   } else {
     if (is63(__v29)) {
       return toplevel_print(__v29);

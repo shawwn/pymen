@@ -13,15 +13,20 @@
   (target py: (repr v) (str v)))
 
 (define-global toplevel-print (v)
-  (print (toplevel-repr v)))
+  (print (toplevel-repr v))
+  v)
 
-(define eval-print (form)
+(define-global print-exception (v ex)
+  (target
+    py: ((idx traceback print_exception) (%literal |*| ex))
+    js: (print (idx v stack))
+    lua: (print (cat "error: " (idx v message) "\n" (idx v stack))))
+  nil)
+
+(define-global eval-print (form)
   (let ((ok v ex) (guard ((idx compiler eval) form)))
     (if (not ok)
-        (target
-          py: ((idx traceback print_exception) (%literal |*| ex))
-          js: (print (idx v stack))
-          lua: (print (cat "error: " (idx v message) "\n" (idx v stack))))
+        (print-exception v ex)
         (is? v) (toplevel-print v))))
 
 (define rep (s)

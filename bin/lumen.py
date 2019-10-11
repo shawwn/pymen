@@ -1251,7 +1251,11 @@ def lumen_set_globals(x=None):
 def toplevel_repr(v=None):
   return repr(v)
 def toplevel_print(v=None):
-  return L_print(toplevel_repr(v))
+  L_print(toplevel_repr(v))
+  return v
+def print_exception(v=None, ex=None):
+  traceback.print_exception(*ex)
+  return None
 def eval_print(form=None):
   def __f83():
     try:
@@ -1265,7 +1269,7 @@ def eval_print(form=None):
   __v29 = has(____id83, 1)
   __ex = has(____id83, 2)
   if not __ok:
-    return traceback.print_exception(*__ex)
+    return print_exception(__v29, __ex)
   else:
     if is63(__v29):
       return toplevel_print(__v29)

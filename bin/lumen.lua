@@ -1424,9 +1424,14 @@ function toplevel_repr(v)
   return _str(v)
 end
 function toplevel_print(v)
-  return _print(toplevel_repr(v))
+  _print(toplevel_repr(v))
+  return v
 end
-local function eval_print(form)
+function print_exception(v, ex)
+  _print("error: " .. v.message .. "\n" .. v.stack)
+  return nil
+end
+function eval_print(form)
   local ____id83 = {xpcall(function ()
     return compiler._eval(form)
   end, function (m)
@@ -1452,7 +1457,7 @@ local function eval_print(form)
   local __v29 = has(____id83, 2)
   local __ex = has(____id83, 3)
   if not __ok then
-    return _print("error: " .. __v29.message .. "\n" .. __v29.stack)
+    return print_exception(__v29, __ex)
   else
     if is63(__v29) then
       return toplevel_print(__v29)
