@@ -462,7 +462,7 @@
         ind (indentation)
         p (if prefix (cat prefix " ") "")
         tr (if (target? 'js) "" "end")
-        a (if async "async " ""))
+        a (if (and async (not (target? 'lua))) "async " ""))
     (if name (cat! tr "\n"))
     (if (target? 'js)
         (cat a "function " id args " {\n" body ind "}" tr)

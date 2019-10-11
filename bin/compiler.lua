@@ -900,7 +900,7 @@ function compile_function(args, body, ...)
   end
   local __tr1 = __e46
   local __e47
-  if __async then
+  if __async and not( has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua") then
     __e47 = "async "
   else
     __e47 = ""

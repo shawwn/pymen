@@ -960,7 +960,7 @@ compile_function = function (args, body) {
   }
   var __tr1 = __e55;
   var __e56;
-  if (__async) {
+  if (__async && !( has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua")) {
     __e56 = "async ";
   } else {
     __e56 = "";

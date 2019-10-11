@@ -725,7 +725,7 @@ def compile_function(args=None, body=None, *_args, **_keys):
     __e46 = "end"
   __tr1 = __e46
   __e47 = None
-  if __async:
+  if __async and not( has(setenv("target", toplevel=True), "value") == "lua"):
     __e47 = "async "
   else:
     __e47 = ""
