@@ -947,7 +947,8 @@
   (cat (indentation) "yield " (mapcat compile args ", ")))
 
 (define-special await (x)
-  (cat "await " (compile x)))
+  (let a (if (target? 'lua) "" "await ")
+    (cat a (compile x))))
 
 (define-special %b (x)
   (cat "b" (compile x)))
