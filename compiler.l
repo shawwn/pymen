@@ -835,6 +835,14 @@
            (cat "error(" (compile x) ")"))
     (cat (indentation) e)))
 
+(define-special throw (x) :stmt
+  (let e (if (target? 'js)
+             (cat "throw " (compile x))
+             (target? 'py)
+             (cat "raise " (compile x))
+           (cat "error(" (compile x) ")"))
+    (cat (indentation) e)))
+
 (define-special %local (name value) :stmt
   (if (and (nil? value) (target? 'py)) (set value "nil"))
   (let (id (compile name)
