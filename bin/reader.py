@@ -168,36 +168,37 @@ def __f3(s=None):
   raise Exception(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f3
 def __f4(s=None):
-  read_char(s)
-  __r22 = None
-  __L_str1 = "\""
-  while nil63(__r22):
-    __c5 = peek_char(s)
-    if __c5 == "\"":
-      __r22 = cat(__L_str1, read_char(s))
-    else:
-      if nil63(__c5):
-        __r22 = expected(s, "\"")
+  __i1 = s["pos"]
+  __j = search(s["string"], "\"", __i1 + 1)
+  __b = either(search(s["string"], "\\", __i1 + 1), __j)
+  if is63(__j) and __j < s["len"] and __b >= __j:
+    s["pos"] = __j + 1
+    return clip(s["string"], __i1, __j + 1)
+  else:
+    __r22 = None
+    read_char(s)
+    while nil63(__r22):
+      __c5 = peek_char(s)
+      if __c5 == "\"":
+        read_char(s)
+        __r22 = clip(s["string"], __i1, s["pos"])
       else:
-        if __c5 == "\\":
-          __L_str1 = cat(__L_str1, read_char(s))
-        __L_str1 = cat(__L_str1, read_char(s))
-  return __r22
+        if nil63(__c5):
+          __r22 = expected(s, "\"")
+        else:
+          if __c5 == "\\":
+            read_char(s)
+          read_char(s)
+    return __r22
 read_table["\""] = __f4
 def __f5(s=None):
-  read_char(s)
-  __r24 = None
-  __L_str2 = "|"
-  while nil63(__r24):
-    __c6 = peek_char(s)
-    if __c6 == "|":
-      __r24 = cat(__L_str2, read_char(s))
-    else:
-      if nil63(__c6):
-        __r24 = expected(s, "|")
-      else:
-        __L_str2 = cat(__L_str2, read_char(s))
-  return __r24
+  __i2 = s["pos"]
+  __j1 = search(s["string"], "|", __i2 + 1)
+  if is63(__j1) and __j1 < s["len"]:
+    s["pos"] = __j1 + 1
+    return clip(s["string"], __i2, __j1 + 1)
+  else:
+    return expected(s, "|")
 read_table["|"] = __f5
 def __f6(s=None):
   read_char(s)
@@ -209,11 +210,11 @@ def __f7(s=None):
 read_table["`"] = __f7
 def __f8(s=None):
   read_char(s)
-  __c7 = peek_char(s)
-  if nil63(__c7) or has63(whitespace, __c7):
+  __c6 = peek_char(s)
+  if nil63(__c6) or has63(whitespace, __c6):
     return ","
   else:
-    if __c7 == "@":
+    if __c6 == "@":
       read_char(s)
       return wrap(s, "unquote-splicing")
     else:

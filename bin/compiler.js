@@ -716,26 +716,30 @@ compile_args = function (args, default63) {
   return __s1 + ")";
 };
 var escape_newlines = function (s) {
-  var __s11 = "";
-  var __i17 = 0;
-  while (__i17 < _35(s)) {
-    var __c3 = char(s, __i17);
-    var __e53;
-    if (__c3 === "\n") {
-      __e53 = "\\n";
-    } else {
-      var __e54;
-      if (__c3 === "\r") {
-        __e54 = "\\r";
+  if (nil63(search(s, "\n")) && nil63(search(s, "\r"))) {
+    return s;
+  } else {
+    var __s11 = "";
+    var __i17 = 0;
+    while (__i17 < _35(s)) {
+      var __c3 = char(s, __i17);
+      var __e53;
+      if (__c3 === "\n") {
+        __e53 = "\\n";
       } else {
-        __e54 = __c3;
+        var __e54;
+        if (__c3 === "\r") {
+          __e54 = "\\r";
+        } else {
+          __e54 = __c3;
+        }
+        __e53 = __e54;
       }
-      __e53 = __e54;
+      __s11 = __s11 + __e53;
+      __i17 = __i17 + 1;
     }
-    __s11 = __s11 + __e53;
-    __i17 = __i17 + 1;
+    return __s11;
   }
-  return __s11;
 };
 var compile_nil = function () {
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {

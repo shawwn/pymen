@@ -202,43 +202,43 @@ read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end
 read_table["\""] = function (s)
-  read_char(s)
-  local __r21 = nil
-  local ___str1 = "\""
-  while nil63(__r21) do
-    local __c5 = peek_char(s)
-    if __c5 == "\"" then
-      __r21 = ___str1 .. read_char(s)
-    else
-      if nil63(__c5) then
-        __r21 = expected(s, "\"")
+  local __i1 = s.pos
+  local __j = search(s.string, "\"", __i1 + 1)
+  local __b = either(search(s.string, "\\", __i1 + 1), __j)
+  if is63(__j) and __j < s.len and __b >= __j then
+    s.pos = __j + 1
+    return clip(s.string, __i1, __j + 1)
+  else
+    local __r21 = nil
+    read_char(s)
+    while nil63(__r21) do
+      local __c5 = peek_char(s)
+      if __c5 == "\"" then
+        read_char(s)
+        __r21 = clip(s.string, __i1, s.pos)
       else
-        if __c5 == "\\" then
-          ___str1 = ___str1 .. read_char(s)
+        if nil63(__c5) then
+          __r21 = expected(s, "\"")
+        else
+          if __c5 == "\\" then
+            read_char(s)
+          end
+          read_char(s)
         end
-        ___str1 = ___str1 .. read_char(s)
       end
     end
+    return __r21
   end
-  return __r21
 end
 read_table["|"] = function (s)
-  read_char(s)
-  local __r23 = nil
-  local ___str2 = "|"
-  while nil63(__r23) do
-    local __c6 = peek_char(s)
-    if __c6 == "|" then
-      __r23 = ___str2 .. read_char(s)
-    else
-      if nil63(__c6) then
-        __r23 = expected(s, "|")
-      else
-        ___str2 = ___str2 .. read_char(s)
-      end
-    end
+  local __i2 = s.pos
+  local __j1 = search(s.string, "|", __i2 + 1)
+  if is63(__j1) and __j1 < s.len then
+    s.pos = __j1 + 1
+    return clip(s.string, __i2, __j1 + 1)
+  else
+    return expected(s, "|")
   end
-  return __r23
 end
 read_table["'"] = function (s)
   read_char(s)
@@ -250,11 +250,11 @@ read_table["`"] = function (s)
 end
 read_table[","] = function (s)
   read_char(s)
-  local __c7 = peek_char(s)
-  if nil63(__c7) or has63(whitespace, __c7) then
+  local __c6 = peek_char(s)
+  if nil63(__c6) or has63(whitespace, __c6) then
     return ","
   else
-    if __c7 == "@" then
+    if __c6 == "@" then
       read_char(s)
       return wrap(s, "unquote-splicing")
     else

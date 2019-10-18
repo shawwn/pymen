@@ -746,39 +746,43 @@ var tostring = function (x) {
   return x.toString();
 };
 escape = function (s) {
-  var __s1 = "\"";
-  var __i26 = 0;
-  while (__i26 < _35(s)) {
-    var __c1 = char(s, __i26);
-    var __e25;
-    if (__c1 === "\n") {
-      __e25 = "\\n";
-    } else {
-      var __e26;
-      if (__c1 === "\r") {
-        __e26 = "\\r";
+  if (nil63(search(s, "\n")) && nil63(search(s, "\r")) && nil63(search(s, "\"")) && nil63(search(s, "\\"))) {
+    return "\"" + s + "\"";
+  } else {
+    var __s1 = "\"";
+    var __i26 = 0;
+    while (__i26 < _35(s)) {
+      var __c1 = char(s, __i26);
+      var __e25;
+      if (__c1 === "\n") {
+        __e25 = "\\n";
       } else {
-        var __e27;
-        if (__c1 === "\"") {
-          __e27 = "\\\"";
+        var __e26;
+        if (__c1 === "\r") {
+          __e26 = "\\r";
         } else {
-          var __e28;
-          if (__c1 === "\\") {
-            __e28 = "\\\\";
+          var __e27;
+          if (__c1 === "\"") {
+            __e27 = "\\\"";
           } else {
-            __e28 = __c1;
+            var __e28;
+            if (__c1 === "\\") {
+              __e28 = "\\\\";
+            } else {
+              __e28 = __c1;
+            }
+            __e27 = __e28;
           }
-          __e27 = __e28;
+          __e26 = __e27;
         }
-        __e26 = __e27;
+        __e25 = __e26;
       }
-      __e25 = __e26;
+      var __c11 = __e25;
+      __s1 = __s1 + __c11;
+      __i26 = __i26 + 1;
     }
-    var __c11 = __e25;
-    __s1 = __s1 + __c11;
-    __i26 = __i26 + 1;
+    return __s1 + "\"";
   }
-  return __s1 + "\"";
 };
 _str = function (x, repr, stack) {
   if (nil63(x)) {

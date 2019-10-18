@@ -417,16 +417,22 @@
 (target py: (define tostring (x) (repr x)))
 
 (define-global escape (s)
-  (let s1 "\""
-    (for i (# s)
-      (let (c (char s i)
-            c1 (if (= c "\n") "\\n"
-                   (= c "\r") "\\r"
-                   (= c "\"") "\\\""
-                   (= c "\\") "\\\\"
-                 c))
-        (cat! s1 c1)))
-    (cat s1 "\"")))
+  (if (and (nil? (search s "\n"))
+           (nil? (search s "\r"))
+           (nil? (search s "\""))
+           (nil? (search s "\\")))
+      (target py: ((idx "" join) (list "\"" s "\""))
+        (cat "\"" s "\""))
+    (let s1 "\""
+      (for i (# s)
+        (let (c (char s i)
+              c1 (if (= c "\n") "\\n"
+                     (= c "\r") "\\r"
+                     (= c "\"") "\\\""
+                     (= c "\\") "\\\\"
+                   c))
+          (cat! s1 c1)))
+      (cat s1 "\""))))
 
 (define-global str (x repr stack)
   (if (nil? x) "nil"

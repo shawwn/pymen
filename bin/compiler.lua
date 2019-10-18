@@ -656,26 +656,30 @@ function compile_args(args, default63)
   return __s1 .. ")"
 end
 local function escape_newlines(s)
-  local __s11 = ""
-  local __i17 = 0
-  while __i17 < _35(s) do
-    local __c3 = char(s, __i17)
-    local __e44
-    if __c3 == "\n" then
-      __e44 = "\\n"
-    else
-      local __e45
-      if __c3 == "\r" then
-        __e45 = "\\r"
+  if nil63(search(s, "\n")) and nil63(search(s, "\r")) then
+    return s
+  else
+    local __s11 = ""
+    local __i17 = 0
+    while __i17 < _35(s) do
+      local __c3 = char(s, __i17)
+      local __e44
+      if __c3 == "\n" then
+        __e44 = "\\n"
       else
-        __e45 = __c3
+        local __e45
+        if __c3 == "\r" then
+          __e45 = "\\r"
+        else
+          __e45 = __c3
+        end
+        __e44 = __e45
       end
-      __e44 = __e45
+      __s11 = __s11 .. __e44
+      __i17 = __i17 + 1
     end
-    __s11 = __s11 .. __e44
-    __i17 = __i17 + 1
+    return __s11
   end
-  return __s11
 end
 local function compile_nil()
   if has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then

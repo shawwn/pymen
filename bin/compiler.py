@@ -525,23 +525,26 @@ def compile_args(args=None, default63=None):
     ____i16 = ____i16 + 1
   return cat(__s1, ")")
 def escape_newlines(s=None):
-  __s11 = ""
-  __i17 = 0
-  while __i17 < L_35(s):
-    __c3 = char(s, __i17)
-    __e44 = None
-    if __c3 == "\n":
-      __e44 = "\\n"
-    else:
-      __e45 = None
-      if __c3 == "\r":
-        __e45 = "\\r"
+  if nil63(search(s, "\n")) and nil63(search(s, "\r")):
+    return s
+  else:
+    __s11 = ""
+    __i17 = 0
+    while __i17 < L_35(s):
+      __c3 = char(s, __i17)
+      __e44 = None
+      if __c3 == "\n":
+        __e44 = "\\n"
       else:
-        __e45 = __c3
-      __e44 = __e45
-    __s11 = cat(__s11, __e44)
-    __i17 = __i17 + 1
-  return __s11
+        __e45 = None
+        if __c3 == "\r":
+          __e45 = "\\r"
+        else:
+          __e45 = __c3
+        __e44 = __e45
+      __s11 = cat(__s11, __e44)
+      __i17 = __i17 + 1
+    return __s11
 def compile_nil():
   if has(setenv("target", toplevel=True), "value") == "py":
     return "None"

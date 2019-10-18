@@ -361,12 +361,15 @@
     (cat s ")")))
 
 (define escape-newlines (s)
-  (with s1 ""
-    (for i (# s)
-      (let c (char s i)
-        (cat! s1 (if (= c "\n") "\\n"
-                     (= c "\r") "\\r"
-                   c))))))
+  (if (and (nil? (search s "\n"))
+           (nil? (search s "\r")))
+      s
+    (with s1 ""
+      (for i (# s)
+        (let c (char s i)
+          (cat! s1 (if (= c "\n") "\\n"
+                       (= c "\r") "\\r"
+                     c)))))))
 
 (define compile-nil ()
   (if (target? 'py) "None"

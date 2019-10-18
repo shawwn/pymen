@@ -616,39 +616,43 @@ function numeric63(s)
   return some63(s)
 end
 function escape(s)
-  local __s1 = "\""
-  local __i26 = 0
-  while __i26 < _35(s) do
-    local __c1 = char(s, __i26)
-    local __e12
-    if __c1 == "\n" then
-      __e12 = "\\n"
-    else
-      local __e13
-      if __c1 == "\r" then
-        __e13 = "\\r"
+  if nil63(search(s, "\n")) and nil63(search(s, "\r")) and nil63(search(s, "\"")) and nil63(search(s, "\\")) then
+    return "\"" .. s .. "\""
+  else
+    local __s1 = "\""
+    local __i26 = 0
+    while __i26 < _35(s) do
+      local __c1 = char(s, __i26)
+      local __e12
+      if __c1 == "\n" then
+        __e12 = "\\n"
       else
-        local __e14
-        if __c1 == "\"" then
-          __e14 = "\\\""
+        local __e13
+        if __c1 == "\r" then
+          __e13 = "\\r"
         else
-          local __e15
-          if __c1 == "\\" then
-            __e15 = "\\\\"
+          local __e14
+          if __c1 == "\"" then
+            __e14 = "\\\""
           else
-            __e15 = __c1
+            local __e15
+            if __c1 == "\\" then
+              __e15 = "\\\\"
+            else
+              __e15 = __c1
+            end
+            __e14 = __e15
           end
-          __e14 = __e15
+          __e13 = __e14
         end
-        __e13 = __e14
+        __e12 = __e13
       end
-      __e12 = __e13
+      local __c11 = __e12
+      __s1 = __s1 .. __c11
+      __i26 = __i26 + 1
     end
-    local __c11 = __e12
-    __s1 = __s1 .. __c11
-    __i26 = __i26 + 1
+    return __s1 .. "\""
   end
-  return __s1 .. "\""
 end
 function _str(x, repr, stack)
   if nil63(x) then

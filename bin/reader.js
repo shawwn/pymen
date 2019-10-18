@@ -202,43 +202,43 @@ read_table[")"] = function (s) {
   throw new Error("Unexpected ) at " + s.pos);
 };
 read_table["\""] = function (s) {
-  read_char(s);
-  var __r21 = undefined;
-  var ___str1 = "\"";
-  while (nil63(__r21)) {
-    var __c5 = peek_char(s);
-    if (__c5 === "\"") {
-      __r21 = ___str1 + read_char(s);
-    } else {
-      if (nil63(__c5)) {
-        __r21 = expected(s, "\"");
+  var __i1 = s.pos;
+  var __j = search(s.string, "\"", __i1 + 1);
+  var __b = either(search(s.string, "\\", __i1 + 1), __j);
+  if (is63(__j) && __j < s.len && __b >= __j) {
+    s.pos = __j + 1;
+    return clip(s.string, __i1, __j + 1);
+  } else {
+    var __r21 = undefined;
+    read_char(s);
+    while (nil63(__r21)) {
+      var __c5 = peek_char(s);
+      if (__c5 === "\"") {
+        read_char(s);
+        __r21 = clip(s.string, __i1, s.pos);
       } else {
-        if (__c5 === "\\") {
-          ___str1 = ___str1 + read_char(s);
+        if (nil63(__c5)) {
+          __r21 = expected(s, "\"");
+        } else {
+          if (__c5 === "\\") {
+            read_char(s);
+          }
+          read_char(s);
         }
-        ___str1 = ___str1 + read_char(s);
       }
     }
+    return __r21;
   }
-  return __r21;
 };
 read_table["|"] = function (s) {
-  read_char(s);
-  var __r23 = undefined;
-  var ___str2 = "|";
-  while (nil63(__r23)) {
-    var __c6 = peek_char(s);
-    if (__c6 === "|") {
-      __r23 = ___str2 + read_char(s);
-    } else {
-      if (nil63(__c6)) {
-        __r23 = expected(s, "|");
-      } else {
-        ___str2 = ___str2 + read_char(s);
-      }
-    }
+  var __i2 = s.pos;
+  var __j1 = search(s.string, "|", __i2 + 1);
+  if (is63(__j1) && __j1 < s.len) {
+    s.pos = __j1 + 1;
+    return clip(s.string, __i2, __j1 + 1);
+  } else {
+    return expected(s, "|");
   }
-  return __r23;
 };
 read_table["'"] = function (s) {
   read_char(s);
@@ -250,11 +250,11 @@ read_table["`"] = function (s) {
 };
 read_table[","] = function (s) {
   read_char(s);
-  var __c7 = peek_char(s);
-  if (nil63(__c7) || has63(whitespace, __c7)) {
+  var __c6 = peek_char(s);
+  if (nil63(__c6) || has63(whitespace, __c6)) {
     return ",";
   } else {
-    if (__c7 === "@") {
+    if (__c6 === "@") {
       read_char(s);
       return wrap(s, "unquote-splicing");
     } else {
