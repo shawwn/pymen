@@ -697,24 +697,25 @@
       (if f (f) (error (cat e " in " code))))))
 
 (target py:
-  (define run (code globals)
-    (let state (or globals lumen-globals)
-      (|exec| code state state)
+  (define run (code globals locals)
+    (let (globals (either globals lumen-globals)
+          locals (either locals globals))
+      (|exec| code globals locals)
       nil)))
 
-(define eval-result (globals)
+(define eval-result (globals locals)
   (target py:
-    (let state (or globals lumen-globals)
+    (let state (or locals globals lumen-globals)
       (get state "lumen_result"))
     lumen-result))
 
-(define-global eval (form globals)
+(define-global eval (form globals locals)
   (let previous target
     (set target (language))
     (let code (compile (expand `(set lumen-result ,form)))
       (set target previous)
-      (run code globals)
-      (eval-result globals))))
+      (run code globals locals)
+      (eval-result globals locals))))
 
 (define-global immediate-call? (x)
   (and (not (atom? x)) (not (atom? (hd x))) (= (hd (hd x)) '%function)))

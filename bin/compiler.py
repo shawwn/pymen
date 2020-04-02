@@ -1001,20 +1001,21 @@ def lower(form=None, hoist=None, stmt63=None, tail63=None):
                                     return lower_call(form, hoist)
 def expand(form=None):
   return lower(macroexpand(form))
-def run(code=None, globals=None):
-  __state = globals or lumen_globals
-  exec(code, __state, __state)
+def run(code=None, globals=None, locals=None):
+  __globals = either(globals, lumen_globals)
+  __locals = either(locals, __globals)
+  exec(code, __globals, __locals)
   return None
-def eval_result(globals=None):
-  __state1 = globals or lumen_globals
-  return __state1["lumen_result"]
-def L_eval(form=None, globals=None):
+def eval_result(globals=None, locals=None):
+  __state = locals or globals or lumen_globals
+  return __state["lumen_result"]
+def L_eval(form=None, globals=None, locals=None):
   __previous = has(setenv("target", toplevel=True), "value")
   setenv("target", toplevel=True)["value"] = "py"
   __code = compile(expand(["set", "lumen-result", form]))
   setenv("target", toplevel=True)["value"] = __previous
-  run(__code, globals)
-  return eval_result(globals)
+  run(__code, globals, locals)
+  return eval_result(globals, locals)
 def immediate_call63(x=None):
   return not atom63(x) and not atom63(hd(x)) and hd(hd(x)) == "%function"
 def __f10(*_args, **_keys):

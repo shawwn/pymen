@@ -1257,16 +1257,16 @@ local function run(code)
     error(e .. " in " .. code)
   end
 end
-local function eval_result(globals)
+local function eval_result(globals, locals)
   return lumen_result
 end
-function _eval(form, globals)
+function _eval(form, globals, locals)
   local __previous = has(setenv("target", {_stash = true, toplevel = true}), "value")
   setenv("target", {_stash = true, toplevel = true}).value = "lua"
   local __code = compile(expand({"set", "lumen-result", form}))
   setenv("target", {_stash = true, toplevel = true}).value = __previous
-  run(__code, globals)
-  return eval_result(globals)
+  run(__code, globals, locals)
+  return eval_result(globals, locals)
 end
 function immediate_call63(x)
   return not atom63(x) and not atom63(hd(x)) and hd(hd(x)) == "%function"

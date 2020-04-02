@@ -3211,12 +3211,12 @@ var run = function (code, context) {
 var eval_result = function (globals) {
   return lumen_result;
 };
-_eval = function (form, globals) {
+_eval = function (form, globals, locals) {
   var __previous = has(setenv("target", {_stash: true, toplevel: true}), "value");
   setenv("target", {_stash: true, toplevel: true}).value = "js";
   var __code = compile(expand(["set", "lumen-result", form]));
   setenv("target", {_stash: true, toplevel: true}).value = __previous;
-  run(__code, globals);
+  run(__code, globals, locals);
   return eval_result(globals);
 };
 immediate_call63 = function (x) {
