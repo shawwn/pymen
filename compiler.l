@@ -527,10 +527,12 @@
       e)))
 
 (define lower-set (args hoist stmt? tail?)
-  (let ((lh rh) args)
-    (add hoist `(%set ,(lower lh hoist) ,(lower rh hoist)))
+  (let ((lh rh) args
+        lh1 (lower lh hoist)
+        rh1 (lower rh hoist))
+    (add hoist `(%set ,lh1 ,rh1))
     (unless (and stmt? (not tail?))
-      lh)))
+      lh1)))
 
 (define lower-if (args hoist stmt? tail?)
   (let ((cond then else) args)
@@ -540,7 +542,7 @@
                    ,(lower-body (list then) tail?)
                    ,@(if (is? else) (list (lower-body (list else) tail?)))))
       (let-unique (e)
-        (add hoist `(%local ,e))
+        (add hoist `(%local ,e nil))
         (add hoist
              `(%if ,(lower cond hoist)
                    ,(lower `(%set ,e ,then))

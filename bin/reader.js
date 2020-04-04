@@ -110,7 +110,7 @@ var wrap = function (s, x) {
   }
 };
 var hex_prefix63 = function (_str) {
-  var __e;
+  var __e = undefined;
   if (code(_str, 0) === 45) {
     __e = 1;
   } else {
@@ -118,7 +118,7 @@ var hex_prefix63 = function (_str) {
   }
   var __i = __e;
   var __id1 = code(_str, __i) === 48;
-  var __e1;
+  var __e1 = undefined;
   if (__id1) {
     __i = __i + 1;
     var __n = code(_str, __i);

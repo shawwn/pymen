@@ -149,7 +149,7 @@ end
 function cut(x, _from, upto)
   local __l2 = dupe(x)
   local __j = 0
-  local __e7
+  local __e7 = nil
   if nil63(_from) or _from < 0 then
     __e7 = 0
   else
@@ -157,7 +157,7 @@ function cut(x, _from, upto)
   end
   local __i3 = __e7
   local __n4 = _35(x)
-  local __e8
+  local __e8 = nil
   if nil63(upto) or upto > __n4 then
     __e8 = __n4
   else
@@ -204,7 +204,7 @@ function char(s, n)
   return clip(s, n, n + 1)
 end
 function code(s, n)
-  local __e9
+  local __e9 = nil
   if n then
     __e9 = n + 1
   end
@@ -362,7 +362,7 @@ function mapcat(f, x, sep)
   local ____i14 = 0
   while ____i14 < _35(____x9) do
     local __v8 = ____x9[____i14 + 1]
-    local __e10
+    local __e10 = nil
     if f then
       __e10 = f(__v8)
     else
@@ -479,7 +479,7 @@ function destash33(l, args1)
   end
 end
 function search(s, pattern, start)
-  local __e11
+  local __e11 = nil
   if start then
     __e11 = start + 1
   end
@@ -623,19 +623,19 @@ function escape(s)
     local __i26 = 0
     while __i26 < _35(s) do
       local __c1 = char(s, __i26)
-      local __e12
+      local __e12 = nil
       if __c1 == "\n" then
         __e12 = "\\n"
       else
-        local __e13
+        local __e13 = nil
         if __c1 == "\r" then
           __e13 = "\\r"
         else
-          local __e14
+          local __e14 = nil
           if __c1 == "\"" then
             __e14 = "\\\""
           else
-            local __e15
+            local __e15 = nil
             if __c1 == "\\" then
               __e15 = "\\\\"
             else
@@ -768,14 +768,14 @@ function setenv(k, ...)
   local ____id4 = ____r87
   local __keys = cut(____id4, 0)
   if string63(__k15) then
-    local __e16
+    local __e16 = nil
     if has63(__keys, "toplevel") then
       __e16 = hd(environment)
     else
       __e16 = last(environment)
     end
     local __frame = __e16
-    local __e17
+    local __e17 = nil
     if has63(__frame, __k15) then
       __e17 = __frame[__k15]
     else
@@ -1192,11 +1192,11 @@ setenv("each", {_stash = true, macro = function (x, t, ...)
   local __o20 = unique("o")
   local __n26 = unique("n")
   local __i34 = unique("i")
-  local __e18
+  local __e18 = nil
   if atom63(__x367) then
     __e18 = {__i34, __x367}
   else
-    local __e19
+    local __e19 = nil
     if _35(__x367) > 1 then
       __e19 = __x367
     else
@@ -1209,7 +1209,7 @@ setenv("each", {_stash = true, macro = function (x, t, ...)
   local __v26 = has(____id64, 2)
   local ____x373 = object({"target", __o20})
   ____x373.py = {"indices", __o20}
-  local __e20
+  local __e20 = nil
   if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" or has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
     __e20 = __body39
   else
@@ -1279,7 +1279,7 @@ setenv("cat!", {_stash = true, macro = function (a, ...)
   return {"set", __a8, join({"cat", __a8}, __bs7)}
 end})
 setenv("inc", {_stash = true, macro = function (n, by)
-  local __e21
+  local __e21 = nil
   if nil63(by) then
     __e21 = 1
   else
@@ -1288,7 +1288,7 @@ setenv("inc", {_stash = true, macro = function (n, by)
   return {"set", n, {"+", n, __e21}}
 end})
 setenv("dec", {_stash = true, macro = function (n, by)
-  local __e22
+  local __e22 = nil
   if nil63(by) then
     __e22 = 1
   else
@@ -1445,11 +1445,11 @@ function eval_print(form)
     if obj63(m) then
       return m
     else
-      local __e23
+      local __e23 = nil
       if string63(m) then
         __e23 = clip(m, search(m, ": ") + 2)
       else
-        local __e24
+        local __e24 = nil
         if nil63(m) then
           __e24 = ""
         else

@@ -819,9 +819,11 @@ def lower_set(args=None, hoist=None, stmt63=None, tail63=None):
   ____id16 = args
   __lh = has(____id16, 0)
   __rh = has(____id16, 1)
-  add(hoist, ["%set", lower(__lh, hoist), lower(__rh, hoist)])
+  __lh1 = lower(__lh, hoist)
+  __rh1 = lower(__rh, hoist)
+  add(hoist, ["%set", __lh1, __rh1])
   if not( stmt63 and not tail63):
-    return __lh
+    return __lh1
 def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
   ____id17 = args
   __cond = has(____id17, 0)
@@ -834,7 +836,7 @@ def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
     return add(hoist, join(["%if", lower(__cond, hoist), lower_body([__L_then], tail63)], __e63))
   else:
     __e3 = unique("e")
-    add(hoist, ["%local", __e3])
+    add(hoist, ["%local", __e3, "nil"])
     __e62 = None
     if is63(__L_else):
       __e62 = [lower(["%set", __e3, __L_else])]
