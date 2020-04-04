@@ -1,6 +1,6 @@
 (target py: (from lumen import *))
 
-(define getenv (k p)
+(define-global getenv (k p)
   (when (string? k)
     (let i (edge environment)
       (while (>= i 0)
@@ -70,7 +70,14 @@
     k))
 
 (define-global bind (lh rh)
-  (if (atom? lh) `(,lh ,rh)
+  (if (atom? lh)
+      `(,lh ,rh)
+      (= (hd lh) 't)
+      (let ((_ var val) lh)
+        (bind `(o ,var (the ,val)) rh))
+      (= (hd lh) 'o)
+      (let ((_ var val) lh)
+        (list var `(if (nil? ,rh) ,val ,rh)))
     (let-unique (id)
       (with bs (list id rh)
         (each (k v) lh
@@ -93,22 +100,30 @@
       `(unstash (arguments% ,(# args1)) (target py: |_keys|)))
     (if (atom? args)
         (list args1 `(let ,(list args (rest)) ,@body))
-      (let bs ()
+      (let (pre () bs () inits ())
         (let-unique (r)
           (each (k v) args
             (when (number? k)
               (if (atom? v) (add args1 v)
+                  (= (hd v) 'o)
+                  (let ((_ var val) v)
+                    (add args1 var)
+                    (add inits `(if (nil? ,var) (%set ,var ,val))))
+                  (= (hd v) 't)
+                  (let ((_ var val) v)
+                    (add args1 var)
+                    (add inits `(if (nil? ,var) (%set ,var (the ,val)))))
                 (let-unique (x)
                   (add args1 x)
                   (join! bs (list v x))))))
           (when (keys? args)
-            (join! bs (list r (rest)))
+            (join! pre (list r (rest)))
             (let n (# args1)
               (for i n
                 (let v (at args1 i)
-                  (join! bs (list v `(destash! ,v ,r))))))
+                  (join! pre (list v `(destash! ,v ,r))))))
             (join! bs (list (keys args) r))))
-        (list args1 `(let ,bs ,@body))))))
+        (list args1 `(let ,pre ,@inits (let ,bs ,@body)))))))
 
 (define quoting? (depth)
   (number? depth))
@@ -580,30 +595,30 @@
                ,(lower-body body)))))))
 
 (define lower-for (args hoist)
-  (let ((t k rest: body) args)
+  (let ((h k rest: body) args)
     (add hoist
-         `(%for ,(lower t hoist) ,k
+         `(%for ,(lower h hoist) ,k
             ,(lower-body body)
             ,@(keys body)))))
 
 (define lower-with (args hoist stmt? tail?)
-  (let ((t rest: body) args)
+  (let ((h rest: body) args)
     (if (and stmt? (not tail?))
         (add hoist
-           `(%with ,(lower t hoist)
+           `(%with ,(lower h hoist)
               ,(lower-body body tail?)
               ,@(keys body)))
       (let-unique (e)
         (add hoist `(%local ,e))
-        (add hoist `(%with ,(lower t hoist)
+        (add hoist `(%with ,(lower h hoist)
                      ,(lower `(%set ,e (do ,@body)))
                      ,@(keys body)))
         e))))
 
 (define lower-block (args hoist stmt? tail?)
-  (let ((name t rest: body) args)
+  (let ((name h rest: body) args)
     (add hoist
-       `(%block ,name ,(lower t hoist)
+       `(%block ,name ,(lower h hoist)
           ,(lower-body body tail?)))))
 
 (define lower-function (args hoist)

@@ -1,4 +1,4 @@
-var getenv = function (k, p) {
+getenv = function (k, p) {
   if (string63(k)) {
     var __i = edge(environment);
     while (__i >= 0) {
@@ -120,59 +120,77 @@ bind = function (lh, rh) {
   if (atom63(lh)) {
     return [lh, rh];
   } else {
-    var __id = unique("id");
-    var __bs = [__id, rh];
-    var ____o2 = lh;
-    var __k4 = undefined;
-    for (__k4 in ____o2) {
-      var __v2 = ____o2[__k4];
-      var __e37 = undefined;
-      if (numeric63(__k4)) {
-        __e37 = parseInt(__k4);
+    if (hd(lh) === "t") {
+      var ____id = lh;
+      var ___ = has(____id, 0);
+      var ___var = has(____id, 1);
+      var __val = has(____id, 2);
+      return bind(["o", ___var, ["the", __val]], rh);
+    } else {
+      if (hd(lh) === "o") {
+        var ____id1 = lh;
+        var ___1 = has(____id1, 0);
+        var ___var1 = has(____id1, 1);
+        var __val1 = has(____id1, 2);
+        return [___var1, ["if", ["nil?", rh], __val1, rh]];
       } else {
-        __e37 = __k4;
-      }
-      var __k5 = __e37;
-      var __e38 = undefined;
-      if (__k5 === "rest") {
-        __e38 = ["cut", __id, _35(lh)];
-      } else {
-        __e38 = ["has", __id, ["quote", bias(__k5)]];
-      }
-      var __x6 = __e38;
-      if (is63(__k5)) {
-        var __e39 = undefined;
-        if (__v2 === true) {
-          __e39 = __k5;
-        } else {
-          __e39 = __v2;
+        var __id2 = unique("id");
+        var __bs = [__id2, rh];
+        var ____o2 = lh;
+        var __k4 = undefined;
+        for (__k4 in ____o2) {
+          var __v2 = ____o2[__k4];
+          var __e37 = undefined;
+          if (numeric63(__k4)) {
+            __e37 = parseInt(__k4);
+          } else {
+            __e37 = __k4;
+          }
+          var __k5 = __e37;
+          var __e38 = undefined;
+          if (__k5 === "rest") {
+            __e38 = ["cut", __id2, _35(lh)];
+          } else {
+            __e38 = ["has", __id2, ["quote", bias(__k5)]];
+          }
+          var __x11 = __e38;
+          if (is63(__k5)) {
+            var __e39 = undefined;
+            if (__v2 === true) {
+              __e39 = __k5;
+            } else {
+              __e39 = __v2;
+            }
+            var __k6 = __e39;
+            __bs = join(__bs, bind(__k6, __x11));
+          }
         }
-        var __k6 = __e39;
-        __bs = join(__bs, bind(__k6, __x6));
+        return __bs;
       }
     }
-    return __bs;
   }
 };
 setenv("arguments%", {_stash: true, macro: function (_from) {
-  var ____x17 = object(["target"]);
-  ____x17.js = [["idx", ["idx", ["idx", "Array", "prototype"], "slice"], "call"], "arguments", _from];
-  ____x17.py = ["|list|", "|_args|"];
-  ____x17.lua = ["list", "|...|"];
-  return ____x17;
+  var ____x22 = object(["target"]);
+  ____x22.js = [["idx", ["idx", ["idx", "Array", "prototype"], "slice"], "call"], "arguments", _from];
+  ____x22.py = ["|list|", "|_args|"];
+  ____x22.lua = ["list", "|...|"];
+  return ____x22;
 }});
 bind42 = function (args, body) {
   var __args1 = {};
   var rest = function () {
     __args1.rest = true;
-    var ____x26 = object(["target"]);
-    ____x26.py = "|_keys|";
-    return ["unstash", ["arguments%", _35(__args1)], ____x26];
+    var ____x31 = object(["target"]);
+    ____x31.py = "|_keys|";
+    return ["unstash", ["arguments%", _35(__args1)], ____x31];
   };
   if (atom63(args)) {
     return [__args1, join(["let", [args, rest()]], body)];
   } else {
+    var __pre = [];
     var __bs1 = [];
+    var __inits = [];
     var __r19 = unique("r");
     var ____o3 = args;
     var __k7 = undefined;
@@ -189,24 +207,42 @@ bind42 = function (args, body) {
         if (atom63(__v3)) {
           add(__args1, __v3);
         } else {
-          var __x30 = unique("x");
-          add(__args1, __x30);
-          __bs1 = join(__bs1, [__v3, __x30]);
+          if (hd(__v3) === "o") {
+            var ____id3 = __v3;
+            var ___2 = has(____id3, 0);
+            var ___var2 = has(____id3, 1);
+            var __val2 = has(____id3, 2);
+            add(__args1, ___var2);
+            add(__inits, ["if", ["nil?", ___var2], ["%set", ___var2, __val2]]);
+          } else {
+            if (hd(__v3) === "t") {
+              var ____id4 = __v3;
+              var ___3 = has(____id4, 0);
+              var ___var3 = has(____id4, 1);
+              var __val3 = has(____id4, 2);
+              add(__args1, ___var3);
+              add(__inits, ["if", ["nil?", ___var3], ["%set", ___var3, ["the", __val3]]]);
+            } else {
+              var __x42 = unique("x");
+              add(__args1, __x42);
+              __bs1 = join(__bs1, [__v3, __x42]);
+            }
+          }
         }
       }
     }
     if (keys63(args)) {
-      __bs1 = join(__bs1, [__r19, rest()]);
+      __pre = join(__pre, [__r19, rest()]);
       var __n4 = _35(__args1);
       var __i5 = 0;
       while (__i5 < __n4) {
         var __v4 = __args1[__i5];
-        __bs1 = join(__bs1, [__v4, ["destash!", __v4, __r19]]);
+        __pre = join(__pre, [__v4, ["destash!", __v4, __r19]]);
         __i5 = __i5 + 1;
       }
       __bs1 = join(__bs1, [keys(args), __r19]);
     }
-    return [__args1, join(["let", __bs1], body)];
+    return [__args1, join(["let", __pre], __inits, [join(["let", __bs1], body)])];
   }
 };
 var quoting63 = function (depth) {
@@ -221,24 +257,24 @@ var can_unquote63 = function (depth) {
 var quasisplice63 = function (x, depth) {
   return can_unquote63(depth) && ! atom63(x) && hd(x) === "unquote-splicing";
 };
-var expand_local = function (__x38) {
-  var ____id1 = __x38;
-  var __x39 = has(____id1, 0);
-  var __name = has(____id1, 1);
-  var __value = has(____id1, 2);
+var expand_local = function (__x52) {
+  var ____id5 = __x52;
+  var __x53 = has(____id5, 0);
+  var __name = has(____id5, 1);
+  var __value = has(____id5, 2);
   setenv(__name, {_stash: true, variable: true});
   return ["%local", __name, macroexpand(__value)];
 };
-var expand_function = function (__x41) {
-  var ____id2 = __x41;
-  var __x42 = has(____id2, 0);
-  var __args = has(____id2, 1);
-  var __body = cut(____id2, 2);
+var expand_function = function (__x55) {
+  var ____id6 = __x55;
+  var __x56 = has(____id6, 0);
+  var __args = has(____id6, 1);
+  var __body = cut(____id6, 2);
   add(environment, {});
   var ____o4 = __args;
   var ____i6 = undefined;
   for (____i6 in ____o4) {
-    var ____x43 = ____o4[____i6];
+    var ____x57 = ____o4[____i6];
     var __e41 = undefined;
     if (numeric63(____i6)) {
       __e41 = parseInt(____i6);
@@ -246,23 +282,23 @@ var expand_function = function (__x41) {
       __e41 = ____i6;
     }
     var ____i61 = __e41;
-    setenv(____x43, {_stash: true, variable: true});
+    setenv(____x57, {_stash: true, variable: true});
   }
-  var ____x44 = join(["%function", __args], macroexpand(__body));
+  var ____x58 = join(["%function", __args], macroexpand(__body));
   drop(environment);
-  return ____x44;
+  return ____x58;
 };
-var expand_definition = function (__x46) {
-  var ____id3 = __x46;
-  var __x47 = has(____id3, 0);
-  var __name1 = has(____id3, 1);
-  var __args11 = has(____id3, 2);
-  var __body1 = cut(____id3, 3);
+var expand_definition = function (__x60) {
+  var ____id7 = __x60;
+  var __x61 = has(____id7, 0);
+  var __name1 = has(____id7, 1);
+  var __args11 = has(____id7, 2);
+  var __body1 = cut(____id7, 3);
   add(environment, {});
   var ____o5 = __args11;
   var ____i7 = undefined;
   for (____i7 in ____o5) {
-    var ____x48 = ____o5[____i7];
+    var ____x62 = ____o5[____i7];
     var __e42 = undefined;
     if (numeric63(____i7)) {
       __e42 = parseInt(____i7);
@@ -270,19 +306,19 @@ var expand_definition = function (__x46) {
       __e42 = ____i7;
     }
     var ____i71 = __e42;
-    setenv(____x48, {_stash: true, variable: true});
+    setenv(____x62, {_stash: true, variable: true});
   }
-  var ____x49 = join([__x47, __name1, __args11], macroexpand(__body1));
+  var ____x63 = join([__x61, __name1, __args11], macroexpand(__body1));
   drop(environment);
-  return ____x49;
+  return ____x63;
 };
 var expand_macro = function (form) {
   return macroexpand(expand1(form));
 };
-expand1 = function (__x51) {
-  var ____id4 = __x51;
-  var __name2 = has(____id4, 0);
-  var __body2 = cut(____id4, 1);
+expand1 = function (__x65) {
+  var ____id8 = __x65;
+  var __name2 = has(____id8, 0);
+  var __body2 = cut(____id8, 1);
   return apply(macro_function(__name2), __body2);
 };
 real63 = function (x) {
@@ -314,27 +350,27 @@ macroexpand = function (form) {
       if (atom63(form)) {
         return form;
       } else {
-        var __x54 = hd(form);
-        if (__x54 === "%local") {
+        var __x68 = hd(form);
+        if (__x68 === "%local") {
           return expand_local(form);
         } else {
-          if (__x54 === "%function") {
+          if (__x68 === "%function") {
             return expand_function(form);
           } else {
-            if (__x54 === "%global-function") {
+            if (__x68 === "%global-function") {
               return expand_definition(form);
             } else {
-              if (__x54 === "%local-function") {
+              if (__x68 === "%local-function") {
                 return expand_definition(form);
               } else {
-                if (__x54 === "%expansion") {
+                if (__x68 === "%expansion") {
                   return form[1];
                 } else {
-                  if (macro63(__x54)) {
+                  if (macro63(__x68)) {
                     return expand_macro(form);
                   } else {
-                    if (parse_access63(__x54)) {
-                      return macroexpand(join([parse_access(__x54)], tl(form)));
+                    if (parse_access63(__x68)) {
+                      return macroexpand(join([parse_access(__x68)], tl(form)));
                     } else {
                       return map(macroexpand, form);
                     }
@@ -372,16 +408,16 @@ var quasiquote_list = function (form, depth) {
       last(__xs)[__k10] = __v6;
     }
   }
-  var ____x58 = form;
+  var ____x72 = form;
   var ____i9 = 0;
-  while (____i9 < _35(____x58)) {
-    var __x59 = ____x58[____i9];
-    if (quasisplice63(__x59, depth)) {
-      var __x60 = quasiexpand(__x59[1]);
-      add(__xs, __x60);
+  while (____i9 < _35(____x72)) {
+    var __x73 = ____x72[____i9];
+    if (quasisplice63(__x73, depth)) {
+      var __x74 = quasiexpand(__x73[1]);
+      add(__xs, __x74);
       add(__xs, ["list"]);
     } else {
-      add(last(__xs), quasiexpand(__x59, depth));
+      add(last(__xs), quasiexpand(__x73, depth));
     }
     ____i9 = ____i9 + 1;
   }
@@ -431,11 +467,11 @@ quasiexpand = function (form, depth) {
     }
   }
 };
-expand_if = function (__x64) {
-  var ____id5 = __x64;
-  var __a = has(____id5, 0);
-  var __b1 = has(____id5, 1);
-  var __c = cut(____id5, 2);
+expand_if = function (__x78) {
+  var ____id9 = __x78;
+  var __a = has(____id9, 0);
+  var __b1 = has(____id9, 1);
+  var __c = cut(____id9, 2);
   if (is63(__b1)) {
     return [join(["%if", __a, __b1], expand_if(__c))];
   } else {
@@ -472,10 +508,10 @@ compile_id = function (id, raw63) {
     } else {
       __e45 = "_";
     }
-    var __x70 = __e45;
+    var __x84 = __e45;
     var __e46 = undefined;
     if (number_code63(code(id, 0))) {
-      __e46 = __x70;
+      __e46 = __x84;
     } else {
       __e46 = "";
     }
@@ -488,7 +524,7 @@ compile_id = function (id, raw63) {
       if (__c1 === "-" && !( id === "-")) {
         var __e50 = undefined;
         if (__i11 === 0) {
-          __e50 = __x70;
+          __e50 = __x84;
         } else {
           __e50 = "_";
         }
@@ -500,7 +536,7 @@ compile_id = function (id, raw63) {
         } else {
           var __e49 = undefined;
           if (__i11 === 0) {
-            __e49 = __x70 + __n9;
+            __e49 = __x84 + __n9;
           } else {
             __e49 = __n9;
           }
@@ -516,7 +552,7 @@ compile_id = function (id, raw63) {
       return __id11;
     } else {
       if (reserved63(__id11)) {
-        return __x70 + __id11;
+        return __x84 + __id11;
       } else {
         return __id11;
       }
@@ -528,14 +564,14 @@ valid_id63 = function (x) {
 };
 var __names = {};
 unique = function (x) {
-  var __x71 = compile_id(x);
-  if (has63(__names, __x71)) {
-    var __i12 = __names[__x71];
-    __names[__x71] = __names[__x71] + 1;
-    return unique(__x71 + __i12);
+  var __x85 = compile_id(x);
+  if (has63(__names, __x85)) {
+    var __i12 = __names[__x85];
+    __names[__x85] = __names[__x85] + 1;
+    return unique(__x85 + __i12);
   } else {
-    __names[__x71] = 1;
-    return "__" + __x71;
+    __names[__x85] = 1;
+    return "__" + __x85;
   }
 };
 key = function (k) {
@@ -567,90 +603,90 @@ mapo = function (f, t) {
       __e51 = __k11;
     }
     var __k12 = __e51;
-    var __x72 = f(__v7);
-    if (is63(__x72)) {
+    var __x86 = f(__v7);
+    if (is63(__x86)) {
       add(__o7, literal(__k12));
-      add(__o7, __x72);
+      add(__o7, __x86);
     }
   }
   return __o7;
 };
-var ____x74 = object([]);
-var ____x75 = object([]);
-____x75.js = "!";
-____x75.lua = "not";
-____x75.py = "not";
-____x74["not"] = ____x75;
-var ____x76 = object([]);
-____x76.js = "!";
-____x76.lua = "not";
-____x76.py = "not";
-____x74["%not"] = ____x76;
-____x74["%unm"] = "-";
-var ____x77 = object([]);
-____x77["*"] = true;
-____x77["/"] = true;
-____x77["%"] = true;
-____x77["%mul"] = "*";
-____x77["%div"] = "/";
-____x77["%mod"] = "%";
-var ____x78 = object([]);
-var ____x79 = object([]);
-____x79.js = "+";
-____x79.lua = "..";
-____x78.cat = ____x79;
-var ____x80 = object([]);
-____x80.js = "+";
-____x80.lua = "..";
-____x78["%cat"] = ____x80;
-var ____x81 = object([]);
-____x81["+"] = true;
-____x81["-"] = true;
-____x81["%add"] = "+";
-____x81["%sub"] = "-";
-var ____x82 = object([]);
-____x82["<"] = true;
-____x82[">"] = true;
-____x82["<="] = true;
-____x82[">="] = true;
-____x82["%lt"] = "<";
-____x82["%gt"] = ">";
-____x82["%le"] = "<=";
-____x82["%ge"] = ">=";
-var ____x83 = object([]);
-var ____x84 = object([]);
-____x84.js = "===";
-____x84.lua = "==";
-____x84.py = "==";
-____x83["="] = ____x84;
-var ____x85 = object([]);
-____x85.js = "===";
-____x85.lua = "==";
-____x85.py = "==";
-____x83["%eq"] = ____x85;
-var ____x86 = object([]);
-var ____x87 = object([]);
-____x87.js = "&&";
-____x87.lua = "and";
-____x87.py = "and";
-____x86["and"] = ____x87;
 var ____x88 = object([]);
-____x88.js = "&&";
-____x88.lua = "and";
-____x88.py = "and";
-____x86["%and"] = ____x88;
 var ____x89 = object([]);
+____x89.js = "!";
+____x89.lua = "not";
+____x89.py = "not";
+____x88["not"] = ____x89;
 var ____x90 = object([]);
-____x90.js = "||";
-____x90.lua = "or";
-____x90.py = "or";
-____x89["or"] = ____x90;
+____x90.js = "!";
+____x90.lua = "not";
+____x90.py = "not";
+____x88["%not"] = ____x90;
+____x88["%unm"] = "-";
 var ____x91 = object([]);
-____x91.js = "||";
-____x91.lua = "or";
-____x91.py = "or";
-____x89["%or"] = ____x91;
-var infix = [____x74, ____x77, ____x78, ____x81, ____x82, ____x83, ____x86, ____x89];
+____x91["*"] = true;
+____x91["/"] = true;
+____x91["%"] = true;
+____x91["%mul"] = "*";
+____x91["%div"] = "/";
+____x91["%mod"] = "%";
+var ____x92 = object([]);
+var ____x93 = object([]);
+____x93.js = "+";
+____x93.lua = "..";
+____x92.cat = ____x93;
+var ____x94 = object([]);
+____x94.js = "+";
+____x94.lua = "..";
+____x92["%cat"] = ____x94;
+var ____x95 = object([]);
+____x95["+"] = true;
+____x95["-"] = true;
+____x95["%add"] = "+";
+____x95["%sub"] = "-";
+var ____x96 = object([]);
+____x96["<"] = true;
+____x96[">"] = true;
+____x96["<="] = true;
+____x96[">="] = true;
+____x96["%lt"] = "<";
+____x96["%gt"] = ">";
+____x96["%le"] = "<=";
+____x96["%ge"] = ">=";
+var ____x97 = object([]);
+var ____x98 = object([]);
+____x98.js = "===";
+____x98.lua = "==";
+____x98.py = "==";
+____x97["="] = ____x98;
+var ____x99 = object([]);
+____x99.js = "===";
+____x99.lua = "==";
+____x99.py = "==";
+____x97["%eq"] = ____x99;
+var ____x100 = object([]);
+var ____x101 = object([]);
+____x101.js = "&&";
+____x101.lua = "and";
+____x101.py = "and";
+____x100["and"] = ____x101;
+var ____x102 = object([]);
+____x102.js = "&&";
+____x102.lua = "and";
+____x102.py = "and";
+____x100["%and"] = ____x102;
+var ____x103 = object([]);
+var ____x104 = object([]);
+____x104.js = "||";
+____x104.lua = "or";
+____x104.py = "or";
+____x103["or"] = ____x104;
+var ____x105 = object([]);
+____x105.js = "||";
+____x105.lua = "or";
+____x105.py = "or";
+____x103["%or"] = ____x105;
+var infix = [____x88, ____x91, ____x92, ____x95, ____x96, ____x97, ____x100, ____x103];
 var unary63 = function (form) {
   return two63(form) && in63(hd(form), ["not", "-", "%not", "%unm"]);
 };
@@ -679,15 +715,15 @@ var precedence = function (form) {
 };
 var getop = function (op) {
   return find(function (level) {
-    var __x93 = has(level, op);
-    if (__x93 === true) {
+    var __x107 = has(level, op);
+    if (__x107 === true) {
       return op;
     } else {
-      if (string63(__x93)) {
-        return __x93;
+      if (string63(__x107)) {
+        return __x107;
       } else {
-        if (is63(__x93)) {
-          return has(__x93, has(setenv("target", {_stash: true, toplevel: true}), "value"));
+        if (is63(__x107)) {
+          return has(__x107, has(setenv("target", {_stash: true, toplevel: true}), "value"));
         }
       }
     }
@@ -702,12 +738,12 @@ infix_operator63 = function (x) {
 compile_args = function (args, default63) {
   var __s1 = "(";
   var __c2 = "";
-  var ____x94 = args;
+  var ____x108 = args;
   var ____i16 = 0;
-  while (____i16 < _35(____x94)) {
-    var __x95 = ____x94[____i16];
-    __s1 = __s1 + __c2 + compile(__x95);
-    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py" && default63 && ! id_literal63(__x95)) {
+  while (____i16 < _35(____x108)) {
+    var __x109 = ____x108[____i16];
+    __s1 = __s1 + __c2 + compile(__x109);
+    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py" && default63 && ! id_literal63(__x109)) {
       __s1 = __s1 + "=None";
     }
     __c2 = ", ";
@@ -818,13 +854,13 @@ var terminator = function (stmt63) {
   }
 };
 var compile_special = function (form, stmt63) {
-  var ____id6 = form;
-  var __x96 = has(____id6, 0);
-  var __args2 = cut(____id6, 1);
-  var ____id7 = getenv(__x96);
-  var __special = has(____id7, "special");
-  var __stmt = has(____id7, "stmt");
-  var __self_tr63 = has(____id7, "tr");
+  var ____id10 = form;
+  var __x110 = has(____id10, 0);
+  var __args2 = cut(____id10, 1);
+  var ____id111 = getenv(__x110);
+  var __special = has(____id111, "special");
+  var __stmt = has(____id111, "stmt");
+  var __self_tr63 = has(____id111, "tr");
   var __e55 = undefined;
   if (stmt63 && ! __stmt) {
     __e55 = indentation();
@@ -845,8 +881,8 @@ var method_call63 = function (form) {
   } else {
     __e56 = form;
   }
-  var __x97 = __e56;
-  return string63(__x97) && _35(__x97, 1) > 1 && char(__x97, 0) === ".";
+  var __x111 = __e56;
+  return string63(__x111) && _35(__x111, 1) > 1 && char(__x111, 0) === ".";
 };
 var compile_call = function (form) {
   var __f = hd(form);
@@ -869,8 +905,8 @@ var op_delims = function (parent, child) {
   var ____r65 = unstash(Array.prototype.slice.call(arguments, 2));
   var __parent = destash33(parent, ____r65);
   var __child = destash33(child, ____r65);
-  var ____id8 = ____r65;
-  var __right = has(____id8, "right");
+  var ____id12 = ____r65;
+  var __right = has(____id12, "right");
   var __e58 = undefined;
   if (__right) {
     __e58 = _6261;
@@ -884,17 +920,17 @@ var op_delims = function (parent, child) {
   }
 };
 var compile_infix = function (form) {
-  var ____id9 = form;
-  var __op = has(____id9, 0);
-  var ____id10 = cut(____id9, 1);
-  var __a1 = has(____id10, 0);
-  var __b2 = has(____id10, 1);
-  var ____id111 = op_delims(form, __a1);
-  var __ao = has(____id111, 0);
-  var __ac = has(____id111, 1);
-  var ____id12 = op_delims(form, __b2, {_stash: true, right: true});
-  var __bo = has(____id12, 0);
-  var __bc = has(____id12, 1);
+  var ____id13 = form;
+  var __op = has(____id13, 0);
+  var ____id14 = cut(____id13, 1);
+  var __a1 = has(____id14, 0);
+  var __b2 = has(____id14, 1);
+  var ____id15 = op_delims(form, __a1);
+  var __ao = has(____id15, 0);
+  var __ac = has(____id15, 1);
+  var ____id16 = op_delims(form, __b2, {_stash: true, right: true});
+  var __bo = has(____id16, 0);
+  var __bc = has(____id16, 1);
   var __a2 = compile(__a1);
   var __b3 = compile(__b2);
   var __op1 = getop(__op);
@@ -906,14 +942,14 @@ var compile_infix = function (form) {
 };
 compile_body = function (body) {
   setenv("indent-level", {_stash: true, toplevel: true}).value = has(setenv("indent-level", {_stash: true, toplevel: true}), "value") + 1;
-  var ____x100 = compile(body, {_stash: true, stmt: true});
+  var ____x114 = compile(body, {_stash: true, stmt: true});
   setenv("indent-level", {_stash: true, toplevel: true}).value = has(setenv("indent-level", {_stash: true, toplevel: true}), "value") - 1;
-  var __s2 = ____x100;
+  var __s2 = ____x114;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py" && none63(__s2)) {
     setenv("indent-level", {_stash: true, toplevel: true}).value = has(setenv("indent-level", {_stash: true, toplevel: true}), "value") + 1;
-    var ____x101 = indentation() + "pass\n";
+    var ____x115 = indentation() + "pass\n";
     setenv("indent-level", {_stash: true, toplevel: true}).value = has(setenv("indent-level", {_stash: true, toplevel: true}), "value") - 1;
-    return ____x101;
+    return ____x115;
   } else {
     return __s2;
   }
@@ -922,17 +958,17 @@ compile_function = function (args, body) {
   var ____r68 = unstash(Array.prototype.slice.call(arguments, 2));
   var __args5 = destash33(args, ____r68);
   var __body3 = destash33(body, ____r68);
-  var ____id13 = ____r68;
-  var __name3 = has(____id13, "name");
-  var __prefix = has(____id13, "prefix");
-  var __async = has(____id13, "async");
+  var ____id17 = ____r68;
+  var __name3 = has(____id17, "name");
+  var __prefix = has(____id17, "prefix");
+  var __async = has(____id17, "async");
   var __e59 = undefined;
   if (__name3) {
     __e59 = compile(__name3);
   } else {
     __e59 = "";
   }
-  var __id14 = __e59;
+  var __id18 = __e59;
   var __e60 = undefined;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && has63(__args5, "rest")) {
     __e60 = join(__args5, ["|...|"]);
@@ -974,12 +1010,12 @@ compile_function = function (args, body) {
     __tr1 = __tr1 + "\n";
   }
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "js") {
-    return __a3 + "function " + __id14 + __args6 + " {\n" + __body4 + __ind + "}" + __tr1;
+    return __a3 + "function " + __id18 + __args6 + " {\n" + __body4 + __ind + "}" + __tr1;
   } else {
     if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-      return __a3 + "def " + __id14 + __args6 + ":\n" + __body4;
+      return __a3 + "def " + __id18 + __args6 + ":\n" + __body4;
     } else {
-      return __p1 + "function " + __id14 + __args6 + "\n" + __body4 + __ind + __tr1;
+      return __p1 + "function " + __id18 + __args6 + "\n" + __body4 + __ind + __tr1;
     }
   }
 };
@@ -989,8 +1025,8 @@ var can_return63 = function (form) {
 compile = function (form) {
   var ____r70 = unstash(Array.prototype.slice.call(arguments, 1));
   var __form = destash33(form, ____r70);
-  var ____id15 = ____r70;
-  var __stmt1 = has(____id15, "stmt");
+  var ____id19 = ____r70;
+  var __stmt1 = has(____id19, "stmt");
   if (nil63(__form)) {
     return "";
   } else {
@@ -1055,11 +1091,11 @@ var standalone63 = function (form) {
   return ! atom63(form) && ! infix63(hd(form)) && ! literal63(form) && !( "get" === hd(form)) || id_literal63(form);
 };
 var lower_do = function (args, hoist, stmt63, tail63) {
-  var ____x109 = almost(args);
+  var ____x123 = almost(args);
   var ____i18 = 0;
-  while (____i18 < _35(____x109)) {
-    var __x110 = ____x109[____i18];
-    var ____y = lower(__x110, hoist, stmt63);
+  while (____i18 < _35(____x123)) {
+    var __x124 = ____x123[____i18];
+    var ____y = lower(__x124, hoist, stmt63);
     if (yes(____y)) {
       var __e1 = ____y;
       if (standalone63(__e1)) {
@@ -1076,9 +1112,9 @@ var lower_do = function (args, hoist, stmt63, tail63) {
   }
 };
 var lower_set = function (args, hoist, stmt63, tail63) {
-  var ____id16 = args;
-  var __lh = has(____id16, 0);
-  var __rh = has(____id16, 1);
+  var ____id20 = args;
+  var __lh = has(____id20, 0);
+  var __rh = has(____id20, 1);
   var __lh1 = lower(__lh, hoist);
   var __rh1 = lower(__rh, hoist);
   add(hoist, ["%set", __lh1, __rh1]);
@@ -1087,10 +1123,10 @@ var lower_set = function (args, hoist, stmt63, tail63) {
   }
 };
 var lower_if = function (args, hoist, stmt63, tail63) {
-  var ____id17 = args;
-  var __cond = has(____id17, 0);
-  var ___then = has(____id17, 1);
-  var ___else = has(____id17, 2);
+  var ____id21 = args;
+  var __cond = has(____id21, 0);
+  var ___then = has(____id21, 1);
+  var ___else = has(____id21, 2);
   if (stmt63) {
     var __e72 = undefined;
     if (is63(___else)) {
@@ -1109,20 +1145,20 @@ var lower_if = function (args, hoist, stmt63, tail63) {
   }
 };
 var lower_short = function (x, args, hoist) {
-  var ____id18 = args;
-  var __a4 = has(____id18, 0);
-  var __b4 = has(____id18, 1);
+  var ____id22 = args;
+  var __a4 = has(____id22, 0);
+  var __b4 = has(____id22, 1);
   var __hoist1 = [];
   var __b11 = lower(__b4, __hoist1);
   if (some63(__hoist1)) {
-    var __id19 = unique("id");
+    var __id23 = unique("id");
     var __e73 = undefined;
     if (x === "and") {
-      __e73 = ["%if", __id19, __b4, __id19];
+      __e73 = ["%if", __id23, __b4, __id23];
     } else {
-      __e73 = ["%if", __id19, __id19, __b4];
+      __e73 = ["%if", __id23, __id23, __b4];
     }
-    return lower(["do", ["%local", __id19, __a4], __e73], hoist);
+    return lower(["do", ["%local", __id23, __a4], __e73], hoist);
   } else {
     return [x, lower(__a4, hoist), __b11];
   }
@@ -1131,62 +1167,62 @@ var lower_try = function (args, hoist, tail63) {
   return add(hoist, ["%try", lower_body(args, tail63)]);
 };
 var lower_while = function (args, hoist) {
-  var ____id20 = args;
-  var __c4 = has(____id20, 0);
-  var __body5 = cut(____id20, 1);
-  var __pre = [];
-  var __c5 = lower(__c4, __pre);
+  var ____id24 = args;
+  var __c4 = has(____id24, 0);
+  var __body5 = cut(____id24, 1);
+  var __pre1 = [];
+  var __c5 = lower(__c4, __pre1);
   var __e74 = undefined;
-  if (none63(__pre)) {
+  if (none63(__pre1)) {
     __e74 = ["while", __c5, lower_body(__body5)];
   } else {
-    __e74 = ["while", true, join(["do"], __pre, [["%if", ["not", __c5], ["break"]], lower_body(__body5)])];
+    __e74 = ["while", true, join(["do"], __pre1, [["%if", ["not", __c5], ["break"]], lower_body(__body5)])];
   }
   return add(hoist, __e74);
 };
 var lower_for = function (args, hoist) {
-  var ____id21 = args;
-  var __t = has(____id21, 0);
-  var __k15 = has(____id21, 1);
-  var __body6 = cut(____id21, 2);
-  return add(hoist, join(["%for", lower(__t, hoist), __k15, lower_body(__body6)], keys(__body6)));
+  var ____id25 = args;
+  var __h = has(____id25, 0);
+  var __k15 = has(____id25, 1);
+  var __body6 = cut(____id25, 2);
+  return add(hoist, join(["%for", lower(__h, hoist), __k15, lower_body(__body6)], keys(__body6)));
 };
 var lower_with = function (args, hoist, stmt63, tail63) {
-  var ____id22 = args;
-  var __t1 = has(____id22, 0);
-  var __body7 = cut(____id22, 1);
+  var ____id26 = args;
+  var __h1 = has(____id26, 0);
+  var __body7 = cut(____id26, 1);
   if (stmt63 && ! tail63) {
-    return add(hoist, join(["%with", lower(__t1, hoist), lower_body(__body7, tail63)], keys(__body7)));
+    return add(hoist, join(["%with", lower(__h1, hoist), lower_body(__body7, tail63)], keys(__body7)));
   } else {
     var __e4 = unique("e");
     add(hoist, ["%local", __e4]);
-    add(hoist, join(["%with", lower(__t1, hoist), lower(["%set", __e4, join(["do"], __body7)])], keys(__body7)));
+    add(hoist, join(["%with", lower(__h1, hoist), lower(["%set", __e4, join(["do"], __body7)])], keys(__body7)));
     return __e4;
   }
 };
 var lower_block = function (args, hoist, stmt63, tail63) {
-  var ____id23 = args;
-  var __name4 = has(____id23, 0);
-  var __t2 = has(____id23, 1);
-  var __body8 = cut(____id23, 2);
-  return add(hoist, ["%block", __name4, lower(__t2, hoist), lower_body(__body8, tail63)]);
+  var ____id27 = args;
+  var __name4 = has(____id27, 0);
+  var __h2 = has(____id27, 1);
+  var __body8 = cut(____id27, 2);
+  return add(hoist, ["%block", __name4, lower(__h2, hoist), lower_body(__body8, tail63)]);
 };
 var lower_function = function (args, hoist) {
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
     var __f11 = unique("f");
     return lower(["do", join(["%local-function", __f11], args), __f11], hoist);
   } else {
-    var ____id24 = args;
-    var __a5 = has(____id24, 0);
-    var __body9 = cut(____id24, 1);
+    var ____id28 = args;
+    var __a5 = has(____id28, 0);
+    var __body9 = cut(____id28, 1);
     return join(["%function", __a5, lower_body(__body9, true)], keys(__body9));
   }
 };
 var lower_definition = function (kind, args, hoist) {
-  var ____id25 = args;
-  var __name5 = has(____id25, 0);
-  var __args7 = has(____id25, 1);
-  var __body10 = cut(____id25, 2);
+  var ____id29 = args;
+  var __name5 = has(____id29, 0);
+  var __args7 = has(____id29, 1);
+  var __body10 = cut(____id29, 2);
   return add(hoist, join([kind, __name5, __args7, lower_body(__body10, true)], keys(__body10)));
 };
 var lower_call = function (form, hoist) {
@@ -1203,11 +1239,11 @@ var pairwise63 = function (form) {
 var lower_pairwise = function (form) {
   if (pairwise63(form)) {
     var __e5 = [];
-    var ____id26 = form;
-    var __x147 = has(____id26, 0);
-    var __args8 = cut(____id26, 1);
+    var ____id30 = form;
+    var __x161 = has(____id30, 0);
+    var __args8 = cut(____id30, 1);
     reduce(function (a, b) {
-      add(__e5, [__x147, a, b]);
+      add(__e5, [__x161, a, b]);
       return a;
     }, __args8);
     return join(["and"], reverse(__e5));
@@ -1220,11 +1256,11 @@ var lower_infix63 = function (form) {
 };
 var lower_infix = function (form, hoist) {
   var __form3 = lower_pairwise(form);
-  var ____id27 = __form3;
-  var __x150 = has(____id27, 0);
-  var __args9 = cut(____id27, 1);
+  var ____id31 = __form3;
+  var __x164 = has(____id31, 0);
+  var __args9 = cut(____id31, 1);
   return lower(reduce(function (a, b) {
-    return [__x150, b, a];
+    return [__x164, b, a];
   }, reverse(__args9)), hoist);
 };
 var lower_special = function (form, hoist) {
@@ -1246,46 +1282,46 @@ lower = function (form, hoist, stmt63, tail63) {
         if (lower_infix63(form)) {
           return lower_infix(form, hoist);
         } else {
-          var ____id28 = form;
-          var __x153 = has(____id28, 0);
-          var __args10 = cut(____id28, 1);
-          if (__x153 === "do") {
+          var ____id32 = form;
+          var __x167 = has(____id32, 0);
+          var __args10 = cut(____id32, 1);
+          if (__x167 === "do") {
             return lower_do(__args10, hoist, stmt63, tail63);
           } else {
-            if (__x153 === "%call") {
+            if (__x167 === "%call") {
               return lower(__args10, hoist, stmt63, tail63);
             } else {
-              if (__x153 === "%set") {
+              if (__x167 === "%set") {
                 return lower_set(__args10, hoist, stmt63, tail63);
               } else {
-                if (__x153 === "%if") {
+                if (__x167 === "%if") {
                   return lower_if(__args10, hoist, stmt63, tail63);
                 } else {
-                  if (__x153 === "%try") {
+                  if (__x167 === "%try") {
                     return lower_try(__args10, hoist, tail63);
                   } else {
-                    if (__x153 === "while") {
+                    if (__x167 === "while") {
                       return lower_while(__args10, hoist);
                     } else {
-                      if (__x153 === "%for") {
+                      if (__x167 === "%for") {
                         return lower_for(__args10, hoist);
                       } else {
-                        if (__x153 === "%with") {
+                        if (__x167 === "%with") {
                           return lower_with(__args10, hoist, stmt63, tail63);
                         } else {
-                          if (__x153 === "%block") {
+                          if (__x167 === "%block") {
                             return lower_block(__args10, hoist, stmt63, tail63);
                           } else {
-                            if (__x153 === "%function") {
+                            if (__x167 === "%function") {
                               return lower_function(__args10, hoist);
                             } else {
-                              if (__x153 === "%local-function" || __x153 === "%global-function") {
-                                return lower_definition(__x153, __args10, hoist);
+                              if (__x167 === "%local-function" || __x167 === "%global-function") {
+                                return lower_definition(__x167, __args10, hoist);
                               } else {
-                                if (in63(__x153, ["and", "or"])) {
-                                  return lower_short(__x153, __args10, hoist);
+                                if (in63(__x167, ["and", "or"])) {
+                                  return lower_short(__x167, __args10, hoist);
                                 } else {
-                                  if (statement63(__x153)) {
+                                  if (statement63(__x167)) {
                                     return lower_special(form, hoist);
                                   } else {
                                     return lower_call(form, hoist);
@@ -1353,16 +1389,16 @@ immediate_call63 = function (x) {
 setenv("do", {_stash: true, special: function () {
   var __forms1 = unstash(Array.prototype.slice.call(arguments, 0));
   var __s4 = "";
-  var ____x158 = __forms1;
+  var ____x172 = __forms1;
   var ____i20 = 0;
-  while (____i20 < _35(____x158)) {
-    var __x159 = ____x158[____i20];
-    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && immediate_call63(__x159) && "\n" === char(__s4, edge(__s4))) {
+  while (____i20 < _35(____x172)) {
+    var __x173 = ____x172[____i20];
+    if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && immediate_call63(__x173) && "\n" === char(__s4, edge(__s4))) {
       __s4 = clip(__s4, 0, edge(__s4)) + ";\n";
     }
-    __s4 = __s4 + compile(__x159, {_stash: true, stmt: true});
-    if (! atom63(__x159)) {
-      if (hd(__x159) === "return" || hd(__x159) === "break") {
+    __s4 = __s4 + compile(__x173, {_stash: true, stmt: true});
+    if (! atom63(__x173)) {
+      if (hd(__x173) === "return" || hd(__x173) === "break") {
         break;
       }
     }
@@ -1426,12 +1462,12 @@ setenv("while", {_stash: true, special: function (cond, form) {
 }, stmt: true, tr: true});
 setenv("%for", {_stash: true, special: function (t, k, form) {
   var ____r106 = unstash(Array.prototype.slice.call(arguments, 3));
-  var __t5 = destash33(t, ____r106);
+  var __t2 = destash33(t, ____r106);
   var __k18 = destash33(k, ____r106);
   var __form5 = destash33(form, ____r106);
-  var ____id30 = ____r106;
-  var __async2 = has(____id30, "async");
-  var __t6 = compile(__t5);
+  var ____id34 = ____r106;
+  var __async2 = has(____id34, "async");
+  var __t3 = compile(__t2);
   var __k19 = compile(__k18);
   var __ind7 = indentation();
   var __body14 = compile_body(__form5);
@@ -1443,22 +1479,22 @@ setenv("%for", {_stash: true, special: function (t, k, form) {
   }
   var __a7 = __e78;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua") {
-    return __ind7 + "for " + __k19 + " in next, " + __t6 + " do\n" + __body14 + __ind7 + "end\n";
+    return __ind7 + "for " + __k19 + " in next, " + __t3 + " do\n" + __body14 + __ind7 + "end\n";
   } else {
     if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-      return __ind7 + __a7 + "for " + __k19 + " in " + __t6 + ":\n" + __body14;
+      return __ind7 + __a7 + "for " + __k19 + " in " + __t3 + ":\n" + __body14;
     } else {
-      return __ind7 + "for (" + __k19 + " in " + __t6 + ") {\n" + __body14 + __ind7 + "}\n";
+      return __ind7 + "for (" + __k19 + " in " + __t3 + ") {\n" + __body14 + __ind7 + "}\n";
     }
   }
 }, stmt: true, tr: true});
 setenv("%with", {_stash: true, special: function (t, form) {
   var ____r108 = unstash(Array.prototype.slice.call(arguments, 2));
-  var __t9 = destash33(t, ____r108);
+  var __t6 = destash33(t, ____r108);
   var __form7 = destash33(form, ____r108);
-  var ____id32 = ____r108;
-  var __async4 = has(____id32, "async");
-  var __t10 = compile(__t9);
+  var ____id36 = ____r108;
+  var __async4 = has(____id36, "async");
+  var __t7 = compile(__t6);
   var __ind9 = indentation();
   var __body16 = compile_body(__form7);
   var __e79 = undefined;
@@ -1469,23 +1505,23 @@ setenv("%with", {_stash: true, special: function (t, form) {
   }
   var __a9 = __e79;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-    return __ind9 + __a9 + "with " + __t10 + ":\n" + __body16;
+    return __ind9 + __a9 + "with " + __t7 + ":\n" + __body16;
   } else {
     return "";
   }
 }, stmt: true, tr: true});
 setenv("%block", {_stash: true, special: function (name, t, form) {
-  var __t12 = compile(t);
+  var __t9 = compile(t);
   var __ind11 = indentation();
   var __body18 = compile_body(form);
   var __e80 = undefined;
-  if (some63(__t12)) {
+  if (some63(__t9)) {
     __e80 = " ";
   } else {
     __e80 = "";
   }
   var __sep1 = __e80;
-  return __ind11 + name + __sep1 + __t12 + ":\n" + __body18;
+  return __ind11 + name + __sep1 + __t9 + ":\n" + __body18;
 }, stmt: true, tr: true});
 setenv("%try", {_stash: true, special: function (form) {
   var __ind13 = indentation();
@@ -1498,13 +1534,13 @@ setenv("%try", {_stash: true, special: function (form) {
   }
   var __hf1 = __e81;
   setenv("indent-level", {_stash: true, toplevel: true}).value = has(setenv("indent-level", {_stash: true, toplevel: true}), "value") + 1;
-  var ____x181 = compile(__hf1, {_stash: true, stmt: true});
+  var ____x195 = compile(__hf1, {_stash: true, stmt: true});
   setenv("indent-level", {_stash: true, toplevel: true}).value = has(setenv("indent-level", {_stash: true, toplevel: true}), "value") - 1;
-  var __h1 = ____x181;
+  var __h4 = ____x195;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "js") {
-    return __ind13 + "try {\n" + __body20 + __ind13 + "}\n" + __ind13 + "catch (e) {\n" + __h1 + __ind13 + "}\n";
+    return __ind13 + "try {\n" + __body20 + __ind13 + "}\n" + __ind13 + "catch (e) {\n" + __h4 + __ind13 + "}\n";
   } else {
-    return __ind13 + "try:\n" + __body20 + __ind13 + "except:\n" + __h1;
+    return __ind13 + "try:\n" + __body20 + __ind13 + "except:\n" + __h4;
   }
 }, stmt: true, tr: true});
 setenv("%delete", {_stash: true, special: function (place) {
@@ -1522,23 +1558,23 @@ setenv("break", {_stash: true, special: function () {
 setenv("%function", {_stash: true, special: function (args) {
   var ____r118 = unstash(Array.prototype.slice.call(arguments, 1));
   var __args121 = destash33(args, ____r118);
-  var ____id34 = ____r118;
-  var __body22 = cut(____id34, 0);
+  var ____id38 = ____r118;
+  var __body22 = cut(____id38, 0);
   return apply(compile_function, join([__args121], __body22, []));
 }});
 setenv("%global-function", {_stash: true, special: function (name, args) {
   var ____r120 = unstash(Array.prototype.slice.call(arguments, 2));
   var __name7 = destash33(name, ____r120);
   var __args14 = destash33(args, ____r120);
-  var ____id36 = ____r120;
-  var __body24 = cut(____id36, 0);
+  var ____id40 = ____r120;
+  var __body24 = cut(____id40, 0);
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" || has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-    var ____x192 = object([__args14]);
-    ____x192.name = __name7;
-    var ____x193 = object([]);
-    ____x193.name = __name7;
-    var __x191 = apply(compile_function, join(____x192, __body24, ____x193));
-    return indentation() + __x191;
+    var ____x206 = object([__args14]);
+    ____x206.name = __name7;
+    var ____x207 = object([]);
+    ____x207.name = __name7;
+    var __x205 = apply(compile_function, join(____x206, __body24, ____x207));
+    return indentation() + __x205;
   } else {
     return compile(["%set", __name7, join(["%function", __args14], __body24)], {_stash: true, stmt: true});
   }
@@ -1547,17 +1583,17 @@ setenv("%local-function", {_stash: true, special: function (name, args) {
   var ____r122 = unstash(Array.prototype.slice.call(arguments, 2));
   var __name9 = destash33(name, ____r122);
   var __args16 = destash33(args, ____r122);
-  var ____id38 = ____r122;
-  var __body26 = cut(____id38, 0);
+  var ____id42 = ____r122;
+  var __body26 = cut(____id42, 0);
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" || has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
-    var ____x202 = object([__args16]);
-    ____x202.name = __name9;
-    ____x202.prefix = "local";
-    var ____x203 = object([]);
-    ____x203.name = __name9;
-    ____x203.prefix = "local";
-    var __x201 = apply(compile_function, join(____x202, __body26, ____x203));
-    return indentation() + __x201;
+    var ____x216 = object([__args16]);
+    ____x216.name = __name9;
+    ____x216.prefix = "local";
+    var ____x217 = object([]);
+    ____x217.name = __name9;
+    ____x217.prefix = "local";
+    var __x215 = apply(compile_function, join(____x216, __body26, ____x217));
+    return indentation() + __x215;
   } else {
     return compile(["%local", __name9, join(["%function", __args16], __body26)], {_stash: true, stmt: true});
   }
@@ -1569,8 +1605,8 @@ setenv("return", {_stash: true, special: function (x) {
   } else {
     __e83 = "return " + compile(x);
   }
-  var __x207 = __e83;
-  return indentation() + __x207;
+  var __x221 = __e83;
+  return indentation() + __x221;
 }, stmt: true});
 setenv("new", {_stash: true, special: function (x) {
   return "new " + compile(x);
@@ -1614,7 +1650,7 @@ setenv("%local", {_stash: true, special: function (name, value) {
   if (nil63(value) && has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
     value = "nil";
   }
-  var __id40 = compile(name);
+  var __id44 = compile(name);
   var __value11 = compile(value);
   var __e88 = undefined;
   if (is63(value)) {
@@ -1637,7 +1673,7 @@ setenv("%local", {_stash: true, special: function (name, value) {
   }
   var __keyword1 = __e89;
   var __ind15 = indentation();
-  return __ind15 + __keyword1 + __id40 + __rh2;
+  return __ind15 + __keyword1 + __id44 + __rh2;
 }, stmt: true});
 setenv("%set", {_stash: true, special: function (lh, rh) {
   var __lh2 = compile(lh);
@@ -1651,15 +1687,15 @@ setenv("%set", {_stash: true, special: function (lh, rh) {
   return indentation() + __lh2 + " = " + __rh4;
 }, stmt: true});
 setenv("get", {_stash: true, special: function (t, k) {
-  var __t121 = compile(t);
+  var __t12 = compile(t);
   var __k121 = compile(k);
-  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && char(__t121, 0) === "{" || infix_operator63(t)) {
-    __t121 = "(" + __t121 + ")";
+  if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "lua" && char(__t12, 0) === "{" || infix_operator63(t)) {
+    __t12 = "(" + __t12 + ")";
   }
   if (string_literal63(k) && valid_id63(inner(k)) && !( has(setenv("target", {_stash: true, toplevel: true}), "value") === "py")) {
-    return __t121 + "." + inner(k);
+    return __t12 + "." + inner(k);
   } else {
-    return __t121 + "[" + __k121 + "]";
+    return __t12 + "[" + __k121 + "]";
   }
 }});
 setenv("idx", {_stash: true, special: function (t, k) {
@@ -1729,9 +1765,9 @@ setenv("%object", {_stash: true, special: function () {
     }
     var __k28 = __e96;
     if (number63(__k28)) {
-      var ____id42 = __v13;
-      var __k29 = has(____id42, 0);
-      var __v14 = has(____id42, 1);
+      var ____id46 = __v13;
+      var __k29 = has(____id46, 0);
+      var __v14 = has(____id46, 1);
       if (! string63(__k29)) {
         throw new Error("Illegal key: " + _str(__k29));
       }
@@ -1743,12 +1779,12 @@ setenv("%object", {_stash: true, special: function () {
 }});
 setenv("%list", {_stash: true, special: function (form, comps, cond) {
   var __s12 = compile(form);
-  var ____x215 = comps;
+  var ____x229 = comps;
   var ____i26 = 0;
-  while (____i26 < _35(____x215)) {
-    var ____id44 = ____x215[____i26];
-    var __k31 = has(____id44, 0);
-    var __v16 = has(____id44, 1);
+  while (____i26 < _35(____x229)) {
+    var ____id48 = ____x229[____i26];
+    var __k31 = has(____id48, 0);
+    var __v16 = has(____id48, 1);
     __s12 = __s12 + " for " + compile(__k31) + " in " + compile(__v16);
     ____i26 = ____i26 + 1;
   }
@@ -1771,8 +1807,8 @@ setenv("global", {_stash: true, special: function (x) {
 setenv("import", {_stash: true, special: function (name) {
   var ____r146 = unstash(Array.prototype.slice.call(arguments, 1));
   var __name11 = destash33(name, ____r146);
-  var ____id47 = ____r146;
-  var __alias1 = cut(____id47, 0);
+  var ____id51 = ____r146;
+  var __alias1 = cut(____id51, 0);
   var __ind17 = indentation();
   var __e97 = undefined;
   if (hd(__alias1) === "as") {
@@ -1781,24 +1817,24 @@ setenv("import", {_stash: true, special: function (name) {
     __e97 = hd(__alias1);
   }
   var __as1 = __e97;
-  var __id48 = __as1 || __name11;
+  var __id52 = __as1 || __name11;
   if (has(setenv("target", {_stash: true, toplevel: true}), "value") === "py") {
     var __s14 = __ind17 + "import " + compile(__name11);
     if (__as1) {
-      __s14 = __s14 + " as " + compile(__id48);
+      __s14 = __s14 + " as " + compile(__id52);
     }
     return __s14;
   } else {
-    return __ind17 + compile(["%local", __id48, ["require", escape(__name11)]]);
+    return __ind17 + compile(["%local", __id52, ["require", escape(__name11)]]);
   }
 }, stmt: true});
 setenv("from", {_stash: true, special: function (name) {
   var ____r149 = unstash(Array.prototype.slice.call(arguments, 1));
   var __name13 = destash33(name, ____r149);
-  var ____id51 = ____r149;
-  var __imports1 = cut(____id51, 0);
+  var ____id55 = ____r149;
+  var __imports1 = cut(____id55, 0);
   var __ind19 = indentation();
-  var __id52 = __name13;
+  var __id56 = __name13;
   var __e98 = undefined;
   if (hd(__imports1) === "import") {
     __e98 = tl(__imports1);

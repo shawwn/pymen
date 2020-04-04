@@ -146,6 +146,10 @@
 (define-macro with-frame body
   (let-unique (x)
     `(do (add environment (obj))
+         ,@(with forms ()
+             (each (k v) body
+               (unless (number? k)
+                 (add forms `(setenv ',k value: ,v)))))
          (with ,x (do ,@body)
            (drop environment)))))
 
@@ -329,3 +333,6 @@
 (define-macro %read-from-file (name)
   `(when-compiling
      `(do ,@(read-from-file ,name))))
+
+(mac the (name)
+  `(getenv ',name 'value))
