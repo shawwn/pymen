@@ -1141,7 +1141,7 @@ setenv("let", {_stash: true, macro: function (bs) {
   var __bs11 = destash33(bs, ____r117);
   var ____id25 = ____r117;
   var __body111 = cut(____id25, 0);
-  if (atom63(__bs11)) {
+  if (atom63(__bs11) || hd63(__bs11, ",")) {
     return join(["let", [__bs11, hd(__body111)]], tl(__body111));
   } else {
     if (none63(__bs11)) {
@@ -2097,52 +2097,56 @@ bind = function (lh, rh) {
   if (atom63(lh)) {
     return [lh, rh];
   } else {
-    if (hd(lh) === "t") {
-      var ____id86 = lh;
-      var ___ = has(____id86, 0);
-      var ___var = has(____id86, 1);
-      var __val2 = has(____id86, 2);
-      return bind(["o", ___var, ["the", __val2]], rh);
+    if (hd63(lh, ",")) {
+      return bind(cut(lh, 1), rh);
     } else {
-      if (hd(lh) === "o") {
-        var ____id87 = lh;
-        var ___1 = has(____id87, 0);
-        var ___var1 = has(____id87, 1);
-        var __val3 = has(____id87, 2);
-        return [___var1, ["if", ["nil?", rh], __val3, rh]];
+      if (hd(lh) === "t") {
+        var ____id86 = lh;
+        var ___ = has(____id86, 0);
+        var ___var = has(____id86, 1);
+        var __val2 = has(____id86, 2);
+        return bind(["o", ___var, ["the", __val2]], rh);
       } else {
-        var __id88 = unique("id");
-        var __bs8 = [__id88, rh];
-        var ____o27 = lh;
-        var __k47 = undefined;
-        for (__k47 in ____o27) {
-          var __v34 = ____o27[__k47];
-          var __e83 = undefined;
-          if (numeric63(__k47)) {
-            __e83 = parseInt(__k47);
-          } else {
-            __e83 = __k47;
-          }
-          var __k48 = __e83;
-          var __e84 = undefined;
-          if (__k48 === "rest") {
-            __e84 = ["cut", __id88, _35(lh)];
-          } else {
-            __e84 = ["has", __id88, ["quote", bias(__k48)]];
-          }
-          var __x539 = __e84;
-          if (is63(__k48)) {
-            var __e85 = undefined;
-            if (__v34 === true) {
-              __e85 = __k48;
+        if (hd(lh) === "o") {
+          var ____id87 = lh;
+          var ___1 = has(____id87, 0);
+          var ___var1 = has(____id87, 1);
+          var __val3 = has(____id87, 2);
+          return [___var1, ["if", ["nil?", rh], __val3, rh]];
+        } else {
+          var __id88 = unique("id");
+          var __bs8 = [__id88, rh];
+          var ____o27 = lh;
+          var __k47 = undefined;
+          for (__k47 in ____o27) {
+            var __v34 = ____o27[__k47];
+            var __e83 = undefined;
+            if (numeric63(__k47)) {
+              __e83 = parseInt(__k47);
             } else {
-              __e85 = __v34;
+              __e83 = __k47;
             }
-            var __k49 = __e85;
-            __bs8 = join(__bs8, bind(__k49, __x539));
+            var __k48 = __e83;
+            var __e84 = undefined;
+            if (__k48 === "rest") {
+              __e84 = ["cut", __id88, _35(lh)];
+            } else {
+              __e84 = ["has", __id88, ["quote", bias(__k48)]];
+            }
+            var __x539 = __e84;
+            if (is63(__k48)) {
+              var __e85 = undefined;
+              if (__v34 === true) {
+                __e85 = __k48;
+              } else {
+                __e85 = __v34;
+              }
+              var __k49 = __e85;
+              __bs8 = join(__bs8, bind(__k49, __x539));
+            }
           }
+          return __bs8;
         }
-        return __bs8;
       }
     }
   }

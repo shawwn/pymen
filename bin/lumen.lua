@@ -990,7 +990,7 @@ setenv("let", {_stash = true, macro = function (bs, ...)
   local __bs11 = destash33(bs, ____r114)
   local ____id25 = ____r114
   local __body111 = cut(____id25, 0)
-  if atom63(__bs11) then
+  if atom63(__bs11) or hd63(__bs11, ",") then
     return join({"let", {__bs11, hd(__body111)}}, tl(__body111))
   else
     if none63(__bs11) then

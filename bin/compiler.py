@@ -78,41 +78,44 @@ def bind(lh=None, rh=None):
   if atom63(lh):
     return [lh, rh]
   else:
-    if hd(lh) == "t":
-      ____id = lh
-      ___ = has(____id, 0)
-      __L_var = has(____id, 1)
-      __val = has(____id, 2)
-      return bind(["o", __L_var, ["the", __val]], rh)
+    if hd63(lh, ","):
+      return bind(cut(lh, 1), rh)
     else:
-      if hd(lh) == "o":
-        ____id1 = lh
-        ___1 = has(____id1, 0)
-        __L_var1 = has(____id1, 1)
-        __val1 = has(____id1, 2)
-        return [__L_var1, ["if", ["nil?", rh], __val1, rh]]
+      if hd(lh) == "t":
+        ____id = lh
+        ___ = has(____id, 0)
+        __L_var = has(____id, 1)
+        __val = has(____id, 2)
+        return bind(["o", __L_var, ["the", __val]], rh)
       else:
-        __id2 = unique("id")
-        __bs = [__id2, rh]
-        ____o2 = lh
-        __k2 = None
-        for __k2 in indices(____o2):
-          __v2 = ____o2[__k2]
-          __e35 = None
-          if __k2 == "rest":
-            __e35 = ["cut", __id2, L_35(lh)]
-          else:
-            __e35 = ["has", __id2, ["quote", bias(__k2)]]
-          __x11 = __e35
-          if is63(__k2):
-            __e36 = None
-            if __v2 == True:
-              __e36 = __k2
+        if hd(lh) == "o":
+          ____id1 = lh
+          ___1 = has(____id1, 0)
+          __L_var1 = has(____id1, 1)
+          __val1 = has(____id1, 2)
+          return [__L_var1, ["if", ["nil?", rh], __val1, rh]]
+        else:
+          __id2 = unique("id")
+          __bs = [__id2, rh]
+          ____o2 = lh
+          __k2 = None
+          for __k2 in indices(____o2):
+            __v2 = ____o2[__k2]
+            __e35 = None
+            if __k2 == "rest":
+              __e35 = ["cut", __id2, L_35(lh)]
             else:
-              __e36 = __v2
-            __k3 = __e36
-            __bs = join(__bs, bind(__k3, __x11))
-        return __bs
+              __e35 = ["has", __id2, ["quote", bias(__k2)]]
+            __x11 = __e35
+            if is63(__k2):
+              __e36 = None
+              if __v2 == True:
+                __e36 = __k2
+              else:
+                __e36 = __v2
+              __k3 = __e36
+              __bs = join(__bs, bind(__k3, __x11))
+          return __bs
 def __f2(L_from=None):
   ____x22 = object(["target"])
   ____x22["js"] = [["idx", ["idx", ["idx", "Array", "prototype"], "slice"], "call"], "arguments", L_from]

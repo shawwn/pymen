@@ -74,7 +74,7 @@
   `(%object ,@(mapo (fn (x) x) body)))
 
 (define-macro let (bs rest: body)
-  (if (atom? bs) `(let (,bs ,(hd body)) ,@(tl body))
+  (if (or (atom? bs) (hd? bs ',)) `(let (,bs ,(hd body)) ,@(tl body))
       (none? bs) `(do ,@body)
     (let ((lh rh rest: bs2) bs
           (id val rest: bs1) (bind lh rh))

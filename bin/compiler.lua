@@ -107,45 +107,49 @@ function bind(lh, rh)
   if atom63(lh) then
     return {lh, rh}
   else
-    if hd(lh) == "t" then
-      local ____id = lh
-      local ___ = has(____id, 1)
-      local ___var = has(____id, 2)
-      local __val = has(____id, 3)
-      return bind({"o", ___var, {"the", __val}}, rh)
+    if hd63(lh, ",") then
+      return bind(cut(lh, 1), rh)
     else
-      if hd(lh) == "o" then
-        local ____id1 = lh
-        local ___1 = has(____id1, 1)
-        local ___var1 = has(____id1, 2)
-        local __val1 = has(____id1, 3)
-        return {___var1, {"if", {"nil?", rh}, __val1, rh}}
+      if hd(lh) == "t" then
+        local ____id = lh
+        local ___ = has(____id, 1)
+        local ___var = has(____id, 2)
+        local __val = has(____id, 3)
+        return bind({"o", ___var, {"the", __val}}, rh)
       else
-        local __id2 = unique("id")
-        local __bs = {__id2, rh}
-        local ____o2 = lh
-        local __k2 = nil
-        for __k2 in next, ____o2 do
-          local __v2 = ____o2[__k2]
-          local __e35 = nil
-          if __k2 == "rest" then
-            __e35 = {"cut", __id2, _35(lh)}
-          else
-            __e35 = {"has", __id2, {"quote", bias(__k2)}}
-          end
-          local __x11 = __e35
-          if is63(__k2) then
-            local __e36 = nil
-            if __v2 == true then
-              __e36 = __k2
+        if hd(lh) == "o" then
+          local ____id1 = lh
+          local ___1 = has(____id1, 1)
+          local ___var1 = has(____id1, 2)
+          local __val1 = has(____id1, 3)
+          return {___var1, {"if", {"nil?", rh}, __val1, rh}}
+        else
+          local __id2 = unique("id")
+          local __bs = {__id2, rh}
+          local ____o2 = lh
+          local __k2 = nil
+          for __k2 in next, ____o2 do
+            local __v2 = ____o2[__k2]
+            local __e35 = nil
+            if __k2 == "rest" then
+              __e35 = {"cut", __id2, _35(lh)}
             else
-              __e36 = __v2
+              __e35 = {"has", __id2, {"quote", bias(__k2)}}
             end
-            local __k3 = __e36
-            __bs = join(__bs, bind(__k3, __x11))
+            local __x11 = __e35
+            if is63(__k2) then
+              local __e36 = nil
+              if __v2 == true then
+                __e36 = __k2
+              else
+                __e36 = __v2
+              end
+              local __k3 = __e36
+              __bs = join(__bs, bind(__k3, __x11))
+            end
           end
+          return __bs
         end
-        return __bs
       end
     end
   end

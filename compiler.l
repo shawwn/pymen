@@ -72,6 +72,8 @@
 (define-global bind (lh rh)
   (if (atom? lh)
       `(,lh ,rh)
+      (hd? lh ',)
+      (bind (cut lh 1) rh)
       (= (hd lh) 't)
       (let ((_ var val) lh)
         (bind `(o ,var (the ,val)) rh))

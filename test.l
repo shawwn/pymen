@@ -679,7 +679,10 @@ c"
        (test= 9 q))))
   (test= 0 (+ (abs -1)
               (let abs (fn (x) x)
-                (abs -1)))))
+                (abs -1))))
+  (target py:
+    (test= '(1 2) (let a, b ((fn (x) x, 2) 1)
+                    (list a b)))))
 
 (define-test with
   (test= 10 (with x 9 (inc x))))
