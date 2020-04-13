@@ -1,4 +1,5 @@
 local delimiters = {["("] = true, [")"] = true, [";"] = true, [","] = true, ["\r"] = true, ["\n"] = true}
+local closing_delimiters = {[")"] = true}
 local whitespace = {[" "] = true, ["\t"] = true, ["\r"] = true, ["\n"] = true}
 local function stream(_str, more)
   return {pos = 0, string = _str, len = _35(_str), more = more}
@@ -292,7 +293,7 @@ end
 read_table[","] = function (s)
   read_char(s)
   local __c6 = peek_char(s)
-  if nil63(__c6) or has63(whitespace, __c6) then
+  if nil63(__c6) or has63(whitespace, __c6) or has63(closing_delimiters, __c6) then
     return ","
   else
     if __c6 == "@" then

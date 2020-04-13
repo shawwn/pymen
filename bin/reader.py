@@ -1,5 +1,6 @@
 from lumen import *
 delimiters = {"(": True, ")": True, ";": True, ",": True, "\r": True, "\n": True}
+closing_delimiters = {")": True}
 whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
 def stream(L_str=None, more=None):
   return {"pos": 0, "string": L_str, "len": L_35(L_str), "more": more}
@@ -242,7 +243,7 @@ read_table["`"] = __f7
 def __f8(s=None):
   read_char(s)
   __c6 = peek_char(s)
-  if nil63(__c6) or has63(whitespace, __c6):
+  if nil63(__c6) or has63(whitespace, __c6) or has63(closing_delimiters, __c6):
     return ","
   else:
     if __c6 == "@":

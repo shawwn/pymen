@@ -1,4 +1,5 @@
 var delimiters = {"(": true, ")": true, ";": true, ",": true, "\r": true, "\n": true};
+var closing_delimiters = {")": true};
 var whitespace = {" ": true, "\t": true, "\r": true, "\n": true};
 var stream = function (_str, more) {
   return {pos: 0, string: _str, len: _35(_str), more: more};
@@ -292,7 +293,7 @@ read_table["`"] = function (s) {
 read_table[","] = function (s) {
   read_char(s);
   var __c6 = peek_char(s);
-  if (nil63(__c6) || has63(whitespace, __c6)) {
+  if (nil63(__c6) || has63(whitespace, __c6) || has63(closing_delimiters, __c6)) {
     return ",";
   } else {
     if (__c6 === "@") {

@@ -1,6 +1,7 @@
 (target py: (from lumen import *))
 
 (define delimiters (set-of "(" ")" ";" "," "\r" "\n"))
+(define closing-delimiters (set-of ")"))
 (define whitespace (set-of " " "\t" "\r" "\n"))
 
 (define stream (str more)
@@ -196,7 +197,7 @@
 (define-reader ("," s)
   (read-char s)
   (let c (peek-char s)
-    (if (or (nil? c) (has? whitespace c))
+    (if (or (nil? c) (has? whitespace c) (has? closing-delimiters c))
         ","
         (= c "@")
         (do (read-char s)

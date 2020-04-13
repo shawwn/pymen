@@ -65,7 +65,10 @@
     (test= 1 (- -1))
     (test= "0?" (read "0?"))
     (test= "0!" (read "0!"))
-    (test= "0." (read "0."))))
+    (test= "0." (read "0."))
+    (test= ', (read ","))
+    (test= '(,) (read "(,)"))
+    (test= 'a, b (read "a, b"))))
 
 (define-test read-more
   (let read (idx reader read-string)
