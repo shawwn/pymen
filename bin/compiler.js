@@ -1120,7 +1120,9 @@ var lower_set = function (args, hoist, stmt63, tail63) {
   var __rh1 = lower(__rh, hoist);
   add(hoist, ["%set", __lh1, __rh1]);
   if (!( stmt63 && ! tail63)) {
-    return __lh1;
+    if (atom63(__lh1)) {
+      return __lh1;
+    }
   }
 };
 var lower_if = function (args, hoist, stmt63, tail63) {

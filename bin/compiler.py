@@ -856,7 +856,8 @@ def lower_set(args=None, hoist=None, stmt63=None, tail63=None):
   __rh1 = lower(__rh, hoist)
   add(hoist, ["%set", __lh1, __rh1])
   if not( stmt63 and not tail63):
-    return __lh1
+    if atom63(__lh1):
+      return __lh1
 def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
   ____id21 = args
   __cond = has(____id21, 0)

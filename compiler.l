@@ -547,7 +547,8 @@
         rh1 (lower rh hoist))
     (add hoist `(%set ,lh1 ,rh1))
     (unless (and stmt? (not tail?))
-      lh1)))
+      (when (atom? lh1)
+        lh1))))
 
 (define lower-if (args hoist stmt? tail?)
   (let ((cond then else) args)

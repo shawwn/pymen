@@ -1060,7 +1060,9 @@ local function lower_set(args, hoist, stmt63, tail63)
   local __rh1 = lower(__rh, hoist)
   add(hoist, {"%set", __lh1, __rh1})
   if not( stmt63 and not tail63) then
-    return __lh1
+    if atom63(__lh1) then
+      return __lh1
+    end
   end
 end
 local function lower_if(args, hoist, stmt63, tail63)
