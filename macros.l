@@ -143,6 +143,12 @@
       `(define-constant ,name (either (get-value ',name) ,x))
     `(define-constant ,name)))
 
+(mac after (x rest: body)
+  (let-unique (r)
+    `(with ,r nil
+       (%block try || (set ,r ,x))
+       (%block finally || (do ,@body)))))
+
 (define-macro with-frame body
   (let-unique (x)
     `(do (add environment (obj))
