@@ -201,41 +201,82 @@ end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end
-read_table["\""] = function (s)
-  local __i1 = s.pos
-  local __j = search(s.string, "\"", __i1 + 1)
-  local __b = either(search(s.string, "\\", __i1 + 1), __j)
-  if is63(__j) and __j < s.len and __b >= __j then
-    s.pos = __j + 1
-    return clip(s.string, __i1, __j + 1)
-  else
-    local __r21 = nil
-    read_char(s)
+local function read_matching(opener, closer, s)
+  local __r21 = nil
+  local __pos1 = s.pos
+  local ___str1 = ""
+  local __i1 = 0
+  while __i1 < _35(opener) do
+    ___str1 = ___str1 .. (read_char(s) or "")
+    __i1 = __i1 + 1
+  end
+  if ___str1 == opener then
     while nil63(__r21) do
-      local __c5 = peek_char(s)
-      if __c5 == "\"" then
-        read_char(s)
-        __r21 = clip(s.string, __i1, s.pos)
+      if clip(s.string, s.pos, s.pos + _35(closer)) == closer then
+        local __i2 = 0
+        while __i2 < _35(closer) do
+          ___str1 = ___str1 .. read_char(s)
+          __i2 = __i2 + 1
+        end
+        __r21 = ___str1
       else
-        if nil63(__c5) then
-          __r21 = expected(s, "\"")
+        if nil63(peek_char(s)) then
+          __r21 = expected(s, closer)
         else
-          if __c5 == "\\" then
-            read_char(s)
+          ___str1 = ___str1 .. read_char(s)
+          if peek_char(s) == "\\" then
+            ___str1 = ___str1 .. read_char(s)
           end
-          read_char(s)
         end
       end
     end
-    return __r21
+  end
+  return __r21
+end
+read_table["\""] = function (s)
+  if string_starts63(s.string, "\"\"\"", s.pos) then
+    local __r23 = read_matching("\"\"\"", "\"\"\"", s)
+    if __r23 == s.more then
+      return __r23
+    else
+      return inner(inner(__r23))
+    end
+  else
+    local __i3 = s.pos
+    local __j = search(s.string, "\"", __i3 + 1)
+    local __b = either(search(s.string, "\\", __i3 + 1), __j)
+    if is63(__j) and __j < s.len and __b >= __j then
+      s.pos = __j + 1
+      return clip(s.string, __i3, __j + 1)
+    else
+      local __r24 = nil
+      read_char(s)
+      while nil63(__r24) do
+        local __c5 = peek_char(s)
+        if __c5 == "\"" then
+          read_char(s)
+          __r24 = clip(s.string, __i3, s.pos)
+        else
+          if nil63(__c5) then
+            __r24 = expected(s, "\"")
+          else
+            if __c5 == "\\" then
+              read_char(s)
+            end
+            read_char(s)
+          end
+        end
+      end
+      return __r24
+    end
   end
 end
 read_table["|"] = function (s)
-  local __i2 = s.pos
-  local __j1 = search(s.string, "|", __i2 + 1)
+  local __i4 = s.pos
+  local __j1 = search(s.string, "|", __i4 + 1)
   if is63(__j1) and __j1 < s.len then
     s.pos = __j1 + 1
-    return clip(s.string, __i2, __j1 + 1)
+    return clip(s.string, __i4, __j1 + 1)
   else
     return expected(s, "|")
   end

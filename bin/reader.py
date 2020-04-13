@@ -167,36 +167,67 @@ read_table["("] = __f2
 def __f3(s=None):
   raise Exception(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f3
-def __f4(s=None):
-  __i1 = s["pos"]
-  __j = search(s["string"], "\"", __i1 + 1)
-  __b = either(search(s["string"], "\\", __i1 + 1), __j)
-  if is63(__j) and __j < s["len"] and __b >= __j:
-    s["pos"] = __j + 1
-    return clip(s["string"], __i1, __j + 1)
-  else:
-    __r22 = None
-    read_char(s)
+def read_matching(opener=None, closer=None, s=None):
+  __r22 = None
+  __pos1 = s["pos"]
+  __L_str1 = ""
+  __i1 = 0
+  while __i1 < L_35(opener):
+    __L_str1 = cat(__L_str1, read_char(s) or "")
+    __i1 = __i1 + 1
+  if __L_str1 == opener:
     while nil63(__r22):
-      __c5 = peek_char(s)
-      if __c5 == "\"":
-        read_char(s)
-        __r22 = clip(s["string"], __i1, s["pos"])
+      if clip(s["string"], s["pos"], s["pos"] + L_35(closer)) == closer:
+        __i2 = 0
+        while __i2 < L_35(closer):
+          __L_str1 = cat(__L_str1, read_char(s))
+          __i2 = __i2 + 1
+        __r22 = __L_str1
       else:
-        if nil63(__c5):
-          __r22 = expected(s, "\"")
+        if nil63(peek_char(s)):
+          __r22 = expected(s, closer)
         else:
-          if __c5 == "\\":
-            read_char(s)
+          __L_str1 = cat(__L_str1, read_char(s))
+          if peek_char(s) == "\\":
+            __L_str1 = cat(__L_str1, read_char(s))
+  return __r22
+def __f4(s=None):
+  if string_starts63(s["string"], "\"\"\"", s["pos"]):
+    __r24 = read_matching("\"\"\"", "\"\"\"", s)
+    if __r24 == s["more"]:
+      return __r24
+    else:
+      return inner(inner(__r24))
+  else:
+    __i3 = s["pos"]
+    __j = search(s["string"], "\"", __i3 + 1)
+    __b = either(search(s["string"], "\\", __i3 + 1), __j)
+    if is63(__j) and __j < s["len"] and __b >= __j:
+      s["pos"] = __j + 1
+      return clip(s["string"], __i3, __j + 1)
+    else:
+      __r25 = None
+      read_char(s)
+      while nil63(__r25):
+        __c5 = peek_char(s)
+        if __c5 == "\"":
           read_char(s)
-    return __r22
+          __r25 = clip(s["string"], __i3, s["pos"])
+        else:
+          if nil63(__c5):
+            __r25 = expected(s, "\"")
+          else:
+            if __c5 == "\\":
+              read_char(s)
+            read_char(s)
+      return __r25
 read_table["\""] = __f4
 def __f5(s=None):
-  __i2 = s["pos"]
-  __j1 = search(s["string"], "|", __i2 + 1)
+  __i4 = s["pos"]
+  __j1 = search(s["string"], "|", __i4 + 1)
   if is63(__j1) and __j1 < s["len"]:
     s["pos"] = __j1 + 1
-    return clip(s["string"], __i2, __j1 + 1)
+    return clip(s["string"], __i4, __j1 + 1)
   else:
     return expected(s, "|")
 read_table["|"] = __f5

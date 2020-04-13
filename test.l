@@ -51,6 +51,7 @@
     (test= (not true) (read "false"))
     (test= 'hi (read "hi"))
     (test= '"hi" (read "\"hi\""))
+    (test= '"""hi""" (read "\"\"\"hi\"\"\""))
     (test= "|hi|" (read "|hi|"))
     (test= '(1 2) (read "(1 2)"))
     (test= '(1 (a)) (read "(1 (a))"))

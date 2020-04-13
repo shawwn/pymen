@@ -201,41 +201,82 @@ read_table["("] = function (s) {
 read_table[")"] = function (s) {
   throw new Error("Unexpected ) at " + s.pos);
 };
-read_table["\""] = function (s) {
-  var __i1 = s.pos;
-  var __j = search(s.string, "\"", __i1 + 1);
-  var __b = either(search(s.string, "\\", __i1 + 1), __j);
-  if (is63(__j) && __j < s.len && __b >= __j) {
-    s.pos = __j + 1;
-    return clip(s.string, __i1, __j + 1);
-  } else {
-    var __r21 = undefined;
-    read_char(s);
+var read_matching = function (opener, closer, s) {
+  var __r21 = undefined;
+  var __pos1 = s.pos;
+  var ___str1 = "";
+  var __i1 = 0;
+  while (__i1 < _35(opener)) {
+    ___str1 = ___str1 + (read_char(s) || "");
+    __i1 = __i1 + 1;
+  }
+  if (___str1 === opener) {
     while (nil63(__r21)) {
-      var __c5 = peek_char(s);
-      if (__c5 === "\"") {
-        read_char(s);
-        __r21 = clip(s.string, __i1, s.pos);
+      if (clip(s.string, s.pos, s.pos + _35(closer)) === closer) {
+        var __i2 = 0;
+        while (__i2 < _35(closer)) {
+          ___str1 = ___str1 + read_char(s);
+          __i2 = __i2 + 1;
+        }
+        __r21 = ___str1;
       } else {
-        if (nil63(__c5)) {
-          __r21 = expected(s, "\"");
+        if (nil63(peek_char(s))) {
+          __r21 = expected(s, closer);
         } else {
-          if (__c5 === "\\") {
-            read_char(s);
+          ___str1 = ___str1 + read_char(s);
+          if (peek_char(s) === "\\") {
+            ___str1 = ___str1 + read_char(s);
           }
-          read_char(s);
         }
       }
     }
-    return __r21;
+  }
+  return __r21;
+};
+read_table["\""] = function (s) {
+  if (string_starts63(s.string, "\"\"\"", s.pos)) {
+    var __r23 = read_matching("\"\"\"", "\"\"\"", s);
+    if (__r23 === s.more) {
+      return __r23;
+    } else {
+      return inner(inner(__r23));
+    }
+  } else {
+    var __i3 = s.pos;
+    var __j = search(s.string, "\"", __i3 + 1);
+    var __b = either(search(s.string, "\\", __i3 + 1), __j);
+    if (is63(__j) && __j < s.len && __b >= __j) {
+      s.pos = __j + 1;
+      return clip(s.string, __i3, __j + 1);
+    } else {
+      var __r24 = undefined;
+      read_char(s);
+      while (nil63(__r24)) {
+        var __c5 = peek_char(s);
+        if (__c5 === "\"") {
+          read_char(s);
+          __r24 = clip(s.string, __i3, s.pos);
+        } else {
+          if (nil63(__c5)) {
+            __r24 = expected(s, "\"");
+          } else {
+            if (__c5 === "\\") {
+              read_char(s);
+            }
+            read_char(s);
+          }
+        }
+      }
+      return __r24;
+    }
   }
 };
 read_table["|"] = function (s) {
-  var __i2 = s.pos;
-  var __j1 = search(s.string, "|", __i2 + 1);
+  var __i4 = s.pos;
+  var __j1 = search(s.string, "|", __i4 + 1);
   if (is63(__j1) && __j1 < s.len) {
     s.pos = __j1 + 1;
-    return clip(s.string, __i2, __j1 + 1);
+    return clip(s.string, __i4, __j1 + 1);
   } else {
     return expected(s, "|");
   }

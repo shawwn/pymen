@@ -336,6 +336,18 @@
                i ((idx string find) s pattern start true))
            (and i (- i 1)))))
 
+(define-global string-ends? (str x pos)
+  (let str (if (is? pos) (clip str pos) str)
+    (if (> (# x) (# str))
+        false
+      (= x (clip str (- (# str) (# x)))))))
+
+(define-global string-starts? (str x pos)
+  (let str (if (is? pos) (clip str pos) str)
+    (if (> (# x) (# str))
+        false
+      (= x (clip str 0 (# x))))))
+
 (define-global split (s sep)
   (if (or (= s "") (= sep "")) ()
     (with l ()
