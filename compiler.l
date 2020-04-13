@@ -998,6 +998,9 @@
 (define-special %r (x)
   (cat "r" (compile x)))
 
+(define-special @ (x) stmt: true
+  (cat (indentation) "@" (compile x)))
+
 (export run
         eval
         expand
