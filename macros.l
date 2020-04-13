@@ -333,6 +333,11 @@
       (one? args) (hd args)
     `(%div ,@args)))
 
+(define-macro // args
+  (if (none? args) 1
+      (one? args) (hd args)
+    `(%idiv ,@args)))
+
 (define-macro async (keyword rest: body)
   `(,keyword ,@body async: true))
 

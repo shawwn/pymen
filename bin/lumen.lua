@@ -1431,14 +1431,26 @@ setenv("/", {_stash = true, macro = function (...)
     end
   end
 end})
+setenv("//", {_stash = true, macro = function (...)
+  local __args21 = unstash({...})
+  if none63(__args21) then
+    return 1
+  else
+    if one63(__args21) then
+      return hd(__args21)
+    else
+      return join({"%idiv"}, __args21)
+    end
+  end
+end})
 setenv("async", {_stash = true, macro = function (keyword, ...)
   local ____r192 = unstash({...})
   local __keyword1 = destash33(keyword, ____r192)
   local ____id84 = ____r192
   local __body55 = cut(____id84, 0)
-  local ____x558 = object({__keyword1})
-  ____x558.async = true
-  return join(____x558, __body55)
+  local ____x561 = object({__keyword1})
+  ____x561.async = true
+  return join(____x561, __body55)
 end})
 setenv("%read-from-file", {_stash = true, macro = function (name)
   return {"when-compiling", {"quasiquote", {"do", {"unquote-splicing", {"read-from-file", name}}}}}
@@ -1612,10 +1624,10 @@ local function main(args)
         end
         __i43 = __i43 + 1
       end
-      local ____x577 = __pre
+      local ____x580 = __pre
       local ____i44 = 0
-      while ____i44 < _35(____x577) do
-        local __file = ____x577[____i44 + 1]
+      while ____i44 < _35(____x580) do
+        local __file = ____x580[____i44 + 1]
         run_file(__file)
         ____i44 = ____i44 + 1
       end

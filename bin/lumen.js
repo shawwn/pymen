@@ -1593,14 +1593,26 @@ setenv("/", {_stash: true, macro: function () {
     }
   }
 }});
+setenv("//", {_stash: true, macro: function () {
+  var __args21 = unstash(Array.prototype.slice.call(arguments, 0));
+  if (none63(__args21)) {
+    return 1;
+  } else {
+    if (one63(__args21)) {
+      return hd(__args21);
+    } else {
+      return join(["%idiv"], __args21);
+    }
+  }
+}});
 setenv("async", {_stash: true, macro: function (keyword) {
   var ____r195 = unstash(Array.prototype.slice.call(arguments, 1));
   var __keyword1 = destash33(keyword, ____r195);
   var ____id84 = ____r195;
   var __body55 = cut(____id84, 0);
-  var ____x502 = object([__keyword1]);
-  ____x502.async = true;
-  return join(____x502, __body55);
+  var ____x504 = object([__keyword1]);
+  ____x504.async = true;
+  return join(____x504, __body55);
 }});
 setenv("%read-from-file", {_stash: true, macro: function (name) {
   return ["when-compiling", ["quasiquote", ["do", ["unquote-splicing", ["read-from-file", name]]]]];
@@ -1756,10 +1768,10 @@ var main = function (args) {
         }
         __i43 = __i43 + 1;
       }
-      var ____x521 = __pre;
+      var ____x523 = __pre;
       var ____i44 = 0;
-      while (____i44 < _35(____x521)) {
-        var __file = ____x521[____i44];
+      while (____i44 < _35(____x523)) {
+        var __file = ____x523[____i44];
         run_file(__file);
         ____i44 = ____i44 + 1;
       }

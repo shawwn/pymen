@@ -1251,21 +1251,31 @@ def __f82(*_args, **_keys):
     else:
       return join(["%div"], __args19)
 setenv("/", macro=__f82)
-def __f83(keyword=None, *_args, **_keys):
+def __f83(*_args, **_keys):
+  __args21 = unstash(list(_args), _keys)
+  if none63(__args21):
+    return 1
+  else:
+    if one63(__args21):
+      return hd(__args21)
+    else:
+      return join(["%idiv"], __args21)
+setenv("//", macro=__f83)
+def __f84(keyword=None, *_args, **_keys):
   ____r195 = unstash(list(_args), _keys)
   __keyword1 = destash33(keyword, ____r195)
   ____id84 = ____r195
   __body55 = cut(____id84, 0)
-  ____x505 = object([__keyword1])
-  ____x505["async"] = True
-  return join(____x505, __body55)
-setenv("async", macro=__f83)
-def __f84(name=None):
-  return ["when-compiling", ["quasiquote", ["do", ["unquote-splicing", ["read-from-file", name]]]]]
-setenv("%read-from-file", macro=__f84)
+  ____x507 = object([__keyword1])
+  ____x507["async"] = True
+  return join(____x507, __body55)
+setenv("async", macro=__f84)
 def __f85(name=None):
+  return ["when-compiling", ["quasiquote", ["do", ["unquote-splicing", ["read-from-file", name]]]]]
+setenv("%read-from-file", macro=__f85)
+def __f86(name=None):
   return ["getenv", ["quote", name], ["quote", "value"]]
-setenv("the", macro=__f85)
+setenv("the", macro=__f86)
 import reader
 import compiler
 import system
@@ -1283,14 +1293,14 @@ def print_exception(v=None, ex=None):
   traceback.print_exception(*ex)
   return None
 def eval_print(form=None):
-  def __f86():
+  def __f87():
     try:
       return [True, compiler.L_eval(form)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id85 = __f86()
+  ____id85 = __f87()
   __ok = has(____id85, 0)
   __v31 = has(____id85, 1)
   __ex = has(____id85, 2)
@@ -1395,10 +1405,10 @@ def main(args=None):
           if not( "-" == char(__a9, 0)):
             add(__pre, __a9)
         __i43 = __i43 + 1
-      ____x524 = __pre
+      ____x526 = __pre
       ____i44 = 0
-      while ____i44 < L_35(____x524):
-        __file = ____x524[____i44]
+      while ____i44 < L_35(____x526):
+        __file = ____x526[____i44]
         run_file(__file)
         ____i44 = ____i44 + 1
       if nil63(__input):

@@ -330,7 +330,7 @@
 
 (define infix
   `((not: (js: ! lua: ,"not" py: ,"not") %not: (js: ! lua: ,"not" py: ,"not") %unm: -)
-    (:* :/ :% %mul: * %div: / %mod: %)
+    (:* :/ :% %mul: * %div: / %idiv: // %mod: %)
     (cat: (js: + lua: ..) %cat: (js: + lua: ..))
     (:+ :- %add: + %sub: -)
     (:< :> :<= :>= %lt: < %gt: > %le: <= %ge: >=)
