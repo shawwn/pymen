@@ -53,7 +53,7 @@
           (with l (array args)
             (each (k v) args
               (unless (number? k)
-                (add l `(%literal ,(cat "|" k "=|") ,v)))))
+                (add l `(%literal ,k |=| ,v)))))
         (let l '(%object "_stash" true)
           (each (k v) args
             (unless (number? k)
@@ -522,7 +522,8 @@
   (or (atom? form)
       (= (hd form) '%array)
       (= (hd form) '%object)
-      (= (hd form) '%list)))
+      (= (hd form) '%list)
+      (= (hd form) ',)))
 
 (define standalone? (form)
   (or (and (not (atom? form))
@@ -547,8 +548,7 @@
         rh1 (lower rh hoist))
     (add hoist `(%set ,lh1 ,rh1))
     (unless (and stmt? (not tail?))
-      (when (atom? lh1)
-        lh1))))
+      lh1)))
 
 (define lower-if (args hoist stmt? tail?)
   (let ((cond then else) args)

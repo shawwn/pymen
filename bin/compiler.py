@@ -53,7 +53,7 @@ def stash42(args=None):
       for __k in indices(____o):
         __v = ____o[__k]
         if not number63(__k):
-          add(__l, ["%literal", cat("|", __k, "=|"), __v])
+          add(__l, ["%literal", __k, "|=|", __v])
       return __l
     else:
       __l1 = ["%object", "\"_stash\"", True]
@@ -829,7 +829,7 @@ def lower_statement(form=None, tail63=None):
 def lower_body(body=None, tail63=None):
   return lower_statement(join(["do"], body), tail63)
 def literal63(form=None):
-  return atom63(form) or hd(form) == "%array" or hd(form) == "%object" or hd(form) == "%list"
+  return atom63(form) or hd(form) == "%array" or hd(form) == "%object" or hd(form) == "%list" or hd(form) == ","
 def standalone63(form=None):
   return not atom63(form) and not infix63(hd(form)) and not literal63(form) and not( "get" == hd(form)) or id_literal63(form)
 def lower_do(args=None, hoist=None, stmt63=None, tail63=None):
@@ -856,8 +856,7 @@ def lower_set(args=None, hoist=None, stmt63=None, tail63=None):
   __rh1 = lower(__rh, hoist)
   add(hoist, ["%set", __lh1, __rh1])
   if not( stmt63 and not tail63):
-    if atom63(__lh1):
-      return __lh1
+    return __lh1
 def lower_if(args=None, hoist=None, stmt63=None, tail63=None):
   ____id21 = args
   __cond = has(____id21, 0)

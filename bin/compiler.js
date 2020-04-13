@@ -78,7 +78,7 @@ var stash42 = function (args) {
         }
         var __k1 = __e36;
         if (! number63(__k1)) {
-          add(__l, ["%literal", "|" + __k1 + "=|", __v]);
+          add(__l, ["%literal", __k1, "|=|", __v]);
         }
       }
       return __l;
@@ -1086,7 +1086,7 @@ var lower_body = function (body, tail63) {
   return lower_statement(join(["do"], body), tail63);
 };
 var literal63 = function (form) {
-  return atom63(form) || hd(form) === "%array" || hd(form) === "%object" || hd(form) === "%list";
+  return atom63(form) || hd(form) === "%array" || hd(form) === "%object" || hd(form) === "%list" || hd(form) === ",";
 };
 var standalone63 = function (form) {
   return ! atom63(form) && ! infix63(hd(form)) && ! literal63(form) && !( "get" === hd(form)) || id_literal63(form);
@@ -1120,9 +1120,7 @@ var lower_set = function (args, hoist, stmt63, tail63) {
   var __rh1 = lower(__rh, hoist);
   add(hoist, ["%set", __lh1, __rh1]);
   if (!( stmt63 && ! tail63)) {
-    if (atom63(__lh1)) {
-      return __lh1;
-    }
+    return __lh1;
   }
 };
 var lower_if = function (args, hoist, stmt63, tail63) {

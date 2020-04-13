@@ -71,7 +71,7 @@ local function stash42(args)
       for __k in next, ____o do
         local __v = ____o[__k]
         if not number63(__k) then
-          add(__l, {"%literal", "|" .. __k .. "=|", __v})
+          add(__l, {"%literal", __k, "|=|", __v})
         end
       end
       return __l
@@ -1026,7 +1026,7 @@ local function lower_body(body, tail63)
   return lower_statement(join({"do"}, body), tail63)
 end
 local function literal63(form)
-  return atom63(form) or hd(form) == "%array" or hd(form) == "%object" or hd(form) == "%list"
+  return atom63(form) or hd(form) == "%array" or hd(form) == "%object" or hd(form) == "%list" or hd(form) == ","
 end
 local function standalone63(form)
   return not atom63(form) and not infix63(hd(form)) and not literal63(form) and not( "get" == hd(form)) or id_literal63(form)
@@ -1060,9 +1060,7 @@ local function lower_set(args, hoist, stmt63, tail63)
   local __rh1 = lower(__rh, hoist)
   add(hoist, {"%set", __lh1, __rh1})
   if not( stmt63 and not tail63) then
-    if atom63(__lh1) then
-      return __lh1
-    end
+    return __lh1
   end
 end
 local function lower_if(args, hoist, stmt63, tail63)
