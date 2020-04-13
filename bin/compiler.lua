@@ -1817,6 +1817,9 @@ end})
 setenv("%r", {_stash = true, special = function (x)
   return "r" .. compile(x)
 end})
+setenv("@", {_stash = true, special = function (x)
+  return indentation() .. "@" .. compile(x)
+end, stmt = true})
 local __exports = exports or {}
 __exports.run = run
 __exports["eval"] = _eval

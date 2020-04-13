@@ -1908,6 +1908,9 @@ setenv("%f", {_stash: true, special: function (x) {
 setenv("%r", {_stash: true, special: function (x) {
   return "r" + compile(x);
 }});
+setenv("@", {_stash: true, special: function (x) {
+  return indentation() + "@" + compile(x);
+}, stmt: true});
 exports.run = run;
 exports["eval"] = _eval;
 exports._eval = _eval;

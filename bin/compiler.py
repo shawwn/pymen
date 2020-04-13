@@ -1500,3 +1500,6 @@ setenv("%f", special=__f46)
 def __f47(x=None):
   return cat("r", compile(x))
 setenv("%r", special=__f47)
+def __f48(x=None):
+  return cat(indentation(), "@", compile(x))
+setenv("@", special=__f48, stmt=True)
