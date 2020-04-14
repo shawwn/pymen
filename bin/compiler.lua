@@ -777,6 +777,23 @@ local function compile_boolean(x)
     end
   end
 end
+local function triple_quoted63(x)
+  return string_literal63(x) and (string_literal63(inner(x)) and string_literal63(inner(inner(x))))
+end
+local function un_triple_quote(x)
+  return escape(inner(inner(inner(x))))
+end
+local function compile_string(x)
+  if triple_quoted63(x) then
+    if has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
+      return x
+    else
+      return escape_newlines(un_triple_quote(x))
+    end
+  else
+    return escape_newlines(x)
+  end
+end
 local function compile_atom(x)
   if x == "nil" then
     return compile_nil()
@@ -785,7 +802,7 @@ local function compile_atom(x)
       return inner(x)
     else
       if string_literal63(x) then
-        return escape_newlines(x)
+        return compile_string(x)
       else
         if string63(x) then
           return compile_id(x)
@@ -876,10 +893,10 @@ local function compile_call(form)
   end
 end
 local function op_delims(parent, child, ...)
-  local ____r67 = unstash({...})
-  local __parent = destash33(parent, ____r67)
-  local __child = destash33(child, ____r67)
-  local ____id14 = ____r67
+  local ____r70 = unstash({...})
+  local __parent = destash33(parent, ____r70)
+  local __child = destash33(child, ____r70)
+  local ____id14 = ____r70
   local __right = has(____id14, "right")
   local __e55 = nil
   if __right then
@@ -929,10 +946,10 @@ function compile_body(body)
   end
 end
 function compile_function(args, body, ...)
-  local ____r70 = unstash({...})
-  local __args9 = destash33(args, ____r70)
-  local __body3 = destash33(body, ____r70)
-  local ____id19 = ____r70
+  local ____r73 = unstash({...})
+  local __args9 = destash33(args, ____r73)
+  local __body3 = destash33(body, ____r73)
+  local ____id19 = ____r73
   local __name3 = has(____id19, "name")
   local __prefix = has(____id19, "prefix")
   local __async = has(____id19, "async")
@@ -997,9 +1014,9 @@ local function can_return63(form)
   return is63(form) and (atom63(form) or not( hd(form) == "%return") and not statement63(hd(form)))
 end
 function compile(form, ...)
-  local ____r72 = unstash({...})
-  local __form = destash33(form, ____r72)
-  local ____id21 = ____r72
+  local ____r75 = unstash({...})
+  local __form = destash33(form, ____r75)
+  local ____id21 = ____r75
   local __stmt1 = has(____id21, "stmt")
   if nil63(__form) then
     return ""
@@ -1062,7 +1079,7 @@ local function literal63(form)
   return atom63(form) or (hd(form) == "%array" or (hd(form) == "%object" or (hd(form) == "%list" or hd(form) == ",")))
 end
 local function standalone63(form)
-  return not atom63(form) and (not infix63(hd(form)) and (not literal63(form) and not( "%get" == hd(form)))) or id_literal63(form)
+  return not( has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua") and string_literal63(form) or (not atom63(form) and (not infix63(hd(form)) and (not literal63(form) and not( "%get" == hd(form)))) or id_literal63(form))
 end
 local function lower_do(args, hoist, stmt63, tail63)
   local ____x126 = almost(args)
@@ -1422,11 +1439,11 @@ setenv("%while", {_stash = true, special = function (cond, form)
   end
 end, stmt = true, tr = true})
 setenv("%for", {_stash = true, special = function (t, k, form, ...)
-  local ____r108 = unstash({...})
-  local __t2 = destash33(t, ____r108)
-  local __k11 = destash33(k, ____r108)
-  local __form5 = destash33(form, ____r108)
-  local ____id36 = ____r108
+  local ____r111 = unstash({...})
+  local __t2 = destash33(t, ____r111)
+  local __k11 = destash33(k, ____r111)
+  local __form5 = destash33(form, ____r111)
+  local ____id36 = ____r111
   local __async2 = has(____id36, "async")
   local __t3 = compile(__t2)
   local __k12 = compile(__k11)
@@ -1450,10 +1467,10 @@ setenv("%for", {_stash = true, special = function (t, k, form, ...)
   end
 end, stmt = true, tr = true})
 setenv("%with", {_stash = true, special = function (t, form, ...)
-  local ____r110 = unstash({...})
-  local __t6 = destash33(t, ____r110)
-  local __form7 = destash33(form, ____r110)
-  local ____id38 = ____r110
+  local ____r113 = unstash({...})
+  local __t6 = destash33(t, ____r113)
+  local __form7 = destash33(form, ____r113)
+  local ____id38 = ____r113
   local __async4 = has(____id38, "async")
   local __t7 = compile(__t6)
   local __ind9 = indentation()
@@ -1535,17 +1552,17 @@ setenv("%break", {_stash = true, special = function ()
   return indentation() .. "break"
 end, stmt = true})
 setenv("%function", {_stash = true, special = function (args, ...)
-  local ____r120 = unstash({...})
-  local __args16 = destash33(args, ____r120)
-  local ____id40 = ____r120
+  local ____r123 = unstash({...})
+  local __args16 = destash33(args, ____r123)
+  local ____id40 = ____r123
   local __body22 = cut(____id40, 0)
   return apply(compile_function, join({__args16}, __body22, {}))
 end})
 setenv("%global-function", {_stash = true, special = function (name, args, ...)
-  local ____r122 = unstash({...})
-  local __name7 = destash33(name, ____r122)
-  local __args18 = destash33(args, ____r122)
-  local ____id42 = ____r122
+  local ____r125 = unstash({...})
+  local __name7 = destash33(name, ____r125)
+  local __args18 = destash33(args, ____r125)
+  local ____id42 = ____r125
   local __body24 = cut(____id42, 0)
   if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" or has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
     local ____x214 = object({__args18})
@@ -1559,10 +1576,10 @@ setenv("%global-function", {_stash = true, special = function (name, args, ...)
   end
 end, stmt = true, tr = true})
 setenv("%local-function", {_stash = true, special = function (name, args, ...)
-  local ____r124 = unstash({...})
-  local __name9 = destash33(name, ____r124)
-  local __args20 = destash33(args, ____r124)
-  local ____id44 = ____r124
+  local ____r127 = unstash({...})
+  local __name9 = destash33(name, ____r127)
+  local __args20 = destash33(args, ____r127)
+  local ____id44 = ____r127
   local __body26 = cut(____id44, 0)
   if has(setenv("target", {_stash = true, toplevel = true}), "value") == "lua" or has(setenv("target", {_stash = true, toplevel = true}), "value") == "py" then
     local ____x225 = object({__args20})
@@ -1770,9 +1787,9 @@ setenv("global", {_stash = true, special = function (x)
   end
 end, stmt = true, tr = true})
 setenv("import", {_stash = true, special = function (name, ...)
-  local ____r148 = unstash({...})
-  local __name11 = destash33(name, ____r148)
-  local ____id53 = ____r148
+  local ____r151 = unstash({...})
+  local __name11 = destash33(name, ____r151)
+  local ____id53 = ____r151
   local __alias1 = cut(____id53, 0)
   local __ind17 = indentation()
   local __e92 = nil
@@ -1794,9 +1811,9 @@ setenv("import", {_stash = true, special = function (name, ...)
   end
 end, stmt = true})
 setenv("from", {_stash = true, special = function (name, ...)
-  local ____r151 = unstash({...})
-  local __name13 = destash33(name, ____r151)
-  local ____id57 = ____r151
+  local ____r154 = unstash({...})
+  local __name13 = destash33(name, ____r154)
+  local ____id57 = ____r154
   local __imports1 = cut(____id57, 0)
   local __ind19 = indentation()
   local __id58 = __name13

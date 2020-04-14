@@ -236,12 +236,7 @@ local function read_matching(opener, closer, s)
 end
 read_table["\""] = function (s)
   if string_starts63(s.string, "\"\"\"", s.pos) then
-    local __r23 = read_matching("\"\"\"", "\"\"\"", s)
-    if __r23 == s.more then
-      return __r23
-    else
-      return inner(inner(__r23))
-    end
+    return read_matching("\"\"\"", "\"\"\"", s)
   else
     local __i3 = s.pos
     local __j = search(s.string, "\"", __i3 + 1)
@@ -250,16 +245,16 @@ read_table["\""] = function (s)
       s.pos = __j + 1
       return clip(s.string, __i3, __j + 1)
     else
-      local __r24 = nil
+      local __r23 = nil
       read_char(s)
-      while nil63(__r24) do
+      while nil63(__r23) do
         local __c5 = peek_char(s)
         if __c5 == "\"" then
           read_char(s)
-          __r24 = clip(s.string, __i3, s.pos)
+          __r23 = clip(s.string, __i3, s.pos)
         else
           if nil63(__c5) then
-            __r24 = expected(s, "\"")
+            __r23 = expected(s, "\"")
           else
             if __c5 == "\\" then
               read_char(s)
@@ -268,7 +263,7 @@ read_table["\""] = function (s)
           end
         end
       end
-      return __r24
+      return __r23
     end
   end
 end

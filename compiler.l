@@ -401,10 +401,24 @@
       (if x "True" "False")
     (if x "true" "false")))
 
+(define triple-quoted? (x)
+  (and (string-literal? x)
+       (string-literal? (inner x))
+       (string-literal? (inner (inner x)))))
+
+(define un-triple-quote (x)
+  (escape (inner (inner (inner x)))))
+
+(define compile-string (x)
+  (if (triple-quoted? x)
+      (if (target? 'py) x
+        (escape-newlines (un-triple-quote x)))
+    (escape-newlines x)))
+
 (define compile-atom (x)
   (if (= x "nil") (compile-nil)
       (id-literal? x) (inner x)
-      (string-literal? x) (escape-newlines x)
+      (string-literal? x) (compile-string x)
       (string? x) (compile-id x)
       (boolean? x) (compile-boolean x)
       (nan? x) "nan"
@@ -531,7 +545,8 @@
       (= (hd form) ',)))
 
 (define standalone? (form)
-  (or (and (not (atom? form))
+  (or (and (not (target? 'lua)) (string-literal? form))
+      (and (not (atom? form))
            (not (infix? (hd form)))
            (not (literal? form))
            (not (= '%get (hd form))))

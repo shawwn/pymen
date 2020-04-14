@@ -236,12 +236,7 @@ var read_matching = function (opener, closer, s) {
 };
 read_table["\""] = function (s) {
   if (string_starts63(s.string, "\"\"\"", s.pos)) {
-    var __r23 = read_matching("\"\"\"", "\"\"\"", s);
-    if (__r23 === s.more) {
-      return __r23;
-    } else {
-      return inner(inner(__r23));
-    }
+    return read_matching("\"\"\"", "\"\"\"", s);
   } else {
     var __i3 = s.pos;
     var __j = search(s.string, "\"", __i3 + 1);
@@ -250,16 +245,16 @@ read_table["\""] = function (s) {
       s.pos = __j + 1;
       return clip(s.string, __i3, __j + 1);
     } else {
-      var __r24 = undefined;
+      var __r23 = undefined;
       read_char(s);
-      while (nil63(__r24)) {
+      while (nil63(__r23)) {
         var __c5 = peek_char(s);
         if (__c5 === "\"") {
           read_char(s);
-          __r24 = clip(s.string, __i3, s.pos);
+          __r23 = clip(s.string, __i3, s.pos);
         } else {
           if (nil63(__c5)) {
-            __r24 = expected(s, "\"");
+            __r23 = expected(s, "\"");
           } else {
             if (__c5 === "\\") {
               read_char(s);
@@ -268,7 +263,7 @@ read_table["\""] = function (s) {
           }
         }
       }
-      return __r24;
+      return __r23;
     }
   }
 };

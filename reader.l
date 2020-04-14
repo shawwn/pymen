@@ -156,9 +156,7 @@
 
 (define-reader ("\"" s)
   (if (string-starts? (get s 'string) "\"\"\"" (get s 'pos))
-      (let r (read-matching "\"\"\"" "\"\"\"" s)
-        (if (= r (get s 'more)) r
-          (inner (inner r))))
+      (read-matching "\"\"\"" "\"\"\"" s)
     (let (i (get s 'pos)
           j (search (get s 'string) "\"" (+ i 1))
           b (either (search (get s 'string) "\\" (+ i 1)) j))

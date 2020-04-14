@@ -194,11 +194,7 @@ def read_matching(opener=None, closer=None, s=None):
   return __r21
 def __f4(s=None):
   if string_starts63(s["string"], "\"\"\"", s["pos"]):
-    __r23 = read_matching("\"\"\"", "\"\"\"", s)
-    if __r23 == s["more"]:
-      return __r23
-    else:
-      return inner(inner(__r23))
+    return read_matching("\"\"\"", "\"\"\"", s)
   else:
     __i3 = s["pos"]
     __j = search(s["string"], "\"", __i3 + 1)
@@ -207,21 +203,21 @@ def __f4(s=None):
       s["pos"] = __j + 1
       return clip(s["string"], __i3, __j + 1)
     else:
-      __r24 = None
+      __r23 = None
       read_char(s)
-      while nil63(__r24):
+      while nil63(__r23):
         __c5 = peek_char(s)
         if __c5 == "\"":
           read_char(s)
-          __r24 = clip(s["string"], __i3, s["pos"])
+          __r23 = clip(s["string"], __i3, s["pos"])
         else:
           if nil63(__c5):
-            __r24 = expected(s, "\"")
+            __r23 = expected(s, "\"")
           else:
             if __c5 == "\\":
               read_char(s)
             read_char(s)
-      return __r24
+      return __r23
 read_table["\""] = __f4
 def __f5(s=None):
   __i4 = s["pos"]

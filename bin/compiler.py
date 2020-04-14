@@ -583,6 +583,18 @@ def compile_boolean(x=None):
       return "true"
     else:
       return "false"
+def triple_quoted63(x=None):
+  return string_literal63(x) and (string_literal63(inner(x)) and string_literal63(inner(inner(x))))
+def un_triple_quote(x=None):
+  return escape(inner(inner(inner(x))))
+def compile_string(x=None):
+  if triple_quoted63(x):
+    if has(setenv("target", toplevel=True), "value") == "py":
+      return x
+    else:
+      return escape_newlines(un_triple_quote(x))
+  else:
+    return escape_newlines(x)
 def compile_atom(x=None):
   if x == "nil":
     return compile_nil()
@@ -591,7 +603,7 @@ def compile_atom(x=None):
       return inner(x)
     else:
       if string_literal63(x):
-        return escape_newlines(x)
+        return compile_string(x)
       else:
         if string63(x):
           return compile_id(x)
@@ -661,10 +673,10 @@ def compile_call(form=None):
   else:
     return cat(__f1, __args4)
 def op_delims(parent=None, child=None, *_args, **_keys):
-  ____r67 = unstash(list(_args), _keys)
-  __parent = destash33(parent, ____r67)
-  __child = destash33(child, ____r67)
-  ____id12 = ____r67
+  ____r70 = unstash(list(_args), _keys)
+  __parent = destash33(parent, ____r70)
+  __child = destash33(child, ____r70)
+  ____id12 = ____r70
   __right = has(____id12, "right")
   __e51 = None
   if __right:
@@ -707,10 +719,10 @@ def compile_body(body=None):
   else:
     return __s2
 def compile_function(args=None, body=None, *_args, **_keys):
-  ____r70 = unstash(list(_args), _keys)
-  __args5 = destash33(args, ____r70)
-  __body3 = destash33(body, ____r70)
-  ____id17 = ____r70
+  ____r73 = unstash(list(_args), _keys)
+  __args5 = destash33(args, ____r73)
+  __body3 = destash33(body, ____r73)
+  ____id17 = ____r73
   __name3 = has(____id17, "name")
   __prefix = has(____id17, "prefix")
   __async = has(____id17, "async")
@@ -764,9 +776,9 @@ def compile_function(args=None, body=None, *_args, **_keys):
 def can_return63(form=None):
   return is63(form) and (atom63(form) or not( hd(form) == "%return") and not statement63(hd(form)))
 def compile(form=None, *_args, **_keys):
-  ____r72 = unstash(list(_args), _keys)
-  __form = destash33(form, ____r72)
-  ____id19 = ____r72
+  ____r75 = unstash(list(_args), _keys)
+  __form = destash33(form, ____r75)
+  ____id19 = ____r75
   __stmt1 = has(____id19, "stmt")
   if nil63(__form):
     return ""
@@ -817,7 +829,7 @@ def lower_body(body=None, tail63=None):
 def literal63(form=None):
   return atom63(form) or (hd(form) == "%array" or (hd(form) == "%object" or (hd(form) == "%list" or hd(form) == ",")))
 def standalone63(form=None):
-  return not atom63(form) and (not infix63(hd(form)) and (not literal63(form) and not( "%get" == hd(form)))) or id_literal63(form)
+  return not( has(setenv("target", toplevel=True), "value") == "lua") and string_literal63(form) or (not atom63(form) and (not infix63(hd(form)) and (not literal63(form) and not( "%get" == hd(form)))) or id_literal63(form))
 def lower_do(args=None, hoist=None, stmt63=None, tail63=None):
   ____x119 = almost(args)
   ____i18 = 0
@@ -1103,11 +1115,11 @@ def __f12(cond=None, form=None):
       return cat(__ind5, "while ", __cond4, " do\n", __body12, __ind5, "end\n")
 setenv("%while", special=__f12, stmt=True, tr=True)
 def __f13(t=None, k=None, form=None, *_args, **_keys):
-  ____r108 = unstash(list(_args), _keys)
-  __t2 = destash33(t, ____r108)
-  __k11 = destash33(k, ____r108)
-  __form5 = destash33(form, ____r108)
-  ____id34 = ____r108
+  ____r111 = unstash(list(_args), _keys)
+  __t2 = destash33(t, ____r111)
+  __k11 = destash33(k, ____r111)
+  __form5 = destash33(form, ____r111)
+  ____id34 = ____r111
   __async2 = has(____id34, "async")
   __t3 = compile(__t2)
   __k12 = compile(__k11)
@@ -1128,10 +1140,10 @@ def __f13(t=None, k=None, form=None, *_args, **_keys):
       return cat(__ind7, "for (", __k12, " in ", __t3, ") {\n", __body14, __ind7, "}\n")
 setenv("%for", special=__f13, stmt=True, tr=True)
 def __f14(t=None, form=None, *_args, **_keys):
-  ____r110 = unstash(list(_args), _keys)
-  __t6 = destash33(t, ____r110)
-  __form7 = destash33(form, ____r110)
-  ____id36 = ____r110
+  ____r113 = unstash(list(_args), _keys)
+  __t6 = destash33(t, ____r113)
+  __form7 = destash33(form, ____r113)
+  ____id36 = ____r113
   __async4 = has(____id36, "async")
   __t7 = compile(__t6)
   __ind9 = indentation()
@@ -1204,17 +1216,17 @@ def __f18():
   return cat(indentation(), "break")
 setenv("%break", special=__f18, stmt=True)
 def __f19(args=None, *_args, **_keys):
-  ____r120 = unstash(list(_args), _keys)
-  __args121 = destash33(args, ____r120)
-  ____id38 = ____r120
+  ____r123 = unstash(list(_args), _keys)
+  __args121 = destash33(args, ____r123)
+  ____id38 = ____r123
   __body22 = cut(____id38, 0)
   return apply(compile_function, join([__args121], __body22, []))
 setenv("%function", special=__f19)
 def __f20(name=None, args=None, *_args, **_keys):
-  ____r122 = unstash(list(_args), _keys)
-  __name7 = destash33(name, ____r122)
-  __args14 = destash33(args, ____r122)
-  ____id40 = ____r122
+  ____r125 = unstash(list(_args), _keys)
+  __name7 = destash33(name, ____r125)
+  __args14 = destash33(args, ____r125)
+  ____id40 = ____r125
   __body24 = cut(____id40, 0)
   if has(setenv("target", toplevel=True), "value") == "lua" or has(setenv("target", toplevel=True), "value") == "py":
     ____x202 = object([__args14])
@@ -1227,10 +1239,10 @@ def __f20(name=None, args=None, *_args, **_keys):
     return compile(["%set", __name7, join(["%function", __args14], __body24)], stmt=True)
 setenv("%global-function", special=__f20, stmt=True, tr=True)
 def __f21(name=None, args=None, *_args, **_keys):
-  ____r124 = unstash(list(_args), _keys)
-  __name9 = destash33(name, ____r124)
-  __args16 = destash33(args, ____r124)
-  ____id42 = ____r124
+  ____r127 = unstash(list(_args), _keys)
+  __name9 = destash33(name, ____r127)
+  __args16 = destash33(args, ____r127)
+  ____id42 = ____r127
   __body26 = cut(____id42, 0)
   if has(setenv("target", toplevel=True), "value") == "lua" or has(setenv("target", toplevel=True), "value") == "py":
     ____x212 = object([__args16])
@@ -1413,9 +1425,9 @@ def __f35(x=None):
     return ""
 setenv("global", special=__f35, stmt=True, tr=True)
 def __f36(name=None, *_args, **_keys):
-  ____r148 = unstash(list(_args), _keys)
-  __name11 = destash33(name, ____r148)
-  ____id51 = ____r148
+  ____r151 = unstash(list(_args), _keys)
+  __name11 = destash33(name, ____r151)
+  ____id51 = ____r151
   __alias1 = cut(____id51, 0)
   __ind17 = indentation()
   __e88 = None
@@ -1434,9 +1446,9 @@ def __f36(name=None, *_args, **_keys):
     return cat(__ind17, compile(["%local", __id52, ["require", escape(__name11)]]))
 setenv("import", special=__f36, stmt=True)
 def __f37(name=None, *_args, **_keys):
-  ____r151 = unstash(list(_args), _keys)
-  __name13 = destash33(name, ____r151)
-  ____id55 = ____r151
+  ____r154 = unstash(list(_args), _keys)
+  __name13 = destash33(name, ____r154)
+  ____id55 = ____r154
   __imports1 = cut(____id55, 0)
   __ind19 = indentation()
   __id56 = __name13
