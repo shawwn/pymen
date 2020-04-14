@@ -86,14 +86,15 @@ def bind(lh=None, rh=None):
         ___ = has(____id, 0)
         __L_var = has(____id, 1)
         __val = has(____id, 2)
-        return bind(["o", __L_var, ["the", __val]], rh)
+        __val1 = either(__val, __L_var)
+        return bind(["o", __L_var, ["the", __val1]], rh)
       else:
         if hd(lh) == "o":
           ____id1 = lh
           ___1 = has(____id1, 0)
           __L_var1 = has(____id1, 1)
-          __val1 = has(____id1, 2)
-          return [__L_var1, ["if", ["nil?", rh], __val1, rh]]
+          __val2 = has(____id1, 2)
+          return [__L_var1, ["if", ["nil?", rh], __val2, rh]]
         else:
           __id2 = unique("id")
           __bs = [__id2, rh]
@@ -149,17 +150,18 @@ def bind42(args=None, body=None):
             ____id3 = __v3
             ___2 = has(____id3, 0)
             __L_var2 = has(____id3, 1)
-            __val2 = has(____id3, 2)
+            __val3 = has(____id3, 2)
             add(__args1, __L_var2)
-            add(__inits, ["if", ["nil?", __L_var2], ["%set", __L_var2, __val2]])
+            add(__inits, ["if", ["nil?", __L_var2], ["%set", __L_var2, __val3]])
           else:
             if hd(__v3) == "t":
               ____id4 = __v3
               ___3 = has(____id4, 0)
               __L_var3 = has(____id4, 1)
-              __val3 = has(____id4, 2)
+              __val4 = has(____id4, 2)
+              __val5 = either(__val4, __L_var3)
               add(__args1, __L_var3)
-              add(__inits, ["if", ["nil?", __L_var3], ["%set", __L_var3, ["the", __val3]]])
+              add(__inits, ["if", ["nil?", __L_var3], ["%set", __L_var3, ["the", __val5]]])
             else:
               __x42 = unique("x")
               add(__args1, __x42)

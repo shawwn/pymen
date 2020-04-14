@@ -128,14 +128,15 @@ bind = function (lh, rh) {
         var ___ = has(____id, 0);
         var ___var = has(____id, 1);
         var __val = has(____id, 2);
-        return bind(["o", ___var, ["the", __val]], rh);
+        var __val1 = either(__val, ___var);
+        return bind(["o", ___var, ["the", __val1]], rh);
       } else {
         if (hd(lh) === "o") {
           var ____id1 = lh;
           var ___1 = has(____id1, 0);
           var ___var1 = has(____id1, 1);
-          var __val1 = has(____id1, 2);
-          return [___var1, ["if", ["nil?", rh], __val1, rh]];
+          var __val2 = has(____id1, 2);
+          return [___var1, ["if", ["nil?", rh], __val2, rh]];
         } else {
           var __id2 = unique("id");
           var __bs = [__id2, rh];
@@ -215,17 +216,18 @@ bind42 = function (args, body) {
             var ____id3 = __v3;
             var ___2 = has(____id3, 0);
             var ___var2 = has(____id3, 1);
-            var __val2 = has(____id3, 2);
+            var __val3 = has(____id3, 2);
             add(__args1, ___var2);
-            add(__inits, ["if", ["nil?", ___var2], ["%set", ___var2, __val2]]);
+            add(__inits, ["if", ["nil?", ___var2], ["%set", ___var2, __val3]]);
           } else {
             if (hd(__v3) === "t") {
               var ____id4 = __v3;
               var ___3 = has(____id4, 0);
               var ___var3 = has(____id4, 1);
-              var __val3 = has(____id4, 2);
+              var __val4 = has(____id4, 2);
+              var __val5 = either(__val4, ___var3);
               add(__args1, ___var3);
-              add(__inits, ["if", ["nil?", ___var3], ["%set", ___var3, ["the", __val3]]]);
+              add(__inits, ["if", ["nil?", ___var3], ["%set", ___var3, ["the", __val5]]]);
             } else {
               var __x42 = unique("x");
               add(__args1, __x42);

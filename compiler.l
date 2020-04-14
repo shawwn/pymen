@@ -75,7 +75,8 @@
       (hd? lh ',)
       (bind (cut lh 1) rh)
       (= (hd lh) 't)
-      (let ((_ var val) lh)
+      (let ((_ var val) lh
+            val (either val var))
         (bind `(o ,var (the ,val)) rh))
       (= (hd lh) 'o)
       (let ((_ var val) lh)
@@ -112,7 +113,8 @@
                     (add args1 var)
                     (add inits `(if (nil? ,var) (%set ,var ,val))))
                   (= (hd v) 't)
-                  (let ((_ var val) v)
+                  (let ((_ var val) v
+                        val (either val var))
                     (add args1 var)
                     (add inits `(if (nil? ,var) (%set ,var (the ,val)))))
                 (let-unique (x)

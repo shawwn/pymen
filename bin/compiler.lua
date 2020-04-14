@@ -115,14 +115,15 @@ function bind(lh, rh)
         local ___ = has(____id, 1)
         local ___var = has(____id, 2)
         local __val = has(____id, 3)
-        return bind({"o", ___var, {"the", __val}}, rh)
+        local __val1 = either(__val, ___var)
+        return bind({"o", ___var, {"the", __val1}}, rh)
       else
         if hd(lh) == "o" then
           local ____id1 = lh
           local ___1 = has(____id1, 1)
           local ___var1 = has(____id1, 2)
-          local __val1 = has(____id1, 3)
-          return {___var1, {"if", {"nil?", rh}, __val1, rh}}
+          local __val2 = has(____id1, 3)
+          return {___var1, {"if", {"nil?", rh}, __val2, rh}}
         else
           local __id2 = unique("id")
           local __bs = {__id2, rh}
@@ -188,17 +189,18 @@ function bind42(args, body)
             local ____id3 = __v3
             local ___2 = has(____id3, 1)
             local ___var2 = has(____id3, 2)
-            local __val2 = has(____id3, 3)
+            local __val3 = has(____id3, 3)
             add(__args1, ___var2)
-            add(__inits, {"if", {"nil?", ___var2}, {"%set", ___var2, __val2}})
+            add(__inits, {"if", {"nil?", ___var2}, {"%set", ___var2, __val3}})
           else
             if hd(__v3) == "t" then
               local ____id4 = __v3
               local ___3 = has(____id4, 1)
               local ___var3 = has(____id4, 2)
-              local __val3 = has(____id4, 3)
+              local __val4 = has(____id4, 3)
+              local __val5 = either(__val4, ___var3)
               add(__args1, ___var3)
-              add(__inits, {"if", {"nil?", ___var3}, {"%set", ___var3, {"the", __val3}}})
+              add(__inits, {"if", {"nil?", ___var3}, {"%set", ___var3, {"the", __val5}}})
             else
               local __x42 = unique("x")
               add(__args1, __x42)
