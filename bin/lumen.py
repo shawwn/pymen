@@ -1776,16 +1776,15 @@ import reader
 import compiler
 import system
 import traceback
+import numpy as np
+from pprint import pprint as pp
 from compiler import *
 def lumen_set_globals(x=None):
   compiler.lumen_globals = x
   return compiler.lumen_globals
 
-def toplevel_repr(v=None):
-  return repr(v)
-
 def toplevel_print(v=None):
-  L_print(toplevel_repr(v))
+  pp(v)
   return v
 
 def print_exception(v=None, ex=None):

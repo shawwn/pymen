@@ -2313,11 +2313,8 @@ setenv("try", {
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
-toplevel_repr = function (v) {
-  return _str(v);
-};
 toplevel_print = function (v) {
-  _print(toplevel_repr(v));
+  _print(_str(v));
   return v;
 };
 print_exception = function (v, ex) {

@@ -991,10 +991,17 @@
 (define-special from (name rest: imports) :stmt
   (let (ind (indentation)
         id name
+        as (with r nil
+             (set r (drop imports))
+             (if (= (last imports) "as")
+                 (drop imports)
+              (do (add imports r)
+                  (set r nil))))
         names (if (= (hd imports) "import") (tl imports) imports)
         names (mapcat (fn (x) (if (= x "*") x (compile x))) names ", "))
     (if (target? 'py)
-        (cat ind "from " (compile name) " import " names)
+        (with s (cat ind "from " (compile name) " import " names)
+          (if as (cat! s " as " (compile as))))
       "")))
 
 (define-special , args

@@ -2,6 +2,8 @@
 (import compiler)
 (import system)
 (target py: (import traceback))
+(target py: (import numpy as np))
+(target py: (from pprint import pprint as pp))
 
 (target py: |from compiler import *|)
 
@@ -9,11 +11,8 @@
   (define-global lumen-set-globals (x)
     (set (idx compiler lumen-globals) x)))
 
-(define-global toplevel-repr (v)
-  (target py: (repr v) (str v)))
-
 (define-global toplevel-print (v)
-  (print (toplevel-repr v))
+  (target py: (pp v) (print (str v)))
   v)
 
 (define-global print-exception (v ex)

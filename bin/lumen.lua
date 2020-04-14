@@ -2185,11 +2185,8 @@ setenv("try", {
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
-function toplevel_repr(v)
-  return _str(v)
-end
 function toplevel_print(v)
-  _print(toplevel_repr(v))
+  _print(_str(v))
   return v
 end
 function print_exception(v, ex)
