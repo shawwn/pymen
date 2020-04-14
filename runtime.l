@@ -3,13 +3,18 @@
 
 (define-global nil? (x)
   (target
-    py: (%is x nil)
+    py: (is x nil)
     js: (or (= x nil) (= x null))
     lua: (= x nil)))
 
 (define-global is? (x) (not (nil? x)))
 
-(define-global no (x) (or (nil? x) (target py: (%is x false) (= x false))))
+(define-global no (x)
+  (or (nil? x)
+      (target
+        py: (is x false)
+        (= x false))))
+
 (define-global yes (x) (not (no x)))
 (define-global either (x y) (if (is? x) x y))
 
@@ -37,9 +42,9 @@
 (define-global array (x)
   (if (array? x) x
     (with l ()
-      (target py:
-        (step v x
-          (add l v))
+      (target
+        py: (step v x
+              (add l v))
         (each (k v) x
           (when (number? k)
             (set (get l k) v)))))))
@@ -194,8 +199,8 @@
             (wipe (at l n))))))))
 
 (define-global last (l)
-  (target py:
-    (has l (edge l))
+  (target
+    py: (has l (edge l))
     (at l (edge l))))
 
 (define-global almost (l)
@@ -250,7 +255,9 @@
 (define sortfunc (f)
   (when f
     (let f (fn (a b) (if (f a b) -1 1))
-      (target py: ((idx functools cmp_to_key) f) f))))
+      (target
+        py: ((idx functools cmp_to_key) f)
+        f))))
 
 (define-global sort (l f)
   (target

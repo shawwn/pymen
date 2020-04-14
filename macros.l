@@ -441,6 +441,15 @@
 (define-macro raise args
   `(%throw ,@args))
 
+(define-macro is args
+  `(%is ,@args))
+
+(define-macro in args
+  `(%in ,@args))
+
+(define-macro as args
+  `(%as ,@args))
+
 (define-macro %expand-case (x rest: body)
   (let ((a rest: bs) (if (atom? x) `(,x) x))
     `(%block ,a ,@(if (none? bs) '((%literal)) bs) ,@body)))

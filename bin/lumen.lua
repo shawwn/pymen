@@ -1749,16 +1749,28 @@ setenv("raise", {_stash = true, macro = function (...)
   local __args47 = unstash({...})
   return join({"%throw"}, __args47)
 end})
+setenv("is", {_stash = true, macro = function (...)
+  local __args49 = unstash({...})
+  return join({"%is"}, __args49)
+end})
+setenv("in", {_stash = true, macro = function (...)
+  local __args51 = unstash({...})
+  return join({"%in"}, __args51)
+end})
+setenv("as", {_stash = true, macro = function (...)
+  local __args53 = unstash({...})
+  return join({"%as"}, __args53)
+end})
 setenv("%expand-case", {_stash = true, macro = function (x, ...)
   local ____r222 = unstash({...})
-  local __x732 = destash33(x, ____r222)
+  local __x741 = destash33(x, ____r222)
   local ____id107 = ____r222
   local __body63 = cut(____id107, 0)
   local __e33 = nil
-  if atom63(__x732) then
-    __e33 = {__x732}
+  if atom63(__x741) then
+    __e33 = {__x741}
   else
-    __e33 = __x732
+    __e33 = __x741
   end
   local ____id108 = __e33
   local __a26 = has(____id108, 1)
@@ -1772,59 +1784,59 @@ setenv("%expand-case", {_stash = true, macro = function (x, ...)
   return join({"%block", __a26}, __e34, __body63)
 end})
 setenv("%cases", {_stash = true, macro = function (...)
-  local __args49 = unstash({...})
-  if none63(__args49) then
+  local __args55 = unstash({...})
+  if none63(__args55) then
     return {"do"}
   else
-    if one63(__args49) then
-      return join({"%expand-case"}, hd(__args49))
+    if one63(__args55) then
+      return join({"%expand-case"}, hd(__args55))
     else
       local __r225 = unique("r")
-      return join({"with", __r225, "nil"}, map(function (__x751)
-        local ____id110 = __x751
-        local __x752 = has(____id110, 1)
+      return join({"with", __r225, "nil"}, map(function (__x760)
+        local ____id110 = __x760
+        local __x761 = has(____id110, 1)
         local __body65 = cut(____id110, 1)
-        return {"%expand-case", __x752, {"%set", __r225, join({"%do"}, __body65)}}
-      end, almost(__args49)), {join({"%expand-case"}, last(__args49))})
+        return {"%expand-case", __x761, {"%set", __r225, join({"%do"}, __body65)}}
+      end, almost(__args55)), {join({"%expand-case"}, last(__args55))})
     end
   end
 end})
 setenv("try", {_stash = true, macro = function (x, ...)
   local ____r228 = unstash({...})
-  local __x772 = destash33(x, ____r228)
+  local __x781 = destash33(x, ____r228)
   local ____id115 = ____r228
   local __cases1 = cut(____id115, 0)
   local __fin1 = {"finally"}
   local ____o26 = __cases1
   local ____i45 = nil
   for ____i45 in next, ____o26 do
-    local __x774 = ____o26[____i45]
-    if hd63(__x774, "finally") then
-      __fin1 = __x774
+    local __x783 = ____o26[____i45]
+    if hd63(__x783, "finally") then
+      __fin1 = __x783
     end
   end
   local __forms7 = {}
-  local ____x777 = __cases1
+  local ____x786 = __cases1
   local ____i46 = 0
-  while ____i46 < _35(____x777) do
-    local ____id116 = ____x777[____i46 + 1]
-    local __x778 = has(____id116, 1)
+  while ____i46 < _35(____x786) do
+    local ____id116 = ____x786[____i46 + 1]
+    local __x787 = has(____id116, 1)
     local __body69 = cut(____id116, 1)
-    if __x778 == "finally" then
+    if __x787 == "finally" then
     else
-      if __x778 == "except" and has(__body69, 1) == "as" then
+      if __x787 == "except" and has(__body69, 1) == "as" then
         local ____id117 = __body69
         local __kind2 = has(____id117, 1)
         local ___1 = has(____id117, 2)
         local __name19 = has(____id117, 3)
         local __body70 = cut(____id117, 3)
-        add(__forms7, join({{__x778, {"%as", __kind2, __name19}}}, __body70))
+        add(__forms7, join({{__x787, {"%as", __kind2, __name19}}}, __body70))
       else
-        if __x778 == "except" then
+        if __x787 == "except" then
           local ____id118 = __body69
           local __kind3 = has(____id118, 1)
           local __body71 = cut(____id118, 1)
-          add(__forms7, join({{__x778, __kind3}}, __body71))
+          add(__forms7, join({{__x787, __kind3}}, __body71))
         else
           error("Unknown try clause")
         end
@@ -1832,7 +1844,7 @@ setenv("try", {_stash = true, macro = function (x, ...)
     end
     ____i46 = ____i46 + 1
   end
-  return join({"%cases", {"try", __x772}}, __forms7, {__fin1})
+  return join({"%cases", {"try", __x781}}, __forms7, {__fin1})
 end})
 local reader = require("reader")
 local compiler = require("compiler")
@@ -2000,10 +2012,10 @@ local function main(args)
         end
         __i47 = __i47 + 1
       end
-      local ____x788 = __pre
+      local ____x797 = __pre
       local ____i48 = 0
-      while ____i48 < _35(____x788) do
-        local __file = ____x788[____i48 + 1]
+      while ____i48 < _35(____x797) do
+        local __file = ____x797[____i48 + 1]
         run_file(__file)
         ____i48 = ____i48 + 1
       end

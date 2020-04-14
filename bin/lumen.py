@@ -1495,16 +1495,28 @@ def __f108(*_args, **_keys):
   __args43 = unstash(list(_args), _keys)
   return join(["%throw"], __args43)
 setenv("raise", macro=__f108)
-def __f109(x=None, *_args, **_keys):
+def __f109(*_args, **_keys):
+  __args45 = unstash(list(_args), _keys)
+  return join(["%is"], __args45)
+setenv("is", macro=__f109)
+def __f110(*_args, **_keys):
+  __args47 = unstash(list(_args), _keys)
+  return join(["%in"], __args47)
+setenv("in", macro=__f110)
+def __f111(*_args, **_keys):
+  __args49 = unstash(list(_args), _keys)
+  return join(["%as"], __args49)
+setenv("as", macro=__f111)
+def __f112(x=None, *_args, **_keys):
   ____r227 = unstash(list(_args), _keys)
-  __x651 = destash33(x, ____r227)
+  __x657 = destash33(x, ____r227)
   ____id105 = ____r227
   __body63 = cut(____id105, 0)
   __e30 = None
-  if atom63(__x651):
-    __e30 = [__x651]
+  if atom63(__x657):
+    __e30 = [__x657]
   else:
-    __e30 = __x651
+    __e30 = __x657
   ____id106 = __e30
   __a26 = has(____id106, 0)
   __bs25 = cut(____id106, 1)
@@ -1514,63 +1526,63 @@ def __f109(x=None, *_args, **_keys):
   else:
     __e31 = __bs25
   return join(["%block", __a26], __e31, __body63)
-setenv("%expand-case", macro=__f109)
-def __f110(*_args, **_keys):
-  __args45 = unstash(list(_args), _keys)
-  if none63(__args45):
+setenv("%expand-case", macro=__f112)
+def __f113(*_args, **_keys):
+  __args51 = unstash(list(_args), _keys)
+  if none63(__args51):
     return ["do"]
   else:
-    if one63(__args45):
-      return join(["%expand-case"], hd(__args45))
+    if one63(__args51):
+      return join(["%expand-case"], hd(__args51))
     else:
       __r230 = unique("r")
-      def __f111(__x669=None):
-        ____id108 = __x669
-        __x670 = has(____id108, 0)
+      def __f114(__x675=None):
+        ____id108 = __x675
+        __x676 = has(____id108, 0)
         __body65 = cut(____id108, 1)
-        return ["%expand-case", __x670, ["%set", __r230, join(["%do"], __body65)]]
-      return join(["with", __r230, "nil"], map(__f111, almost(__args45)), [join(["%expand-case"], last(__args45))])
-setenv("%cases", macro=__f110)
-def __f112(x=None, *_args, **_keys):
+        return ["%expand-case", __x676, ["%set", __r230, join(["%do"], __body65)]]
+      return join(["with", __r230, "nil"], map(__f114, almost(__args51)), [join(["%expand-case"], last(__args51))])
+setenv("%cases", macro=__f113)
+def __f115(x=None, *_args, **_keys):
   ____r233 = unstash(list(_args), _keys)
-  __x689 = destash33(x, ____r233)
+  __x695 = destash33(x, ____r233)
   ____id113 = ____r233
   __cases1 = cut(____id113, 0)
   __fin1 = ["finally"]
   ____o25 = __cases1
   ____i45 = None
   for ____i45 in indices(____o25):
-    __x691 = ____o25[____i45]
-    if hd63(__x691, "finally"):
-      __fin1 = __x691
+    __x697 = ____o25[____i45]
+    if hd63(__x697, "finally"):
+      __fin1 = __x697
   __forms7 = []
-  ____x694 = __cases1
+  ____x700 = __cases1
   ____i46 = 0
-  while ____i46 < L_35(____x694):
-    ____id114 = ____x694[____i46]
-    __x695 = has(____id114, 0)
+  while ____i46 < L_35(____x700):
+    ____id114 = ____x700[____i46]
+    __x701 = has(____id114, 0)
     __body69 = cut(____id114, 1)
-    if __x695 == "finally":
+    if __x701 == "finally":
       pass
     else:
-      if __x695 == "except" and has(__body69, 1) == "as":
+      if __x701 == "except" and has(__body69, 1) == "as":
         ____id115 = __body69
         __kind2 = has(____id115, 0)
         ___1 = has(____id115, 1)
         __name19 = has(____id115, 2)
         __body70 = cut(____id115, 3)
-        add(__forms7, join([[__x695, ["%as", __kind2, __name19]]], __body70))
+        add(__forms7, join([[__x701, ["%as", __kind2, __name19]]], __body70))
       else:
-        if __x695 == "except":
+        if __x701 == "except":
           ____id116 = __body69
           __kind3 = has(____id116, 0)
           __body71 = cut(____id116, 1)
-          add(__forms7, join([[__x695, __kind3]], __body71))
+          add(__forms7, join([[__x701, __kind3]], __body71))
         else:
           raise Exception("Unknown try clause")
     ____i46 = ____i46 + 1
-  return join(["%cases", ["try", __x689]], __forms7, [__fin1])
-setenv("try", macro=__f112)
+  return join(["%cases", ["try", __x695]], __forms7, [__fin1])
+setenv("try", macro=__f115)
 import reader
 import compiler
 import system
@@ -1588,14 +1600,14 @@ def print_exception(v=None, ex=None):
   traceback.print_exception(*ex)
   return None
 def eval_print(form=None):
-  def __f113():
+  def __f116():
     try:
       return [True, compiler.L_eval(form)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id117 = __f113()
+  ____id117 = __f116()
   __ok6 = has(____id117, 0)
   __v31 = has(____id117, 1)
   __ex = has(____id117, 2)
@@ -1700,10 +1712,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i47 = __i47 + 1
-      ____x704 = __pre
+      ____x710 = __pre
       ____i48 = 0
-      while ____i48 < L_35(____x704):
-        __file = ____x704[____i48]
+      while ____i48 < L_35(____x710):
+        __file = ____x710[____i48]
         run_file(__file)
         ____i48 = ____i48 + 1
       if nil63(__input):
