@@ -90,16 +90,16 @@ function read_string(_str, more)
   end
 end
 local function key63(atom)
-  return string63(atom) and _35(atom) > 1 and char(atom, edge(atom)) == ":"
+  return string63(atom) and (_35(atom) > 1 and char(atom, edge(atom)) == ":")
 end
 local function flag63(atom)
-  return string63(atom) and _35(atom) > 1 and char(atom, 0) == ":"
+  return string63(atom) and (_35(atom) > 1 and char(atom, 0) == ":")
 end
 local function expected(s, c)
   if is63(s.more) then
     return s.more
   else
-    error("Expected " .. c .. " at " .. s.pos)
+    error("Expected " .. (c .. (" at " .. s.pos)))
   end
 end
 local function wrap(s, x)
@@ -139,7 +139,7 @@ local function maybe_number(_str)
   end
 end
 local function real63(x)
-  return number63(x) and not nan63(x) and not inf63(x)
+  return number63(x) and (not nan63(x) and not inf63(x))
 end
 read_table[""] = function (s)
   local ___str = ""
@@ -246,7 +246,7 @@ read_table["\""] = function (s)
     local __i3 = s.pos
     local __j = search(s.string, "\"", __i3 + 1)
     local __b = either(search(s.string, "\\", __i3 + 1), __j)
-    if is63(__j) and __j < s.len and __b >= __j then
+    if is63(__j) and (__j < s.len and __b >= __j) then
       s.pos = __j + 1
       return clip(s.string, __i3, __j + 1)
     else
@@ -293,7 +293,7 @@ end
 read_table[","] = function (s)
   read_char(s)
   local __c6 = peek_char(s)
-  if nil63(__c6) or has63(whitespace, __c6) or has63(closing_delimiters, __c6) then
+  if nil63(__c6) or (has63(whitespace, __c6) or has63(closing_delimiters, __c6)) then
     return ","
   else
     if __c6 == "@" then

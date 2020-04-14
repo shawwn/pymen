@@ -16,7 +16,7 @@ var path_separator = require("path").sep;
 var path_join = function () {
   var __parts = unstash(Array.prototype.slice.call(arguments, 0));
   return reduce(function (x, y) {
-    return x + path_separator + y;
+    return x + (path_separator + y);
   }, __parts) || "";
 };
 var get_environment_variable = function (name) {

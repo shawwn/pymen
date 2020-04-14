@@ -5,19 +5,19 @@
   (quasiexpand form 1))
 
 (define-macro set args
-  `(do ,@(map (fn ((lh rh))
-                (set lh (macroexpand lh))
-                (if (and (not (atom? lh)) (= (hd lh) 'has))
-                    `(%set (get ,@(tl lh)) ,rh)
-                  `(%set ,lh ,rh)))
-              (pair args))))
+  `(%do ,@(map (fn ((lh rh))
+                 (set lh (macroexpand lh))
+                 (if (and (not (atom? lh)) (= (hd lh) 'has))
+                     `(%set (%get ,@(tl lh)) ,rh)
+                   `(%set ,lh ,rh)))
+               (pair args))))
 
 (define-macro at (l i)
   (if (and (target? 'lua) (number? i))
       (inc i)
       (target? 'lua)
       (set i `(+ ,i 1)))
-  `(get ,l ,i))
+  `(%get ,l ,i))
 
 (define-macro wipe (place)
   (if (target? 'lua)
@@ -45,7 +45,7 @@
         (each (k v) body
           (if (number? k)
               (set (get l k) v)
-            (add forms `(set (get ,x ',k) ,v))))
+            (add forms `(%set (%get ,x ',k) ,v))))
         (if (some? forms)
             `(let ,x (object (%array ,@l)) ,@forms ,x)
           `(%array ,@l))))))
@@ -65,17 +65,17 @@
          (if ,@(apply join (map cl (pair clauses))))))))
 
 (define-macro when (cond rest: body)
-  `(if ,cond (do ,@body)))
+  `(%if ,cond (%do ,@body)))
 
 (define-macro unless (cond rest: body)
-  `(if (not ,cond) (do ,@body)))
+  `(%if (%not ,cond) (%do ,@body)))
 
 (define-macro obj body
   `(%object ,@(mapo (fn (x) x) body)))
 
 (define-macro let (bs rest: body)
   (if (or (atom? bs) (hd? bs ',)) `(let (,bs ,(hd body)) ,@(tl body))
-      (none? bs) `(do ,@body)
+      (none? bs) `(%do ,@body)
     (let ((lh rh rest: bs2) bs
           (id val rest: bs1) (bind lh rh))
       (let renames ()
@@ -83,9 +83,9 @@
           (let id1 (unique id)
             (set renames (list id id1)
                  id id1)))
-        `(do (%local ,id ,val)
-             (let-symbol ,renames
-               (let ,(join bs1 bs2) ,@body)))))))
+        `(%do (%local ,id ,val)
+              (let-symbol ,renames
+                (let ,(join bs1 bs2) ,@body)))))))
 
 (define-macro with (x v rest: body)
   (if (= v 'as)
@@ -117,7 +117,7 @@
   `(setenv ',name symbol: ',expansion))
 
 (define-macro define-reader ((char s) rest: body)
-  `(set (get read-table ,char) (fn (,s) ,@body)))
+  `(%set (%get read-table ,char) (fn (,s) ,@body)))
 
 (define-macro define (name x rest: body)
   (setenv name :variable)
@@ -135,8 +135,8 @@
   `(has (setenv ,x :toplevel) 'value))
 
 (define-macro define-constant (name x)
-  `(do (setenv ',name :toplevel value: ,(either x `(get-value ',name)))
-       (define-symbol ,name (get-value ',name))))
+  `(%do (setenv ',name :toplevel value: ,(either x `(get-value ',name)))
+        (define-symbol ,name (get-value ',name))))
 
 (define-macro define-variable (name x)
   (if (is? x)
@@ -151,12 +151,12 @@
               (if ,ok ,r (throw ,r)))
         (with ,r nil
            (%block try || (set ,r ,x))
-           (%block finally || (do ,@body))))))
+           (%block finally || (%do ,@body))))))
 
 (define-macro with-frame body
-  `(do (add environment (obj))
-       (after (do ,@body)
-         (drop environment))))
+  `(%do (add environment (obj))
+        (after (%do ,@body)
+          (drop environment))))
 
 (define-macro with-values body
   `(with-frame
@@ -177,14 +177,14 @@
     (map (fn (m)
            (macroexpand `(define-macro ,@m)))
          definitions)
-    `(do ,@(macroexpand body))))
+    `(%do ,@(macroexpand body))))
 
 (define-macro let-symbol (expansions rest: body)
   (with-frame
     (map (fn ((name exp))
            (macroexpand `(define-symbol ,name ,exp)))
          (pair expansions))
-    `(do ,@(macroexpand body))))
+    `(%do ,@(macroexpand body))))
 
 (define-macro let-unique (names rest: body)
   (let bs (map (fn (n)
@@ -204,17 +204,17 @@
       `(%call apply ,f ,@args)))
 
 (define-macro guard (expr)
-  `(let-macro ((return args (error "Can't return from guard")))
+  `(let-macro ((%return args (error "Can't return from guard")))
      (target lua:
              (list (xpcall
-                     (fn () ,expr)
-                     (fn (m)
+                     (%function () ,expr)
+                     (%function (m)
                        (if (obj? m) m
                            (obj stack: ((idx debug traceback))
                                 message: (if (string? m) (clip m (+ (search m ": ") 2))
                                              (nil? m) ""
                                              (str m)))))))
-             ((fn () (%try (list true ,expr)))))))
+             ((%function () (%try (list true ,expr)))))))
 
 (define-macro each (x t rest: body)
   (let-unique (o n i)
@@ -223,7 +223,7 @@
                       (list i (hd x)))))
       `(let (,o ,t ,k nil)
          (%for (target py: (indices ,o) ,o) ,k ,@(keys body)
-           (let (,v (get ,o ,k))
+           (let (,v (%get ,o ,k))
              ,@(if (or (target? 'lua) (target? 'py))
                    body
                  `((let ,k (if (numeric? ,k)
@@ -233,7 +233,7 @@
 
 (define-macro for (i to rest: body)
   (if (= to 'in)
-      `(%for ,(hd body) ,i (do ,@(tl body)) ,@(keys body))
+      `(%for ,(hd body) ,i (%do ,@(tl body)) ,@(keys body))
     `(let ,i 0
        (while (< ,i ,to)
          ,@body
@@ -276,29 +276,29 @@
 
 (define-macro with-indent (form)
   (let-unique (x)
-    `(do (inc indent-level)
-         (with ,x ,form
-           (dec indent-level)))))
+    `(%do (inc indent-level)
+          (with ,x ,form
+            (dec indent-level)))))
 
 (define-macro export names
   (let forms (map (fn (k)
                     (if (= k (compile k))
-                        `(set (idx exports ,k) ,k)
-                      `(set (get exports ',k) ,k
-                            (idx exports ,k) ,k)))
+                        `(%set (idx exports ,k) ,k)
+                      `(%do (%set (%get exports ',k) ,k)
+                            (%set (idx exports ,k) ,k))))
                   names)
     (if (target? 'js)
-        `(do ,@forms)
+        `(%do ,@forms)
         (target? 'lua)
         `(let exports (or exports (obj))
            ,@forms
            (return exports)))))
 
 (define-macro when-compiling body
-  (eval `(do ,@body)))
+  (eval `(%do ,@body)))
 
 (define-macro during-compilation body
-  (with form `(do ,@body)
+  (with form `(%do ,@body)
     (eval form)))
 
 (define-macro def (name rest: body)
@@ -319,6 +319,22 @@
   `(when (undefined? ,name)
      (target py: (global ,name))
      (defconst ,name ,@value)))
+
+(define-macro async (keyword rest: body)
+  `(,keyword ,@body async: true))
+
+(define-macro %read-from-file (name)
+  `(when-compiling
+     `(%do ,@(read-from-file ,name))))
+
+(mac the (name)
+  `(getenv ',name 'value))
+
+(define-macro cat (a rest: bs)
+  (if (nil? a) ""
+      (none? bs) a
+      (one? bs) `(target py: (%call cat ,a ,@bs) (%cat ,a ,@bs))
+    `(target py: (%call cat ,a ,@bs) (%cat ,a (cat ,@bs)))))
 
 (define-macro + args
   (if (none? args) 0
@@ -345,12 +361,117 @@
       (one? args) (hd args)
     `(%idiv ,@args)))
 
-(define-macro async (keyword rest: body)
-  `(,keyword ,@body async: true))
+(define-macro % args
+  (if (none? args) 0
+      (one? args) (hd args)
+    `(%mod ,@args)))
 
-(define-macro %read-from-file (name)
-  `(when-compiling
-     `(do ,@(read-from-file ,name))))
+(define-macro < (a rest: bs)
+  (if (none? bs) true
+      (one? bs) `(%lt ,a ,@bs)
+    `(%and (%lt ,a ,(hd bs)) (< ,@bs))))
 
-(mac the (name)
-  `(getenv ',name 'value))
+(define-macro <= (a rest: bs)
+  (if (none? bs) true
+      (one? bs) `(%le ,a ,@bs)
+    `(%and (%le ,a ,(hd bs)) (<= ,@bs))))
+
+(define-macro = (a rest: bs)
+  (if (none? bs) true
+      (one? bs) `(%eq ,a ,@bs)
+    `(%and (%eq ,a ,(hd bs)) (= ,@bs))))
+
+(define-macro >= (a rest: bs)
+  (if (none? bs) true
+      (one? bs) `(%ge ,a ,@bs)
+    `(%and (%ge ,a ,(hd bs)) (>= ,@bs))))
+
+(define-macro > (a rest: bs)
+  (if (none? bs) true
+      (one? bs) `(%gt ,a ,@bs)
+    `(%and (%gt ,a ,(hd bs)) (> ,@bs))))
+
+(define-macro not args
+  (if (none? args) false
+      (one? args) `(%not ,@args)
+    `(%and (%not ,(hd args)) (not ,@(tl args)))))
+
+(define-macro and (a rest: bs)
+  (if (nil? a) true
+      (none? bs) a
+      (one? bs) `(%and ,a ,@bs)
+    `(%and ,a (and ,@bs))))
+
+(define-macro or (a rest: bs)
+  (if (nil? a) false
+      (none? bs) a
+      (one? bs) `(%or ,a ,@bs)
+    `(%or ,a (or ,@bs))))
+
+(define-macro break args
+  `(%break ,@args))
+
+(define-macro return args
+  `(%return ,@args))
+
+(define-macro while (c rest: body)
+  `(%while ,c ,@body))
+
+(define-macro do body
+  `(%do ,@body))
+
+(define-macro get args
+  `(%get ,@args))
+
+(define-macro idx args
+  `(%idx ,@args))
+
+(define-macro new args
+  `(%new ,@args))
+
+(define-macro typeof args
+  `(%typeof ,@args))
+
+(define-macro error args
+  `(%error ,@args))
+
+(define-macro throw args
+  `(%throw ,@args))
+
+(define-macro raise args
+  `(%throw ,@args))
+
+(define-macro %expand-case (x rest: body)
+  (let ((a rest: bs) (if (atom? x) `(,x) x))
+    `(%block ,a ,@(if (none? bs) '((%literal)) bs) ,@body)))
+
+(define-macro %cases args
+  (if (none? args) `(do)
+      (one? args) `(%expand-case ,@(hd args))
+    (let-unique (r)
+      `(with ,r nil
+         ,@(map (fn ((x rest: body)) `(%expand-case ,x (%set ,r (%do ,@body))))
+                (almost args))
+         (%expand-case ,@(last args))))))
+
+; python-specific
+
+(define-macro try (x rest: cases)
+  (let fin `(finally)
+    (each x cases
+      (when (hd? x 'finally)
+        (set fin x)))
+    `(%cases (try ,x)
+       ,@(with forms ()
+           (step (x rest: body) cases
+             (if (= x 'finally)
+                  (do)
+                 (and (= x 'except) (= (has body 1) 'as))
+                 (let ((kind _ name rest: body) body)
+                   (add forms `((,x (%as ,kind ,name)) ,@body)))
+                 (= x 'except)
+                 (let ((kind rest: body) body)
+                   (add forms `((,x ,kind) ,@body)))
+                (error "Unknown try clause"))))
+       ,fin)))
+

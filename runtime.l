@@ -3,13 +3,13 @@
 
 (define-global nil? (x)
   (target
-    py: (%literal x | is | None)
+    py: (%is x nil)
     js: (or (= x nil) (= x null))
     lua: (= x nil)))
 
 (define-global is? (x) (not (nil? x)))
 
-(define-global no (x) (or (nil? x) (target py: (%literal x | is | false) (= x false))))
+(define-global no (x) (or (nil? x) (target py: (%is x false) (= x false))))
 (define-global yes (x) (not (no x)))
 (define-global either (x y) (if (is? x) x y))
 
@@ -17,7 +17,7 @@
   (target js: ((idx l hasOwnProperty) k)
           py: (if (isinstance l dict)
                   (and (or (number? k) (string? k))
-                       (%literal k | in | l))
+                       (%in k l))
                 (and (number? k) (>= k 0) (< k (len l))))
           lua: (is? (get l k))))
 
@@ -63,7 +63,7 @@
       (inc n))))
 
 (define-global # (x upto)
-  (target lua: |#x|
+  (target lua: (%literal |#| x)
     (if (or (string? x)
             (array? x))
         (target js: (idx x length)
@@ -123,7 +123,7 @@
           py: (let (n (# s)
                     from (if (or (nil? from) (< from 0)) 0 from)
                     upto (if (or (nil? upto) (> upto n)) n upto))
-                (%literal s |[| from |:| upto |]|))))
+                (get s (: from upto)))))
 
 (define-global dupe (x)
   (target lua: () py: (obj) js: (if (array? x) () (obj))))
@@ -409,14 +409,10 @@
     py: (when (or (and (= (char s 0) "-")
                        (number-code? (code s 1)))
                   (number-code? (code s 0)))
-|try:
-      return int(s)
-    except ValueError:
-      try:
-        return float(s)
-      except ValueError:
-        return None
-| nil)))
+          (try (return (int s))
+            (except ValueError))
+          (try (return (float s))
+            (except ValueError)))))
 
 (define-global numeric? (s)
   (let n (# s)
@@ -512,7 +508,7 @@
 (target js: (define math Math))
 (target py: (import math))
 (target py: (import random))
-(target py: || (define-global abs (idx math abs)))
+(target py: (do) (define-global abs (idx math abs)))
 (define-global acos (idx math acos))
 (define-global asin (idx math asin))
 (define-global atan (idx math atan))
@@ -522,9 +518,9 @@
 (define-global floor (idx math floor))
 (define-global log (idx math log))
 (define-global log10 (idx math log10))
-(target py: || (define-global max (idx math max)))
-(target py: || (define-global min (idx math min)))
-(target py: || (define-global pow (idx math pow)))
+(target py: (do) (define-global max (idx math max)))
+(target py: (do) (define-global min (idx math min)))
+(target py: (do) (define-global pow (idx math pow)))
 (define-global random (target py: (idx random random) (idx math random)))
 (define-global sin (idx math sin))
 (define-global sinh (idx math sinh))

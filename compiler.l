@@ -49,7 +49,7 @@
 
 (define stash* (args)
   (if (keys? args)
-      (if (= target 'py)
+      (if (target? 'py)
           (with l (array args)
             (each (k v) args
               (unless (number? k)
@@ -92,7 +92,7 @@
                 (join! bs (bind k x))))))))))
 
 (define-macro arguments% (from)
-  `(target js: ((idx (idx (idx Array prototype) slice) call) arguments ,from)
+  `(target js: ((%idx (%idx (%idx Array prototype) slice) call) arguments ,from)
            py: (|list| |_args|)
            lua: (list |...|)))
 
@@ -111,12 +111,12 @@
                   (= (hd v) 'o)
                   (let ((_ var val) v)
                     (add args1 var)
-                    (add inits `(if (nil? ,var) (%set ,var ,val))))
+                    (add inits `(%if (nil? ,var) (%set ,var ,val))))
                   (= (hd v) 't)
                   (let ((_ var val) v
                         val (either val var))
                     (add args1 var)
-                    (add inits `(if (nil? ,var) (%set ,var (the ,val)))))
+                    (add inits `(%if (nil? ,var) (%set ,var (the ,val)))))
                 (let-unique (x)
                   (add args1 x)
                   (join! bs (list v x))))))
@@ -175,7 +175,7 @@
             (let n (number a)
               (if (is? n)
                   `(at ,b ,n)
-                `(idx ,b ,a))))
+                `(%idx ,b ,a))))
           (reverse (split str "."))))
 
 (define-global parse-access? (form)
@@ -287,7 +287,7 @@
 (define-global compile-id (id raw?)
   (if (= (code id 0) 46) ; .
       (cat "." (compile-id (clip id 1) true))
-    (let (x (if (= target 'py) "L_" "_")
+    (let (x (if (target? 'py) "L_" "_")
           id1 (if (number-code? (code id 0)) x ""))
       (for i (# id)
         (let (c (char id i)
@@ -333,17 +333,18 @@
           (add o x))))))
 
 (define infix
-  `((not: (js: ! lua: ,"not" py: ,"not") %not: (js: ! lua: ,"not" py: ,"not") %unm: -)
-    (:* :/ :% %mul: * %div: / %idiv: // %mod: %)
-    (cat: (js: + lua: ..) %cat: (js: + lua: ..))
-    (:+ :- %add: + %sub: -)
-    (:< :> :<= :>= %lt: < %gt: > %le: <= %ge: >=)
-    (=: (js: === lua: == py: ==) %eq: (js: === lua: == py: ==))
-    (and: (js: && lua: and py: and) %and: (js: && lua: and py: and))
-    (or: (js: ,"||" lua: or py: or) %or: (js: ,"||" lua: or py: or))))
+  `((%not: (js: ! lua: not py: not) %unm: -)
+    (%mul: * %div: / %idiv: // %mod: %)
+    (%cat: (js: + lua: .. py: +))
+    (%add: + %sub: -)
+    (%lt: < %gt: > %le: <= %ge: >=)
+    (%eq: (js: === lua: == py: ==))
+    (%in: (py: in) %is: (py: is))
+    (%and: (js: && lua: and py: and))
+    (%or: (js: ,"||" lua: or py: or))))
 
 (define unary? (form)
-  (and (two? form) (in? (hd form) '(not - %not %unm))))
+  (and (two? form) (in? (hd form) '(%not %unm))))
 
 (define index (k)
   (target k lua: (when (number? k) (- k 1))))
@@ -372,7 +373,7 @@
   (let (s "(" c "")
     (step x args
       (cat! s c (compile x))
-      (when (and (= target 'py)
+      (when (and (target? 'py)
                  default?
                  (not (id-literal? x)))
         (cat! s "=None"))
@@ -495,7 +496,7 @@
 (define can-return? (form)
   (and (is? form)
        (or (atom? form)
-           (and (not (= (hd form) 'return))
+           (and (not (= (hd form) '%return))
                 (not (statement? (hd form)))))))
 
 (define-global compile (form :stmt)
@@ -513,14 +514,14 @@
   (either
     (let (hoist () e (lower form hoist true tail?))
       (if (and (some? hoist) (is? e))
-          `(do ,@hoist ,e)
+          `(%do ,@hoist ,e)
           (is? e) e
-          (> (# hoist) 1) `(do ,@hoist)
+          (> (# hoist) 1) `(%do ,@hoist)
         (hd hoist)))
-    '(do)))
+    '(%do)))
 
 (define lower-body (body tail?)
-  (lower-statement `(do ,@body) tail?))
+  (lower-statement `(%do ,@body) tail?))
 
 (define literal? (form)
   (or (atom? form)
@@ -533,7 +534,7 @@
   (or (and (not (atom? form))
            (not (infix? (hd form)))
            (not (literal? form))
-           (not (= 'get (hd form))))
+           (not (= '%get (hd form))))
       (id-literal? form)))
 
 (define lower-do (args hoist stmt? tail?)
@@ -543,7 +544,7 @@
         (add hoist e))))
   (let e (lower (last args) hoist stmt? tail?)
     (if (and tail? (can-return? e))
-        `(return ,e)
+        `(%return ,e)
       e)))
 
 (define lower-set (args hoist stmt? tail?)
@@ -576,8 +577,8 @@
         b1 (lower b hoist1))
     (if (some? hoist1)
         (let-unique (id)
-          (lower `(do (%local ,id ,a)
-                      ,(if (= x 'and)
+          (lower `(%do (%local ,id ,a)
+                      ,(if (= x '%and)
                            `(%if ,id ,b ,id)
                          `(%if ,id ,id ,b)))
                  hoist))
@@ -592,12 +593,12 @@
         c (lower c pre))
     (add hoist
       (if (none? pre)
-          `(while ,c
+          `(%while ,c
             ,(lower-body body))
-        `(while true
-           (do ,@pre
-               (%if (not ,c) (break))
-               ,(lower-body body)))))))
+        `(%while true
+           (%do ,@pre
+                (%if (%not ,c) (%break))
+                ,(lower-body body)))))))
 
 (define lower-for (args hoist)
   (let ((h k rest: body) args)
@@ -616,7 +617,7 @@
       (let-unique (e)
         (add hoist `(%local ,e))
         (add hoist `(%with ,(lower h hoist)
-                     ,(lower `(%set ,e (do ,@body)))
+                     ,(lower `(%set ,e (%do ,@body)))
                      ,@(keys body)))
         e))))
 
@@ -629,7 +630,7 @@
 (define lower-function (args hoist)
   (if (target? 'py)
       (let-unique (f)
-        (lower `(do (%local-function ,f ,@args) ,f) hoist))
+        (lower `(%do (%local-function ,f ,@args) ,f) hoist))
     (let ((a rest: body) args)
       `(%function ,a ,(lower-body body true) ,@(keys body)))))
 
@@ -642,7 +643,7 @@
     (if (some? form) form)))
 
 (define pairwise? (form)
-  (in? (hd form) '(< <= = >= >)))
+  (in? (hd form) '(%lt %le %eq %ge %gt)))
 
 (define lower-pairwise (form)
   (if (pairwise? form)
@@ -650,7 +651,7 @@
         (reduce (fn (a b)
                   (add e `(,x ,a ,b)) a)
                 args)
-        `(and ,@(reverse e)))
+        `(%and ,@(reverse e)))
     form))
 
 (define lower-infix? (form)
@@ -674,20 +675,21 @@
       (nil? hoist) (lower-statement form)
       (lower-infix? form) (lower-infix form hoist)
     (let ((x rest: args) form)
-      (if (= x 'do) (lower-do args hoist stmt? tail?)
+      (if (= x '%do) (lower-do args hoist stmt? tail?)
           (= x '%call) (lower args hoist stmt? tail?)
           (= x '%set) (lower-set args hoist stmt? tail?)
           (= x '%if) (lower-if args hoist stmt? tail?)
           (= x '%try) (lower-try args hoist tail?)
-          (= x 'while) (lower-while args hoist)
+          (= x '%while) (lower-while args hoist)
           (= x '%for) (lower-for args hoist)
           (= x '%with) (lower-with args hoist stmt? tail?)
           (= x '%block) (lower-block args hoist stmt? tail?)
+          (= x '%cases) (lower-cases args hoist stmt? tail?)
           (= x '%function) (lower-function args hoist)
           (or (= x '%local-function)
               (= x '%global-function))
           (lower-definition x args hoist)
-          (in? x '(and or))
+          (in? x '(%and %or))
           (lower-short x args hoist)
           (statement? x) (lower-special form hoist)
         (lower-call form hoist)))))
@@ -734,7 +736,7 @@
 (define-global eval (form globals locals)
   (let previous target
     (set target (language))
-    (let code (compile (expand `(set lumen-result ,form)))
+    (let code (compile (expand `(%set lumen-result ,form)))
       (set target previous)
       (run code globals locals)
       (eval-result globals locals))))
@@ -742,7 +744,7 @@
 (define-global immediate-call? (x)
   (and (not (atom? x)) (not (atom? (hd x))) (= (hd (hd x)) '%function)))
 
-(define-special do forms :stmt :tr
+(define-special %do forms :stmt :tr
   (with s ""
     (step x forms
       (when (and (target? 'lua)
@@ -751,8 +753,8 @@
         (set s (cat (clip s 0 (edge s)) ";\n")))
       (cat! s (compile x :stmt))
       (unless (atom? x)
-        (if (or (= (hd x) 'return)
-                (= (hd x) 'break))
+        (if (or (= (hd x) '%return)
+                (= (hd x) '%break))
             (break))))))
 
 (define-special %if (cond cons alt) :stmt :tr
@@ -777,7 +779,7 @@
         (cat s "\n")
       s)))
 
-(define-special while (cond form) :stmt :tr
+(define-special %while (cond form) :stmt :tr
   (let (cond (compile cond)
         body (compile-body form)
         ind (indentation))
@@ -823,10 +825,10 @@
   (let (ind (indentation)
         body (compile-body form)
         hf (if (target? 'py)
-               `(do (import sys)
-                    (%local e ((idx sys exc_info)))
-                    (return (%array false (get e 1) e)))
-             `(return (%array false e)))
+               `(%do (import sys)
+                     (%local e ((%idx sys exc_info)))
+                     (%return (%array false (%get e 1) e)))
+             `(%return (%array false e)))
         h (with-indent (compile hf :stmt)))
     (if (target? 'js)
         (cat ind "try {\n" body ind "}\n"
@@ -837,7 +839,7 @@
 (define-special %delete (place) :stmt
   (cat (indentation) (if (target? 'py) "del " "delete ") (compile place)))
 
-(define-special break () :stmt
+(define-special %break () :stmt
   (cat (indentation) "break"))
 
 (define-special %function (args rest: body)
@@ -855,27 +857,27 @@
         (cat (indentation) x))
     (compile `(%local ,name (%function ,args ,@body)) :stmt)))
 
-(define-special return (x) :stmt
+(define-special %return (x) :stmt
   (let x (if (nil? x)
              "return"
            (cat "return " (compile x)))
     (cat (indentation) x)))
 
-(define-special new (x)
+(define-special %new (x)
   (cat "new " (compile x)))
 
-(define-special typeof (x)
+(define-special %typeof (x)
   (cat "typeof(" (compile x) ")"))
 
-(define-special error (x) :stmt
+(define-special %error (x) :stmt
   (let e (if (target? 'js)
-             (cat "throw " (compile `(new (Error ,x))))
+             (cat "throw " (compile `(%new (Error ,x))))
              (target? 'py)
              (cat "raise " (compile `(Exception ,x)))
            (cat "error(" (compile x) ")"))
     (cat (indentation) e)))
 
-(define-special throw (x) :stmt
+(define-special %throw (x) :stmt
   (let e (if (target? 'js)
              (cat "throw " (compile x))
              (target? 'py)
@@ -897,7 +899,7 @@
         rh (compile (if (nil? rh) 'nil rh)))
     (cat (indentation) lh " = " rh)))
 
-(define-special get (t k)
+(define-special %get (t k)
   (let (t1 (compile t)
         k1 (compile k))
     (when (or (and (target? 'lua)
@@ -910,7 +912,7 @@
         (cat t1 "." (inner k))
       (cat t1 "[" k1 "]"))))
 
-(define-special idx (t k)
+(define-special %idx (t k)
   (let (t1 (compile t)
         k1 (compile k))
     (when (or (and (target? 'lua)
@@ -987,9 +989,6 @@
 
 (define-special %as (form id)
   (cat (compile form) " as " (compile id)))
-
-(define-special %in (x l)
-  (cat (compile x) " in " (compile l)))
 
 (define-special yield args :stmt
   (cat (indentation) "yield " (mapcat compile args ", ")))

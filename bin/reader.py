@@ -68,9 +68,9 @@ def read_string(L_str=None, more=None):
   if not( __x1 == eof):
     return __x1
 def key63(atom=None):
-  return string63(atom) and L_35(atom) > 1 and char(atom, edge(atom)) == ":"
+  return string63(atom) and (L_35(atom) > 1 and char(atom, edge(atom)) == ":")
 def flag63(atom=None):
-  return string63(atom) and L_35(atom) > 1 and char(atom, 0) == ":"
+  return string63(atom) and (L_35(atom) > 1 and char(atom, 0) == ":")
 def expected(s=None, c=None):
   if is63(s["more"]):
     return s["more"]
@@ -116,7 +116,7 @@ def maybe_number(L_str=None):
     if number_code63(code(L_str, edge(L_str))):
       return number(L_str)
 def real63(x=None):
-  return number63(x) and not nan63(x) and not inf63(x)
+  return number63(x) and (not nan63(x) and not inf63(x))
 def __f1(s=None):
   __L_str = ""
   while True:
@@ -139,17 +139,17 @@ def __f1(s=None):
 read_table[""] = __f1
 def __f2(s=None):
   read_char(s)
-  __r19 = None
+  __r18 = None
   __l1 = []
-  while nil63(__r19):
+  while nil63(__r18):
     skip_non_code(s)
     __c4 = peek_char(s)
     if __c4 == ")":
       read_char(s)
-      __r19 = __l1
+      __r18 = __l1
     else:
       if nil63(__c4):
-        __r19 = expected(s, ")")
+        __r18 = expected(s, ")")
       else:
         __x4 = read(s)
         if key63(__x4):
@@ -163,13 +163,13 @@ def __f2(s=None):
             __l1[clip(__x4, 1)] = True
           else:
             add(__l1, __x4)
-  return __r19
+  return __r18
 read_table["("] = __f2
 def __f3(s=None):
   raise Exception(cat("Unexpected ) at ", s["pos"]))
 read_table[")"] = __f3
 def read_matching(opener=None, closer=None, s=None):
-  __r22 = None
+  __r21 = None
   __pos1 = s["pos"]
   __L_str1 = ""
   __i1 = 0
@@ -177,51 +177,51 @@ def read_matching(opener=None, closer=None, s=None):
     __L_str1 = cat(__L_str1, read_char(s) or "")
     __i1 = __i1 + 1
   if __L_str1 == opener:
-    while nil63(__r22):
+    while nil63(__r21):
       if clip(s["string"], s["pos"], s["pos"] + L_35(closer)) == closer:
         __i2 = 0
         while __i2 < L_35(closer):
           __L_str1 = cat(__L_str1, read_char(s))
           __i2 = __i2 + 1
-        __r22 = __L_str1
+        __r21 = __L_str1
       else:
         if nil63(peek_char(s)):
-          __r22 = expected(s, closer)
+          __r21 = expected(s, closer)
         else:
           __L_str1 = cat(__L_str1, read_char(s))
           if peek_char(s) == "\\":
             __L_str1 = cat(__L_str1, read_char(s))
-  return __r22
+  return __r21
 def __f4(s=None):
   if string_starts63(s["string"], "\"\"\"", s["pos"]):
-    __r24 = read_matching("\"\"\"", "\"\"\"", s)
-    if __r24 == s["more"]:
-      return __r24
+    __r23 = read_matching("\"\"\"", "\"\"\"", s)
+    if __r23 == s["more"]:
+      return __r23
     else:
-      return inner(inner(__r24))
+      return inner(inner(__r23))
   else:
     __i3 = s["pos"]
     __j = search(s["string"], "\"", __i3 + 1)
     __b = either(search(s["string"], "\\", __i3 + 1), __j)
-    if is63(__j) and __j < s["len"] and __b >= __j:
+    if is63(__j) and (__j < s["len"] and __b >= __j):
       s["pos"] = __j + 1
       return clip(s["string"], __i3, __j + 1)
     else:
-      __r25 = None
+      __r24 = None
       read_char(s)
-      while nil63(__r25):
+      while nil63(__r24):
         __c5 = peek_char(s)
         if __c5 == "\"":
           read_char(s)
-          __r25 = clip(s["string"], __i3, s["pos"])
+          __r24 = clip(s["string"], __i3, s["pos"])
         else:
           if nil63(__c5):
-            __r25 = expected(s, "\"")
+            __r24 = expected(s, "\"")
           else:
             if __c5 == "\\":
               read_char(s)
             read_char(s)
-      return __r25
+      return __r24
 read_table["\""] = __f4
 def __f5(s=None):
   __i4 = s["pos"]
@@ -243,7 +243,7 @@ read_table["`"] = __f7
 def __f8(s=None):
   read_char(s)
   __c6 = peek_char(s)
-  if nil63(__c6) or has63(whitespace, __c6) or has63(closing_delimiters, __c6):
+  if nil63(__c6) or (has63(whitespace, __c6) or has63(closing_delimiters, __c6)):
     return ","
   else:
     if __c6 == "@":

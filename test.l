@@ -417,7 +417,7 @@ c"
             (test= 20 a)))
     (test= 20 (do (set a 10)
                   (do (set a 20) a))))
-  (test= '(do) (expand '(do))))
+  (test= '(%do) (expand '(do))))
 
 (define-test if
   (test= 'a (macroexpand '(if a)))
@@ -719,7 +719,7 @@ c"
     (test= 'yy try)
     (test= '99 return))
   (define var (if end return)
-    (return (+ if end return)))
+    (%return (+ if end return)))
   (test= 6 (var 1 2 3))
   (define 1+ (x)
     (+ x 1))

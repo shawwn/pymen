@@ -47,7 +47,7 @@ local path_separator = char(_G.package.config, 0)
 local function path_join(...)
   local __parts = unstash({...})
   return reduce(function (x, y)
-    return x .. path_separator .. y
+    return x .. (path_separator .. y)
   end, __parts) or ""
 end
 local function get_environment_variable(name)

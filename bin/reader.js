@@ -90,16 +90,16 @@ read_string = function (_str, more) {
   }
 };
 var key63 = function (atom) {
-  return string63(atom) && _35(atom) > 1 && char(atom, edge(atom)) === ":";
+  return string63(atom) && (_35(atom) > 1 && char(atom, edge(atom)) === ":");
 };
 var flag63 = function (atom) {
-  return string63(atom) && _35(atom) > 1 && char(atom, 0) === ":";
+  return string63(atom) && (_35(atom) > 1 && char(atom, 0) === ":");
 };
 var expected = function (s, c) {
   if (is63(s.more)) {
     return s.more;
   } else {
-    throw new Error("Expected " + c + " at " + s.pos);
+    throw new Error("Expected " + (c + (" at " + s.pos)));
   }
 };
 var wrap = function (s, x) {
@@ -139,7 +139,7 @@ var maybe_number = function (_str) {
   }
 };
 var real63 = function (x) {
-  return number63(x) && ! nan63(x) && ! inf63(x);
+  return number63(x) && (! nan63(x) && ! inf63(x));
 };
 read_table[""] = function (s) {
   var ___str = "";
@@ -246,7 +246,7 @@ read_table["\""] = function (s) {
     var __i3 = s.pos;
     var __j = search(s.string, "\"", __i3 + 1);
     var __b = either(search(s.string, "\\", __i3 + 1), __j);
-    if (is63(__j) && __j < s.len && __b >= __j) {
+    if (is63(__j) && (__j < s.len && __b >= __j)) {
       s.pos = __j + 1;
       return clip(s.string, __i3, __j + 1);
     } else {
@@ -293,7 +293,7 @@ read_table["`"] = function (s) {
 read_table[","] = function (s) {
   read_char(s);
   var __c6 = peek_char(s);
-  if (nil63(__c6) || has63(whitespace, __c6) || has63(closing_delimiters, __c6)) {
+  if (nil63(__c6) || (has63(whitespace, __c6) || has63(closing_delimiters, __c6))) {
     return ",";
   } else {
     if (__c6 === "@") {
