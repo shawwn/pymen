@@ -147,11 +147,19 @@
         (unless (number? k)
           (set (get l k) v))))))
 
-(define-global keys (x)
-  (with t (dupe x)
+(define-global props (x)
+  (with t (obj)
     (each (k v) x
       (unless (number? k)
         (set (get t k) v)))))
+
+(define-global values (x)
+  (if (array? x) x
+    (let t (obj)
+      (each (k v) x
+        (when (number? k)
+          (set (get t k) v)))
+      (array t))))
 
 (define-global edge (x)
   (- (# x) 1))
@@ -207,7 +215,7 @@
   (cut l 0 (edge l)))
 
 (define-global reverse (l)
-  (with l1 (keys l)
+  (with l1 (props l)
     (let i (edge l)
       (while (>= i 0)
         (add l1 (at l i))
@@ -290,7 +298,7 @@
 (define-global keep (f x)
   (map (fn (v) (when (yes (f v)) v)) x))
 
-(define-global keys? (t)
+(define-global props? (t)
   (each (k v) t
     (unless (number? k)
       (return true)))
@@ -302,7 +310,7 @@
   true)
 
 (define-global stash (args)
-  (when (keys? args)
+  (when (props? args)
     (let p (obj)
       (each (k v) args
         (unless (number? k)
@@ -485,12 +493,12 @@
       (cat s ")"))))
 
 (target lua:
-  (define values (or unpack (idx table unpack))))
+  (define unpack (or unpack (idx table unpack))))
 
 (define-global apply (f args)
   (let args (stash args)
     (target js: ((idx f apply) f args)
-            lua: (f (values args))
+            lua: (f (unpack args))
             py: (f (%literal |*| args)))))
 
 (define-global call (f rest: args)

@@ -63,7 +63,7 @@ var literal = function (s) {
   }
 };
 var stash42 = function (args) {
-  if (keys63(args)) {
+  if (props63(args)) {
     if (has(setenv("target", {
       _stash: true,
       toplevel: true
@@ -246,7 +246,7 @@ bind42 = function (args, body) {
         }
       }
     }
-    if (keys63(args)) {
+    if (props63(args)) {
       __pre = join(__pre, [__r19, rest()]);
       var __n4 = _35(__args1);
       var __i5 = 0;
@@ -255,7 +255,7 @@ bind42 = function (args, body) {
         __pre = join(__pre, [__v4, ["destash!", __v4, __r19]]);
         __i5 = __i5 + 1;
       }
-      __bs1 = join(__bs1, [keys(args), __r19]);
+      __bs1 = join(__bs1, [props(args), __r19]);
     }
     return [__args1, join(["let", __pre], __inits, [join(["let", __bs1], body)])];
   }
@@ -456,7 +456,7 @@ var quasiquote_list = function (form, depth) {
     ____i9 = ____i9 + 1;
   }
   var __pruned = keep(function (x) {
-    return _35(x) > 1 || (!( hd(x) === "list") || keys63(x));
+    return _35(x) > 1 || (!( hd(x) === "list") || props63(x));
   }, __xs);
   if (one63(__pruned)) {
     return hd(__pruned);
@@ -1370,18 +1370,18 @@ var lower_for = function (args, hoist) {
   var __h = has(____id25, 0);
   var __k15 = has(____id25, 1);
   var __body6 = cut(____id25, 2);
-  return add(hoist, join(["%for", lower(__h, hoist), __k15, lower_body(__body6)], keys(__body6)));
+  return add(hoist, join(["%for", lower(__h, hoist), __k15, lower_body(__body6)], props(__body6)));
 };
 var lower_with = function (args, hoist, stmt63, tail63) {
   var ____id26 = args;
   var __h1 = has(____id26, 0);
   var __body7 = cut(____id26, 1);
   if (stmt63 && ! tail63) {
-    return add(hoist, join(["%with", lower(__h1, hoist), lower_body(__body7, tail63)], keys(__body7)));
+    return add(hoist, join(["%with", lower(__h1, hoist), lower_body(__body7, tail63)], props(__body7)));
   } else {
     var __e4 = unique("e");
     add(hoist, ["%local", __e4]);
-    add(hoist, join(["%with", lower(__h1, hoist), lower(["%set", __e4, join(["%do"], __body7)])], keys(__body7)));
+    add(hoist, join(["%with", lower(__h1, hoist), lower(["%set", __e4, join(["%do"], __body7)])], props(__body7)));
     return __e4;
   }
 };
@@ -1403,7 +1403,7 @@ var lower_function = function (args, hoist) {
     var ____id28 = args;
     var __a5 = has(____id28, 0);
     var __body9 = cut(____id28, 1);
-    return join(["%function", __a5, lower_body(__body9, true)], keys(__body9));
+    return join(["%function", __a5, lower_body(__body9, true)], props(__body9));
   }
 };
 var lower_definition = function (kind, args, hoist) {
@@ -1411,7 +1411,7 @@ var lower_definition = function (kind, args, hoist) {
   var __name5 = has(____id29, 0);
   var __args7 = has(____id29, 1);
   var __body10 = cut(____id29, 2);
-  return add(hoist, join([kind, __name5, __args7, lower_body(__body10, true)], keys(__body10)));
+  return add(hoist, join([kind, __name5, __args7, lower_body(__body10, true)], props(__body10)));
 };
 var lower_call = function (form, hoist) {
   var __form2 = map(function (x) {

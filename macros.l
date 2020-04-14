@@ -108,7 +108,7 @@
     form))
 
 (define-macro define-special (name args rest: body)
-  (let form `(setenv ',name special: (fn ,args ,@body) ,@(keys body))
+  (let form `(setenv ',name special: (fn ,args ,@body) ,@(props body))
     (eval form)
     form))
 
@@ -122,14 +122,14 @@
 (define-macro define (name x rest: body)
   (setenv name :variable)
   (if (some? body)
-      `(%local-function ,name ,@(bind* x body) ,@(keys body))
-    `(%local ,name ,x ,@(keys body))))
+      `(%local-function ,name ,@(bind* x body) ,@(props body))
+    `(%local ,name ,x ,@(props body))))
 
 (define-macro define-global (name x rest: body)
   (setenv name :toplevel :variable)
   (if (some? body)
-      `(%global-function ,name ,@(bind* x body) ,@(keys body))
-    `(set ,name ,x ,@(keys body))))
+      `(%global-function ,name ,@(bind* x body) ,@(props body))
+    `(set ,name ,x ,@(props body))))
 
 (define-macro get-value (x)
   `(has (setenv ,x :toplevel) 'value))
@@ -194,13 +194,13 @@
        ,@body)))
 
 (define-macro fn (args rest: body)
-  `(%function ,@(bind* args body) ,@(keys body)))
+  `(%function ,@(bind* args body) ,@(props body)))
 
 (define-macro apply (f rest: args)
   (if (> (# args) 1)
-      `(%call apply ,f (join (list ,@(almost args)) ,(last args) (list ,@(keys args))))
-      (keys? args)
-      `(%call apply ,f (join ,@args (list ,@(keys args))))
+      `(%call apply ,f (join (list ,@(almost args)) ,(last args) (list ,@(props args))))
+      (props? args)
+      `(%call apply ,f (join ,@args (list ,@(props args))))
       `(%call apply ,f ,@args)))
 
 (define-macro guard (expr)
@@ -222,7 +222,7 @@
                   (if (> (# x) 1) x
                       (list i (hd x)))))
       `(let (,o ,t ,k nil)
-         (%for (target py: (indices ,o) ,o) ,k ,@(keys body)
+         (%for (target py: (indices ,o) ,o) ,k ,@(props body)
            (let (,v (%get ,o ,k))
              ,@(if (or (target? 'lua) (target? 'py))
                    body
@@ -233,7 +233,7 @@
 
 (define-macro for (i to rest: body)
   (if (= to 'in)
-      `(%for ,(hd body) ,i (%do ,@(tl body)) ,@(keys body))
+      `(%for ,(hd body) ,i (%do ,@(tl body)) ,@(props body))
     `(let ,i 0
        (while (< ,i ,to)
          ,@body

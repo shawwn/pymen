@@ -48,7 +48,7 @@
   (if (string-literal? s) s (quoted s)))
 
 (define stash* (args)
-  (if (keys? args)
+  (if (props? args)
       (if (target? 'py)
           (with l (array args)
             (each (k v) args
@@ -120,13 +120,13 @@
                 (let-unique (x)
                   (add args1 x)
                   (join! bs (list v x))))))
-          (when (keys? args)
+          (when (props? args)
             (join! pre (list r (rest)))
             (let n (# args1)
               (for i n
                 (let v (at args1 i)
                   (join! pre (list v `(destash! ,v ,r))))))
-            (join! bs (list (keys args) r))))
+            (join! bs (list (props args) r))))
         (list args1 `(let ,pre ,@inits (let ,bs ,@body)))))))
 
 (define quoting? (depth)
@@ -220,7 +220,7 @@
         (keep (fn (x)
                 (or (> (# x) 1)
                     (not (= (hd x) 'list))
-                    (keys? x)))
+                    (props? x)))
               xs)
       (if (one? pruned)
           (hd pruned)
@@ -621,7 +621,7 @@
     (add hoist
          `(%for ,(lower h hoist) ,k
             ,(lower-body body)
-            ,@(keys body)))))
+            ,@(props body)))))
 
 (define lower-with (args hoist stmt? tail?)
   (let ((h rest: body) args)
@@ -629,12 +629,12 @@
         (add hoist
            `(%with ,(lower h hoist)
               ,(lower-body body tail?)
-              ,@(keys body)))
+              ,@(props body)))
       (let-unique (e)
         (add hoist `(%local ,e))
         (add hoist `(%with ,(lower h hoist)
                      ,(lower `(%set ,e (%do ,@body)))
-                     ,@(keys body)))
+                     ,@(props body)))
         e))))
 
 (define lower-block (args hoist stmt? tail?)
@@ -648,11 +648,11 @@
       (let-unique (f)
         (lower `(%do (%local-function ,f ,@args) ,f) hoist))
     (let ((a rest: body) args)
-      `(%function ,a ,(lower-body body true) ,@(keys body)))))
+      `(%function ,a ,(lower-body body true) ,@(props body)))))
 
 (define lower-definition (kind args hoist)
   (let ((name args rest: body) args)
-    (add hoist `(,kind ,name ,args ,(lower-body body true) ,@(keys body)))))
+    (add hoist `(,kind ,name ,args ,(lower-body body true) ,@(props body)))))
 
 (define lower-call (form hoist)
   (let form (map (fn (x) (lower x hoist)) form)

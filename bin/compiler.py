@@ -57,7 +57,7 @@ def literal(s=None):
     return quoted(s)
 
 def stash42(args=None):
-  if keys63(args):
+  if props63(args):
     if has(setenv("target", toplevel=True), "value") == "py":
       __l = array(args)
       ____o = args
@@ -182,7 +182,7 @@ def bind42(args=None, body=None):
               __x42 = unique("x")
               add(__args1, __x42)
               __bs1 = join(__bs1, [__v3, __x42])
-    if keys63(args):
+    if props63(args):
       __pre = join(__pre, [__r19, rest()])
       __n4 = L_35(__args1)
       __i5 = 0
@@ -190,7 +190,7 @@ def bind42(args=None, body=None):
         __v4 = __args1[__i5]
         __pre = join(__pre, [__v4, ["destash!", __v4, __r19]])
         __i5 = __i5 + 1
-      __bs1 = join(__bs1, [keys(args), __r19])
+      __bs1 = join(__bs1, [props(args), __r19])
     return [__args1, join(["let", __pre], __inits, [join(["let", __bs1], body)])]
 
 def quoting63(depth=None):
@@ -337,7 +337,7 @@ def quasiquote_list(form=None, depth=None):
       add(last(__xs), quasiexpand(__x71, depth))
     ____i9 = ____i9 + 1
   def __f4(x=None):
-    return L_35(x) > 1 or (not( hd(x) == "list") or keys63(x))
+    return L_35(x) > 1 or (not( hd(x) == "list") or props63(x))
   __pruned = keep(__f4, __xs)
   if one63(__pruned):
     return hd(__pruned)
@@ -1048,18 +1048,18 @@ def lower_for(args=None, hoist=None):
   __h = has(____id25, 0)
   __k8 = has(____id25, 1)
   __body6 = cut(____id25, 2)
-  return add(hoist, join(["%for", lower(__h, hoist), __k8, lower_body(__body6)], keys(__body6)))
+  return add(hoist, join(["%for", lower(__h, hoist), __k8, lower_body(__body6)], props(__body6)))
 
 def lower_with(args=None, hoist=None, stmt63=None, tail63=None):
   ____id26 = args
   __h1 = has(____id26, 0)
   __body7 = cut(____id26, 1)
   if stmt63 and not tail63:
-    return add(hoist, join(["%with", lower(__h1, hoist), lower_body(__body7, tail63)], keys(__body7)))
+    return add(hoist, join(["%with", lower(__h1, hoist), lower_body(__body7, tail63)], props(__body7)))
   else:
     __e4 = unique("e")
     add(hoist, ["%local", __e4])
-    add(hoist, join(["%with", lower(__h1, hoist), lower(["%set", __e4, join(["%do"], __body7)])], keys(__body7)))
+    add(hoist, join(["%with", lower(__h1, hoist), lower(["%set", __e4, join(["%do"], __body7)])], props(__body7)))
     return __e4
 
 def lower_block(args=None, hoist=None, stmt63=None, tail63=None):
@@ -1077,14 +1077,14 @@ def lower_function(args=None, hoist=None):
     ____id28 = args
     __a5 = has(____id28, 0)
     __body9 = cut(____id28, 1)
-    return join(["%function", __a5, lower_body(__body9, True)], keys(__body9))
+    return join(["%function", __a5, lower_body(__body9, True)], props(__body9))
 
 def lower_definition(kind=None, args=None, hoist=None):
   ____id29 = args
   __name5 = has(____id29, 0)
   __args7 = has(____id29, 1)
   __body10 = cut(____id29, 2)
-  return add(hoist, join([kind, __name5, __args7, lower_body(__body10, True)], keys(__body10)))
+  return add(hoist, join([kind, __name5, __args7, lower_body(__body10, True)], props(__body10)))
 
 def lower_call(form=None, hoist=None):
   def __f7(x=None):

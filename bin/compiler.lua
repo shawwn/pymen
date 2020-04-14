@@ -63,7 +63,7 @@ local function literal(s)
   end
 end
 local function stash42(args)
-  if keys63(args) then
+  if props63(args) then
     if has(setenv("target", {
       _stash = true,
       toplevel = true
@@ -219,7 +219,7 @@ function bind42(args, body)
         end
       end
     end
-    if keys63(args) then
+    if props63(args) then
       __pre = join(__pre, {__r19, rest()})
       local __n4 = _35(__args1)
       local __i5 = 0
@@ -228,7 +228,7 @@ function bind42(args, body)
         __pre = join(__pre, {__v4, {"destash!", __v4, __r19}})
         __i5 = __i5 + 1
       end
-      __bs1 = join(__bs1, {keys(args), __r19})
+      __bs1 = join(__bs1, {props(args), __r19})
     end
     return {__args1, join({"let", __pre}, __inits, {join({"let", __bs1}, body)})}
   end
@@ -456,7 +456,7 @@ local function quasiquote_list(form, depth)
     ____i9 = ____i9 + 1
   end
   local __pruned = keep(function (x)
-    return _35(x) > 1 or (not( hd(x) == "list") or keys63(x))
+    return _35(x) > 1 or (not( hd(x) == "list") or props63(x))
   end, __xs)
   if one63(__pruned) then
     return hd(__pruned)
@@ -1358,18 +1358,18 @@ local function lower_for(args, hoist)
   local __h = has(____id27, 1)
   local __k8 = has(____id27, 2)
   local __body6 = cut(____id27, 2)
-  return add(hoist, join({"%for", lower(__h, hoist), __k8, lower_body(__body6)}, keys(__body6)))
+  return add(hoist, join({"%for", lower(__h, hoist), __k8, lower_body(__body6)}, props(__body6)))
 end
 local function lower_with(args, hoist, stmt63, tail63)
   local ____id28 = args
   local __h1 = has(____id28, 1)
   local __body7 = cut(____id28, 1)
   if stmt63 and not tail63 then
-    return add(hoist, join({"%with", lower(__h1, hoist), lower_body(__body7, tail63)}, keys(__body7)))
+    return add(hoist, join({"%with", lower(__h1, hoist), lower_body(__body7, tail63)}, props(__body7)))
   else
     local __e4 = unique("e")
     add(hoist, {"%local", __e4})
-    add(hoist, join({"%with", lower(__h1, hoist), lower({"%set", __e4, join({"%do"}, __body7)})}, keys(__body7)))
+    add(hoist, join({"%with", lower(__h1, hoist), lower({"%set", __e4, join({"%do"}, __body7)})}, props(__body7)))
     return __e4
   end
 end
@@ -1391,7 +1391,7 @@ local function lower_function(args, hoist)
     local ____id30 = args
     local __a5 = has(____id30, 1)
     local __body9 = cut(____id30, 1)
-    return join({"%function", __a5, lower_body(__body9, true)}, keys(__body9))
+    return join({"%function", __a5, lower_body(__body9, true)}, props(__body9))
   end
 end
 local function lower_definition(kind, args, hoist)
@@ -1399,7 +1399,7 @@ local function lower_definition(kind, args, hoist)
   local __name5 = has(____id31, 1)
   local __args111 = has(____id31, 2)
   local __body10 = cut(____id31, 2)
-  return add(hoist, join({kind, __name5, __args111, lower_body(__body10, true)}, keys(__body10)))
+  return add(hoist, join({kind, __name5, __args111, lower_body(__body10, true)}, props(__body10)))
 end
 local function lower_call(form, hoist)
   local __form2 = map(function (x)
