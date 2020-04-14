@@ -96,6 +96,12 @@
            py: (|list| |_args|)
            lua: (list |...|)))
 
+(define body-docstring (body)
+  (if (and (> (# body) 1)
+           (string-literal? (hd body)))
+      (list (hd body) (tl body))
+    (list () body)))
+
 (define-global bind* (args body)
   (let args1 (obj)
     (define rest ()
@@ -103,7 +109,8 @@
       `(unstash (arguments% ,(# args1)) (target py: |_keys|)))
     (if (atom? args)
         (list args1 `(let ,(list args (rest)) ,@body))
-      (let (pre () bs () inits ())
+      (let ((doc body) (body-docstring body)
+            pre () bs () inits ())
         (let-unique (r)
           (each (k v) args
             (when (number? k)
@@ -127,7 +134,8 @@
                 (let v (at args1 i)
                   (join! pre (list v `(destash! ,v ,r))))))
             (join! bs (list (props args) r))))
-        (list args1 `(let ,pre ,@inits (let ,bs ,@body)))))))
+        (let forms `(let ,pre ,@inits (let ,bs ,@body))
+          (list args1 (if (is? doc) `(do ,doc ,forms) forms)))))))
 
 (define quoting? (depth)
   (number? depth))
@@ -182,7 +190,7 @@
   (and (string? form)
        (not (string-literal? form))
        (not (id-literal? form))
-       (search form ".")
+       (is? (search form "."))
        (valid-access? form)))
 
 (define-global macroexpand (form)
@@ -259,24 +267,33 @@
     (for i indent-level
       (cat! s "  "))))
 
+
 (define reserved
-  (set-of "=" "==" "+" "-" "%" "*" "/" "<" ">" "<=" ">="
-          ;; js
+  (obj
+    all: (set-of
+          "=" "==" "+" "-" "%" "*" "/" "<" ">" "<=" ">=")
+    js: (set-of
           "break" "case" "catch" "class" "const" "continue"
           "debugger" "default" "delete" "do" "else" "eval"
           "finally" "for" "function" "if" "import" "in"
           "instanceof" "let" "return" "switch" "throw"
-          "try" "typeof" "var" "void" "with"
-          ;; lua
+          "try" "typeof" "var" "void" "with")
+    lua: (set-of
           "and" "end" "in" "load" "repeat" "while" "break"
           "false" "local" "return" "do" "for" "nil" "then"
           "else" "function" "not" "true" "elseif" "if" "or"
-          "until"
-          ;; python
-          "from" "str" "print"))
+          "until")
+    py: (set-of
+          "and" "except" "lambda" "with" "as" "finally" "nonlocal"
+          "while" "assert" "false" "None" "yield" "break" "for" "not"
+          "class" "from" "or" "continue" "global" "pass" "def" "if"
+          "raise" "del" "import" "return" "elif" "in" "True" "else"
+          "is" "try"
+          "from" "str" "print")))
 
 (define-global reserved? (x)
-  (has? reserved x))
+  (or (has? (get reserved 'all) x)
+      (has? (get reserved target) x)))
 
 (define valid-code? (n)
   (or (number-code? n)         ; 0-9
@@ -415,11 +432,11 @@
         (escape-newlines (un-triple-quote x)))
     (escape-newlines x)))
 
-(define compile-atom (x)
+(define compile-atom (x raw?)
   (if (= x "nil") (compile-nil)
       (id-literal? x) (inner x)
       (string-literal? x) (compile-string x)
-      (string? x) (compile-id x)
+      (string? x) (compile-id x raw?)
       (boolean? x) (compile-boolean x)
       (nan? x) "nan"
       (= x inf) "inf"
@@ -444,7 +461,7 @@
            (= (hd x) '%function))
       (> (precedence x) 0)))
 
-(define method-call? (form)
+(define-global method-call? (form)
   (let x (if (list? form) (hd form) form)
     (and (string? x)
          (> (# x 1) 1)
@@ -514,13 +531,13 @@
            (and (not (= (hd form) '%return))
                 (not (statement? (hd form)))))))
 
-(define-global compile (form :stmt)
+(define-global compile (form raw? :stmt)
   (if (nil? form) ""
       (special-form? form)
       (compile-special form stmt)
     (let (tr (terminator stmt)
           ind (if stmt (indentation) "")
-          form (if (atom? form) (compile-atom form)
+          form (if (atom? form) (compile-atom form raw?)
                    (infix? (hd form)) (compile-infix form)
                  (compile-call form)))
       (cat ind form tr))))
@@ -930,7 +947,7 @@
 
 (define-special %idx (t k)
   (let (t1 (compile t)
-        k1 (compile k))
+        k1 (compile k 'raw))
     (when (or (and (target? 'lua)
                    (= (char t1 0) "{"))
               (infix-operator? t))

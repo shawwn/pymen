@@ -1,19 +1,93 @@
 (import reader)
 (import compiler)
 (import system)
+(target py: |from compiler import *|)
 (target py: (import traceback))
 (target py: (import numpy as np))
-(target py: (from pprint import pprint as pp))
 
-(target py: |from compiler import *|)
+(target py: (from types import ModuleType as module))
+(target py: (define-global module? (x) (isinstance x module)))
+
+(target py: (import inspect))
+(target py: (define-global class? (x) ((idx inspect isclass) x)))
+
+(target py: (from pprint import pprint as pp)
+  (define-global pp (x)
+    (print (str x))))
+
+(target py:
+  (define-global entries (x)
+    (with r ()
+      (let mods ()
+        (step k (dir x)
+          (unless (= (clip k 0 2) "__")
+            (let v (getattr x k)
+              (if (function? v) (add r k)
+                  (module? v) (add mods (cat "." k))
+                  (add r (list k v))))))
+        (step x mods
+          (add r x))))))
+
+(target py: (from io import StringIO))
+
+(target py:
+  (define-global pp-to-string (x)
+    (let r (StringIO)
+      (pp x r)
+      ((idx r getvalue)))))
+
+(define-global lines (x)
+  (split x "\n"))
+
+(define-macro errsafe (x (o else 'nil))
+  `(let ((ok v) (guard ,x))
+     (if ok v ,else)))
+
+(define-global simple-id? (x)
+  (let r (errsafe ((idx reader read-string) x))
+    (when (= r x) r)))
+
+(define-global get-indentation (s)
+  (with r ""
+    (for i (# s)
+      (let c (char s i)
+        (when (= c " ")
+          (cat! r c))))))
+
+(define-global strip-outer (s lh rh)
+  (if (and (string-starts? s lh)
+           (string-ends? s rh))
+      (clip (clip s 0 (- (# s) (# rh))) (# lh))
+    s))
+
+(target py:
+  (define-global pp-toplevel (x)
+    (let doc (docstring x)
+      (when doc
+        (print (cat "\n\"\"\"\n" (doc.strip) "\n\"\"\""))))
+    (if (or (module? x) (class? x))
+        (do (set s (pp-to-string (entries x))
+                 s (s.rstrip)
+                 s (strip-outer s "[" "]")
+                 s (cat " " s))
+            (step x (lines s)
+              (let ind (get-indentation x)
+                (set x (x.rstrip ","))
+                (let id (simple-id? (strip-outer (x (.strip)) "'" "'"))
+                  (print (if id (cat ind id) x)))))
+            (print (repr x)))
+      (pp x))))
+
+(target py:
+  (define-global docstring (x)
+    (errsafe (idx x __doc__))))
 
 (target py:
   (define-global lumen-set-globals (x)
     (set (idx compiler lumen-globals) x)))
 
 (define-global toplevel-print (v)
-  (target py: (pp v) (print (str v)))
-  v)
+  (target py: (pp-toplevel v) (pp v)))
 
 (define-global print-exception (v ex)
   (target
@@ -22,14 +96,47 @@
     lua: (print (cat "error: " (idx v message) "\n" (idx v stack))))
   nil)
 
+(define-global %self reader)
+
+(define accessor-literal? (form)
+  (and (string? form)
+       (not (string-literal? form))
+       (not (id-literal? form))
+       (= (char form 0) ".")
+       (not (= (clip form 0 2) ".."))
+       (> (# form) 1)))
+
+(define-global eval-self-form (form)
+  (if (and (hd? form '%self)
+           (> (# form) 1))
+      `(%set %self ,(at form 1))
+      (list? form)
+      (if (accessor-literal? (hd form))
+          `(%self ,@form)
+        form)
+      (= form ".")
+      `%self
+      (accessor-literal? form)
+      `(%self ,form)
+    form))
+
 (define-global eval-print (form)
-  (let ((ok v ex) (guard ((idx compiler eval) form)))
+  (let (form (eval-self-form form)
+        (ok v ex) (guard ((idx compiler eval) form)))
     (if (not ok)
         (print-exception v ex)
-        (is? v) (toplevel-print v))))
+        (is? v)
+        (toplevel-print v))))
 
-(define rep (s)
-  (let v (eval ((idx reader read-string) s))
+(define-global read-toplevel (str more)
+  (let (s ((idx reader stream) str more)
+        x (errsafe ((idx reader read-all) s)))
+    (if (= x more) more
+        (one? x) (hd x)
+      x)))
+
+(define rep (str)
+  (let v (eval (read-toplevel str))
     (if (is? v) (toplevel-print v))))
 
 (define repl ()
@@ -37,7 +144,7 @@
     (define rep1 (s)
       (cat! (get o 'buf) s)
       (let (more ()
-            form ((idx reader read-string) (get o 'buf) more))
+            form (read-toplevel (get o 'buf) more))
           (unless (= form more)
             (eval-print form)
             (set (get o 'buf) "")

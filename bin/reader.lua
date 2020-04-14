@@ -13,11 +13,11 @@ local whitespace = {
   ["\r"] = true,
   ["\n"] = true
 }
-local function stream(_str, more)
+local function stream(str, more)
   return {
     pos = 0,
-    string = _str,
-    len = _35(_str),
+    string = str,
+    len = _35(str),
     more = more
   }
 end
@@ -100,8 +100,8 @@ local function read_all(s)
   end
   return __l
 end
-function read_string(_str, more)
-  local __x1 = read(stream(_str, more))
+function read_string(str, more)
+  local __x1 = read(stream(str, more))
   if not( __x1 == eof) then
     return __x1
   end
@@ -127,31 +127,31 @@ local function wrap(s, x)
     return {x, __y}
   end
 end
-local function hex_prefix63(_str)
+local function hex_prefix63(str)
   local __e = nil
-  if code(_str, 0) == 45 then
+  if code(str, 0) == 45 then
     __e = 1
   else
     __e = 0
   end
   local __i = __e
-  local __id1 = code(_str, __i) == 48
+  local __id1 = code(str, __i) == 48
   local __e1 = nil
   if __id1 then
     __i = __i + 1
-    local __n = code(_str, __i)
+    local __n = code(str, __i)
     __e1 = __n == 120 or __n == 88
   else
     __e1 = __id1
   end
   return __e1
 end
-local function maybe_number(_str)
-  if hex_prefix63(_str) then
-    return tonumber(_str)
+local function maybe_number(str)
+  if hex_prefix63(str) then
+    return tonumber(str)
   else
-    if number_code63(code(_str, edge(_str))) then
-      return number(_str)
+    if number_code63(code(str, edge(str))) then
+      return number(str)
     end
   end
 end
@@ -159,26 +159,26 @@ local function real63(x)
   return number63(x) and (not nan63(x) and not inf63(x))
 end
 read_table[""] = function (s)
-  local ___str = ""
+  local __str = ""
   while true do
     local __c3 = peek_char(s)
     if __c3 and (not has63(whitespace, __c3) and not has63(delimiters, __c3)) then
-      ___str = ___str .. read_char(s)
+      __str = __str .. read_char(s)
     else
       break
     end
   end
-  if ___str == "true" then
+  if __str == "true" then
     return true
   else
-    if ___str == "false" then
+    if __str == "false" then
       return false
     else
-      local __n1 = maybe_number(___str)
+      local __n1 = maybe_number(__str)
       if real63(__n1) then
         return __n1
       else
-        return ___str
+        return __str
       end
     end
   end
@@ -222,28 +222,28 @@ end
 local function read_matching(opener, closer, s)
   local __r21 = nil
   local __pos1 = s.pos
-  local ___str1 = ""
+  local __str1 = ""
   local __i1 = 0
   while __i1 < _35(opener) do
-    ___str1 = ___str1 .. (read_char(s) or "")
+    __str1 = __str1 .. (read_char(s) or "")
     __i1 = __i1 + 1
   end
-  if ___str1 == opener then
+  if __str1 == opener then
     while nil63(__r21) do
       if clip(s.string, s.pos, s.pos + _35(closer)) == closer then
         local __i2 = 0
         while __i2 < _35(closer) do
-          ___str1 = ___str1 .. read_char(s)
+          __str1 = __str1 .. read_char(s)
           __i2 = __i2 + 1
         end
-        __r21 = ___str1
+        __r21 = __str1
       else
         if nil63(peek_char(s)) then
           __r21 = expected(s, closer)
         else
-          ___str1 = ___str1 .. read_char(s)
+          __str1 = __str1 .. read_char(s)
           if peek_char(s) == "\\" then
-            ___str1 = ___str1 .. read_char(s)
+            __str1 = __str1 .. read_char(s)
           end
         end
       end

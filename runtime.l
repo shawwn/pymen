@@ -365,14 +365,15 @@
 
 (define-global split (s sep)
   (if (or (= s "") (= sep "")) ()
-    (with l ()
-      (let n (# sep)
-        (while true
-          (let i (search s sep)
-            (if (nil? i) (break)
-              (do (add l (clip s 0 i))
-                  (set s (clip s (+ i n)))))))
-        (add l s)))))
+    (target py: ((idx s split) sep)
+      (with l ()
+        (let n (# sep)
+          (while true
+            (let i (search s sep)
+              (if (nil? i) (break)
+                (do (add l (clip s 0 i))
+                    (set s (clip s (+ i n)))))))
+          (add l s))))))
 
 (define tostr (x)
   (if (string? x) x (nil? x) "" (str x)))
@@ -515,10 +516,12 @@
           (set (get entry k) v)))
       (set (get frame k) entry))))
 
-(define-global print (x)
-  (target js: ((idx console log) x)
-          py: (do (|print| x) nil)
-          lua: (|print| x)))
+(target
+  py: (define-global print (x)
+        (do (|print| x) nil))
+  (define-global print
+    (target js: (idx console log)
+            lua: print)))
 
 (target js: (define math Math))
 (target py: (import math))

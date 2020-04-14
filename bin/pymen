@@ -20,6 +20,6 @@ else
 fi
 
 code=lumen.py
-export PYTHONPATH="${PYTHONPATH}:${home}:${dir}"
+export PYTHONPATH="${PYTHONPATH}:${up}:${home}:${dir}:${dir}/.."
 
 exec ${host} "${home}/${code}" "$@"
