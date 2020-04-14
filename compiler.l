@@ -504,7 +504,8 @@
     (if (target? 'js)
         (cat a "function " id args " {\n" body ind "}" tr)
         (target? 'py)
-        (cat a "def " id args ":\n" body)
+        (let ws (if (none? ind) "\n" "")
+          (cat a "def " id args ":\n" body ws))
       (cat p "function " id args "\n" body ind tr))))
 
 (define can-return? (form)
