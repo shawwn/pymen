@@ -143,21 +143,27 @@
       `(define-constant ,name (either (get-value ',name) ,x))
     `(define-constant ,name)))
 
-(mac after (x rest: body)
-  (let-unique (r)
-    `(with ,r nil
-       (%block try || (set ,r ,x))
-       (%block finally || (do ,@body)))))
+(define-macro after (x rest: body)
+  (let-unique (ok r)
+    `(target
+       lua: (let ((,ok ,r) (guard ,x))
+              ,@body
+              (if ,ok ,r (throw ,r)))
+        (with ,r nil
+           (%block try || (set ,r ,x))
+           (%block finally || (do ,@body))))))
 
 (define-macro with-frame body
-  (let-unique (x)
-    `(do (add environment (obj))
-         ,@(with forms ()
-             (each (k v) body
-               (unless (number? k)
-                 (add forms `(setenv ',k value: ,v)))))
-         (with ,x (do ,@body)
-           (drop environment)))))
+  `(do (add environment (obj))
+       (after (do ,@body)
+         (drop environment))))
+
+(define-macro with-values body
+  `(with-frame
+     ,@(with forms ()
+         (each (k v) body
+           (unless (number? k)
+             (add forms `(setenv ',k value: ,v)))))))
 
 (define-macro with-bindings ((names) rest: body)
   (let-unique (x)
@@ -198,16 +204,17 @@
       `(%call apply ,f ,@args)))
 
 (define-macro guard (expr)
-  (if (or (target? 'js) (target? 'py))
-      `((fn () (%try (list true ,expr))))
-    `(list (xpcall
-             (fn () ,expr)
-             (fn (m)
-               (if (obj? m) m
-                 (obj stack: ((idx debug traceback))
-                      message: (if (string? m) (clip m (+ (search m ": ") 2))
-                                   (nil? m) ""
-                                 (str m)))))))))
+  `(let-macro ((return args (error "Can't return from guard")))
+     (target lua:
+             (list (xpcall
+                     (fn () ,expr)
+                     (fn (m)
+                       (if (obj? m) m
+                           (obj stack: ((idx debug traceback))
+                                message: (if (string? m) (clip m (+ (search m ": ") 2))
+                                             (nil? m) ""
+                                             (str m)))))))
+             ((fn () (%try (list true ,expr)))))))
 
 (define-macro each (x t rest: body)
   (let-unique (o n i)

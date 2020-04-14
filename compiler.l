@@ -812,8 +812,12 @@
   (let (t (compile t)
         ind (indentation)
         body (compile-body form)
-        sep (if (some? t) " " ""))
-    (cat ind name sep t ":\n" body)))
+        sep (if (some? t) " " "")
+        lh (if (some? t) "(" "")
+        rh (if (some? t) ")" ""))
+    (if (target? 'py)
+        (cat ind name sep t ":\n" body)
+      (cat ind name sep lh t rh sep "{\n" body ind "}\n"))))
 
 (define-special %try (form) :stmt :tr
   (let (ind (indentation)

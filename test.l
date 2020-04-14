@@ -625,7 +625,8 @@ c"
     (test= '(false foo) (guard1 (do (error "foo") (error "baz"))))
     (test= '(false baz) (guard1 (do (guard1 (error "foo")) (error "baz"))))
     (test= '(true 42) (guard1 (if true 42 (error "baz"))))
-    (test= '(false baz) (guard1 (if false 42 (error "baz"))))))
+    (test= '(false baz) (guard1 (if false 42 (error "baz"))))
+    (test= false (hd (guard (expand '((fn () (guard (return 42))))))))))
 
 (define-test let
   (let a 10
