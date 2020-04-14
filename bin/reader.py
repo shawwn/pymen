@@ -1,9 +1,26 @@
 from lumen import *
-delimiters = {"(": True, ")": True, ";": True, ",": True, "\r": True, "\n": True}
+delimiters = {
+  "(": True,
+  ")": True,
+  ";": True,
+  ",": True,
+  "\r": True,
+  "\n": True
+}
 closing_delimiters = {")": True}
-whitespace = {" ": True, "\t": True, "\r": True, "\n": True}
+whitespace = {
+  " ": True,
+  "\t": True,
+  "\r": True,
+  "\n": True
+}
 def stream(L_str=None, more=None):
-  return {"pos": 0, "string": L_str, "len": L_35(L_str), "more": more}
+  return {
+    "pos": 0,
+    "string": L_str,
+    "len": L_35(L_str),
+    "more": more
+  }
 
 def peek_char(s=None):
   ____id = s

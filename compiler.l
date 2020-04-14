@@ -949,15 +949,19 @@
 
 (define-special %object forms
   (let (s "{" c ""
-        sep (if (target? 'lua) " = " ": "))
+        sep (if (target? 'lua) " = " ": ")
+        ind (with-indent (indentation))
+        pad (if (> (# forms) 2) (cat "\n" ind))
+        end (if (is? pad) (cat "\n" (indentation)) ""))
+    (cat! s (either pad ""))
     (each (k v) (pair forms)
       (when (number? k)
         (let ((k v) v)
           (unless (string? k)
             (error (cat "Illegal key: " (str k))))
-          (cat! s c (key k) sep (compile v))
-          (set c ", "))))
-    (cat s "}")))
+          (cat! s c (key k) sep (with-indent (compile v)))
+          (set c (cat "," (either pad " "))))))
+    (cat s end "}")))
 
 (define-special %list (form comps cond)
   (let s (compile form)
