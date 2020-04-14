@@ -2270,20 +2270,24 @@ function eval_self_form(form)
   if hd63(form, "%self") and _35(form) > 1 then
     return {"%set", "%self", form[2]}
   else
-    if list63(form) then
-      if accessor_literal63(hd(form)) then
-        return join({"%self"}, form)
-      else
-        return form
-      end
+    if hd63(form, "import") or hd63(form, "from") and has(form, 2) == "import" then
+      return {"%do", form, {"%set", "%self", last(form)}}
     else
-      if form == "." then
-        return "%self"
-      else
-        if accessor_literal63(form) then
-          return {"%self", form}
+      if list63(form) then
+        if accessor_literal63(hd(form)) then
+          return join({"%self"}, form)
         else
           return form
+        end
+      else
+        if form == "." then
+          return "%self"
+        else
+          if accessor_literal63(form) then
+            return {"%self", form}
+          else
+            return form
+          end
         end
       end
     end
@@ -2360,14 +2364,14 @@ function read_toplevel(str, more)
   else
     __e42 = nil
   end
-  local __x811 = __e42
-  if __x811 == more then
+  local __x813 = __e42
+  if __x813 == more then
     return more
   else
-    if one63(__x811) then
-      return hd(__x811)
+    if one63(__x813) then
+      return hd(__x813)
     else
-      return __x811
+      return __x813
     end
   end
 end
@@ -2511,10 +2515,10 @@ local function main(args)
         end
         __i49 = __i49 + 1
       end
-      local ____x815 = __pre
+      local ____x817 = __pre
       local ____i50 = 0
-      while ____i50 < _35(____x815) do
-        local __file = ____x815[____i50 + 1]
+      while ____i50 < _35(____x817) do
+        local __file = ____x817[____i50 + 1]
         run_file(__file)
         ____i50 = ____i50 + 1
       end

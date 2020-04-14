@@ -1915,19 +1915,22 @@ def eval_self_form(form=None):
   if hd63(form, "%self") and L_35(form) > 1:
     return ["%set", "%self", form[1]]
   else:
-    if list63(form):
-      if accessor_literal63(hd(form)):
-        return join(["%self"], form)
-      else:
-        return form
+    if hd63(form, "import") or hd63(form, "from") and has(form, 2) == "import":
+      return ["%do", form, ["%set", "%self", last(form)]]
     else:
-      if form == ".":
-        return "%self"
-      else:
-        if accessor_literal63(form):
-          return ["%self", form]
+      if list63(form):
+        if accessor_literal63(hd(form)):
+          return join(["%self"], form)
         else:
           return form
+      else:
+        if form == ".":
+          return "%self"
+        else:
+          if accessor_literal63(form):
+            return ["%self", form]
+          else:
+            return form
 
 def eval_print(form=None):
   __form6 = eval_self_form(form)
@@ -1965,14 +1968,14 @@ def read_toplevel(L_str=None, more=None):
     __e34 = __v36
   else:
     __e34 = None
-  __x730 = __e34
-  if __x730 == more:
+  __x732 = __e34
+  if __x732 == more:
     return more
   else:
-    if one63(__x730):
-      return hd(__x730)
+    if one63(__x732):
+      return hd(__x732)
     else:
-      return __x730
+      return __x732
 
 def rep(L_str=None):
   __v37 = eval(read_toplevel(L_str))
@@ -2079,10 +2082,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i51 = __i51 + 1
-      ____x733 = __pre
+      ____x735 = __pre
       ____i52 = 0
-      while ____i52 < L_35(____x733):
-        __file = ____x733[____i52]
+      while ____i52 < L_35(____x735):
+        __file = ____x735[____i52]
         run_file(__file)
         ____i52 = ____i52 + 1
       if nil63(__input):

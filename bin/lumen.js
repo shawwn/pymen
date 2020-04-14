@@ -2382,20 +2382,24 @@ eval_self_form = function (form) {
   if (hd63(form, "%self") && _35(form) > 1) {
     return ["%set", "%self", form[1]];
   } else {
-    if (list63(form)) {
-      if (accessor_literal63(hd(form))) {
-        return join(["%self"], form);
-      } else {
-        return form;
-      }
+    if (hd63(form, "import") || hd63(form, "from") && has(form, 2) === "import") {
+      return ["%do", form, ["%set", "%self", last(form)]];
     } else {
-      if (form === ".") {
-        return "%self";
-      } else {
-        if (accessor_literal63(form)) {
-          return ["%self", form];
+      if (list63(form)) {
+        if (accessor_literal63(hd(form))) {
+          return join(["%self"], form);
         } else {
           return form;
+        }
+      } else {
+        if (form === ".") {
+          return "%self";
+        } else {
+          if (accessor_literal63(form)) {
+            return ["%self", form];
+          } else {
+            return form;
+          }
         }
       }
     }
@@ -2440,14 +2444,14 @@ read_toplevel = function (str, more) {
   } else {
     __e52 = undefined;
   }
-  var __x720 = __e52;
-  if (__x720 === more) {
+  var __x722 = __e52;
+  if (__x722 === more) {
     return more;
   } else {
-    if (one63(__x720)) {
-      return hd(__x720);
+    if (one63(__x722)) {
+      return hd(__x722);
     } else {
-      return __x720;
+      return __x722;
     }
   }
 };
@@ -2586,10 +2590,10 @@ var main = function (args) {
         }
         __i49 = __i49 + 1;
       }
-      var ____x723 = __pre;
+      var ____x725 = __pre;
       var ____i50 = 0;
-      while (____i50 < _35(____x723)) {
-        var __file = ____x723[____i50];
+      while (____i50 < _35(____x725)) {
+        var __file = ____x725[____i50];
         run_file(__file);
         ____i50 = ____i50 + 1;
       }
