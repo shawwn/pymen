@@ -484,3 +484,5 @@
                 (error "Unknown try clause"))))
        ,fin)))
 
+(define-macro dbg ()
+  `(target py: (do (import pdb) ((idx pdb set-trace))) (do)))

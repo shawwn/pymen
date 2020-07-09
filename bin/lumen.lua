@@ -2180,6 +2180,14 @@ setenv("try", {
     return join({"%cases", {"try", __x781}}, __forms7, {__fin1})
   end
 })
+setenv("dbg", {
+  _stash = true,
+  macro = function ()
+    local ____x800 = object({"target", {"do"}})
+    ____x800.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
+    return ____x800
+  end
+})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
@@ -2231,22 +2239,22 @@ function simple_id63(x)
   else
     __e37 = nil
   end
-  local __r234 = __e37
-  if __r234 == x then
-    return __r234
+  local __r236 = __e37
+  if __r236 == x then
+    return __r236
   end
 end
 function get_indentation(s)
-  local __r236 = ""
+  local __r238 = ""
   local __i48 = 0
   while __i48 < _35(s) do
     local __c4 = char(s, __i48)
     if __c4 == " " then
-      __r236 = __r236 .. __c4
+      __r238 = __r238 .. __c4
     end
     __i48 = __i48 + 1
   end
-  return __r236
+  return __r238
 end
 function strip_outer(s, lh, rh)
   if string_starts63(s, lh) and string_ends63(s, rh) then
@@ -2364,14 +2372,14 @@ function read_toplevel(str, more)
   else
     __e42 = nil
   end
-  local __x813 = __e42
-  if __x813 == more then
+  local __x825 = __e42
+  if __x825 == more then
     return more
   else
-    if one63(__x813) then
-      return hd(__x813)
+    if one63(__x825) then
+      return hd(__x825)
     else
-      return __x813
+      return __x825
     end
   end
 end
@@ -2515,10 +2523,10 @@ local function main(args)
         end
         __i49 = __i49 + 1
       end
-      local ____x817 = __pre
+      local ____x829 = __pre
       local ____i50 = 0
-      while ____i50 < _35(____x817) do
-        local __file = ____x817[____i50 + 1]
+      while ____i50 < _35(____x829) do
+        local __file = ____x829[____i50 + 1]
         run_file(__file)
         ____i50 = ____i50 + 1
       end

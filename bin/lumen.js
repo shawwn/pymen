@@ -2308,6 +2308,14 @@ setenv("try", {
     return join(["%cases", ["try", __x692]], __forms7, [__fin1]);
   }
 });
+setenv("dbg", {
+  _stash: true,
+  macro: function () {
+    var ____x711 = object(["target", ["do"]]);
+    ____x711.py = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]];
+    return ____x711;
+  }
+});
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
@@ -2343,22 +2351,22 @@ simple_id63 = function (x) {
   } else {
     __e51 = undefined;
   }
-  var __r237 = __e51;
-  if (__r237 === x) {
-    return __r237;
+  var __r239 = __e51;
+  if (__r239 === x) {
+    return __r239;
   }
 };
 get_indentation = function (s) {
-  var __r239 = "";
+  var __r241 = "";
   var __i48 = 0;
   while (__i48 < _35(s)) {
     var __c4 = char(s, __i48);
     if (__c4 === " ") {
-      __r239 = __r239 + __c4;
+      __r241 = __r241 + __c4;
     }
     __i48 = __i48 + 1;
   }
-  return __r239;
+  return __r241;
 };
 strip_outer = function (s, lh, rh) {
   if (string_starts63(s, lh) && string_ends63(s, rh)) {
@@ -2444,14 +2452,14 @@ read_toplevel = function (str, more) {
   } else {
     __e52 = undefined;
   }
-  var __x722 = __e52;
-  if (__x722 === more) {
+  var __x734 = __e52;
+  if (__x734 === more) {
     return more;
   } else {
-    if (one63(__x722)) {
-      return hd(__x722);
+    if (one63(__x734)) {
+      return hd(__x734);
     } else {
-      return __x722;
+      return __x734;
     }
   }
 };
@@ -2590,10 +2598,10 @@ var main = function (args) {
         }
         __i49 = __i49 + 1;
       }
-      var ____x725 = __pre;
+      var ____x737 = __pre;
       var ____i50 = 0;
-      while (____i50 < _35(____x725)) {
-        var __file = ____x725[____i50];
+      while (____i50 < _35(____x737)) {
+        var __file = ____x737[____i50];
         run_file(__file);
         ____i50 = ____i50 + 1;
       }

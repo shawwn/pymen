@@ -1762,6 +1762,12 @@ def __f115(x=None, *_args, **_keys):
   return join(["%cases", ["try", __x695]], __forms7, [__fin1])
 
 setenv("try", macro=__f115)
+def __f116():
+  ____x714 = object(["target", ["do"]])
+  ____x714["py"] = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]]
+  return ____x714
+
+setenv("dbg", macro=__f116)
 import reader
 import compiler
 import system
@@ -1778,54 +1784,54 @@ def class63(x=None):
 
 from pprint import pprint as pp
 def entries(x=None):
-  __r238 = []
+  __r240 = []
   __mods = []
-  ____x708 = dir(x)
+  ____x720 = dir(x)
   ____i47 = 0
-  while ____i47 < L_35(____x708):
-    __k25 = ____x708[____i47]
+  while ____i47 < L_35(____x720):
+    __k25 = ____x720[____i47]
     if not( clip(__k25, 0, 2) == "__"):
       __v32 = getattr(x, __k25)
       if function63(__v32):
-        add(__r238, __k25)
+        add(__r240, __k25)
       else:
         if module63(__v32):
           add(__mods, cat(".", __k25))
         else:
-          add(__r238, [__k25, __v32])
+          add(__r240, [__k25, __v32])
     ____i47 = ____i47 + 1
-  ____x710 = __mods
+  ____x722 = __mods
   ____i48 = 0
-  while ____i48 < L_35(____x710):
-    __x711 = ____x710[____i48]
-    add(__r238, __x711)
+  while ____i48 < L_35(____x722):
+    __x723 = ____x722[____i48]
+    add(__r240, __x723)
     ____i48 = ____i48 + 1
-  return __r238
+  return __r240
 
 from io import StringIO
 def pp_to_string(x=None):
-  __r240 = StringIO()
-  pp(x, __r240)
-  return __r240.getvalue()
+  __r242 = StringIO()
+  pp(x, __r242)
+  return __r242.getvalue()
 
 def lines(x=None):
   return split(x, "\n")
 
-def __f116(x=None, L_else=None):
+def __f117(x=None, L_else=None):
   if nil63(L_else):
     L_else = "nil"
   return ["let", [["ok", "v"], ["guard", x]], ["if", "ok", "v", L_else]]
 
-setenv("errsafe", macro=__f116)
+setenv("errsafe", macro=__f117)
 def simple_id63(x=None):
-  def __f117():
+  def __f118():
     try:
       return [True, reader.read_string(x)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id117 = __f117()
+  ____id117 = __f118()
   __ok6 = has(____id117, 0)
   __v33 = has(____id117, 1)
   __e32 = None
@@ -1833,19 +1839,19 @@ def simple_id63(x=None):
     __e32 = __v33
   else:
     __e32 = None
-  __r245 = __e32
-  if __r245 == x:
-    return __r245
+  __r247 = __e32
+  if __r247 == x:
+    return __r247
 
 def get_indentation(s=None):
-  __r247 = ""
+  __r249 = ""
   __i49 = 0
   while __i49 < L_35(s):
     __c4 = char(s, __i49)
     if __c4 == " ":
-      __r247 = cat(__r247, __c4)
+      __r249 = cat(__r249, __c4)
     __i49 = __i49 + 1
-  return __r247
+  return __r249
 
 def strip_outer(s=None, lh=None, rh=None):
   if string_starts63(s, lh) and string_ends63(s, rh):
@@ -1862,18 +1868,18 @@ def pp_toplevel(x=None):
     s = s.rstrip()
     s = strip_outer(s, "[", "]")
     s = cat(" ", s)
-    ____x723 = lines(s)
+    ____x735 = lines(s)
     ____i50 = 0
-    while ____i50 < L_35(____x723):
-      __x724 = ____x723[____i50]
-      __ind = get_indentation(__x724)
-      __x724 = __x724.rstrip(",")
-      __id118 = simple_id63(strip_outer(__x724.strip(), "'", "'"))
+    while ____i50 < L_35(____x735):
+      __x736 = ____x735[____i50]
+      __ind = get_indentation(__x736)
+      __x736 = __x736.rstrip(",")
+      __id118 = simple_id63(strip_outer(__x736.strip(), "'", "'"))
       __e33 = None
       if __id118:
         __e33 = cat(__ind, __id118)
       else:
-        __e33 = __x724
+        __e33 = __x736
       L_print(__e33)
       ____i50 = ____i50 + 1
     return L_print(repr(x))
@@ -1881,14 +1887,14 @@ def pp_toplevel(x=None):
     return pp(x)
 
 def docstring(x=None):
-  def __f118():
+  def __f119():
     try:
       return [True, x.__doc__]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id119 = __f118()
+  ____id119 = __f119()
   __ok7 = has(____id119, 0)
   __v34 = has(____id119, 1)
   if __ok7:
@@ -1934,14 +1940,14 @@ def eval_self_form(form=None):
 
 def eval_print(form=None):
   __form6 = eval_self_form(form)
-  def __f119():
+  def __f120():
     try:
       return [True, compiler.eval(__form6)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id120 = __f119()
+  ____id120 = __f120()
   __ok8 = has(____id120, 0)
   __v35 = has(____id120, 1)
   __ex = has(____id120, 2)
@@ -1953,14 +1959,14 @@ def eval_print(form=None):
 
 def read_toplevel(L_str=None, more=None):
   __s3 = reader.stream(L_str, more)
-  def __f120():
+  def __f121():
     try:
       return [True, reader.read_all(__s3)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id1211 = __f120()
+  ____id1211 = __f121()
   __ok9 = has(____id1211, 0)
   __v36 = has(____id1211, 1)
   __e34 = None
@@ -1968,14 +1974,14 @@ def read_toplevel(L_str=None, more=None):
     __e34 = __v36
   else:
     __e34 = None
-  __x732 = __e34
-  if __x732 == more:
+  __x744 = __e34
+  if __x744 == more:
     return more
   else:
-    if one63(__x732):
-      return hd(__x732)
+    if one63(__x744):
+      return hd(__x744)
     else:
-      return __x732
+      return __x744
 
 def rep(L_str=None):
   __v37 = eval(read_toplevel(L_str))
@@ -2082,10 +2088,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i51 = __i51 + 1
-      ____x735 = __pre
+      ____x747 = __pre
       ____i52 = 0
-      while ____i52 < L_35(____x735):
-        __file = ____x735[____i52]
+      while ____i52 < L_35(____x747):
+        __file = ____x747[____i52]
         run_file(__file)
         ____i52 = ____i52 + 1
       if nil63(__input):
