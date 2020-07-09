@@ -30,6 +30,11 @@
 (define read-table (obj))
 (define eof (obj))
 
+(define eof? (s x)
+  (or (= x eof)
+      (and (is? (get s 'more))
+           (= x (get s 'more)))))
+
 (define read-1 (s)
   (skip-non-code s)
   (let c (peek-char s)
@@ -46,7 +51,7 @@
           (while true
             (read-char s)
             (set form (read-1 s))
-            (if (= form eof) (return (expected s "tuple")))
+            (if (eof? s form) (return (expected s "tuple")))
             (add r form)
             (unless (= "," (peek-char s))
               (break))))
@@ -56,12 +61,13 @@
   (with l ()
     (while true
       (let form (read s)
-        (if (= form eof) (break))
+        (if (eof? s form) (break))
         (add l form)))))
 
 (define-global read-string (str more)
-  (let x (read (stream str more))
-    (unless (= x eof) x)))
+  (let s (stream str more)
+    (let x (read s)
+      (unless (= x eof) x))))
 
 (define key? (atom)
   (and (string? atom)

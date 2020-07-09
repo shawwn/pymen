@@ -60,6 +60,9 @@ local function skip_non_code(s)
 end
 local read_table = {}
 local eof = {}
+local function eof63(s, x)
+  return x == eof or is63(s.more) and x == s.more
+end
 local function read_1(s)
   skip_non_code(s)
   local __c2 = peek_char(s)
@@ -72,19 +75,19 @@ end
 local function read(s)
   local __form = read_1(s)
   if "," == peek_char(s) then
-    local __r6 = {",", __form}
+    local __r7 = {",", __form}
     while true do
       read_char(s)
       __form = read_1(s)
-      if __form == eof then
+      if eof63(s, __form) then
         return expected(s, "tuple")
       end
-      add(__r6, __form)
+      add(__r7, __form)
       if not( "," == peek_char(s)) then
         break
       end
     end
-    return __r6
+    return __r7
   else
     return __form
   end
@@ -93,7 +96,7 @@ local function read_all(s)
   local __l = {}
   while true do
     local __form1 = read(s)
-    if __form1 == eof then
+    if eof63(s, __form1) then
       break
     end
     add(__l, __form1)
@@ -101,7 +104,8 @@ local function read_all(s)
   return __l
 end
 function read_string(str, more)
-  local __x1 = read(stream(str, more))
+  local __s = stream(str, more)
+  local __x1 = read(__s)
   if not( __x1 == eof) then
     return __x1
   end
@@ -185,17 +189,17 @@ read_table[""] = function (s)
 end
 read_table["("] = function (s)
   read_char(s)
-  local __r18 = nil
+  local __r19 = nil
   local __l1 = {}
-  while nil63(__r18) do
+  while nil63(__r19) do
     skip_non_code(s)
     local __c4 = peek_char(s)
     if __c4 == ")" then
       read_char(s)
-      __r18 = __l1
+      __r19 = __l1
     else
       if nil63(__c4) then
-        __r18 = expected(s, ")")
+        __r19 = expected(s, ")")
       else
         local __x3 = read(s)
         if key63(__x3) then
@@ -214,13 +218,13 @@ read_table["("] = function (s)
       end
     end
   end
-  return __r18
+  return __r19
 end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end
 local function read_matching(opener, closer, s)
-  local __r21 = nil
+  local __r22 = nil
   local __pos1 = s.pos
   local __str1 = ""
   local __i1 = 0
@@ -229,17 +233,17 @@ local function read_matching(opener, closer, s)
     __i1 = __i1 + 1
   end
   if __str1 == opener then
-    while nil63(__r21) do
+    while nil63(__r22) do
       if clip(s.string, s.pos, s.pos + _35(closer)) == closer then
         local __i2 = 0
         while __i2 < _35(closer) do
           __str1 = __str1 .. read_char(s)
           __i2 = __i2 + 1
         end
-        __r21 = __str1
+        __r22 = __str1
       else
         if nil63(peek_char(s)) then
-          __r21 = expected(s, closer)
+          __r22 = expected(s, closer)
         else
           __str1 = __str1 .. read_char(s)
           if peek_char(s) == "\\" then
@@ -249,7 +253,7 @@ local function read_matching(opener, closer, s)
       end
     end
   end
-  return __r21
+  return __r22
 end
 read_table["\""] = function (s)
   if string_starts63(s.string, "\"\"\"", s.pos) then
@@ -262,16 +266,16 @@ read_table["\""] = function (s)
       s.pos = __j + 1
       return clip(s.string, __i3, __j + 1)
     else
-      local __r23 = nil
+      local __r24 = nil
       read_char(s)
-      while nil63(__r23) do
+      while nil63(__r24) do
         local __c5 = peek_char(s)
         if __c5 == "\"" then
           read_char(s)
-          __r23 = clip(s.string, __i3, s.pos)
+          __r24 = clip(s.string, __i3, s.pos)
         else
           if nil63(__c5) then
-            __r23 = expected(s, "\"")
+            __r24 = expected(s, "\"")
           else
             if __c5 == "\\" then
               read_char(s)
@@ -280,7 +284,7 @@ read_table["\""] = function (s)
           end
         end
       end
-      return __r23
+      return __r24
     end
   end
 end
