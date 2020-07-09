@@ -58,6 +58,15 @@ local function write(x)
 end
 local function flush(x)
 end
+local function remove_newline(s)
+  if char(s, edge(s)) == "\n" then
+    s = clip(s, 0, edge(s))
+  end
+  if char(s, edge(s)) == "\r" then
+    s = clip(s, 0, edge(s))
+  end
+  return s
+end
 local function read_line()
   return io.read()
 end

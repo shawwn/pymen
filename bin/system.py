@@ -38,8 +38,15 @@ def write(x=None):
 def flush(x=None):
   return sys.stdout.flush()
 
+def remove_newline(s=None):
+  if char(s, edge(s)) == "\n":
+    s = clip(s, 0, edge(s))
+  if char(s, edge(s)) == "\r":
+    s = clip(s, 0, edge(s))
+  return s
+
 def read_line():
-  return sys.stdin.readline()
+  return remove_newline(sys.stdin.readline())
 
 def exit(code=None):
   pass

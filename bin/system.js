@@ -28,6 +28,15 @@ var write = function (x) {
 };
 var flush = function (x) {
 };
+var remove_newline = function (s) {
+  if (char(s, edge(s)) === "\n") {
+    s = clip(s, 0, edge(s));
+  }
+  if (char(s, edge(s)) === "\r") {
+    s = clip(s, 0, edge(s));
+  }
+  return s;
+};
 var read_line = function () {
 };
 var exit = function (code) {

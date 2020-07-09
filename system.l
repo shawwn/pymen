@@ -72,9 +72,14 @@
 (define flush (x)
   (target py: ((idx (idx sys stdout) flush))))
 
+(define remove-newline (s)
+  (if (= (char s (edge s)) "\n") (set s (clip s 0 (edge s))))
+  (if (= (char s (edge s)) "\r") (set s (clip s 0 (edge s))))
+  s)
+
 (define read-line ()
   (target lua: ((idx io read))
-          py: ((idx (idx sys stdin) readline))))
+          py: (remove-newline ((idx (idx sys stdin) readline)))))
 
 (define exit (code)
   (target js: ((idx process exit) code)
