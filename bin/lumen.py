@@ -1912,25 +1912,25 @@ def accessor_literal63(form=None):
   return string63(form) and (not string_literal63(form) and (not id_literal63(form) and (char(form, 0) == "." and (not( clip(form, 0, 2) == "..") and L_35(form) > 1))))
 
 def eval_self_form(form=None):
-  if hd63(form, "%self") and L_35(form) > 1:
-    return ["%set", "%self", form[1]]
+  if form == ".":
+    return "%self"
   else:
-    if hd63(form, "import") or hd63(form, "from") and has(form, 2) == "import":
-      return ["%do", form, ["%set", "%self", last(form)]]
+    if accessor_literal63(form):
+      return ["%self", form]
     else:
-      if list63(form):
-        if accessor_literal63(hd(form)):
-          return join(["%self"], form)
-        else:
-          return form
+      if not list63(form):
+        return form
       else:
-        if form == ".":
-          return "%self"
+        if hd63(form, "%self") and L_35(form) > 1:
+          return ["%set", "%self", form[1]]
         else:
-          if accessor_literal63(form):
-            return ["%self", form]
+          if hd63(form, "import") or hd63(form, "from") and has(form, 2) == "import":
+            return ["%do", form, ["%set", "%self", last(form)]]
           else:
-            return form
+            if accessor_literal63(hd(form)):
+              return join(["%self"], form)
+            else:
+              return form
 
 def eval_print(form=None):
   __form6 = eval_self_form(form)

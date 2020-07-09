@@ -107,22 +107,22 @@
        (> (# form) 1)))
 
 (define-global eval-self-form (form)
-  (if (and (hd? form '%self)
+  (if (= form ".")
+      `%self
+      (accessor-literal? form)
+      `(%self ,form)
+      (not (list? form))
+      form
+      (and (hd? form '%self)
            (> (# form) 1))
       `(%set %self ,(at form 1))
       (or (hd? form 'import)
           (and (hd? form 'from)
                (= (has form 2) 'import)))
       `(%do ,form (%set %self ,(last form)))
-      (list? form)
-      (if (accessor-literal? (hd form))
-          `(%self ,@form)
-        form)
-      (= form ".")
-      `%self
-      (accessor-literal? form)
-      `(%self ,form)
-    form))
+    (if (accessor-literal? (hd form))
+        `(%self ,@form)
+      form)))
 
 (define-global eval-print (form)
   (let (form (eval-self-form form)

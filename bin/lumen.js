@@ -2379,26 +2379,26 @@ var accessor_literal63 = function (form) {
   return string63(form) && (! string_literal63(form) && (! id_literal63(form) && (char(form, 0) === "." && (!( clip(form, 0, 2) === "..") && _35(form) > 1))));
 };
 eval_self_form = function (form) {
-  if (hd63(form, "%self") && _35(form) > 1) {
-    return ["%set", "%self", form[1]];
+  if (form === ".") {
+    return "%self";
   } else {
-    if (hd63(form, "import") || hd63(form, "from") && has(form, 2) === "import") {
-      return ["%do", form, ["%set", "%self", last(form)]];
+    if (accessor_literal63(form)) {
+      return ["%self", form];
     } else {
-      if (list63(form)) {
-        if (accessor_literal63(hd(form))) {
-          return join(["%self"], form);
-        } else {
-          return form;
-        }
+      if (! list63(form)) {
+        return form;
       } else {
-        if (form === ".") {
-          return "%self";
+        if (hd63(form, "%self") && _35(form) > 1) {
+          return ["%set", "%self", form[1]];
         } else {
-          if (accessor_literal63(form)) {
-            return ["%self", form];
+          if (hd63(form, "import") || hd63(form, "from") && has(form, 2) === "import") {
+            return ["%do", form, ["%set", "%self", last(form)]];
           } else {
-            return form;
+            if (accessor_literal63(hd(form))) {
+              return join(["%self"], form);
+            } else {
+              return form;
+            }
           }
         }
       }

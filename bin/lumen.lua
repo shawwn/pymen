@@ -2267,26 +2267,26 @@ local function accessor_literal63(form)
   return string63(form) and (not string_literal63(form) and (not id_literal63(form) and (char(form, 0) == "." and (not( clip(form, 0, 2) == "..") and _35(form) > 1))))
 end
 function eval_self_form(form)
-  if hd63(form, "%self") and _35(form) > 1 then
-    return {"%set", "%self", form[2]}
+  if form == "." then
+    return "%self"
   else
-    if hd63(form, "import") or hd63(form, "from") and has(form, 2) == "import" then
-      return {"%do", form, {"%set", "%self", last(form)}}
+    if accessor_literal63(form) then
+      return {"%self", form}
     else
-      if list63(form) then
-        if accessor_literal63(hd(form)) then
-          return join({"%self"}, form)
-        else
-          return form
-        end
+      if not list63(form) then
+        return form
       else
-        if form == "." then
-          return "%self"
+        if hd63(form, "%self") and _35(form) > 1 then
+          return {"%set", "%self", form[2]}
         else
-          if accessor_literal63(form) then
-            return {"%self", form}
+          if hd63(form, "import") or hd63(form, "from") and has(form, 2) == "import" then
+            return {"%do", form, {"%set", "%self", last(form)}}
           else
-            return form
+            if accessor_literal63(hd(form)) then
+              return join({"%self"}, form)
+            else
+              return form
+            end
           end
         end
       end
