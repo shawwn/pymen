@@ -41,11 +41,11 @@ def variable63(k=None):
 def bound63(x=None):
   return macro63(x) or (special63(x) or (symbol63(x) or variable63(x)))
 
-def flag63(atom=None):
+def keyword63(atom=None):
   return string63(atom) and (L_35(atom) > 1 and char(atom, 0) == ":")
 
 def quoted(form=None):
-  if flag63(form):
+  if keyword63(form):
     return form
   else:
     if string63(form):
@@ -527,12 +527,12 @@ def reserved63(x=None):
 def valid_code63(n=None):
   return number_code63(n) or (n > 64 and n < 91 or (n > 96 and n < 123 or n == 95))
 
-def compile_flag(x=None):
+def compile_keyword(x=None):
   return escape(x)
 
 def compile_id(id=None, raw63=None):
-  if flag63(id):
-    return compile_flag(id)
+  if keyword63(id):
+    return compile_keyword(id)
   else:
     if code(id, 0) == 46:
       return cat(".", compile_id(clip(id, 1), True))

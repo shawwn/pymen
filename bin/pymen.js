@@ -2808,11 +2808,11 @@ var variable63 = function (k) {
 bound63 = function (x) {
   return macro63(x) || (special63(x) || (symbol63(x) || variable63(x)));
 };
-flag63 = function (atom) {
+keyword63 = function (atom) {
   return string63(atom) && (_35(atom) > 1 && char(atom, 0) === ":");
 };
 quoted = function (form) {
-  if (flag63(form)) {
+  if (keyword63(form)) {
     return form;
   } else {
     if (string63(form)) {
@@ -3438,12 +3438,12 @@ reserved63 = function (x) {
 var valid_code63 = function (n) {
   return number_code63(n) || (n > 64 && n < 91 || (n > 96 && n < 123 || n === 95));
 };
-var compile_flag = function (x) {
+var compile_keyword = function (x) {
   return escape(x);
 };
 compile_id = function (id, raw63) {
-  if (flag63(id)) {
-    return compile_flag(id);
+  if (keyword63(id)) {
+    return compile_keyword(id);
   } else {
     if (code(id, 0) === 46) {
       return "." + compile_id(clip(id, 1), true);

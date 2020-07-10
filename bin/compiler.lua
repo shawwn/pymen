@@ -44,11 +44,11 @@ end
 function bound63(x)
   return macro63(x) or (special63(x) or (symbol63(x) or variable63(x)))
 end
-function flag63(atom)
+function keyword63(atom)
   return string63(atom) and (_35(atom) > 1 and char(atom, 0) == ":")
 end
 function quoted(form)
-  if flag63(form) then
+  if keyword63(form) then
     return form
   else
     if string63(form) then
@@ -674,12 +674,12 @@ end
 local function valid_code63(n)
   return number_code63(n) or (n > 64 and n < 91 or (n > 96 and n < 123 or n == 95))
 end
-local function compile_flag(x)
+local function compile_keyword(x)
   return escape(x)
 end
 function compile_id(id, raw63)
-  if flag63(id) then
-    return compile_flag(id)
+  if keyword63(id) then
+    return compile_keyword(id)
   else
     if code(id, 0) == 46 then
       return "." .. compile_id(clip(id, 1), true)
