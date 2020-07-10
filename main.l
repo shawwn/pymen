@@ -39,10 +39,6 @@
 (define-global lines (x)
   (split x "\n"))
 
-(define-macro errsafe (x (o else 'nil))
-  `(let ((ok v) (guard ,x))
-     (if ok v ,else)))
-
 (define-global simple-id? (x)
   (let r (errsafe ((idx reader read-string) x))
     (when (= r x) r)))
