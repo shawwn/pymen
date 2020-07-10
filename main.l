@@ -11,9 +11,31 @@
 (target py: (import inspect))
 (target py: (define-global class? (x) ((idx inspect isclass) x)))
 
+(define-global disp (str)
+  ((idx system write) str)
+  ((idx system flush)))
+
 (target py: (from pprint import pprint as pp)
   (define-global pp (x)
-    (print (str x))))
+    (if (and (list? x) (> (# x) 1))
+        (let (c "  " nl nil)
+          (print "(")
+          (step v x
+            (if nl (print "")) (disp c)
+            (set nl true) (set c "  ")
+            (print (str v)))
+          (print ")"))
+      (print (str x)))))
+
+(target js:
+  (define-global dir (x)
+    ((idx Object getOwnPropertyNames) x)))
+
+(target lua:
+  (define-global dir (x)
+    (with r ()
+      (each (k v) x
+        (add r k)))))
 
 (target py:
   (define-global entries (x)
@@ -39,10 +61,6 @@
 (define-global lines (x)
   (split x "\n"))
 
-(define-global simple-id? (x)
-  (let r (errsafe ((idx reader read-string) x))
-    (when (= r x) r)))
-
 (define-global get-indentation (s)
   (with r ""
     (for i (# s)
@@ -57,21 +75,29 @@
     s))
 
 (target py:
-  (define-global pp-toplevel (x)
+  (define-global pp-obj (x)
+    (set s (pp-to-string (entries x))
+         s (s.rstrip)
+         s (strip-outer s "[" "]")
+         s (cat " " s))
+    (step x (lines s)
+      (let ind (get-indentation x)
+        (set x (x.rstrip ","))
+        (let id (simple-id? (strip-outer (x (.strip)) "'" "'"))
+          (print (if id (cat ind id) x)))))
+    (print (repr x))))
+
+(target py:
+  (define-global pp-doc (x)
     (let doc (docstring x)
       (when doc
-        (print (cat "\n\"\"\"\n" (doc.strip) "\n\"\"\""))))
+        (print (cat "\n\"\"\"\n" (doc.strip) "\n\"\"\""))))))
+
+(target py:
+  (define-global pp-toplevel (x)
+    (pp-doc x)
     (if (or (module? x) (class? x))
-        (do (set s (pp-to-string (entries x))
-                 s (s.rstrip)
-                 s (strip-outer s "[" "]")
-                 s (cat " " s))
-            (step x (lines s)
-              (let ind (get-indentation x)
-                (set x (x.rstrip ","))
-                (let id (simple-id? (strip-outer (x (.strip)) "'" "'"))
-                  (print (if id (cat ind id) x)))))
-            (print (repr x)))
+        (pp-obj x)
       (pp x))))
 
 (target py:
@@ -144,8 +170,7 @@
   (define o (obj buf: ""))
   (define reset ()
     (set (get o 'buf) "")
-    ((idx system write) "> ")
-    ((idx system flush)))
+    (disp "> "))
   (define ctrl-c ()
     (target py: ((idx traceback print-exc))
       (print ""))
@@ -168,8 +193,11 @@
         (unless (= s ctrl-c)
           (if (is? s) (rep1 (cat s "\n")) (break)))))))
 
+(define-global read-file (path)
+  ((idx system read-file) path))
+
 (define-global read-from-file (path)
-  (let s ((idx reader stream) ((idx system read-file) path))
+  (let s ((idx reader stream) (read-file path))
     ((idx reader read-all) s)))
 
 (define-global expand-file (path)

@@ -458,12 +458,17 @@
           (cat! s1 c1)))
       (cat s1 "\""))))
 
+(define-global simple-id? (x)
+  (let r (errsafe (read-string x))
+    (when (= r x) r)))
+
 (define-global str (x repr stack)
   (if (nil? x) "nil"
       (nan? x) "nan"
       (= x inf) "inf"
       (= x -inf) "-inf"
       (boolean? x) (if x "true" "false")
+      (simple-id? x) x
       (string? x) (escape x)
       (atom? x) (tostring x)
       (function? x) "function"
@@ -482,14 +487,16 @@
           (do (target lua:
                 (unless (string? k)
                   (set k (str k repr l))))
-              (add ks (list (cat k ":") (str v repr l))))))
+              (if (function? v)
+                  (add ks (list (cat "." k) ""))
+                (add ks (list (cat k ": ") (str v repr l)))))))
       (sort ks (fn ((a) (b)) (< a b)))
       (drop l)
       (step v xs
         (cat! s sp v)
         (set sp " "))
       (step (k v) ks
-        (cat! s sp k " " v)
+        (cat! s sp k v)
         (set sp " "))
       (cat s ")"))))
 
