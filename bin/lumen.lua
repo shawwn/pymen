@@ -1033,23 +1033,33 @@ setenv("case", {
     return {"let", __x86, __expr5, join({"if"}, apply(join, map(__cl1, pair(__clauses1))))}
   end
 })
+setenv("of", {
+  _stash = true,
+  macro = function (x, ...)
+    local ____r108 = unstash({...})
+    local __x100 = destash33(x, ____r108)
+    local ____id18 = ____r108
+    local __values1 = cut(____id18, 0)
+    return join({"case", __x100, __values1, true, false}, props(__values1))
+  end
+})
 setenv("when", {
   _stash = true,
   macro = function (cond, ...)
-    local ____r108 = unstash({...})
-    local __cond3 = destash33(cond, ____r108)
-    local ____id18 = ____r108
-    local __body5 = cut(____id18, 0)
+    local ____r110 = unstash({...})
+    local __cond3 = destash33(cond, ____r110)
+    local ____id20 = ____r110
+    local __body5 = cut(____id20, 0)
     return {"%if", __cond3, join({"%do"}, __body5)}
   end
 })
 setenv("unless", {
   _stash = true,
   macro = function (cond, ...)
-    local ____r110 = unstash({...})
-    local __cond5 = destash33(cond, ____r110)
-    local ____id20 = ____r110
-    local __body7 = cut(____id20, 0)
+    local ____r112 = unstash({...})
+    local __cond5 = destash33(cond, ____r112)
+    local ____id22 = ____r112
+    local __body7 = cut(____id22, 0)
     return {"%if", {"%not", __cond5}, join({"%do"}, __body7)}
   end
 })
@@ -1058,33 +1068,33 @@ setenv("obj", {
   macro = function (...)
     local __body10 = unstash({...})
     if _35(__body10) > 2 and (__body10[2] == "for" and __body10[4] == "in") then
-      local ____id24 = __body10
-      local __expr8 = has(____id24, 1)
-      local __body111 = cut(____id24, 1)
+      local ____id26 = __body10
+      local __expr8 = has(____id26, 1)
+      local __body111 = cut(____id26, 1)
       local __comps3 = {}
       local __cond7 = nil
       while _35(__body111) > 2 and (__body111[1] == "for" and __body111[3] == "in") do
-        local ____id25 = __body111
-        local ___for3 = has(____id25, 1)
-        local __names3 = has(____id25, 2)
-        local ___in3 = has(____id25, 3)
-        local __l121 = has(____id25, 4)
-        local __body14 = cut(____id25, 4)
+        local ____id27 = __body111
+        local ___for3 = has(____id27, 1)
+        local __names3 = has(____id27, 2)
+        local ___in3 = has(____id27, 3)
+        local __l121 = has(____id27, 4)
+        local __body14 = cut(____id27, 4)
         add(__comps3, {__names3, __l121})
         __body111 = __body14
       end
       if hd(__body111) == "if" then
-        local ____id26 = __body111
-        local ___if3 = has(____id26, 1)
-        local __expr9 = has(____id26, 2)
+        local ____id28 = __body111
+        local ___if3 = has(____id28, 1)
+        local __expr9 = has(____id28, 2)
         __cond7 = __expr9
       end
       if list63(__expr8) and hd63(__expr8, ",") then
         __expr8 = join({":"}, tl(__expr8))
       end
-      local ____x116 = object({"%list", __expr8, __comps3, __cond7})
-      ____x116.kind = "object"
-      return ____x116
+      local ____x121 = object({"%list", __expr8, __comps3, __cond7})
+      ____x121.kind = "object"
+      return ____x121
     else
       return join({"%object"}, mapo(function (x)
         return x
@@ -1095,31 +1105,31 @@ setenv("obj", {
 setenv("let", {
   _stash = true,
   macro = function (bs, ...)
-    local ____r114 = unstash({...})
-    local __bs11 = destash33(bs, ____r114)
-    local ____id31 = ____r114
-    local __body131 = cut(____id31, 0)
+    local ____r116 = unstash({...})
+    local __bs11 = destash33(bs, ____r116)
+    local ____id33 = ____r116
+    local __body131 = cut(____id33, 0)
     if atom63(__bs11) or hd63(__bs11, ",") then
       return join({"let", {__bs11, hd(__body131)}}, tl(__body131))
     else
       if none63(__bs11) then
         return join({"%do"}, __body131)
       else
-        local ____id32 = __bs11
-        local __lh3 = has(____id32, 1)
-        local __rh3 = has(____id32, 2)
-        local __bs21 = cut(____id32, 2)
-        local ____id33 = bind(__lh3, __rh3)
-        local __id34 = has(____id33, 1)
-        local __val1 = has(____id33, 2)
-        local __bs12 = cut(____id33, 2)
+        local ____id34 = __bs11
+        local __lh3 = has(____id34, 1)
+        local __rh3 = has(____id34, 2)
+        local __bs21 = cut(____id34, 2)
+        local ____id35 = bind(__lh3, __rh3)
+        local __id36 = has(____id35, 1)
+        local __val1 = has(____id35, 2)
+        local __bs12 = cut(____id35, 2)
         local __renames1 = {}
-        if not id_literal63(__id34) then
-          local __id121 = unique(__id34)
-          __renames1 = {__id34, __id121}
-          __id34 = __id121
+        if not id_literal63(__id36) then
+          local __id121 = unique(__id36)
+          __renames1 = {__id36, __id121}
+          __id36 = __id121
         end
-        return {"%do", {"%local", __id34, __val1}, {"let-symbol", __renames1, join({"let", join(__bs12, __bs21)}, __body131)}}
+        return {"%do", {"%local", __id36, __val1}, {"let-symbol", __renames1, join({"let", join(__bs12, __bs21)}, __body131)}}
       end
     end
   end
@@ -1127,18 +1137,18 @@ setenv("let", {
 setenv("with", {
   _stash = true,
   macro = function (x, v, ...)
-    local ____r116 = unstash({...})
-    local __x143 = destash33(x, ____r116)
-    local __v23 = destash33(v, ____r116)
-    local ____id36 = ____r116
-    local __body15 = cut(____id36, 0)
+    local ____r118 = unstash({...})
+    local __x148 = destash33(x, ____r118)
+    local __v23 = destash33(v, ____r118)
+    local ____id38 = ____r118
+    local __body15 = cut(____id38, 0)
     if __v23 == "as" then
-      return join({"%with", {"%as", __x143, hd(__body15)}}, tl(__body15))
+      return join({"%with", {"%as", __x148, hd(__body15)}}, tl(__body15))
     else
-      if not atom63(__x143) or has(__body15, "async") then
-        return join({"%with", __x143, __v23}, __body15)
+      if not atom63(__x148) or has(__body15, "async") then
+        return join({"%with", __x148, __v23}, __body15)
       else
-        return join({"let", {__x143, __v23}}, __body15, {__x143})
+        return join({"let", {__x148, __v23}}, __body15, {__x148})
       end
     end
   end
@@ -1146,26 +1156,26 @@ setenv("with", {
 setenv("let-when", {
   _stash = true,
   macro = function (x, v, ...)
-    local ____r118 = unstash({...})
-    local __x157 = destash33(x, ____r118)
-    local __v25 = destash33(v, ____r118)
-    local ____id38 = ____r118
-    local __body17 = cut(____id38, 0)
+    local ____r120 = unstash({...})
+    local __x162 = destash33(x, ____r120)
+    local __v25 = destash33(v, ____r120)
+    local ____id40 = ____r120
+    local __body17 = cut(____id40, 0)
     local __y6 = unique("y")
-    return {"let", __y6, __v25, {"when", {"yes", __y6}, join({"let", {__x157, __y6}}, __body17)}}
+    return {"let", __y6, __v25, {"when", {"yes", __y6}, join({"let", {__x162, __y6}}, __body17)}}
   end
 })
 setenv("define-macro", {
   _stash = true,
   macro = function (name, args, ...)
-    local ____r120 = unstash({...})
-    local __name1 = destash33(name, ____r120)
-    local __args5 = destash33(args, ____r120)
-    local ____id40 = ____r120
-    local __body19 = cut(____id40, 0)
-    local ____x167 = object({"setenv", {"quote", __name1}})
-    ____x167.macro = join({"fn", __args5}, __body19)
-    local __form1 = ____x167
+    local ____r122 = unstash({...})
+    local __name1 = destash33(name, ____r122)
+    local __args5 = destash33(args, ____r122)
+    local ____id42 = ____r122
+    local __body19 = cut(____id42, 0)
+    local ____x172 = object({"setenv", {"quote", __name1}})
+    ____x172.macro = join({"fn", __args5}, __body19)
+    local __form1 = ____x172
     eval(__form1)
     return __form1
   end
@@ -1173,14 +1183,14 @@ setenv("define-macro", {
 setenv("define-special", {
   _stash = true,
   macro = function (name, args, ...)
-    local ____r122 = unstash({...})
-    local __name3 = destash33(name, ____r122)
-    local __args7 = destash33(args, ____r122)
-    local ____id42 = ____r122
-    local __body21 = cut(____id42, 0)
-    local ____x174 = object({"setenv", {"quote", __name3}})
-    ____x174.special = join({"fn", __args7}, __body21)
-    local __form3 = join(____x174, props(__body21))
+    local ____r124 = unstash({...})
+    local __name3 = destash33(name, ____r124)
+    local __args7 = destash33(args, ____r124)
+    local ____id44 = ____r124
+    local __body21 = cut(____id44, 0)
+    local ____x179 = object({"setenv", {"quote", __name3}})
+    ____x179.special = join({"fn", __args7}, __body21)
+    local __form3 = join(____x179, props(__body21))
     eval(__form3)
     return __form3
   end
@@ -1192,78 +1202,78 @@ setenv("define-symbol", {
       _stash = true,
       symbol = expansion
     })
-    local ____x180 = object({"setenv", {"quote", name}})
-    ____x180.symbol = {"quote", expansion}
-    return ____x180
+    local ____x185 = object({"setenv", {"quote", name}})
+    ____x185.symbol = {"quote", expansion}
+    return ____x185
   end
 })
 setenv("define-reader", {
   _stash = true,
-  macro = function (__x188, ...)
-    local ____r126 = unstash({...})
-    local ____x188 = destash33(__x188, ____r126)
-    local ____id45 = ____x188
-    local __char1 = has(____id45, 1)
-    local __s2 = has(____id45, 2)
-    local ____id46 = ____r126
-    local __body23 = cut(____id46, 0)
+  macro = function (__x193, ...)
+    local ____r128 = unstash({...})
+    local ____x193 = destash33(__x193, ____r128)
+    local ____id47 = ____x193
+    local __char1 = has(____id47, 1)
+    local __s2 = has(____id47, 2)
+    local ____id48 = ____r128
+    local __body23 = cut(____id48, 0)
     return {"%set", {"%get", "read-table", __char1}, join({"fn", {__s2}}, __body23)}
   end
 })
 setenv("define", {
   _stash = true,
   macro = function (name, x, ...)
-    local ____r128 = unstash({...})
-    local __name5 = destash33(name, ____r128)
-    local __x198 = destash33(x, ____r128)
-    local ____id48 = ____r128
-    local __body25 = cut(____id48, 0)
+    local ____r130 = unstash({...})
+    local __name5 = destash33(name, ____r130)
+    local __x203 = destash33(x, ____r130)
+    local ____id50 = ____r130
+    local __body25 = cut(____id50, 0)
     setenv(__name5, {
       _stash = true,
       variable = true
     })
     if some63(__body25) then
-      return join({"%local-function", __name5}, bind42(__x198, __body25), props(__body25))
+      return join({"%local-function", __name5}, bind42(__x203, __body25), props(__body25))
     else
-      return join({"%local", __name5, __x198}, props(__body25))
+      return join({"%local", __name5, __x203}, props(__body25))
     end
   end
 })
 setenv("define-global", {
   _stash = true,
   macro = function (name, x, ...)
-    local ____r130 = unstash({...})
-    local __name7 = destash33(name, ____r130)
-    local __x205 = destash33(x, ____r130)
-    local ____id50 = ____r130
-    local __body27 = cut(____id50, 0)
+    local ____r132 = unstash({...})
+    local __name7 = destash33(name, ____r132)
+    local __x210 = destash33(x, ____r132)
+    local ____id52 = ____r132
+    local __body27 = cut(____id52, 0)
     setenv(__name7, {
       _stash = true,
       toplevel = true,
       variable = true
     })
     if some63(__body27) then
-      return join({"%global-function", __name7}, bind42(__x205, __body27), props(__body27))
+      return join({"%global-function", __name7}, bind42(__x210, __body27), props(__body27))
     else
-      return join({"set", __name7, __x205}, props(__body27))
+      return join({"set", __name7, __x210}, props(__body27))
     end
   end
 })
 setenv("get-value", {
   _stash = true,
   macro = function (x)
-    local ____x212 = object({"setenv", x})
-    ____x212.toplevel = true
-    return {"has", ____x212, {"quote", "value"}}
+    local ____x217 = object({"setenv", x})
+    ____x217.toplevel = true
+    return {"has", ____x217, {"quote", "value"}}
   end
 })
 setenv("define-constant", {
   _stash = true,
   macro = function (name, x)
-    local ____x223 = object({"setenv", {"quote", name}})
-    ____x223.toplevel = true
-    ____x223.value = either(x, {"get-value", {"quote", name}})
-    return {"%do", ____x223, {"define-symbol", name, {"get-value", {"quote", name}}}}
+    local ____x228 = object({"setenv", {"quote", name}})
+    ____x228.toplevel = true
+    ____x228.value = either(x, {"get-value", {"quote", name}})
+    return {"%do", ____x228, {"define-symbol", name, {"get-value", {"quote", name}}}}
   end
 })
 setenv("define-variable", {
@@ -1279,15 +1289,15 @@ setenv("define-variable", {
 setenv("after", {
   _stash = true,
   macro = function (x, ...)
-    local ____r139 = unstash({...})
-    local __x252 = destash33(x, ____r139)
-    local ____id52 = ____r139
-    local __body29 = cut(____id52, 0)
+    local ____r141 = unstash({...})
+    local __x257 = destash33(x, ____r141)
+    local ____id54 = ____r141
+    local __body29 = cut(____id54, 0)
     local __ok1 = unique("ok")
-    local __r140 = unique("r")
-    local ____x253 = object({"target", {"try", __x252, join({"finally"}, __body29)}})
-    ____x253.lua = join({"let", {{__ok1, __r140}, {"guard", __x252}}}, __body29, {{"if", __ok1, __r140, {"throw", __r140}}})
-    return ____x253
+    local __r142 = unique("r")
+    local ____x258 = object({"target", {"try", __x257, join({"finally"}, __body29)}})
+    ____x258.lua = join({"let", {{__ok1, __r142}, {"guard", __x257}}}, __body29, {{"if", __ok1, __r142, {"throw", __r142}}})
+    return ____x258
   end
 })
 setenv("with-frame", {
@@ -1307,9 +1317,9 @@ setenv("with-values", {
     for __k23 in next, ____o21 do
       local __v27 = ____o21[__k23]
       if not number63(__k23) then
-        local ____x281 = object({"setenv", {"quote", __k23}})
-        ____x281.value = __v27
-        add(__forms3, ____x281)
+        local ____x286 = object({"setenv", {"quote", __k23}})
+        ____x286.value = __v27
+        add(__forms3, ____x286)
       end
     end
     return join({"with-frame"}, __forms3)
@@ -1317,28 +1327,28 @@ setenv("with-values", {
 })
 setenv("with-bindings", {
   _stash = true,
-  macro = function (__x288, ...)
-    local ____r142 = unstash({...})
-    local ____x288 = destash33(__x288, ____r142)
-    local ____id55 = ____x288
-    local __names5 = has(____id55, 1)
-    local ____id56 = ____r142
-    local __body35 = cut(____id56, 0)
-    local __x290 = unique("x")
-    local ____x293 = object({"setenv", __x290})
-    ____x293.variable = true
-    return join({"with-frame", {"each", __x290, __names5, ____x293}}, __body35)
+  macro = function (__x293, ...)
+    local ____r144 = unstash({...})
+    local ____x293 = destash33(__x293, ____r144)
+    local ____id57 = ____x293
+    local __names5 = has(____id57, 1)
+    local ____id58 = ____r144
+    local __body35 = cut(____id58, 0)
+    local __x295 = unique("x")
+    local ____x298 = object({"setenv", __x295})
+    ____x298.variable = true
+    return join({"with-frame", {"each", __x295, __names5, ____x298}}, __body35)
   end
 })
 setenv("let-macro", {
   _stash = true,
   macro = function (definitions, ...)
-    local ____r147 = unstash({...})
-    local __definitions1 = destash33(definitions, ____r147)
-    local ____id58 = ____r147
-    local __body37 = cut(____id58, 0)
+    local ____r149 = unstash({...})
+    local __definitions1 = destash33(definitions, ____r149)
+    local ____id60 = ____r149
+    local __body37 = cut(____id60, 0)
     add(environment, {})
-    local ____id59 = {xpcall(function ()
+    local ____id61 = {xpcall(function ()
       map(function (m)
         return macroexpand(join({"define-macro"}, m))
       end, __definitions1)
@@ -1365,29 +1375,29 @@ setenv("let-macro", {
         }
       end
     end)}
-    local ____ok3 = has(____id59, 1)
-    local ____r148 = has(____id59, 2)
+    local ____ok3 = has(____id61, 1)
+    local ____r150 = has(____id61, 2)
     drop(environment)
     if ____ok3 then
-      return ____r148
+      return ____r150
     else
-      error(____r148)
+      error(____r150)
     end
   end
 })
 setenv("let-symbol", {
   _stash = true,
   macro = function (expansions, ...)
-    local ____r154 = unstash({...})
-    local __expansions1 = destash33(expansions, ____r154)
-    local ____id62 = ____r154
-    local __body39 = cut(____id62, 0)
+    local ____r156 = unstash({...})
+    local __expansions1 = destash33(expansions, ____r156)
+    local ____id64 = ____r156
+    local __body39 = cut(____id64, 0)
     add(environment, {})
-    local ____id63 = {xpcall(function ()
-      map(function (__x307)
-        local ____id64 = __x307
-        local __name9 = has(____id64, 1)
-        local __exp1 = has(____id64, 2)
+    local ____id65 = {xpcall(function ()
+      map(function (__x312)
+        local ____id66 = __x312
+        local __name9 = has(____id66, 1)
+        local __exp1 = has(____id66, 2)
         return macroexpand({"define-symbol", __name9, __exp1})
       end, pair(__expansions1))
       return join({"%do"}, macroexpand(__body39))
@@ -1413,23 +1423,23 @@ setenv("let-symbol", {
         }
       end
     end)}
-    local ____ok5 = has(____id63, 1)
-    local ____r155 = has(____id63, 2)
+    local ____ok5 = has(____id65, 1)
+    local ____r157 = has(____id65, 2)
     drop(environment)
     if ____ok5 then
-      return ____r155
+      return ____r157
     else
-      error(____r155)
+      error(____r157)
     end
   end
 })
 setenv("let-unique", {
   _stash = true,
   macro = function (names, ...)
-    local ____r159 = unstash({...})
-    local __names7 = destash33(names, ____r159)
-    local ____id66 = ____r159
-    local __body41 = cut(____id66, 0)
+    local ____r161 = unstash({...})
+    local __names7 = destash33(names, ____r161)
+    local ____id68 = ____r161
+    local __body41 = cut(____id68, 0)
     local __bs3 = map(function (n)
       return {n, {"unique", {"quote", n}}}
     end, __names7)
@@ -1439,20 +1449,20 @@ setenv("let-unique", {
 setenv("fn", {
   _stash = true,
   macro = function (args, ...)
-    local ____r162 = unstash({...})
-    local __args13 = destash33(args, ____r162)
-    local ____id68 = ____r162
-    local __body43 = cut(____id68, 0)
+    local ____r164 = unstash({...})
+    local __args13 = destash33(args, ____r164)
+    local ____id70 = ____r164
+    local __body43 = cut(____id70, 0)
     return join({"%function"}, bind42(__args13, __body43), props(__body43))
   end
 })
 setenv("apply", {
   _stash = true,
   macro = function (f, ...)
-    local ____r164 = unstash({...})
-    local __f3 = destash33(f, ____r164)
-    local ____id70 = ____r164
-    local __args15 = cut(____id70, 0)
+    local ____r166 = unstash({...})
+    local __f3 = destash33(f, ____r166)
+    local ____id72 = ____r166
+    local __args15 = cut(____id72, 0)
     if _35(__args15) > 1 then
       return {"%call", "apply", __f3, {"join", join({"list"}, almost(__args15)), last(__args15), join({"list"}, props(__args15))}}
     else
@@ -1467,42 +1477,42 @@ setenv("apply", {
 setenv("guard", {
   _stash = true,
   macro = function (expr)
-    local ____x371 = object({"target", {{"%function", join(), {"%try", {"list", true, expr}}}}})
-    local ____x383 = object({"obj"})
-    ____x383.stack = {{"idx", "debug", "traceback"}}
-    ____x383.message = {"if", {"string?", "m"}, {"clip", "m", {"+", {"search", "m", "\": \""}, 2}}, {"nil?", "m"}, "\"\"", {"str", "m"}}
-    ____x371.lua = {"list", {"xpcall", {"%function", join(), expr}, {"%function", {"m"}, {"if", {"obj?", "m"}, "m", ____x383}}}}
-    return {"let-macro", {{"%return", "args", {"error", "\"Can't return from guard\""}}}, ____x371}
+    local ____x376 = object({"target", {{"%function", join(), {"%try", {"list", true, expr}}}}})
+    local ____x388 = object({"obj"})
+    ____x388.stack = {{"idx", "debug", "traceback"}}
+    ____x388.message = {"if", {"string?", "m"}, {"clip", "m", {"+", {"search", "m", "\": \""}, 2}}, {"nil?", "m"}, "\"\"", {"str", "m"}}
+    ____x376.lua = {"list", {"xpcall", {"%function", join(), expr}, {"%function", {"m"}, {"if", {"obj?", "m"}, "m", ____x388}}}}
+    return {"let-macro", {{"%return", "args", {"error", "\"Can't return from guard\""}}}, ____x376}
   end
 })
 setenv("each", {
   _stash = true,
   macro = function (x, t, ...)
-    local ____r168 = unstash({...})
-    local __x411 = destash33(x, ____r168)
-    local __t4 = destash33(t, ____r168)
-    local ____id73 = ____r168
-    local __body45 = cut(____id73, 0)
+    local ____r170 = unstash({...})
+    local __x416 = destash33(x, ____r170)
+    local __t4 = destash33(t, ____r170)
+    local ____id75 = ____r170
+    local __body45 = cut(____id75, 0)
     local __o23 = unique("o")
     local __n29 = unique("n")
     local __i37 = unique("i")
     local __e30 = nil
-    if atom63(__x411) then
-      __e30 = {__i37, __x411}
+    if atom63(__x416) then
+      __e30 = {__i37, __x416}
     else
       local __e31 = nil
-      if _35(__x411) > 1 then
-        __e31 = __x411
+      if _35(__x416) > 1 then
+        __e31 = __x416
       else
-        __e31 = {__i37, hd(__x411)}
+        __e31 = {__i37, hd(__x416)}
       end
       __e30 = __e31
     end
-    local ____id74 = __e30
-    local __k25 = has(____id74, 1)
-    local __v29 = has(____id74, 2)
-    local ____x417 = object({"target", __o23})
-    ____x417.py = {"indices", __o23}
+    local ____id76 = __e30
+    local __k25 = has(____id76, 1)
+    local __v29 = has(____id76, 2)
+    local ____x422 = object({"target", __o23})
+    ____x422.py = {"indices", __o23}
     local __e32 = nil
     if has(setenv("target", {
       _stash = true,
@@ -1515,17 +1525,17 @@ setenv("each", {
     else
       __e32 = {join({"let", __k25, {"if", {"numeric?", __k25}, {"parseInt", __k25}, __k25}}, __body45)}
     end
-    return {"let", {__o23, __t4, __k25, "nil"}, join({"%for", ____x417, __k25}, props(__body45), {join({"let", {__v29, {"%get", __o23, __k25}}}, __e32)})}
+    return {"let", {__o23, __t4, __k25, "nil"}, join({"%for", ____x422, __k25}, props(__body45), {join({"let", {__v29, {"%get", __o23, __k25}}}, __e32)})}
   end
 })
 setenv("for", {
   _stash = true,
   macro = function (i, to, ...)
-    local ____r170 = unstash({...})
-    local __i39 = destash33(i, ____r170)
-    local __to1 = destash33(to, ____r170)
-    local ____id76 = ____r170
-    local __body47 = cut(____id76, 0)
+    local ____r172 = unstash({...})
+    local __i39 = destash33(i, ____r172)
+    local __to1 = destash33(to, ____r172)
+    local ____id78 = ____r172
+    local __body47 = cut(____id78, 0)
     if __to1 == "in" then
       return join({"%for", hd(__body47), __i39, join({"%do"}, tl(__body47))}, props(__body47))
     else
@@ -1536,14 +1546,14 @@ setenv("for", {
 setenv("step", {
   _stash = true,
   macro = function (v, t, ...)
-    local ____r172 = unstash({...})
-    local __v31 = destash33(v, ____r172)
-    local __t6 = destash33(t, ____r172)
-    local ____id78 = ____r172
-    local __body49 = cut(____id78, 0)
-    local __x452 = unique("x")
+    local ____r174 = unstash({...})
+    local __v31 = destash33(v, ____r174)
+    local __t6 = destash33(t, ____r174)
+    local ____id80 = ____r174
+    local __body49 = cut(____id80, 0)
+    local __x457 = unique("x")
     local __i41 = unique("i")
-    return {"let", {__x452, __t6}, {"for", __i41, {"#", __x452}, join({"let", {__v31, {"at", __x452, __i41}}}, __body49)}}
+    return {"let", {__x457, __t6}, {"for", __i41, {"#", __x457}, join({"let", {__v31, {"at", __x457, __i41}}}, __body49)}}
   end
 })
 setenv("set-of", {
@@ -1554,8 +1564,8 @@ setenv("set-of", {
     local ____o25 = __xs13
     local ____i43 = nil
     for ____i43 in next, ____o25 do
-      local __x463 = ____o25[____i43]
-      __l14[__x463] = true
+      local __x468 = ____o25[____i43]
+      __l14[__x468] = true
     end
     return join({"obj"}, __l14)
   end
@@ -1595,20 +1605,20 @@ setenv("language", {
 setenv("join!", {
   _stash = true,
   macro = function (a, ...)
-    local ____r178 = unstash({...})
-    local __a6 = destash33(a, ____r178)
-    local ____id80 = ____r178
-    local __bs5 = cut(____id80, 0)
+    local ____r180 = unstash({...})
+    local __a6 = destash33(a, ____r180)
+    local ____id82 = ____r180
+    local __bs5 = cut(____id82, 0)
     return {"set", __a6, join({"join", __a6}, __bs5)}
   end
 })
 setenv("cat!", {
   _stash = true,
   macro = function (a, ...)
-    local ____r180 = unstash({...})
-    local __a8 = destash33(a, ____r180)
-    local ____id82 = ____r180
-    local __bs7 = cut(____id82, 0)
+    local ____r182 = unstash({...})
+    local __a8 = destash33(a, ____r182)
+    local ____id84 = ____r182
+    local __bs7 = cut(____id84, 0)
     return {"set", __a8, join({"cat", __a8}, __bs7)}
   end
 })
@@ -1639,8 +1649,8 @@ setenv("dec", {
 setenv("with-indent", {
   _stash = true,
   macro = function (form)
-    local __x493 = unique("x")
-    return {"%do", {"inc", "indent-level"}, {"with", __x493, form, {"dec", "indent-level"}}}
+    local __x498 = unique("x")
+    return {"%do", {"inc", "indent-level"}, {"with", __x498, form, {"dec", "indent-level"}}}
   end
 })
 setenv("export", {
@@ -1688,65 +1698,65 @@ setenv("during-compilation", {
 setenv("def", {
   _stash = true,
   macro = function (name, ...)
-    local ____r190 = unstash({...})
-    local __name11 = destash33(name, ____r190)
-    local ____id84 = ____r190
-    local __body55 = cut(____id84, 0)
+    local ____r192 = unstash({...})
+    local __name11 = destash33(name, ____r192)
+    local ____id86 = ____r192
+    local __body55 = cut(____id86, 0)
     return join({"define-global", __name11}, __body55)
   end
 })
 setenv("mac", {
   _stash = true,
   macro = function (name, ...)
-    local ____r192 = unstash({...})
-    local __name13 = destash33(name, ____r192)
-    local ____id86 = ____r192
-    local __body57 = cut(____id86, 0)
+    local ____r194 = unstash({...})
+    local __name13 = destash33(name, ____r194)
+    local ____id88 = ____r194
+    local __body57 = cut(____id88, 0)
     return join({"define-macro", __name13}, __body57)
   end
 })
 setenv("defconst", {
   _stash = true,
   macro = function (name, ...)
-    local ____r194 = unstash({...})
-    local __name15 = destash33(name, ____r194)
-    local ____id88 = ____r194
-    local __value1 = cut(____id88, 0)
+    local ____r196 = unstash({...})
+    local __name15 = destash33(name, ____r196)
+    local ____id90 = ____r196
+    local __value1 = cut(____id90, 0)
     return join({"def", __name15}, __value1)
   end
 })
 setenv("undefined?", {
   _stash = true,
   macro = function (name)
-    local ____x551 = object({"target"})
-    ____x551.js = {"=", {"typeof", name}, "\"undefined\""}
-    ____x551.lua = {"=", {"idx", "_G", name}, "nil"}
-    ____x551.py = {"not", {"%in", {"quote", compile(name)}, {"globals"}}}
-    return ____x551
+    local ____x556 = object({"target"})
+    ____x556.js = {"=", {"typeof", name}, "\"undefined\""}
+    ____x556.lua = {"=", {"idx", "_G", name}, "nil"}
+    ____x556.py = {"not", {"%in", {"quote", compile(name)}, {"globals"}}}
+    return ____x556
   end
 })
 setenv("defvar", {
   _stash = true,
   macro = function (name, ...)
-    local ____r198 = unstash({...})
-    local __name17 = destash33(name, ____r198)
-    local ____id90 = ____r198
-    local __value3 = cut(____id90, 0)
-    local ____x568 = object({"target"})
-    ____x568.py = {"global", __name17}
-    return {"when", {"undefined?", __name17}, ____x568, join({"defconst", __name17}, __value3)}
+    local ____r200 = unstash({...})
+    local __name17 = destash33(name, ____r200)
+    local ____id92 = ____r200
+    local __value3 = cut(____id92, 0)
+    local ____x573 = object({"target"})
+    ____x573.py = {"global", __name17}
+    return {"when", {"undefined?", __name17}, ____x573, join({"defconst", __name17}, __value3)}
   end
 })
 setenv("async", {
   _stash = true,
   macro = function (keyword, ...)
-    local ____r200 = unstash({...})
-    local __keyword1 = destash33(keyword, ____r200)
-    local ____id92 = ____r200
-    local __body59 = cut(____id92, 0)
-    local ____x573 = object({__keyword1})
-    ____x573.async = true
-    return join(____x573, __body59)
+    local ____r202 = unstash({...})
+    local __keyword1 = destash33(keyword, ____r202)
+    local ____id94 = ____r202
+    local __body59 = cut(____id94, 0)
+    local ____x578 = object({__keyword1})
+    ____x578.async = true
+    return join(____x578, __body59)
   end
 })
 setenv("%read-from-file", {
@@ -1764,10 +1774,10 @@ setenv("the", {
 setenv("cat", {
   _stash = true,
   macro = function (a, ...)
-    local ____r206 = unstash({...})
-    local __a10 = destash33(a, ____r206)
-    local ____id94 = ____r206
-    local __bs9 = cut(____id94, 0)
+    local ____r208 = unstash({...})
+    local __a10 = destash33(a, ____r208)
+    local ____id96 = ____r208
+    local __bs9 = cut(____id96, 0)
     if nil63(__a10) then
       return ""
     else
@@ -1775,13 +1785,13 @@ setenv("cat", {
         return __a10
       else
         if one63(__bs9) then
-          local ____x598 = object({"target", join({"%cat", __a10}, __bs9)})
-          ____x598.py = join({"%call", "cat", __a10}, __bs9)
-          return ____x598
+          local ____x603 = object({"target", join({"%cat", __a10}, __bs9)})
+          ____x603.py = join({"%call", "cat", __a10}, __bs9)
+          return ____x603
         else
-          local ____x601 = object({"target", {"%cat", __a10, join({"cat"}, __bs9)}})
-          ____x601.py = join({"%call", "cat", __a10}, __bs9)
-          return ____x601
+          local ____x606 = object({"target", {"%cat", __a10, join({"cat"}, __bs9)}})
+          ____x606.py = join({"%call", "cat", __a10}, __bs9)
+          return ____x606
         end
       end
     end
@@ -1880,10 +1890,10 @@ setenv("%", {
 setenv("<", {
   _stash = true,
   macro = function (a, ...)
-    local ____r208 = unstash({...})
-    local __a12 = destash33(a, ____r208)
-    local ____id96 = ____r208
-    local __bs111 = cut(____id96, 0)
+    local ____r210 = unstash({...})
+    local __a12 = destash33(a, ____r210)
+    local ____id98 = ____r210
+    local __bs111 = cut(____id98, 0)
     if none63(__bs111) then
       return true
     else
@@ -1898,10 +1908,10 @@ setenv("<", {
 setenv("<=", {
   _stash = true,
   macro = function (a, ...)
-    local ____r210 = unstash({...})
-    local __a14 = destash33(a, ____r210)
-    local ____id98 = ____r210
-    local __bs13 = cut(____id98, 0)
+    local ____r212 = unstash({...})
+    local __a14 = destash33(a, ____r212)
+    local ____id100 = ____r212
+    local __bs13 = cut(____id100, 0)
     if none63(__bs13) then
       return true
     else
@@ -1916,10 +1926,10 @@ setenv("<=", {
 setenv("=", {
   _stash = true,
   macro = function (a, ...)
-    local ____r212 = unstash({...})
-    local __a16 = destash33(a, ____r212)
-    local ____id100 = ____r212
-    local __bs15 = cut(____id100, 0)
+    local ____r214 = unstash({...})
+    local __a16 = destash33(a, ____r214)
+    local ____id102 = ____r214
+    local __bs15 = cut(____id102, 0)
     if none63(__bs15) then
       return true
     else
@@ -1934,10 +1944,10 @@ setenv("=", {
 setenv(">=", {
   _stash = true,
   macro = function (a, ...)
-    local ____r214 = unstash({...})
-    local __a18 = destash33(a, ____r214)
-    local ____id102 = ____r214
-    local __bs17 = cut(____id102, 0)
+    local ____r216 = unstash({...})
+    local __a18 = destash33(a, ____r216)
+    local ____id104 = ____r216
+    local __bs17 = cut(____id104, 0)
     if none63(__bs17) then
       return true
     else
@@ -1952,10 +1962,10 @@ setenv(">=", {
 setenv(">", {
   _stash = true,
   macro = function (a, ...)
-    local ____r216 = unstash({...})
-    local __a20 = destash33(a, ____r216)
-    local ____id104 = ____r216
-    local __bs19 = cut(____id104, 0)
+    local ____r218 = unstash({...})
+    local __a20 = destash33(a, ____r218)
+    local ____id106 = ____r218
+    local __bs19 = cut(____id106, 0)
     if none63(__bs19) then
       return true
     else
@@ -1985,10 +1995,10 @@ setenv("not", {
 setenv("and", {
   _stash = true,
   macro = function (a, ...)
-    local ____r218 = unstash({...})
-    local __a22 = destash33(a, ____r218)
-    local ____id106 = ____r218
-    local __bs211 = cut(____id106, 0)
+    local ____r220 = unstash({...})
+    local __a22 = destash33(a, ____r220)
+    local ____id108 = ____r220
+    local __bs211 = cut(____id108, 0)
     if nil63(__a22) then
       return true
     else
@@ -2007,10 +2017,10 @@ setenv("and", {
 setenv("or", {
   _stash = true,
   macro = function (a, ...)
-    local ____r220 = unstash({...})
-    local __a24 = destash33(a, ____r220)
-    local ____id108 = ____r220
-    local __bs23 = cut(____id108, 0)
+    local ____r222 = unstash({...})
+    local __a24 = destash33(a, ____r222)
+    local ____id110 = ____r222
+    local __bs23 = cut(____id110, 0)
     if nil63(__a24) then
       return false
     else
@@ -2043,10 +2053,10 @@ setenv("return", {
 setenv("while", {
   _stash = true,
   macro = function (c, ...)
-    local ____r222 = unstash({...})
-    local __c3 = destash33(c, ____r222)
-    local ____id110 = ____r222
-    local __body61 = cut(____id110, 0)
+    local ____r224 = unstash({...})
+    local __c3 = destash33(c, ____r224)
+    local ____id112 = ____r224
+    local __body61 = cut(____id112, 0)
     return join({"%while", __c3}, __body61)
   end
 })
@@ -2130,19 +2140,19 @@ setenv("as", {
 setenv("%expand-case", {
   _stash = true,
   macro = function (x, ...)
-    local ____r224 = unstash({...})
-    local __x741 = destash33(x, ____r224)
-    local ____id113 = ____r224
-    local __body65 = cut(____id113, 0)
+    local ____r226 = unstash({...})
+    local __x746 = destash33(x, ____r226)
+    local ____id115 = ____r226
+    local __body65 = cut(____id115, 0)
     local __e35 = nil
-    if atom63(__x741) then
-      __e35 = {__x741}
+    if atom63(__x746) then
+      __e35 = {__x746}
     else
-      __e35 = __x741
+      __e35 = __x746
     end
-    local ____id114 = __e35
-    local __a26 = has(____id114, 1)
-    local __bs25 = cut(____id114, 1)
+    local ____id116 = __e35
+    local __a26 = has(____id116, 1)
+    local __bs25 = cut(____id116, 1)
     local __e36 = nil
     if none63(__bs25) then
       __e36 = {{"%literal"}}
@@ -2162,12 +2172,12 @@ setenv("%cases", {
       if one63(__args55) then
         return join({"%expand-case"}, hd(__args55))
       else
-        local __r227 = unique("r")
-        return join({"with", __r227, "nil"}, map(function (__x760)
-          local ____id116 = __x760
-          local __x761 = has(____id116, 1)
-          local __body67 = cut(____id116, 1)
-          return {"%expand-case", __x761, {"%set", __r227, join({"%do"}, __body67)}}
+        local __r229 = unique("r")
+        return join({"with", __r229, "nil"}, map(function (__x765)
+          local ____id118 = __x765
+          local __x766 = has(____id118, 1)
+          local __body67 = cut(____id118, 1)
+          return {"%expand-case", __x766, {"%set", __r229, join({"%do"}, __body67)}}
         end, almost(__args55)), {join({"%expand-case"}, last(__args55))})
       end
     end
@@ -2176,41 +2186,41 @@ setenv("%cases", {
 setenv("try", {
   _stash = true,
   macro = function (x, ...)
-    local ____r230 = unstash({...})
-    local __x781 = destash33(x, ____r230)
-    local ____id1211 = ____r230
-    local __cases1 = cut(____id1211, 0)
+    local ____r232 = unstash({...})
+    local __x786 = destash33(x, ____r232)
+    local ____id123 = ____r232
+    local __cases1 = cut(____id123, 0)
     local __fin1 = {"finally"}
     local ____o27 = __cases1
     local ____i46 = nil
     for ____i46 in next, ____o27 do
-      local __x783 = ____o27[____i46]
-      if hd63(__x783, "finally") then
-        __fin1 = __x783
+      local __x788 = ____o27[____i46]
+      if hd63(__x788, "finally") then
+        __fin1 = __x788
       end
     end
     local __forms7 = {}
-    local ____x786 = __cases1
+    local ____x791 = __cases1
     local ____i47 = 0
-    while ____i47 < _35(____x786) do
-      local ____id122 = ____x786[____i47 + 1]
-      local __x787 = has(____id122, 1)
-      local __body71 = cut(____id122, 1)
-      if __x787 == "finally" then
+    while ____i47 < _35(____x791) do
+      local ____id124 = ____x791[____i47 + 1]
+      local __x792 = has(____id124, 1)
+      local __body71 = cut(____id124, 1)
+      if __x792 == "finally" then
       else
-        if __x787 == "except" and has(__body71, 1) == "as" then
-          local ____id123 = __body71
-          local __kind2 = has(____id123, 1)
-          local ___1 = has(____id123, 2)
-          local __name19 = has(____id123, 3)
-          local __body72 = cut(____id123, 3)
-          add(__forms7, join({{__x787, {"%as", __kind2, __name19}}}, __body72))
+        if __x792 == "except" and has(__body71, 1) == "as" then
+          local ____id125 = __body71
+          local __kind2 = has(____id125, 1)
+          local ___1 = has(____id125, 2)
+          local __name19 = has(____id125, 3)
+          local __body72 = cut(____id125, 3)
+          add(__forms7, join({{__x792, {"%as", __kind2, __name19}}}, __body72))
         else
-          if __x787 == "except" then
-            local ____id124 = __body71
-            local __kind3 = has(____id124, 1)
-            local __body73 = cut(____id124, 1)
-            add(__forms7, join({{__x787, __kind3}}, __body73))
+          if __x792 == "except" then
+            local ____id126 = __body71
+            local __kind3 = has(____id126, 1)
+            local __body73 = cut(____id126, 1)
+            add(__forms7, join({{__x792, __kind3}}, __body73))
           else
             error("Unknown try clause")
           end
@@ -2218,7 +2228,7 @@ setenv("try", {
       end
       ____i47 = ____i47 + 1
     end
-    return join({"%cases", {"try", __x781}}, __forms7, {__fin1})
+    return join({"%cases", {"try", __x786}}, __forms7, {__fin1})
   end
 })
 setenv("errsafe", {
@@ -2233,9 +2243,17 @@ setenv("errsafe", {
 setenv("dbg", {
   _stash = true,
   macro = function ()
-    local ____x810 = object({"target", {"do"}})
-    ____x810.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
-    return ____x810
+    local ____x815 = object({"target", {"do"}})
+    ____x815.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
+    return ____x815
+  end
+})
+setenv("prc", {
+  _stash = true,
+  macro = function (form)
+    local __form7 = expand(form)
+    print(compile(expand({"%set", "lumen-result", __form7})))
+    return __form7
   end
 })
 local reader = require("reader")
@@ -2248,7 +2266,7 @@ function lines(x)
   return split(x, "\n")
 end
 function simple_id63(x)
-  local ____id125 = {xpcall(function ()
+  local ____id127 = {xpcall(function ()
     return reader.read_string(x)
   end, function (m)
     if obj63(m) then
@@ -2272,30 +2290,30 @@ function simple_id63(x)
       }
     end
   end)}
-  local __ok6 = has(____id125, 1)
-  local __v32 = has(____id125, 2)
+  local __ok6 = has(____id127, 1)
+  local __v32 = has(____id127, 2)
   local __e39 = nil
   if __ok6 then
     __e39 = __v32
   else
     __e39 = nil
   end
-  local __r238 = __e39
-  if __r238 == x then
-    return __r238
+  local __r242 = __e39
+  if __r242 == x then
+    return __r242
   end
 end
 function get_indentation(s)
-  local __r240 = ""
+  local __r244 = ""
   local __i48 = 0
   while __i48 < _35(s) do
     local __c4 = char(s, __i48)
     if __c4 == " " then
-      __r240 = __r240 .. __c4
+      __r244 = __r244 .. __c4
     end
     __i48 = __i48 + 1
   end
-  return __r240
+  return __r244
 end
 function strip_outer(s, lh, rh)
   if string_starts63(s, lh) and string_ends63(s, rh) then
@@ -2343,9 +2361,9 @@ function eval_self_form(form)
   end
 end
 function eval_print(form)
-  local __form6 = eval_self_form(form)
-  local ____id126 = {xpcall(function ()
-    return compiler.eval(__form6)
+  local __form8 = eval_self_form(form)
+  local ____id128 = {xpcall(function ()
+    return compiler.eval(__form8)
   end, function (m)
     if obj63(m) then
       return m
@@ -2368,9 +2386,9 @@ function eval_print(form)
       }
     end
   end)}
-  local __ok7 = has(____id126, 1)
-  local __v33 = has(____id126, 2)
-  local __ex = has(____id126, 3)
+  local __ok7 = has(____id128, 1)
+  local __v33 = has(____id128, 2)
+  local __ex = has(____id128, 3)
   if not __ok7 then
     return print_exception(__v33, __ex)
   else
@@ -2381,7 +2399,7 @@ function eval_print(form)
 end
 function read_toplevel(str, more)
   local __s3 = reader.stream(str, more)
-  local ____id127 = {xpcall(function ()
+  local ____id129 = {xpcall(function ()
     return reader.read_all(__s3)
   end, function (m)
     if obj63(m) then
@@ -2405,25 +2423,25 @@ function read_toplevel(str, more)
       }
     end
   end)}
-  local __ok8 = has(____id127, 1)
-  local __v34 = has(____id127, 2)
+  local __ok8 = has(____id129, 1)
+  local __v34 = has(____id129, 2)
   local __e44 = nil
   if __ok8 then
     __e44 = __v34
   else
     __e44 = nil
   end
-  local __x825 = __e44
-  if __x825 == more then
+  local __x832 = __e44
+  if __x832 == more then
     return more
   else
-    if nil63(__x825) then
-      return __x825
+    if nil63(__x832) then
+      return __x832
     else
-      if one63(__x825) then
-        return hd(__x825)
+      if one63(__x832) then
+        return hd(__x832)
       else
-        return __x825
+        return __x832
       end
     end
   end
@@ -2449,9 +2467,9 @@ local function repl()
   local function rep1(s)
     o.buf = o.buf .. s
     local __more = {}
-    local __form7 = read_toplevel(o.buf, __more)
-    if not( __form7 == __more) then
-      eval_print(__form7)
+    local __form9 = read_toplevel(o.buf, __more)
+    if not( __form9 == __more) then
+      eval_print(__form9)
       return reset()
     end
   end
@@ -2476,8 +2494,8 @@ function expand_file(path)
   return compiler.expand(join({"do"}, __body74))
 end
 function compile_file(path)
-  local __form8 = expand_file(path)
-  return compiler.compile(__form8, {
+  local __form10 = expand_file(path)
+  return compiler.compile(__form10, {
     _stash = true,
     stmt = true
   })
@@ -2577,10 +2595,10 @@ local function main(args)
         end
         __i49 = __i49 + 1
       end
-      local ____x829 = __pre
+      local ____x836 = __pre
       local ____i50 = 0
-      while ____i50 < _35(____x829) do
-        local __file = ____x829[____i50 + 1]
+      while ____i50 < _35(____x836) do
+        local __file = ____x836[____i50 + 1]
         run_file(__file)
         ____i50 = ____i50 + 1
       end
