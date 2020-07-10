@@ -107,9 +107,6 @@ def read_string(L_str=None, more=None):
 def key63(atom=None):
   return string63(atom) and (L_35(atom) > 1 and char(atom, edge(atom)) == ":")
 
-def flag63(atom=None):
-  return string63(atom) and (L_35(atom) > 1 and char(atom, 0) == ":")
-
 def expected(s=None, c=None):
   if is63(s["more"]):
     return s["more"]
@@ -184,21 +181,21 @@ def __f1(s=None):
 read_table[""] = __f1
 def __f2(s=None):
   read_char(s)
-  __r21 = None
+  __r20 = None
   __l1 = []
-  while nil63(__r21):
+  while nil63(__r20):
     skip_non_code(s)
     __c4 = peek_char(s)
     if __c4 == ")":
       read_char(s)
-      __r21 = __l1
+      __r20 = __l1
     else:
       if nil63(__c4):
-        __r21 = expected(s, ")")
+        __r20 = expected(s, ")")
       else:
         __x4 = read(s)
         if eof63(s, __x4):
-          __r21 = expected(s, ")")
+          __r20 = expected(s, ")")
         else:
           if key63(__x4):
             __k = clip(__x4, 0, edge(__x4))
@@ -206,12 +203,8 @@ def __f2(s=None):
             __l1 = object(__l1)
             __l1[__k] = __v1
           else:
-            if flag63(__x4):
-              __l1 = object(__l1)
-              __l1[clip(__x4, 1)] = True
-            else:
-              add(__l1, __x4)
-  return __r21
+            add(__l1, __x4)
+  return __r20
 
 read_table["("] = __f2
 def __f3(s=None):
@@ -219,7 +212,7 @@ def __f3(s=None):
 
 read_table[")"] = __f3
 def read_matching(opener=None, closer=None, s=None):
-  __r24 = None
+  __r23 = None
   __pos1 = s["pos"]
   __L_str1 = ""
   __i1 = 0
@@ -227,21 +220,21 @@ def read_matching(opener=None, closer=None, s=None):
     __L_str1 = cat(__L_str1, read_char(s) or "")
     __i1 = __i1 + 1
   if __L_str1 == opener:
-    while nil63(__r24):
+    while nil63(__r23):
       if clip(s["string"], s["pos"], s["pos"] + L_35(closer)) == closer:
         __i2 = 0
         while __i2 < L_35(closer):
           __L_str1 = cat(__L_str1, read_char(s))
           __i2 = __i2 + 1
-        __r24 = __L_str1
+        __r23 = __L_str1
       else:
         if nil63(peek_char(s)):
-          __r24 = expected(s, closer)
+          __r23 = expected(s, closer)
         else:
           __L_str1 = cat(__L_str1, read_char(s))
           if peek_char(s) == "\\":
             __L_str1 = cat(__L_str1, read_char(s))
-  return __r24
+  return __r23
 
 def __f4(s=None):
   if string_starts63(s["string"], "\"\"\"", s["pos"]):
@@ -254,21 +247,21 @@ def __f4(s=None):
       s["pos"] = __j + 1
       return clip(s["string"], __i3, __j + 1)
     else:
-      __r26 = None
+      __r25 = None
       read_char(s)
-      while nil63(__r26):
+      while nil63(__r25):
         __c5 = peek_char(s)
         if __c5 == "\"":
           read_char(s)
-          __r26 = clip(s["string"], __i3, s["pos"])
+          __r25 = clip(s["string"], __i3, s["pos"])
         else:
           if nil63(__c5):
-            __r26 = expected(s, "\"")
+            __r25 = expected(s, "\"")
           else:
             if __c5 == "\\":
               read_char(s)
             read_char(s)
-      return __r26
+      return __r25
 
 read_table["\""] = __f4
 def __f5(s=None):

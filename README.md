@@ -66,12 +66,6 @@ Positional values can be gotten out of lists using the `at` operator, and keys u
 20
 ```
 
-A shortcut for a key whose value is `true` looks like this, called a flag:
-```
-> (list :yes)
-(yes: true)
-```
-
 #### Variables
 Variables are declared using `define` and `define-global`. Variables declared with `define` are available for use anywhere in subsequent expressions in the same scope, and `define-global` makes them globally available.
 ```

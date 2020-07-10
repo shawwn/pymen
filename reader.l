@@ -78,11 +78,6 @@
        (> (# atom) 1)
        (= (char atom (edge atom)) ":")))
 
-(define flag? (atom)
-  (and (string? atom)
-       (> (# atom) 1)
-       (= (char atom 0) ":")))
-
 (define expected (s c)
   (if (is? (get s 'more))
       (get s 'more)
@@ -140,7 +135,6 @@
                   (let (k (clip x 0 (edge x))
                         v (read s))
                     (set l (object l) (get l k) v))
-                  (flag? x) (set l (object l) (get l (clip x 1)) true)
                 (add l x)))))))))
 
 (define-reader (")" s)

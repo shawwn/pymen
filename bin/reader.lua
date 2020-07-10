@@ -122,9 +122,6 @@ end
 local function key63(atom)
   return string63(atom) and (_35(atom) > 1 and char(atom, edge(atom)) == ":")
 end
-local function flag63(atom)
-  return string63(atom) and (_35(atom) > 1 and char(atom, 0) == ":")
-end
 local function expected(s, c)
   if is63(s.more) then
     return s.more
@@ -198,21 +195,21 @@ read_table[""] = function (s)
 end
 read_table["("] = function (s)
   read_char(s)
-  local __r21 = nil
+  local __r20 = nil
   local __l1 = {}
-  while nil63(__r21) do
+  while nil63(__r20) do
     skip_non_code(s)
     local __c4 = peek_char(s)
     if __c4 == ")" then
       read_char(s)
-      __r21 = __l1
+      __r20 = __l1
     else
       if nil63(__c4) then
-        __r21 = expected(s, ")")
+        __r20 = expected(s, ")")
       else
         local __x3 = read(s)
         if eof63(s, __x3) then
-          __r21 = expected(s, ")")
+          __r20 = expected(s, ")")
         else
           if key63(__x3) then
             local __k = clip(__x3, 0, edge(__x3))
@@ -220,24 +217,19 @@ read_table["("] = function (s)
             __l1 = object(__l1)
             __l1[__k] = __v
           else
-            if flag63(__x3) then
-              __l1 = object(__l1)
-              __l1[clip(__x3, 1)] = true
-            else
-              add(__l1, __x3)
-            end
+            add(__l1, __x3)
           end
         end
       end
     end
   end
-  return __r21
+  return __r20
 end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end
 local function read_matching(opener, closer, s)
-  local __r24 = nil
+  local __r23 = nil
   local __pos1 = s.pos
   local __str1 = ""
   local __i1 = 0
@@ -246,17 +238,17 @@ local function read_matching(opener, closer, s)
     __i1 = __i1 + 1
   end
   if __str1 == opener then
-    while nil63(__r24) do
+    while nil63(__r23) do
       if clip(s.string, s.pos, s.pos + _35(closer)) == closer then
         local __i2 = 0
         while __i2 < _35(closer) do
           __str1 = __str1 .. read_char(s)
           __i2 = __i2 + 1
         end
-        __r24 = __str1
+        __r23 = __str1
       else
         if nil63(peek_char(s)) then
-          __r24 = expected(s, closer)
+          __r23 = expected(s, closer)
         else
           __str1 = __str1 .. read_char(s)
           if peek_char(s) == "\\" then
@@ -266,7 +258,7 @@ local function read_matching(opener, closer, s)
       end
     end
   end
-  return __r24
+  return __r23
 end
 read_table["\""] = function (s)
   if string_starts63(s.string, "\"\"\"", s.pos) then
@@ -279,16 +271,16 @@ read_table["\""] = function (s)
       s.pos = __j + 1
       return clip(s.string, __i3, __j + 1)
     else
-      local __r26 = nil
+      local __r25 = nil
       read_char(s)
-      while nil63(__r26) do
+      while nil63(__r25) do
         local __c5 = peek_char(s)
         if __c5 == "\"" then
           read_char(s)
-          __r26 = clip(s.string, __i3, s.pos)
+          __r25 = clip(s.string, __i3, s.pos)
         else
           if nil63(__c5) then
-            __r26 = expected(s, "\"")
+            __r25 = expected(s, "\"")
           else
             if __c5 == "\\" then
               read_char(s)
@@ -297,7 +289,7 @@ read_table["\""] = function (s)
           end
         end
       end
-      return __r26
+      return __r25
     end
   end
 end
