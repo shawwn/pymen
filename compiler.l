@@ -152,7 +152,7 @@
        (= (hd x) 'unquote-splicing)))
 
 (define expand-local ((x name value))
-  (setenv name :variable)
+  (setenv name variable: true)
   `(%local ,name ,(macroexpand value)))
 
 (define expand-function ((x args rest: body))
@@ -451,7 +451,7 @@
 
 (define compile-special (form stmt?)
   (let ((x rest: args) form
-        (:special :stmt tr: self-tr?) (getenv x)
+        (special: special stmt: stmt tr: self-tr?) (getenv x)
         p (if (and stmt? (not stmt)) (indentation) "")
         tr (terminator (and stmt? (not self-tr?))))
     (cat p (apply special args) tr)))
@@ -478,7 +478,7 @@
         (cat "(" f1 ")" args)
       (cat f1 args))))
 
-(define op-delims (parent child :right)
+(define op-delims (parent child right: right)
   (if ((if right >= >)
        (precedence child)
        (precedence parent))
@@ -488,7 +488,7 @@
 (define compile-infix (form)
   (let ((op rest: (a b)) form
         (ao ac) (op-delims form a)
-        (bo bc) (op-delims form b :right)
+        (bo bc) (op-delims form b right: true)
         a (compile a)
         b (compile b)
         op (getop op))
@@ -497,12 +497,12 @@
       (cat ao a ac " " op " " bo b bc))))
 
 (define-global compile-body (body)
-  (let s (with-indent (compile body :stmt))
+  (let s (with-indent (compile body stmt: true))
       (if (and (target? 'py) (none? s))
           (with-indent (cat (indentation) "pass\n"))
         s)))
 
-(define-global compile-function (args body :name :prefix :async)
+(define-global compile-function (args body name: name prefix: prefix async: async)
   (let (id (if name (compile name) "")
         args1 (if (and (target? 'lua)
                        (has? args 'rest))
@@ -531,7 +531,7 @@
            (and (not (= (hd form) '%return))
                 (not (statement? (hd form)))))))
 
-(define-global compile (form raw? :stmt)
+(define-global compile (form raw? stmt: stmt)
   (if (nil? form) ""
       (special-form? form)
       (compile-special form stmt)
@@ -777,20 +777,20 @@
 (define-global immediate-call? (x)
   (and (not (atom? x)) (not (atom? (hd x))) (= (hd (hd x)) '%function)))
 
-(define-special %do forms :stmt :tr
+(define-special %do forms stmt: true tr: true
   (with s ""
     (step x forms
       (when (and (target? 'lua)
                  (immediate-call? x)
                  (= "\n" (char s (edge s))))
         (set s (cat (clip s 0 (edge s)) ";\n")))
-      (cat! s (compile x :stmt))
+      (cat! s (compile x stmt: true))
       (unless (atom? x)
         (if (or (= (hd x) '%return)
                 (= (hd x) '%break))
             (break))))))
 
-(define-special %if (cond cons alt) :stmt :tr
+(define-special %if (cond cons alt) stmt: true tr: true
   (let (cond (compile cond)
         cons (compile-body cons)
         alt (if alt (compile-body alt))
@@ -812,7 +812,7 @@
         (cat s "\n")
       s)))
 
-(define-special %while (cond form) :stmt :tr
+(define-special %while (cond form) stmt: true tr: true
   (let (cond (compile cond)
         body (compile-body form)
         ind (indentation))
@@ -822,7 +822,7 @@
         (cat ind "while " cond ":\n" body)
       (cat ind "while " cond " do\n" body ind "end\n"))))
 
-(define-special %for (t k form :async) :stmt :tr
+(define-special %for (t k form async: async) stmt: true tr: true
   (let (t (compile t)
         k (compile k)
         ind (indentation)
@@ -834,7 +834,7 @@
         (cat ind a "for " k " in " t ":\n" body)
       (cat ind "for (" k " in " t ") {\n" body ind "}\n"))))
 
-(define-special %with (t form :async) :stmt :tr
+(define-special %with (t form async: async) stmt: true tr: true
   (let (t (compile t)
         ind (indentation)
         body (compile-body form)
@@ -843,7 +843,7 @@
         (cat ind a "with " t ":\n" body)
       "")))
 
-(define-special %block (name t form) :stmt :tr
+(define-special %block (name t form) stmt: true tr: true
   (let (t (compile t)
         ind (indentation)
         body (compile-body form)
@@ -854,7 +854,7 @@
         (cat ind name sep t ":\n" body)
       (cat ind name sep lh t rh sep "{\n" body ind "}\n"))))
 
-(define-special %try (form) :stmt :tr
+(define-special %try (form) stmt: true tr: true
   (let (ind (indentation)
         body (compile-body form)
         hf (if (target? 'py)
@@ -862,35 +862,35 @@
                      (%local e ((%idx sys exc_info)))
                      (%return (%array false (%get e 1) e)))
              `(%return (%array false e)))
-        h (with-indent (compile hf :stmt)))
+        h (with-indent (compile hf stmt: true)))
     (if (target? 'js)
         (cat ind "try {\n" body ind "}\n"
              ind "catch (e) {\n" h ind "}\n")
       (cat ind "try:\n" body
            ind "except:\n" h))))
 
-(define-special %delete (place) :stmt
+(define-special %delete (place) stmt: true
   (cat (indentation) (if (target? 'py) "del " "delete ") (compile place)))
 
-(define-special %break () :stmt
+(define-special %break () stmt: true
   (cat (indentation) "break"))
 
 (define-special %function (args rest: body)
   (apply compile-function args body))
 
-(define-special %global-function (name args rest: body) :stmt :tr
+(define-special %global-function (name args rest: body) stmt: true tr: true
   (if (or (target? 'lua) (target? 'py))
       (let x (apply compile-function args body name: name)
         (cat (indentation) x))
-    (compile `(%set ,name (%function ,args ,@body)) :stmt)))
+    (compile `(%set ,name (%function ,args ,@body)) stmt: true)))
 
-(define-special %local-function (name args rest: body) :stmt :tr
+(define-special %local-function (name args rest: body) stmt: true tr: true
   (if (or (target? 'lua) (target? 'py))
       (let x (apply compile-function args body name: name prefix: 'local)
         (cat (indentation) x))
-    (compile `(%local ,name (%function ,args ,@body)) :stmt)))
+    (compile `(%local ,name (%function ,args ,@body)) stmt: true)))
 
-(define-special %return (x) :stmt
+(define-special %return (x) stmt: true
   (let x (if (nil? x)
              "return"
            (cat "return " (compile x)))
@@ -902,7 +902,7 @@
 (define-special %typeof (x)
   (cat "typeof(" (compile x) ")"))
 
-(define-special %error (x) :stmt
+(define-special %error (x) stmt: true
   (let e (if (target? 'js)
              (cat "throw " (compile `(%new (Error ,x))))
              (target? 'py)
@@ -910,7 +910,7 @@
            (cat "error(" (compile x) ")"))
     (cat (indentation) e)))
 
-(define-special %throw (x) :stmt
+(define-special %throw (x) stmt: true
   (let e (if (target? 'js)
              (cat "throw " (compile x))
              (target? 'py)
@@ -918,7 +918,7 @@
            (cat "error(" (compile x) ")"))
     (cat (indentation) e)))
 
-(define-special %local (name value) :stmt
+(define-special %local (name value) stmt: true
   (if (and (nil? value) (target? 'py)) (set value "nil"))
   (let (id (compile name)
         value1 (compile value)
@@ -927,7 +927,7 @@
         ind (indentation))
     (cat ind keyword id rh)))
 
-(define-special %set (lh rh) :stmt
+(define-special %set (lh rh) stmt: true
   (let (lh (compile lh)
         rh (compile (if (nil? rh) 'nil rh)))
     (cat (indentation) lh " = " rh)))
@@ -980,7 +980,7 @@
           (set c (cat "," (either pad " "))))))
     (cat s end "}")))
 
-(define-special %list (form comps cond :kind)
+(define-special %list (form comps cond kind: kind)
   (let (s (compile form)
         (lh rh) (if (= kind 'object) (list "{" "}") (list "[" "]")))
     (unless (= kind 'object)
@@ -994,12 +994,12 @@
 (define-special %literal args
   (apply cat (map compile args)))
 
-(define-special global (x) :stmt :tr
+(define-special global (x) stmt: true tr: true
   (if (target? 'py)
       (cat (indentation) "global " (compile x) "\n")
     ""))
 
-(define-special import (name rest: alias) :stmt
+(define-special import (name rest: alias) stmt: true
   (let (ind (indentation)
         as (if (= (hd alias) "as") (at alias 1) (hd alias))
         id (or as name))
@@ -1008,7 +1008,7 @@
           (if as (cat! s " as " (compile id))))
       (cat ind (compile `(%local ,id (require ,(escape name))))))))
 
-(define-special from (name rest: imports) :stmt
+(define-special from (name rest: imports) stmt: true
   (let (ind (indentation)
         id name
         as (with r nil
@@ -1037,7 +1037,7 @@
 (define-special %as (form id)
   (cat (compile form) " as " (compile id)))
 
-(define-special yield args :stmt
+(define-special yield args stmt: true
   (cat (indentation) "yield " (mapcat compile args ", ")))
 
 (define-special await (x)

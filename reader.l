@@ -8,7 +8,7 @@
   (obj pos: 0 string: str len: (# str) more: more))
 
 (define peek-char (s)
-  (let ((:pos :len :string) s)
+  (let ((pos: pos len: len string: string) s)
     (when (< pos len)
       (char string pos))))
 

@@ -141,22 +141,22 @@
   `(%set (%get read-table ,char) (fn (,s) ,@body)))
 
 (define-macro define (name x rest: body)
-  (setenv name :variable)
+  (setenv name variable: true)
   (if (some? body)
       `(%local-function ,name ,@(bind* x body) ,@(props body))
     `(%local ,name ,x ,@(props body))))
 
 (define-macro define-global (name x rest: body)
-  (setenv name :toplevel :variable)
+  (setenv name toplevel: true variable: true)
   (if (some? body)
       `(%global-function ,name ,@(bind* x body) ,@(props body))
     `(set ,name ,x ,@(props body))))
 
 (define-macro get-value (x)
-  `(has (setenv ,x :toplevel) 'value))
+  `(has (setenv ,x toplevel: true) 'value))
 
 (define-macro define-constant (name x)
-  `(%do (setenv ',name :toplevel value: ,(either x `(get-value ',name)))
+  `(%do (setenv ',name toplevel: true value: ,(either x `(get-value ',name)))
         (define-symbol ,name (get-value ',name))))
 
 (define-macro define-variable (name x)
@@ -188,7 +188,7 @@
   (let-unique (x)
    `(with-frame
       (each ,x ,names
-        (setenv ,x :variable))
+        (setenv ,x variable: true))
       ,@body)))
 
 (define-macro let-macro (definitions rest: body)

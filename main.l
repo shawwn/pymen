@@ -206,7 +206,7 @@
 
 (define-global compile-file (path)
   (let form (expand-file path)
-    ((idx compiler compile) form :stmt)))
+    ((idx compiler compile) form stmt: true)))
 
 (define-global load (path)
   (let (previous target previous-indent indent-level)
