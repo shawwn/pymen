@@ -381,7 +381,6 @@
   (unless (or (atom? form) (unary? form))
     (when (atom? (hd form))
       (each (k v) infix
-        ;(print (str (list k v (hd form))))
         (if (has? v (hd form)) (return (index k))))))
   0)
 
