@@ -65,6 +65,9 @@
       `(let ,x ,expr
          (if ,@(apply join (map cl (pair clauses))))))))
 
+(define-macro of (x rest: values)
+  `(case ,x (,@values) true false ,@(props values)))
+
 (define-macro when (cond rest: body)
   `(%if ,cond (%do ,@body)))
 
