@@ -454,10 +454,10 @@ c"
     (test= 2 (case x 9 9 (10) 2 4))
     (test= 2 (case x 9 9 (10 20) 2 4)))
   (let x 'z
-    (test= 9 (case x z 9 10))
-    (test= 7 (case x a 1 b 2 7))
-    (test= 2 (case x a 1 (z) 2 7))
-    (test= 2 (case x a 1 (b z) 2 7)))
+    (test= 9 (case x 'z 9 10))
+    (test= 7 (case x 'a 1 'b 2 7))
+    (test= 2 (case x 'a 1 ('z) 2 7))
+    (test= 2 (case x 'a 1 ('b 'z) 2 7)))
   (let (n (list 0) f (fn () (inc (at n 0)))) ; no multiple eval
     (test= 'b (case (f) 0 'a 1 'b 'c)))
   (test= 'b ((fn () (case 2 0 (do) 1 'a 2 'b)))))

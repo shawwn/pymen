@@ -149,21 +149,21 @@ end
 function cut(x, from, upto)
   local __l2 = dupe(x)
   local __j = 0
-  local __e11 = nil
-  if nil63(from) or from < 0 then
-    __e11 = 0
-  else
-    __e11 = from
-  end
-  local __i3 = __e11
-  local __n4 = _35(x)
   local __e12 = nil
-  if nil63(upto) or upto > __n4 then
-    __e12 = __n4
+  if nil63(from) or from < 0 then
+    __e12 = 0
   else
-    __e12 = upto
+    __e12 = from
   end
-  local __upto1 = __e12
+  local __i3 = __e12
+  local __n4 = _35(x)
+  local __e13 = nil
+  if nil63(upto) or upto > __n4 then
+    __e13 = __n4
+  else
+    __e13 = upto
+  end
+  local __upto1 = __e13
   while __i3 < __upto1 do
     __l2[__j + 1] = x[__i3 + 1]
     __i3 = __i3 + 1
@@ -220,11 +220,11 @@ function char(s, n)
   return clip(s, n, n + 1)
 end
 function code(s, n)
-  local __e13 = nil
+  local __e14 = nil
   if n then
-    __e13 = n + 1
+    __e14 = n + 1
   end
-  return string.byte(s, __e13)
+  return string.byte(s, __e14)
 end
 function string_literal63(x)
   return string63(x) and char(x, 0) == "\""
@@ -378,13 +378,13 @@ function mapcat(f, x, sep)
   local ____i15 = 0
   while ____i15 < _35(____x9) do
     local __v9 = ____x9[____i15 + 1]
-    local __e14 = nil
+    local __e15 = nil
     if f then
-      __e14 = f(__v9)
+      __e15 = f(__v9)
     else
-      __e14 = __v9
+      __e15 = __v9
     end
-    local __y4 = __e14
+    local __y4 = __e15
     if is63(__y4) then
       __r56 = __r56 .. (__c .. __y4)
       __c = sep or ""
@@ -495,22 +495,22 @@ function destash33(l, args1)
   end
 end
 function search(s, pattern, start)
-  local __e15 = nil
+  local __e16 = nil
   if start then
-    __e15 = start + 1
+    __e16 = start + 1
   end
-  local __start = __e15
+  local __start = __e16
   local __i23 = string.find(s, pattern, __start, true)
   return __i23 and __i23 - 1
 end
 function string_ends63(str, x, pos)
-  local __e16 = nil
+  local __e17 = nil
   if is63(pos) then
-    __e16 = clip(str, pos)
+    __e17 = clip(str, pos)
   else
-    __e16 = str
+    __e17 = str
   end
-  local __str = __e16
+  local __str = __e17
   if _35(x) > _35(__str) then
     return false
   else
@@ -518,13 +518,13 @@ function string_ends63(str, x, pos)
   end
 end
 function string_starts63(str, x, pos)
-  local __e17 = nil
+  local __e18 = nil
   if is63(pos) then
-    __e17 = clip(str, pos)
+    __e18 = clip(str, pos)
   else
-    __e17 = str
+    __e18 = str
   end
-  local __str1 = __e17
+  local __str1 = __e18
   if _35(x) > _35(__str1) then
     return false
   else
@@ -667,31 +667,31 @@ function escape(s)
     local __i27 = 0
     while __i27 < _35(s) do
       local __c1 = char(s, __i27)
-      local __e18 = nil
+      local __e19 = nil
       if __c1 == "\n" then
-        __e18 = "\\n"
+        __e19 = "\\n"
       else
-        local __e19 = nil
+        local __e20 = nil
         if __c1 == "\r" then
-          __e19 = "\\r"
+          __e20 = "\\r"
         else
-          local __e20 = nil
+          local __e21 = nil
           if __c1 == "\"" then
-            __e20 = "\\\""
+            __e21 = "\\\""
           else
-            local __e21 = nil
+            local __e22 = nil
             if __c1 == "\\" then
-              __e21 = "\\\\"
+              __e22 = "\\\\"
             else
-              __e21 = __c1
+              __e22 = __c1
             end
-            __e20 = __e21
+            __e21 = __e22
           end
-          __e19 = __e20
+          __e20 = __e21
         end
-        __e18 = __e19
+        __e19 = __e20
       end
-      local __c11 = __e18
+      local __c11 = __e19
       __s1 = __s1 .. __c11
       __i27 = __i27 + 1
     end
@@ -812,20 +812,20 @@ function setenv(k, ...)
   local ____id4 = ____r90
   local __keys = cut(____id4, 0)
   if string63(__k16) then
-    local __e22 = nil
-    if has63(__keys, "toplevel") then
-      __e22 = hd(environment)
-    else
-      __e22 = last(environment)
-    end
-    local __frame = __e22
     local __e23 = nil
-    if has63(__frame, __k16) then
-      __e23 = __frame[__k16]
+    if has63(__keys, "toplevel") then
+      __e23 = hd(environment)
     else
-      __e23 = {}
+      __e23 = last(environment)
     end
-    local __entry = __e23
+    local __frame = __e23
+    local __e24 = nil
+    if has63(__frame, __k16) then
+      __e24 = __frame[__k16]
+    else
+      __e24 = {}
+    end
+    local __entry = __e24
     local ____o17 = __keys
     local __k17 = nil
     for __k17 in next, ____o17 do
@@ -994,13 +994,20 @@ setenv("case", {
     local ____r104 = unstash({...})
     local __expr5 = destash33(expr, ____r104)
     local ____id15 = ____r104
+    local __e25 = nil
+    if nil63(has(____id15, "cmp")) then
+      __e25 = "="
+    else
+      __e25 = has(____id15, "cmp")
+    end
+    local __cmp1 = __e25
     local __clauses1 = cut(____id15, 0)
     local __x86 = unique("x")
     local __eq1 = function (_)
-      return {"=", {"quote", _}, __x86}
+      return {__cmp1, _, __x86}
     end
-    local __cl1 = function (__x89)
-      local ____id16 = __x89
+    local __cl1 = function (__x88)
+      local ____id16 = __x88
       local __a4 = has(____id16, 1)
       local __b4 = has(____id16, 2)
       if nil63(__b4) then
@@ -1009,11 +1016,15 @@ setenv("case", {
         if string63(__a4) or number63(__a4) then
           return {__eq1(__a4), __b4}
         else
-          if one63(__a4) then
-            return {__eq1(hd(__a4)), __b4}
+          if list63(__a4) and hd63(__a4, "quote") then
+            return {__eq1(__a4), __b4}
           else
-            if _35(__a4) > 1 then
-              return {join({"or"}, map(__eq1, __a4)), __b4}
+            if one63(__a4) then
+              return {__eq1(hd(__a4)), __b4}
+            else
+              if _35(__a4) > 1 then
+                return {join({"or"}, map(__eq1, __a4)), __b4}
+              end
             end
           end
         end
@@ -1336,21 +1347,21 @@ setenv("let-macro", {
       if obj63(m) then
         return m
       else
-        local __e24 = nil
+        local __e26 = nil
         if string63(m) then
-          __e24 = clip(m, search(m, ": ") + 2)
+          __e26 = clip(m, search(m, ": ") + 2)
         else
-          local __e25 = nil
+          local __e27 = nil
           if nil63(m) then
-            __e25 = ""
+            __e27 = ""
           else
-            __e25 = str(m)
+            __e27 = str(m)
           end
-          __e24 = __e25
+          __e26 = __e27
         end
         return {
           stack = debug.traceback(),
-          message = __e24
+          message = __e26
         }
       end
     end)}
@@ -1384,21 +1395,21 @@ setenv("let-symbol", {
       if obj63(m) then
         return m
       else
-        local __e26 = nil
+        local __e28 = nil
         if string63(m) then
-          __e26 = clip(m, search(m, ": ") + 2)
+          __e28 = clip(m, search(m, ": ") + 2)
         else
-          local __e27 = nil
+          local __e29 = nil
           if nil63(m) then
-            __e27 = ""
+            __e29 = ""
           else
-            __e27 = str(m)
+            __e29 = str(m)
           end
-          __e26 = __e27
+          __e28 = __e29
         end
         return {
           stack = debug.traceback(),
-          message = __e26
+          message = __e28
         }
       end
     end)}
@@ -1475,24 +1486,24 @@ setenv("each", {
     local __o23 = unique("o")
     local __n29 = unique("n")
     local __i37 = unique("i")
-    local __e28 = nil
+    local __e30 = nil
     if atom63(__x411) then
-      __e28 = {__i37, __x411}
+      __e30 = {__i37, __x411}
     else
-      local __e29 = nil
+      local __e31 = nil
       if _35(__x411) > 1 then
-        __e29 = __x411
+        __e31 = __x411
       else
-        __e29 = {__i37, hd(__x411)}
+        __e31 = {__i37, hd(__x411)}
       end
-      __e28 = __e29
+      __e30 = __e31
     end
-    local ____id74 = __e28
+    local ____id74 = __e30
     local __k25 = has(____id74, 1)
     local __v29 = has(____id74, 2)
     local ____x417 = object({"target", __o23})
     ____x417.py = {"indices", __o23}
-    local __e30 = nil
+    local __e32 = nil
     if has(setenv("target", {
       _stash = true,
       toplevel = true
@@ -1500,11 +1511,11 @@ setenv("each", {
       _stash = true,
       toplevel = true
     }), "value") == "py" then
-      __e30 = __body45
+      __e32 = __body45
     else
-      __e30 = {join({"let", __k25, {"if", {"numeric?", __k25}, {"parseInt", __k25}, __k25}}, __body45)}
+      __e32 = {join({"let", __k25, {"if", {"numeric?", __k25}, {"parseInt", __k25}, __k25}}, __body45)}
     end
-    return {"let", {__o23, __t4, __k25, "nil"}, join({"%for", ____x417, __k25}, props(__body45), {join({"let", {__v29, {"%get", __o23, __k25}}}, __e30)})}
+    return {"let", {__o23, __t4, __k25, "nil"}, join({"%for", ____x417, __k25}, props(__body45), {join({"let", {__v29, {"%get", __o23, __k25}}}, __e32)})}
   end
 })
 setenv("for", {
@@ -1604,25 +1615,25 @@ setenv("cat!", {
 setenv("inc", {
   _stash = true,
   macro = function (n, by)
-    local __e31 = nil
+    local __e33 = nil
     if nil63(by) then
-      __e31 = 1
+      __e33 = 1
     else
-      __e31 = by
+      __e33 = by
     end
-    return {"set", n, {"+", n, __e31}}
+    return {"set", n, {"+", n, __e33}}
   end
 })
 setenv("dec", {
   _stash = true,
   macro = function (n, by)
-    local __e32 = nil
+    local __e34 = nil
     if nil63(by) then
-      __e32 = 1
+      __e34 = 1
     else
-      __e32 = by
+      __e34 = by
     end
-    return {"set", n, {"-", n, __e32}}
+    return {"set", n, {"-", n, __e34}}
   end
 })
 setenv("with-indent", {
@@ -2123,22 +2134,22 @@ setenv("%expand-case", {
     local __x741 = destash33(x, ____r224)
     local ____id113 = ____r224
     local __body65 = cut(____id113, 0)
-    local __e33 = nil
+    local __e35 = nil
     if atom63(__x741) then
-      __e33 = {__x741}
+      __e35 = {__x741}
     else
-      __e33 = __x741
+      __e35 = __x741
     end
-    local ____id114 = __e33
+    local ____id114 = __e35
     local __a26 = has(____id114, 1)
     local __bs25 = cut(____id114, 1)
-    local __e34 = nil
+    local __e36 = nil
     if none63(__bs25) then
-      __e34 = {{"%literal"}}
+      __e36 = {{"%literal"}}
     else
-      __e34 = __bs25
+      __e36 = __bs25
     end
-    return join({"%block", __a26}, __e34, __body65)
+    return join({"%block", __a26}, __e36, __body65)
   end
 })
 setenv("%cases", {
@@ -2243,33 +2254,33 @@ function simple_id63(x)
     if obj63(m) then
       return m
     else
-      local __e35 = nil
+      local __e37 = nil
       if string63(m) then
-        __e35 = clip(m, search(m, ": ") + 2)
+        __e37 = clip(m, search(m, ": ") + 2)
       else
-        local __e36 = nil
+        local __e38 = nil
         if nil63(m) then
-          __e36 = ""
+          __e38 = ""
         else
-          __e36 = str(m)
+          __e38 = str(m)
         end
-        __e35 = __e36
+        __e37 = __e38
       end
       return {
         stack = debug.traceback(),
-        message = __e35
+        message = __e37
       }
     end
   end)}
   local __ok6 = has(____id125, 1)
   local __v32 = has(____id125, 2)
-  local __e37 = nil
+  local __e39 = nil
   if __ok6 then
-    __e37 = __v32
+    __e39 = __v32
   else
-    __e37 = nil
+    __e39 = nil
   end
-  local __r238 = __e37
+  local __r238 = __e39
   if __r238 == x then
     return __r238
   end
@@ -2339,21 +2350,21 @@ function eval_print(form)
     if obj63(m) then
       return m
     else
-      local __e38 = nil
+      local __e40 = nil
       if string63(m) then
-        __e38 = clip(m, search(m, ": ") + 2)
+        __e40 = clip(m, search(m, ": ") + 2)
       else
-        local __e39 = nil
+        local __e41 = nil
         if nil63(m) then
-          __e39 = ""
+          __e41 = ""
         else
-          __e39 = str(m)
+          __e41 = str(m)
         end
-        __e38 = __e39
+        __e40 = __e41
       end
       return {
         stack = debug.traceback(),
-        message = __e38
+        message = __e40
       }
     end
   end)}
@@ -2376,33 +2387,33 @@ function read_toplevel(str, more)
     if obj63(m) then
       return m
     else
-      local __e40 = nil
+      local __e42 = nil
       if string63(m) then
-        __e40 = clip(m, search(m, ": ") + 2)
+        __e42 = clip(m, search(m, ": ") + 2)
       else
-        local __e41 = nil
+        local __e43 = nil
         if nil63(m) then
-          __e41 = ""
+          __e43 = ""
         else
-          __e41 = str(m)
+          __e43 = str(m)
         end
-        __e40 = __e41
+        __e42 = __e43
       end
       return {
         stack = debug.traceback(),
-        message = __e40
+        message = __e42
       }
     end
   end)}
   local __ok8 = has(____id127, 1)
   local __v34 = has(____id127, 2)
-  local __e42 = nil
+  local __e44 = nil
   if __ok8 then
-    __e42 = __v34
+    __e44 = __v34
   else
-    __e42 = nil
+    __e44 = nil
   end
-  local __x825 = __e42
+  local __x825 = __e44
   if __x825 == more then
     return more
   else

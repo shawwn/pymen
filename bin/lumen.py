@@ -142,18 +142,18 @@ def inf63(n=None):
 
 def clip(s=None, L_from=None, upto=None):
   __n3 = L_35(s)
-  __e11 = None
-  if nil63(L_from) or L_from < 0:
-    __e11 = 0
-  else:
-    __e11 = L_from
-  __L_from = __e11
   __e12 = None
-  if nil63(upto) or upto > __n3:
-    __e12 = __n3
+  if nil63(L_from) or L_from < 0:
+    __e12 = 0
   else:
-    __e12 = upto
-  __upto1 = __e12
+    __e12 = L_from
+  __L_from = __e12
+  __e13 = None
+  if nil63(upto) or upto > __n3:
+    __e13 = __n3
+  else:
+    __e13 = upto
+  __upto1 = __e13
   return s[__L_from:__upto1]
 
 def dupe(x=None):
@@ -162,19 +162,19 @@ def dupe(x=None):
 def cut(x=None, L_from=None, upto=None):
   __l2 = dupe(x)
   __j = 0
-  __e13 = None
-  if nil63(L_from) or L_from < 0:
-    __e13 = 0
-  else:
-    __e13 = L_from
-  __i3 = __e13
-  __n4 = L_35(x)
   __e14 = None
-  if nil63(upto) or upto > __n4:
-    __e14 = __n4
+  if nil63(L_from) or L_from < 0:
+    __e14 = 0
   else:
-    __e14 = upto
-  __upto2 = __e14
+    __e14 = L_from
+  __i3 = __e14
+  __n4 = L_35(x)
+  __e15 = None
+  if nil63(upto) or upto > __n4:
+    __e15 = __n4
+  else:
+    __e15 = upto
+  __upto2 = __e15
   while __i3 < __upto2:
     __l2[__j] = x[__i3]
     __i3 = __i3 + 1
@@ -327,10 +327,10 @@ def pair(l=None):
   __i12 = 0
   while __i12 < __n13:
     __a = l[__i12]
-    __e15 = None
+    __e16 = None
     if __i12 + 1 < __n13:
-      __e15 = l[__i12 + 1]
-    __b = __e15
+      __e16 = l[__i12 + 1]
+    __b = __e16
     add(__l12, [__a, __b])
     __i12 = __i12 + 1
     __i12 = __i12 + 1
@@ -378,12 +378,12 @@ def mapcat(f=None, x=None, sep=None):
   ____i15 = 0
   while ____i15 < L_35(____x10):
     __v9 = ____x10[____i15]
-    __e16 = None
+    __e17 = None
     if f:
-      __e16 = f(__v9)
+      __e17 = f(__v9)
     else:
-      __e16 = __v9
-    __y4 = __e16
+      __e17 = __v9
+    __y4 = __e17
     if is63(__y4):
       __r58 = cat(__r58, __c, __y4)
       __c = sep or ""
@@ -478,24 +478,24 @@ def search(s=None, pattern=None, start=None):
     return __i23
 
 def string_ends63(L_str=None, x=None, pos=None):
-  __e17 = None
+  __e18 = None
   if is63(pos):
-    __e17 = clip(L_str, pos)
+    __e18 = clip(L_str, pos)
   else:
-    __e17 = L_str
-  __L_str = __e17
+    __e18 = L_str
+  __L_str = __e18
   if L_35(x) > L_35(__L_str):
     return False
   else:
     return x == clip(__L_str, L_35(__L_str) - L_35(x))
 
 def string_starts63(L_str=None, x=None, pos=None):
-  __e18 = None
+  __e19 = None
   if is63(pos):
-    __e18 = clip(L_str, pos)
+    __e19 = clip(L_str, pos)
   else:
-    __e18 = L_str
-  __L_str1 = __e18
+    __e19 = L_str
+  __L_str1 = __e19
   if L_35(x) > L_35(__L_str1):
     return False
   else:
@@ -636,27 +636,27 @@ def escape(s=None):
     __i26 = 0
     while __i26 < L_35(s):
       __c1 = char(s, __i26)
-      __e19 = None
+      __e20 = None
       if __c1 == "\n":
-        __e19 = "\\n"
+        __e20 = "\\n"
       else:
-        __e20 = None
+        __e21 = None
         if __c1 == "\r":
-          __e20 = "\\r"
+          __e21 = "\\r"
         else:
-          __e21 = None
+          __e22 = None
           if __c1 == "\"":
-            __e21 = "\\\""
+            __e22 = "\\\""
           else:
-            __e22 = None
+            __e23 = None
             if __c1 == "\\":
-              __e22 = "\\\\"
+              __e23 = "\\\\"
             else:
-              __e22 = __c1
-            __e21 = __e22
-          __e20 = __e21
-        __e19 = __e20
-      __c11 = __e19
+              __e23 = __c1
+            __e22 = __e23
+          __e21 = __e22
+        __e20 = __e21
+      __c11 = __e20
       __s1 = cat(__s1, __c11)
       __i26 = __i26 + 1
     return cat(__s1, "\"")
@@ -755,18 +755,18 @@ def setenv(k=None, *_args, **_keys):
   ____id4 = ____r95
   __keys = cut(____id4, 0)
   if string63(__k15):
-    __e23 = None
-    if has63(__keys, "toplevel"):
-      __e23 = hd(environment)
-    else:
-      __e23 = last(environment)
-    __frame = __e23
     __e24 = None
-    if has63(__frame, __k15):
-      __e24 = __frame[__k15]
+    if has63(__keys, "toplevel"):
+      __e24 = hd(environment)
     else:
-      __e24 = {}
-    __entry = __e24
+      __e24 = last(environment)
+    __frame = __e24
+    __e25 = None
+    if has63(__frame, __k15):
+      __e25 = __frame[__k15]
+    else:
+      __e25 = {}
+    __entry = __e25
     ____o16 = __keys
     __k16 = None
     for __k16 in indices(____o16):
@@ -888,13 +888,19 @@ def __f27(expr=None, *_args, **_keys):
   ____r110 = unstash(list(_args), _keys)
   __expr5 = destash33(expr, ____r110)
   ____id15 = ____r110
+  __e26 = None
+  if nil63(has(____id15, "cmp")):
+    __e26 = "="
+  else:
+    __e26 = has(____id15, "cmp")
+  __cmp1 = __e26
   __clauses1 = cut(____id15, 0)
   __x71 = unique("x")
   def __f28(_=None):
-    return ["=", ["quote", _], __x71]
+    return [__cmp1, _, __x71]
   __eq1 = __f28
-  def __f29(__x74=None):
-    ____id16 = __x74
+  def __f29(__x73=None):
+    ____id16 = __x73
     __a4 = has(____id16, 0)
     __b4 = has(____id16, 1)
     if nil63(__b4):
@@ -903,11 +909,14 @@ def __f27(expr=None, *_args, **_keys):
       if string63(__a4) or number63(__a4):
         return [__eq1(__a4), __b4]
       else:
-        if one63(__a4):
-          return [__eq1(hd(__a4)), __b4]
+        if list63(__a4) and hd63(__a4, "quote"):
+          return [__eq1(__a4), __b4]
         else:
-          if L_35(__a4) > 1:
-            return [join(["or"], map(__eq1, __a4)), __b4]
+          if one63(__a4):
+            return [__eq1(hd(__a4)), __b4]
+          else:
+            if L_35(__a4) > 1:
+              return [join(["or"], map(__eq1, __a4)), __b4]
   __cl1 = __f29
   return ["let", __x71, __expr5, join(["if"], apply(join, map(__cl1, pair(__clauses1))))]
 
@@ -1235,27 +1244,27 @@ def __f59(x=None, t=None, *_args, **_keys):
   __o22 = unique("o")
   __n30 = unique("n")
   __i36 = unique("i")
-  __e25 = None
+  __e27 = None
   if atom63(__x371):
-    __e25 = [__i36, __x371]
+    __e27 = [__i36, __x371]
   else:
-    __e26 = None
+    __e28 = None
     if L_35(__x371) > 1:
-      __e26 = __x371
+      __e28 = __x371
     else:
-      __e26 = [__i36, hd(__x371)]
-    __e25 = __e26
-  ____id72 = __e25
+      __e28 = [__i36, hd(__x371)]
+    __e27 = __e28
+  ____id72 = __e27
   __k24 = has(____id72, 0)
   __v29 = has(____id72, 1)
   ____x377 = object(["target", __o22])
   ____x377["py"] = ["indices", __o22]
-  __e27 = None
+  __e29 = None
   if has(setenv("target", toplevel=True), "value") == "lua" or has(setenv("target", toplevel=True), "value") == "py":
-    __e27 = __body45
+    __e29 = __body45
   else:
-    __e27 = [join(["let", __k24, ["if", ["numeric?", __k24], ["parseInt", __k24], __k24]], __body45)]
-  return ["let", [__o22, __t4, __k24, "nil"], join(["%for", ____x377, __k24], props(__body45), [join(["let", [__v29, ["%get", __o22, __k24]]], __e27)])]
+    __e29 = [join(["let", __k24, ["if", ["numeric?", __k24], ["parseInt", __k24], __k24]], __body45)]
+  return ["let", [__o22, __t4, __k24, "nil"], join(["%for", ____x377, __k24], props(__body45), [join(["let", [__v29, ["%get", __o22, __k24]]], __e29)])]
 
 setenv("each", macro=__f59)
 def __f60(i=None, to=None, *_args, **_keys):
@@ -1325,21 +1334,21 @@ def __f67(a=None, *_args, **_keys):
 
 setenv("cat!", macro=__f67)
 def __f68(n=None, by=None):
-  __e28 = None
+  __e30 = None
   if nil63(by):
-    __e28 = 1
+    __e30 = 1
   else:
-    __e28 = by
-  return ["set", n, ["+", n, __e28]]
+    __e30 = by
+  return ["set", n, ["+", n, __e30]]
 
 setenv("inc", macro=__f68)
 def __f69(n=None, by=None):
-  __e29 = None
+  __e31 = None
   if nil63(by):
-    __e29 = 1
+    __e31 = 1
   else:
-    __e29 = by
-  return ["set", n, ["-", n, __e29]]
+    __e31 = by
+  return ["set", n, ["-", n, __e31]]
 
 setenv("dec", macro=__f69)
 def __f70(form=None):
@@ -1714,20 +1723,20 @@ def __f112(x=None, *_args, **_keys):
   __x657 = destash33(x, ____r232)
   ____id1111 = ____r232
   __body65 = cut(____id1111, 0)
-  __e30 = None
+  __e32 = None
   if atom63(__x657):
-    __e30 = [__x657]
+    __e32 = [__x657]
   else:
-    __e30 = __x657
-  ____id112 = __e30
+    __e32 = __x657
+  ____id112 = __e32
   __a26 = has(____id112, 0)
   __bs25 = cut(____id112, 1)
-  __e31 = None
+  __e33 = None
   if none63(__bs25):
-    __e31 = [["%literal"]]
+    __e33 = [["%literal"]]
   else:
-    __e31 = __bs25
-  return join(["%block", __a26], __e31, __body65)
+    __e33 = __bs25
+  return join(["%block", __a26], __e33, __body65)
 
 setenv("%expand-case", macro=__f112)
 def __f113(*_args, **_keys):
@@ -1860,12 +1869,12 @@ def simple_id63(x=None):
   ____id123 = __f118()
   __ok6 = has(____id123, 0)
   __v33 = has(____id123, 1)
-  __e32 = None
+  __e34 = None
   if __ok6:
-    __e32 = __v33
+    __e34 = __v33
   else:
-    __e32 = None
-  __r251 = __e32
+    __e34 = None
+  __r251 = __e34
   if __r251 == x:
     return __r251
 
@@ -1901,12 +1910,12 @@ def pp_toplevel(x=None):
       __ind = get_indentation(__x736)
       __x736 = __x736.rstrip(",")
       __id124 = simple_id63(strip_outer(__x736.strip(), "'", "'"))
-      __e33 = None
+      __e35 = None
       if __id124:
-        __e33 = cat(__ind, __id124)
+        __e35 = cat(__ind, __id124)
       else:
-        __e33 = __x736
-      L_print(__e33)
+        __e35 = __x736
+      L_print(__e35)
       ____i50 = ____i50 + 1
     return L_print(repr(x))
   else:
@@ -1995,12 +2004,12 @@ def read_toplevel(L_str=None, more=None):
   ____id127 = __f121()
   __ok9 = has(____id127, 0)
   __v36 = has(____id127, 1)
-  __e34 = None
+  __e36 = None
   if __ok9:
-    __e34 = __v36
+    __e36 = __v36
   else:
-    __e34 = None
-  __x744 = __e34
+    __e36 = None
+  __x744 = __e36
   if __x744 == more:
     return more
   else:
@@ -2024,7 +2033,7 @@ def repl():
     system.write("> ")
     return system.flush()
   def ctrl_c():
-    L_print("")
+    traceback.print_exc()
     reset()
     return ctrl_c
   def rep1(s=None):
