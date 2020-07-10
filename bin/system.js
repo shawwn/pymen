@@ -13,8 +13,8 @@ var directory_exists63 = function (path) {
   return fs.existsSync(path, "utf8") && fs.statSync(path).isDirectory();
 };
 var path_separator = require("path").sep;
-var path_join = function () {
-  var __parts = unstash(Array.prototype.slice.call(arguments, 0));
+var path_join = function (..._42args) {
+  var __parts = unstash([..._42args]);
   return reduce(function (x, y) {
     return x + (path_separator + y);
   }, __parts) || "";

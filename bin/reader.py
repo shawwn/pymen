@@ -193,17 +193,17 @@ def __f2(s=None):
       if nil63(__c4):
         __r20 = expected(s, ")")
       else:
-        __x4 = read(s)
-        if eof63(s, __x4):
+        __x5 = read(s)
+        if eof63(s, __x5):
           __r20 = expected(s, ")")
         else:
-          if key63(__x4):
-            __k = clip(__x4, 0, edge(__x4))
+          if key63(__x5):
+            __k = clip(__x5, 0, edge(__x5))
             __v1 = read(s)
             __l1 = object(__l1)
             __l1[__k] = __v1
           else:
-            add(__l1, __x4)
+            add(__l1, __x5)
   return __r20
 
 read_table["("] = __f2

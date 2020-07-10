@@ -24,7 +24,7 @@ def directory_exists63(path=None):
 
 path_separator = None
 def path_join(*_args, **_keys):
-  __parts = unstash(list(_args), _keys)
+  __parts = unstash(_args, _keys)
   def __f2(x=None, y=None):
     return cat(x, path_separator, y)
   return reduce(__f2, __parts) or ""
