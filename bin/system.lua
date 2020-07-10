@@ -67,7 +67,7 @@ local function remove_newline(s)
   end
   return s
 end
-local function read_line()
+local function read_line(on_ctrl_c)
   return io.read()
 end
 local function exit(code)

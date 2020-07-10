@@ -980,13 +980,16 @@
           (set c (cat "," (either pad " "))))))
     (cat s end "}")))
 
-(define-special %list (form comps cond)
-  (let s (compile form)
+(define-special %list (form comps cond :kind)
+  (let (s (compile form)
+        (lh rh) (if (= kind 'object) (list "{" "}") (list "[" "]")))
+    (unless (= kind 'object)
+      (set s (cat "(" s ")")))
     (step (k v) comps
       (cat! s " for " (compile k) " in " (compile v)))
     (when (is? cond)
       (cat! s " if " (compile cond)))
-    (cat "[" s "]")))
+    (cat lh s rh)))
 
 (define-special %literal args
   (apply cat (map compile args)))

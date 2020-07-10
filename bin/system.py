@@ -45,8 +45,24 @@ def remove_newline(s=None):
     s = clip(s, 0, edge(s))
   return s
 
-def read_line():
-  return remove_newline(sys.stdin.readline())
+def read_line(on_ctrl_c=None):
+  ____r13 = None
+  try:
+    __line = sys.stdin.readline()
+    __e1 = None
+    if not( __line == ""):
+      __e1 = remove_newline(__line)
+    ____r13 = __e1
+  except KeyboardInterrupt:
+    __e2 = None
+    if function63(on_ctrl_c):
+      __e2 = on_ctrl_c()
+    else:
+      __e2 = on_ctrl_c
+    ____r13 = __e2
+  finally:
+    pass
+  return ____r13
 
 def exit(code=None):
   pass

@@ -71,7 +71,24 @@
   `(%if (%not ,cond) (%do ,@body)))
 
 (define-macro obj body
-  `(%object ,@(mapo (fn (x) x) body)))
+  (if (and (> (# body) 2)
+           (= (at body 1) 'for)
+           (= (at body 3) 'in))
+      (let ((expr rest: body) body
+            comps () cond nil)
+        (while (and (> (# body) 2)
+                    (= (at body 0) 'for)
+                    (= (at body 2) 'in))
+          (let ((_for names _in l rest: body1) body)
+            (add comps (list names l))
+            (set body body1)))
+        (when (= (hd body) 'if)
+          (let ((_if expr) body)
+            (set cond expr)))
+        (when (and (list? expr) (hd? expr ',))
+          (set expr `(: ,@(tl expr))))
+        `(%list ,expr ,comps ,cond kind: object))
+    `(%object ,@(mapo (fn (x) x) body))))
 
 (define-macro let (bs rest: body)
   (if (or (atom? bs) (hd? bs ',)) `(let (,bs ,(hd body)) ,@(tl body))

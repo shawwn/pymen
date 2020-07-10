@@ -60,8 +60,11 @@ var skip_non_code = function (s) {
 };
 var read_table = {};
 var eof = {};
+var more63 = function (s, x) {
+  return is63(s.more) && x === s.more;
+};
 var eof63 = function (s, x) {
-  return x === eof || is63(s.more) && x === s.more;
+  return x === eof || more63(s, x);
 };
 var read_1 = function (s) {
   skip_non_code(s);
@@ -75,33 +78,39 @@ var read_1 = function (s) {
 var read = function (s) {
   var __form = read_1(s);
   if ("," === peek_char(s)) {
-    var __r7 = [",", __form];
+    var __r8 = [",", __form];
     while (true) {
       read_char(s);
       __form = read_1(s);
       if (eof63(s, __form)) {
         return expected(s, "tuple");
       }
-      add(__r7, __form);
+      add(__r8, __form);
       if (!( "," === peek_char(s))) {
         break;
       }
     }
-    return __r7;
+    return __r8;
   } else {
     return __form;
   }
 };
 var read_all = function (s) {
+  var __r10 = undefined;
   var __l = [];
-  while (true) {
+  while (nil63(__r10)) {
     var __form1 = read(s);
-    if (eof63(s, __form1)) {
-      break;
+    if (more63(s, __form1)) {
+      __r10 = s.more;
+    } else {
+      if (eof63(s, __form1)) {
+        __r10 = __l;
+      } else {
+        add(__l, __form1);
+      }
     }
-    add(__l, __form1);
   }
-  return __l;
+  return __r10;
 };
 read_string = function (str, more) {
   var __s = stream(str, more);
@@ -125,7 +134,7 @@ var expected = function (s, c) {
 };
 var wrap = function (s, x) {
   var __y = read(s);
-  if (__y === s.more) {
+  if (more63(s, __y)) {
     return __y;
   } else {
     return [x, __y];
@@ -189,42 +198,46 @@ read_table[""] = function (s) {
 };
 read_table["("] = function (s) {
   read_char(s);
-  var __r19 = undefined;
+  var __r21 = undefined;
   var __l1 = [];
-  while (nil63(__r19)) {
+  while (nil63(__r21)) {
     skip_non_code(s);
     var __c4 = peek_char(s);
     if (__c4 === ")") {
       read_char(s);
-      __r19 = __l1;
+      __r21 = __l1;
     } else {
       if (nil63(__c4)) {
-        __r19 = expected(s, ")");
+        __r21 = expected(s, ")");
       } else {
         var __x3 = read(s);
-        if (key63(__x3)) {
-          var __k = clip(__x3, 0, edge(__x3));
-          var __v = read(s);
-          __l1 = object(__l1);
-          __l1[__k] = __v;
+        if (eof63(s, __x3)) {
+          __r21 = expected(s, ")");
         } else {
-          if (flag63(__x3)) {
+          if (key63(__x3)) {
+            var __k = clip(__x3, 0, edge(__x3));
+            var __v = read(s);
             __l1 = object(__l1);
-            __l1[clip(__x3, 1)] = true;
+            __l1[__k] = __v;
           } else {
-            add(__l1, __x3);
+            if (flag63(__x3)) {
+              __l1 = object(__l1);
+              __l1[clip(__x3, 1)] = true;
+            } else {
+              add(__l1, __x3);
+            }
           }
         }
       }
     }
   }
-  return __r19;
+  return __r21;
 };
 read_table[")"] = function (s) {
   throw new Error("Unexpected ) at " + s.pos);
 };
 var read_matching = function (opener, closer, s) {
-  var __r22 = undefined;
+  var __r24 = undefined;
   var __pos1 = s.pos;
   var __str1 = "";
   var __i1 = 0;
@@ -233,17 +246,17 @@ var read_matching = function (opener, closer, s) {
     __i1 = __i1 + 1;
   }
   if (__str1 === opener) {
-    while (nil63(__r22)) {
+    while (nil63(__r24)) {
       if (clip(s.string, s.pos, s.pos + _35(closer)) === closer) {
         var __i2 = 0;
         while (__i2 < _35(closer)) {
           __str1 = __str1 + read_char(s);
           __i2 = __i2 + 1;
         }
-        __r22 = __str1;
+        __r24 = __str1;
       } else {
         if (nil63(peek_char(s))) {
-          __r22 = expected(s, closer);
+          __r24 = expected(s, closer);
         } else {
           __str1 = __str1 + read_char(s);
           if (peek_char(s) === "\\") {
@@ -253,7 +266,7 @@ var read_matching = function (opener, closer, s) {
       }
     }
   }
-  return __r22;
+  return __r24;
 };
 read_table["\""] = function (s) {
   if (string_starts63(s.string, "\"\"\"", s.pos)) {
@@ -266,16 +279,16 @@ read_table["\""] = function (s) {
       s.pos = __j + 1;
       return clip(s.string, __i3, __j + 1);
     } else {
-      var __r24 = undefined;
+      var __r26 = undefined;
       read_char(s);
-      while (nil63(__r24)) {
+      while (nil63(__r26)) {
         var __c5 = peek_char(s);
         if (__c5 === "\"") {
           read_char(s);
-          __r24 = clip(s.string, __i3, s.pos);
+          __r26 = clip(s.string, __i3, s.pos);
         } else {
           if (nil63(__c5)) {
-            __r24 = expected(s, "\"");
+            __r26 = expected(s, "\"");
           } else {
             if (__c5 === "\\") {
               read_char(s);
@@ -284,7 +297,7 @@ read_table["\""] = function (s) {
           }
         }
       }
-      return __r24;
+      return __r26;
     }
   }
 };

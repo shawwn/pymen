@@ -37,7 +37,7 @@ var remove_newline = function (s) {
   }
   return s;
 };
-var read_line = function () {
+var read_line = function (on_ctrl_c) {
 };
 var exit = function (code) {
   return process.exit(code);

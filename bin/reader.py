@@ -54,8 +54,11 @@ def skip_non_code(s=None):
 
 read_table = {}
 eof = {}
+def more63(s=None, x=None):
+  return is63(s["more"]) and x == s["more"]
+
 def eof63(s=None, x=None):
-  return x == eof or is63(s["more"]) and x == s["more"]
+  return x == eof or more63(s, x)
 
 def read_1(s=None):
   skip_non_code(s)
@@ -68,27 +71,32 @@ def read_1(s=None):
 def read(s=None):
   __form = read_1(s)
   if "," == peek_char(s):
-    __r7 = [",", __form]
+    __r8 = [",", __form]
     while True:
       read_char(s)
       __form = read_1(s)
       if eof63(s, __form):
         return expected(s, "tuple")
-      add(__r7, __form)
+      add(__r8, __form)
       if not( "," == peek_char(s)):
         break
-    return __r7
+    return __r8
   else:
     return __form
 
 def read_all(s=None):
+  __r10 = None
   __l = []
-  while True:
+  while nil63(__r10):
     __form1 = read(s)
-    if eof63(s, __form1):
-      break
-    add(__l, __form1)
-  return __l
+    if more63(s, __form1):
+      __r10 = s["more"]
+    else:
+      if eof63(s, __form1):
+        __r10 = __l
+      else:
+        add(__l, __form1)
+  return __r10
 
 def read_string(L_str=None, more=None):
   __s = stream(L_str, more)
@@ -110,7 +118,7 @@ def expected(s=None, c=None):
 
 def wrap(s=None, x=None):
   __y = read(s)
-  if __y == s["more"]:
+  if more63(s, __y):
     return __y
   else:
     return [x, __y]
@@ -176,31 +184,34 @@ def __f1(s=None):
 read_table[""] = __f1
 def __f2(s=None):
   read_char(s)
-  __r19 = None
+  __r21 = None
   __l1 = []
-  while nil63(__r19):
+  while nil63(__r21):
     skip_non_code(s)
     __c4 = peek_char(s)
     if __c4 == ")":
       read_char(s)
-      __r19 = __l1
+      __r21 = __l1
     else:
       if nil63(__c4):
-        __r19 = expected(s, ")")
+        __r21 = expected(s, ")")
       else:
         __x4 = read(s)
-        if key63(__x4):
-          __k = clip(__x4, 0, edge(__x4))
-          __v1 = read(s)
-          __l1 = object(__l1)
-          __l1[__k] = __v1
+        if eof63(s, __x4):
+          __r21 = expected(s, ")")
         else:
-          if flag63(__x4):
+          if key63(__x4):
+            __k = clip(__x4, 0, edge(__x4))
+            __v1 = read(s)
             __l1 = object(__l1)
-            __l1[clip(__x4, 1)] = True
+            __l1[__k] = __v1
           else:
-            add(__l1, __x4)
-  return __r19
+            if flag63(__x4):
+              __l1 = object(__l1)
+              __l1[clip(__x4, 1)] = True
+            else:
+              add(__l1, __x4)
+  return __r21
 
 read_table["("] = __f2
 def __f3(s=None):
@@ -208,7 +219,7 @@ def __f3(s=None):
 
 read_table[")"] = __f3
 def read_matching(opener=None, closer=None, s=None):
-  __r22 = None
+  __r24 = None
   __pos1 = s["pos"]
   __L_str1 = ""
   __i1 = 0
@@ -216,21 +227,21 @@ def read_matching(opener=None, closer=None, s=None):
     __L_str1 = cat(__L_str1, read_char(s) or "")
     __i1 = __i1 + 1
   if __L_str1 == opener:
-    while nil63(__r22):
+    while nil63(__r24):
       if clip(s["string"], s["pos"], s["pos"] + L_35(closer)) == closer:
         __i2 = 0
         while __i2 < L_35(closer):
           __L_str1 = cat(__L_str1, read_char(s))
           __i2 = __i2 + 1
-        __r22 = __L_str1
+        __r24 = __L_str1
       else:
         if nil63(peek_char(s)):
-          __r22 = expected(s, closer)
+          __r24 = expected(s, closer)
         else:
           __L_str1 = cat(__L_str1, read_char(s))
           if peek_char(s) == "\\":
             __L_str1 = cat(__L_str1, read_char(s))
-  return __r22
+  return __r24
 
 def __f4(s=None):
   if string_starts63(s["string"], "\"\"\"", s["pos"]):
@@ -243,21 +254,21 @@ def __f4(s=None):
       s["pos"] = __j + 1
       return clip(s["string"], __i3, __j + 1)
     else:
-      __r24 = None
+      __r26 = None
       read_char(s)
-      while nil63(__r24):
+      while nil63(__r26):
         __c5 = peek_char(s)
         if __c5 == "\"":
           read_char(s)
-          __r24 = clip(s["string"], __i3, s["pos"])
+          __r26 = clip(s["string"], __i3, s["pos"])
         else:
           if nil63(__c5):
-            __r24 = expected(s, "\"")
+            __r26 = expected(s, "\"")
           else:
             if __c5 == "\\":
               read_char(s)
             read_char(s)
-      return __r24
+      return __r26
 
 read_table["\""] = __f4
 def __f5(s=None):
