@@ -2209,44 +2209,40 @@ setenv("try", {
   _stash = true,
   macro = function (x, ...)
     local ____r232 = unstash({...})
-    local __x863 = destash33(x, ____r232)
+    local __x861 = destash33(x, ____r232)
     local ____id123 = ____r232
     local __cases1 = cut(____id123, 0)
     local __fin1 = {"finally"}
     local ____o27 = __cases1
     local ____i46 = nil
     for ____i46 in next, ____o27 do
-      local __x865 = ____o27[____i46]
-      if hd63(__x865, "finally") then
-        __fin1 = __x865
+      local __x863 = ____o27[____i46]
+      if hd63(__x863, "finally") then
+        __fin1 = __x863
       end
     end
     local __forms7 = {}
-    local ____x868 = __cases1
+    local ____x866 = __cases1
     local ____i47 = 0
-    while ____i47 < _35(____x868) do
-      local ____id124 = ____x868[____i47 + 1]
-      local __x869 = has(____id124, 1)
+    while ____i47 < _35(____x866) do
+      local ____id124 = ____x866[____i47 + 1]
+      local __x867 = has(____id124, 1)
       local __body71 = cut(____id124, 1)
-      if __x869 == "finally" then
+      if __x867 == "finally" then
       else
-        if __x869 == "except" and has(__body71, 1) == "as" then
+        if __x867 == "except" and has(__body71, 1) == "as" then
           local ____id125 = __body71
           local __kind2 = has(____id125, 1)
           local ___1 = has(____id125, 2)
           local __name19 = has(____id125, 3)
           local __body72 = cut(____id125, 3)
-          add(__forms7, join({{__x869, {"%as", __kind2, __name19}}}, __body72))
+          add(__forms7, join({{__x867, {"%as", __kind2, __name19}}}, __body72))
         else
-          if __x869 == "except" then
-            if one63(__body71) then
-              add(__forms7, join({{__x869, "Exception"}}, __body71))
-            else
-              local ____id126 = __body71
-              local __kind3 = has(____id126, 1)
-              local __body73 = cut(____id126, 1)
-              add(__forms7, join({{__x869, __kind3}}, __body73))
-            end
+          if __x867 == "except" then
+            local ____id126 = __body71
+            local __kind3 = has(____id126, 1)
+            local __body73 = cut(____id126, 1)
+            add(__forms7, join({{__x867, __kind3}}, __body73))
           else
             error("Unknown try clause")
           end
@@ -2254,7 +2250,7 @@ setenv("try", {
       end
       ____i47 = ____i47 + 1
     end
-    return join({"%cases", {"try", __x863}}, __forms7, {__fin1})
+    return join({"%cases", {"try", __x861}}, __forms7, {__fin1})
   end
 })
 setenv("errsafe", {
@@ -2269,9 +2265,9 @@ setenv("errsafe", {
 setenv("dbg", {
   _stash = true,
   macro = function ()
-    local ____x894 = object({"target", {"do"}})
-    ____x894.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
-    return ____x894
+    local ____x890 = object({"target", {"do"}})
+    ____x890.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
+    return ____x890
   end
 })
 setenv("see", {
@@ -2294,10 +2290,10 @@ function pp(x)
     local __c4 = "  "
     local __nl = nil
     print("(")
-    local ____x902 = x
+    local ____x898 = x
     local ____i48 = 0
-    while ____i48 < _35(____x902) do
-      local __v32 = ____x902[____i48 + 1]
+    while ____i48 < _35(____x898) do
+      local __v32 = ____x898[____i48 + 1]
       if __nl then
         print("")
       end
@@ -2491,17 +2487,17 @@ function read_toplevel(str, more)
   else
     __e44 = nil
   end
-  local __x914 = __e44
-  if __x914 == more then
+  local __x910 = __e44
+  if __x910 == more then
     return more
   else
-    if nil63(__x914) then
-      return __x914
+    if nil63(__x910) then
+      return __x910
     else
-      if one63(__x914) then
-        return hd(__x914)
+      if one63(__x910) then
+        return hd(__x910)
       else
-        return __x914
+        return __x910
       end
     end
   end
@@ -2657,10 +2653,10 @@ local function main(args)
         end
         __i51 = __i51 + 1
       end
-      local ____x919 = __pre
+      local ____x915 = __pre
       local ____i52 = 0
-      while ____i52 < _35(____x919) do
-        local __file = ____x919[____i52 + 1]
+      while ____i52 < _35(____x915) do
+        local __file = ____x915[____i52 + 1]
         run_file(__file)
         ____i52 = ____i52 + 1
       end

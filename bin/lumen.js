@@ -2330,14 +2330,14 @@ setenv("try", {
   _stash: true,
   macro: function (x, ..._42args) {
     var ____r237 = unstash([..._42args]);
-    var __x857 = destash33(x, ____r237);
+    var __x855 = destash33(x, ____r237);
     var ____id1211 = ____r237;
     var __cases1 = cut(____id1211, 0);
     var __fin1 = ["finally"];
     var ____o27 = __cases1;
     var ____i46 = undefined;
     for (____i46 in ____o27) {
-      var __x859 = ____o27[____i46];
+      var __x857 = ____o27[____i46];
       var __e52 = undefined;
       if (numeric63(____i46)) {
         __e52 = parseInt(____i46);
@@ -2345,36 +2345,32 @@ setenv("try", {
         __e52 = ____i46;
       }
       var ____i461 = __e52;
-      if (hd63(__x859, "finally")) {
-        __fin1 = __x859;
+      if (hd63(__x857, "finally")) {
+        __fin1 = __x857;
       }
     }
     var __forms7 = [];
-    var ____x862 = __cases1;
+    var ____x860 = __cases1;
     var ____i47 = 0;
-    while (____i47 < _35(____x862)) {
-      var ____id122 = ____x862[____i47];
-      var __x863 = has(____id122, 0);
+    while (____i47 < _35(____x860)) {
+      var ____id122 = ____x860[____i47];
+      var __x861 = has(____id122, 0);
       var __body71 = cut(____id122, 1);
-      if (__x863 === "finally") {
+      if (__x861 === "finally") {
       } else {
-        if (__x863 === "except" && has(__body71, 1) === "as") {
+        if (__x861 === "except" && has(__body71, 1) === "as") {
           var ____id123 = __body71;
           var __kind2 = has(____id123, 0);
           var ___1 = has(____id123, 1);
           var __name19 = has(____id123, 2);
           var __body72 = cut(____id123, 3);
-          add(__forms7, join([[__x863, ["%as", __kind2, __name19]]], __body72));
+          add(__forms7, join([[__x861, ["%as", __kind2, __name19]]], __body72));
         } else {
-          if (__x863 === "except") {
-            if (one63(__body71)) {
-              add(__forms7, join([[__x863, "Exception"]], __body71));
-            } else {
-              var ____id124 = __body71;
-              var __kind3 = has(____id124, 0);
-              var __body73 = cut(____id124, 1);
-              add(__forms7, join([[__x863, __kind3]], __body73));
-            }
+          if (__x861 === "except") {
+            var ____id124 = __body71;
+            var __kind3 = has(____id124, 0);
+            var __body73 = cut(____id124, 1);
+            add(__forms7, join([[__x861, __kind3]], __body73));
           } else {
             throw new Error("Unknown try clause");
           }
@@ -2382,7 +2378,7 @@ setenv("try", {
       }
       ____i47 = ____i47 + 1;
     }
-    return join(["%cases", ["try", __x857]], __forms7, [__fin1]);
+    return join(["%cases", ["try", __x855]], __forms7, [__fin1]);
   }
 });
 setenv("errsafe", {
@@ -2397,9 +2393,9 @@ setenv("errsafe", {
 setenv("dbg", {
   _stash: true,
   macro: function () {
-    var ____x888 = object(["target", ["do"]]);
-    ____x888.py = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]];
-    return ____x888;
+    var ____x884 = object(["target", ["do"]]);
+    ____x884.py = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]];
+    return ____x884;
   }
 });
 setenv("see", {
@@ -2422,10 +2418,10 @@ pp = function (x) {
     var __c4 = "  ";
     var __nl = undefined;
     print("(");
-    var ____x896 = x;
+    var ____x892 = x;
     var ____i48 = 0;
-    while (____i48 < _35(____x896)) {
-      var __v32 = ____x896[____i48];
+    while (____i48 < _35(____x892)) {
+      var __v32 = ____x892[____i48];
       if (__nl) {
         print("");
       }
@@ -2564,17 +2560,17 @@ read_toplevel = function (str, more) {
   } else {
     __e54 = undefined;
   }
-  var __x908 = __e54;
-  if (__x908 === more) {
+  var __x904 = __e54;
+  if (__x904 === more) {
     return more;
   } else {
-    if (nil63(__x908)) {
-      return __x908;
+    if (nil63(__x904)) {
+      return __x904;
     } else {
-      if (one63(__x908)) {
-        return hd(__x908);
+      if (one63(__x904)) {
+        return hd(__x904);
       } else {
-        return __x908;
+        return __x904;
       }
     }
   }
@@ -2723,10 +2719,10 @@ var main = function (args) {
         }
         __i50 = __i50 + 1;
       }
-      var ____x913 = __pre;
+      var ____x909 = __pre;
       var ____i51 = 0;
-      while (____i51 < _35(____x913)) {
-        var __file = ____x913[____i51];
+      while (____i51 < _35(____x909)) {
+        var __file = ____x909[____i51];
         run_file(__file);
         ____i51 = ____i51 + 1;
       }

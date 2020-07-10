@@ -20,18 +20,25 @@
 
 (define-global has? (l k)
   (target js: ((idx l hasOwnProperty) k)
-          py: (if (isinstance l dict)
+          py: (if (obj? l)
                   (%in k l)
-                (and (number? k) (>= k 0) (< k (len l))))
+                  (array? l)
+                  (and (number? k) (>= k 0) (< k (len l)))
+                false)
           lua: (is? (get l k))))
 
 (define-global has (l k else)
   (if (has? l k) (get l k) else))
 
+(target py:
+  (try (from (idx collections abc) import Sequence)
+    (except ImportError
+      (from collections import Sequence))))
+(target py: (import numpy as np))
+
 (define-global array? (x)
   (target js: ((idx Array isArray) x)
-          py: (or (isinstance x list)
-                  (isinstance x tuple))
+          py: (isinstance x (tuple (list Sequence (idx np ndarray))))
           lua: (= (type x) 'table)))
 
 (target py:
@@ -86,7 +93,8 @@
 (target py:
   (do (import numbers)
       (define-global string? (x) (isinstance x |str|))
-      (define-global number? (x) (and (not (boolean? x)) (isinstance x (idx numbers Number))))
+      (define-global number? (x) (and (not (boolean? x))
+                                      (isinstance x (idx numbers Number))))
       (define-global boolean? (x) (isinstance x bool))
       (define-global function? (x) (callable x)))
   (do (define-global string? (x) (= (type x) 'string))
