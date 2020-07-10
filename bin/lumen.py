@@ -267,9 +267,9 @@ def reverse(l=None):
     __i7 = __i7 - 1
   return __l11
 
-def reduce(f=None, x=None):
+def reduce(f=None, x=None, L_else=None):
   if none63(x):
-    return None
+    return L_else
   else:
     if one63(x):
       return hd(x)
@@ -523,37 +523,37 @@ def cat(*_args, **_keys):
   __xs = unstash(_args, _keys)
   def __f7(a=None, b=None):
     return cat2(a, b)
-  return either(reduce(__f7, __xs), "")
+  return reduce(__f7, __xs, "")
 
 def L_43(*_args, **_keys):
   __xs1 = unstash(_args, _keys)
   def __f8(a=None, b=None):
     return a + b
-  return either(reduce(__f8, __xs1), 0)
+  return reduce(__f8, __xs1, 0)
 
 def L_45(*_args, **_keys):
   __xs2 = unstash(_args, _keys)
   def __f9(b=None, a=None):
     return a - b
-  return either(reduce(__f9, reverse(__xs2)), 0)
+  return reduce(__f9, reverse(__xs2), 0)
 
 def L_42(*_args, **_keys):
   __xs3 = unstash(_args, _keys)
   def __f10(a=None, b=None):
     return a * b
-  return either(reduce(__f10, __xs3), 1)
+  return reduce(__f10, __xs3, 1)
 
 def L_47(*_args, **_keys):
   __xs4 = unstash(_args, _keys)
   def __f11(b=None, a=None):
     return a / b
-  return either(reduce(__f11, reverse(__xs4)), 1)
+  return reduce(__f11, reverse(__xs4), 1)
 
 def L_37(*_args, **_keys):
   __xs5 = unstash(_args, _keys)
   def __f12(b=None, a=None):
     return a % b
-  return either(reduce(__f12, reverse(__xs5)), 0)
+  return reduce(__f12, reverse(__xs5), 1)
 
 def pairwise(f=None, xs=None):
   __i24 = 0
@@ -599,7 +599,7 @@ def number_code63(n=None):
   return n > 47 and n < 58
 
 def number(s=None):
-  if char(s, 0) == "-" and number_code63(code(s, 1)) or number_code63(code(s, 0)):
+  if string63(s):
     ____r86 = None
     try:
       return int(s)
@@ -615,6 +615,9 @@ def number(s=None):
     finally:
       pass
     return ____r87
+  else:
+    if number63(s):
+      return s
 
 def numeric63(s=None):
   __n22 = L_35(s)

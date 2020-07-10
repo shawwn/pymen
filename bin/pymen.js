@@ -320,9 +320,9 @@ reverse = function (l) {
   }
   return __l11;
 };
-reduce = function (f, x) {
+reduce = function (f, x, _else) {
   if (none63(x)) {
-    return undefined;
+    return _else;
   } else {
     if (one63(x)) {
       return hd(x);
@@ -700,39 +700,39 @@ var cat2 = function (a, b) {
 };
 cat = function (..._42args) {
   var __xs = unstash([..._42args]);
-  return either(reduce(function (a, b) {
+  return reduce(function (a, b) {
     return cat2(a, b);
-  }, __xs), "");
+  }, __xs, "");
 };
 _43 = function (..._42args) {
   var __xs1 = unstash([..._42args]);
-  return either(reduce(function (a, b) {
+  return reduce(function (a, b) {
     return a + b;
-  }, __xs1), 0);
+  }, __xs1, 0);
 };
 _45 = function (..._42args) {
   var __xs2 = unstash([..._42args]);
-  return either(reduce(function (b, a) {
+  return reduce(function (b, a) {
     return a - b;
-  }, reverse(__xs2)), 0);
+  }, reverse(__xs2), 0);
 };
 _42 = function (..._42args) {
   var __xs3 = unstash([..._42args]);
-  return either(reduce(function (a, b) {
+  return reduce(function (a, b) {
     return a * b;
-  }, __xs3), 1);
+  }, __xs3, 1);
 };
 _47 = function (..._42args) {
   var __xs4 = unstash([..._42args]);
-  return either(reduce(function (b, a) {
+  return reduce(function (b, a) {
     return a / b;
-  }, reverse(__xs4)), 1);
+  }, reverse(__xs4), 1);
 };
 _37 = function (..._42args) {
   var __xs5 = unstash([..._42args]);
-  return either(reduce(function (b, a) {
+  return reduce(function (b, a) {
     return a % b;
-  }, reverse(__xs5)), 0);
+  }, reverse(__xs5), 1);
 };
 var pairwise = function (f, xs) {
   var __i25 = 0;

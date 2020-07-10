@@ -253,9 +253,9 @@ function reverse(l)
   end
   return __l11
 end
-function reduce(f, x)
+function reduce(f, x, _else)
   if none63(x) then
-    return nil
+    return _else
   else
     if one63(x) then
       return hd(x)
@@ -566,39 +566,39 @@ local function cat2(a, b)
 end
 function cat(...)
   local __xs = unstash({...})
-  return either(reduce(function (a, b)
+  return reduce(function (a, b)
     return cat2(a, b)
-  end, __xs), "")
+  end, __xs, "")
 end
 function _43(...)
   local __xs1 = unstash({...})
-  return either(reduce(function (a, b)
+  return reduce(function (a, b)
     return a + b
-  end, __xs1), 0)
+  end, __xs1, 0)
 end
 function _45(...)
   local __xs2 = unstash({...})
-  return either(reduce(function (b, a)
+  return reduce(function (b, a)
     return a - b
-  end, reverse(__xs2)), 0)
+  end, reverse(__xs2), 0)
 end
 function _42(...)
   local __xs3 = unstash({...})
-  return either(reduce(function (a, b)
+  return reduce(function (a, b)
     return a * b
-  end, __xs3), 1)
+  end, __xs3, 1)
 end
 function _47(...)
   local __xs4 = unstash({...})
-  return either(reduce(function (b, a)
+  return reduce(function (b, a)
     return a / b
-  end, reverse(__xs4)), 1)
+  end, reverse(__xs4), 1)
 end
 function _37(...)
   local __xs5 = unstash({...})
-  return either(reduce(function (b, a)
+  return reduce(function (b, a)
     return a % b
-  end, reverse(__xs5)), 0)
+  end, reverse(__xs5), 1)
 end
 local function pairwise(f, xs)
   local __i25 = 0
