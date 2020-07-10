@@ -77,9 +77,15 @@
   (if (= (char s (edge s)) "\r") (set s (clip s 0 (edge s))))
   s)
 
-(define read-line ()
+(define read-line (on-ctrl-c)
   (target lua: ((idx io read))
-          py: (remove-newline ((idx (idx sys stdin) readline)))))
+          py: (try (let line ((idx (idx sys stdin) readline))
+                     (unless (= line "")
+                       (remove-newline line)))
+                (except KeyboardInterrupt
+                        (if (function? on-ctrl-c)
+                            (on-ctrl-c)
+                          on-ctrl-c)))))
 
 (define exit (code)
   (target js: ((idx process exit) code)

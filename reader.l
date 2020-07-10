@@ -30,10 +30,12 @@
 (define read-table (obj))
 (define eof (obj))
 
+(define more? (s x)
+  (and (is? (get s 'more))
+       (= x (get s 'more))))
+
 (define eof? (s x)
-  (or (= x eof)
-      (and (is? (get s 'more))
-           (= x (get s 'more)))))
+  (or (= x eof) (more? s x)))
 
 (define read-1 (s)
   (skip-non-code s)
@@ -58,11 +60,13 @@
       form)))
 
 (define read-all (s)
-  (with l ()
-    (while true
-      (let form (read s)
-        (if (eof? s form) (break))
-        (add l form)))))
+  (with r nil
+    (let l ()
+      (while (nil? r)
+        (let form (read s)
+          (if (more? s form) (set r (get s 'more))
+              (eof? s form) (set r l)
+            (add l form)))))))
 
 (define-global read-string (str more)
   (let s (stream str more)
@@ -86,7 +90,7 @@
 
 (define wrap (s x)
   (let y (read s)
-    (if (= y (get s 'more)) y
+    (if (more? s y) y
       (list x y))))
 
 (define hex-prefix? (str)
@@ -130,7 +134,9 @@
           (if (= c ")") (do (read-char s) (set r l))
               (nil? c) (set r (expected s ")"))
             (let x (read s)
-              (if (key? x)
+              (if (eof? s x)
+                  (set r (expected s ")"))
+                  (key? x)
                   (let (k (clip x 0 (edge x))
                         v (read s))
                     (set l (object l) (get l k) v))
