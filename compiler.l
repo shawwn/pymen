@@ -39,8 +39,14 @@
       (symbol? x)
       (variable? x)))
 
+(define-global flag? (atom)
+  (and (string? atom)
+       (> (# atom) 1)
+       (= (char atom 0) ":")))
+
 (define-global quoted (form)
-  (if (string? form) (escape form)
+  (if (flag? form) form
+      (string? form) (escape form)
       (atom? form) form
     `(list ,@(map quoted form))))
 
@@ -301,8 +307,13 @@
       (and (> n 96) (< n 123)) ; a-z
       (= n 95)))               ; _
 
+(define compile-flag (x)
+  (escape x))
+
 (define-global compile-id (id raw?)
-  (if (= (code id 0) 46) ; .
+  (if (flag? id)
+      (compile-flag id)
+      (= (code id 0) 46) ; .
       (cat "." (compile-id (clip id 1) true))
     (let (x (if (target? 'py) "L_" "_")
           id1 (if (number-code? (code id 0)) x ""))

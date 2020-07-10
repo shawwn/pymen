@@ -44,14 +44,21 @@ end
 function bound63(x)
   return macro63(x) or (special63(x) or (symbol63(x) or variable63(x)))
 end
+function flag63(atom)
+  return string63(atom) and (_35(atom) > 1 and char(atom, 0) == ":")
+end
 function quoted(form)
-  if string63(form) then
-    return escape(form)
+  if flag63(form) then
+    return form
   else
-    if atom63(form) then
-      return form
+    if string63(form) then
+      return escape(form)
     else
-      return join({"list"}, map(quoted, form))
+      if atom63(form) then
+        return form
+      else
+        return join({"list"}, map(quoted, form))
+      end
     end
   end
 end
@@ -195,7 +202,7 @@ function bind42(args, body)
     local __pre = {}
     local __bs1 = {}
     local __inits = {}
-    local __r20 = unique("r")
+    local __r21 = unique("r")
     local ____o3 = args
     local __k4 = nil
     for __k4 in next, ____o3 do
@@ -230,15 +237,15 @@ function bind42(args, body)
       end
     end
     if props63(args) then
-      __pre = join(__pre, {__r20, rest()})
+      __pre = join(__pre, {__r21, rest()})
       local __n4 = _35(__args1)
       local __i5 = 0
       while __i5 < __n4 do
         local __v4 = __args1[__i5 + 1]
-        __pre = join(__pre, {__v4, {"destash!", __v4, __r20}})
+        __pre = join(__pre, {__v4, {"destash!", __v4, __r21}})
         __i5 = __i5 + 1
       end
-      __bs1 = join(__bs1, {props(args), __r20})
+      __bs1 = join(__bs1, {props(args), __r21})
     end
     local __forms = join({"let", __pre}, __inits, {join({"let", __bs1}, __body)})
     local __e43 = nil
@@ -313,12 +320,12 @@ local function expand_function(__x58)
     end
   end)}
   local ____ok = has(____id8, 1)
-  local ____r27 = has(____id8, 2)
+  local ____r28 = has(____id8, 2)
   drop(environment)
   if ____ok then
-    return ____r27
+    return ____r28
   else
-    error(____r27)
+    error(____r28)
   end
 end
 local function expand_definition(__x64)
@@ -362,12 +369,12 @@ local function expand_definition(__x64)
     end
   end)}
   local ____ok1 = has(____id10, 1)
-  local ____r29 = has(____id10, 2)
+  local ____r30 = has(____id10, 2)
   drop(environment)
   if ____ok1 then
-    return ____r29
+    return ____r30
   else
-    error(____r29)
+    error(____r30)
   end
 end
 local function expand_macro(form)
@@ -667,66 +674,73 @@ end
 local function valid_code63(n)
   return number_code63(n) or (n > 64 and n < 91 or (n > 96 and n < 123 or n == 95))
 end
+local function compile_flag(x)
+  return escape(x)
+end
 function compile_id(id, raw63)
-  if code(id, 0) == 46 then
-    return "." .. compile_id(clip(id, 1), true)
+  if flag63(id) then
+    return compile_flag(id)
   else
-    local __e49 = nil
-    if has(setenv("target", {
-      _stash = true,
-      toplevel = true
-    }), "value") == "py" then
-      __e49 = "L_"
+    if code(id, 0) == 46 then
+      return "." .. compile_id(clip(id, 1), true)
     else
-      __e49 = "_"
-    end
-    local __x89 = __e49
-    local __e50 = nil
-    if number_code63(code(id, 0)) then
-      __e50 = __x89
-    else
-      __e50 = ""
-    end
-    local __id111 = __e50
-    local __i11 = 0
-    while __i11 < _35(id) do
-      local __c1 = char(id, __i11)
-      local __n9 = code(__c1)
-      local __e51 = nil
-      if __c1 == "-" and not( id == "-") then
-        local __e54 = nil
-        if __i11 == 0 then
-          __e54 = __x89
-        else
-          __e54 = "_"
-        end
-        __e51 = __e54
+      local __e49 = nil
+      if has(setenv("target", {
+        _stash = true,
+        toplevel = true
+      }), "value") == "py" then
+        __e49 = "L_"
       else
-        local __e52 = nil
-        if valid_code63(__n9) then
-          __e52 = __c1
-        else
-          local __e53 = nil
-          if __i11 == 0 then
-            __e53 = __x89 .. __n9
-          else
-            __e53 = __n9
-          end
-          __e52 = __e53
-        end
-        __e51 = __e52
+        __e49 = "_"
       end
-      local __c11 = __e51
-      __id111 = __id111 .. __c11
-      __i11 = __i11 + 1
-    end
-    if raw63 then
-      return __id111
-    else
-      if reserved63(__id111) then
-        return __x89 .. __id111
+      local __x89 = __e49
+      local __e50 = nil
+      if number_code63(code(id, 0)) then
+        __e50 = __x89
       else
+        __e50 = ""
+      end
+      local __id111 = __e50
+      local __i11 = 0
+      while __i11 < _35(id) do
+        local __c1 = char(id, __i11)
+        local __n9 = code(__c1)
+        local __e51 = nil
+        if __c1 == "-" and not( id == "-") then
+          local __e54 = nil
+          if __i11 == 0 then
+            __e54 = __x89
+          else
+            __e54 = "_"
+          end
+          __e51 = __e54
+        else
+          local __e52 = nil
+          if valid_code63(__n9) then
+            __e52 = __c1
+          else
+            local __e53 = nil
+            if __i11 == 0 then
+              __e53 = __x89 .. __n9
+            else
+              __e53 = __n9
+            end
+            __e52 = __e53
+          end
+          __e51 = __e52
+        end
+        local __c11 = __e51
+        __id111 = __id111 .. __c11
+        __i11 = __i11 + 1
+      end
+      if raw63 then
         return __id111
+      else
+        if reserved63(__id111) then
+          return __x89 .. __id111
+        else
+          return __id111
+        end
       end
     end
   end
@@ -1082,10 +1096,10 @@ local function compile_call(form)
   end
 end
 local function op_delims(parent, child, ...)
-  local ____r71 = unstash({...})
-  local __parent = destash33(parent, ____r71)
-  local __child = destash33(child, ____r71)
-  local ____id15 = ____r71
+  local ____r73 = unstash({...})
+  local __parent = destash33(parent, ____r73)
+  local __child = destash33(child, ____r73)
+  local ____id15 = ____r73
   local __right = has(____id15, "right")
   local __e60 = nil
   if __right then
@@ -1168,10 +1182,10 @@ function compile_body(body)
   end
 end
 function compile_function(args, body, ...)
-  local ____r74 = unstash({...})
-  local __args9 = destash33(args, ____r74)
-  local __body4 = destash33(body, ____r74)
-  local ____id20 = ____r74
+  local ____r76 = unstash({...})
+  local __args9 = destash33(args, ____r76)
+  local __body4 = destash33(body, ____r76)
+  local ____id20 = ____r76
   local __name3 = has(____id20, "name")
   local __prefix = has(____id20, "prefix")
   local __async = has(____id20, "async")
@@ -1261,10 +1275,10 @@ local function can_return63(form)
   return is63(form) and (atom63(form) or not( hd(form) == "%return") and not statement63(hd(form)))
 end
 function compile(form, raw63, ...)
-  local ____r76 = unstash({...})
-  local __form = destash33(form, ____r76)
-  local __raw63 = destash33(raw63, ____r76)
-  local ____id22 = ____r76
+  local ____r78 = unstash({...})
+  local __form = destash33(form, ____r78)
+  local __raw63 = destash33(raw63, ____r78)
+  local ____id22 = ____r78
   local __stmt1 = has(____id22, "stmt")
   if nil63(__form) then
     return ""
@@ -1749,11 +1763,11 @@ setenv("%while", {
 setenv("%for", {
   _stash = true,
   special = function (t, k, form, ...)
-    local ____r112 = unstash({...})
-    local __t2 = destash33(t, ____r112)
-    local __k11 = destash33(k, ____r112)
-    local __form5 = destash33(form, ____r112)
-    local ____id37 = ____r112
+    local ____r114 = unstash({...})
+    local __t2 = destash33(t, ____r114)
+    local __k11 = destash33(k, ____r114)
+    local __form5 = destash33(form, ____r114)
+    local ____id37 = ____r114
     local __async2 = has(____id37, "async")
     local __t3 = compile(__t2)
     local __k12 = compile(__k11)
@@ -1788,10 +1802,10 @@ setenv("%for", {
 setenv("%with", {
   _stash = true,
   special = function (t, form, ...)
-    local ____r114 = unstash({...})
-    local __t6 = destash33(t, ____r114)
-    local __form7 = destash33(form, ____r114)
-    local ____id39 = ____r114
+    local ____r116 = unstash({...})
+    local __t6 = destash33(t, ____r116)
+    local __form7 = destash33(form, ____r116)
+    local ____id39 = ____r116
     local __async4 = has(____id39, "async")
     local __t7 = compile(__t6)
     local __ind9 = indentation()
@@ -1926,9 +1940,9 @@ setenv("%break", {
 setenv("%function", {
   _stash = true,
   special = function (args, ...)
-    local ____r124 = unstash({...})
-    local __args16 = destash33(args, ____r124)
-    local ____id41 = ____r124
+    local ____r126 = unstash({...})
+    local __args16 = destash33(args, ____r126)
+    local ____id41 = ____r126
     local __body23 = cut(____id41, 0)
     return apply(compile_function, join({__args16}, __body23, {}))
   end
@@ -1936,10 +1950,10 @@ setenv("%function", {
 setenv("%global-function", {
   _stash = true,
   special = function (name, args, ...)
-    local ____r126 = unstash({...})
-    local __name7 = destash33(name, ____r126)
-    local __args18 = destash33(args, ____r126)
-    local ____id43 = ____r126
+    local ____r128 = unstash({...})
+    local __name7 = destash33(name, ____r128)
+    local __args18 = destash33(args, ____r128)
+    local ____id43 = ____r128
     local __body25 = cut(____id43, 0)
     if has(setenv("target", {
       _stash = true,
@@ -1967,10 +1981,10 @@ setenv("%global-function", {
 setenv("%local-function", {
   _stash = true,
   special = function (name, args, ...)
-    local ____r128 = unstash({...})
-    local __name9 = destash33(name, ____r128)
-    local __args20 = destash33(args, ____r128)
-    local ____id45 = ____r128
+    local ____r130 = unstash({...})
+    local __name9 = destash33(name, ____r130)
+    local __args20 = destash33(args, ____r130)
+    local ____id45 = ____r130
     local __body27 = cut(____id45, 0)
     if has(setenv("target", {
       _stash = true,
@@ -2286,11 +2300,11 @@ setenv("%object", {
 setenv("%list", {
   _stash = true,
   special = function (form, comps, cond, ...)
-    local ____r148 = unstash({...})
-    local __form9 = destash33(form, ____r148)
-    local __comps1 = destash33(comps, ____r148)
-    local __cond6 = destash33(cond, ____r148)
-    local ____id53 = ____r148
+    local ____r150 = unstash({...})
+    local __form9 = destash33(form, ____r150)
+    local __comps1 = destash33(comps, ____r150)
+    local __cond6 = destash33(cond, ____r150)
+    local ____id53 = ____r150
     local __kind1 = has(____id53, "kind")
     local __s12 = compile(__form9)
     local __e100 = nil
@@ -2345,9 +2359,9 @@ setenv("global", {
 setenv("import", {
   _stash = true,
   special = function (name, ...)
-    local ____r152 = unstash({...})
-    local __name11 = destash33(name, ____r152)
-    local ____id58 = ____r152
+    local ____r154 = unstash({...})
+    local __name11 = destash33(name, ____r154)
+    local ____id58 = ____r154
     local __alias1 = cut(____id58, 0)
     local __ind19 = indentation()
     local __e101 = nil
@@ -2376,23 +2390,23 @@ setenv("import", {
 setenv("from", {
   _stash = true,
   special = function (name, ...)
-    local ____r156 = unstash({...})
-    local __name13 = destash33(name, ____r156)
-    local ____id62 = ____r156
+    local ____r158 = unstash({...})
+    local __name13 = destash33(name, ____r158)
+    local ____id62 = ____r158
     local __imports1 = cut(____id62, 0)
     local __ind21 = indentation()
     local __id63 = __name13
-    local __r157 = nil
-    __r157 = drop(__imports1)
+    local __r159 = nil
+    __r159 = drop(__imports1)
     local __e102 = nil
     if last(__imports1) == "as" then
       __e102 = drop(__imports1)
     else
-      add(__imports1, __r157)
-      __r157 = nil
-      __e102 = __r157
+      add(__imports1, __r159)
+      __r159 = nil
+      __e102 = __r159
     end
-    local __as3 = __r157
+    local __as3 = __r159
     local __e103 = nil
     if hd(__imports1) == "import" then
       __e103 = tl(__imports1)
