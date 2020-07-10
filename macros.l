@@ -149,9 +149,7 @@
        lua: (let ((,ok ,r) (guard ,x))
               ,@body
               (if ,ok ,r (throw ,r)))
-        (with ,r nil
-           (%block try || (set ,r ,x))
-           (%block finally || (%do ,@body))))))
+       (try ,x (finally ,@body)))))
 
 (define-macro with-frame body
   `(%do (add environment (obj))
