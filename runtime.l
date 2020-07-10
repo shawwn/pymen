@@ -457,10 +457,6 @@
           (cat! s1 c1)))
       (cat s1 "\""))))
 
-(define-global simple-id? (x)
-  (let r (errsafe (read-string x))
-    (when (= r x) r)))
-
 (define-global str (x repr stack)
   (if (nil? x) "nil"
       (nan? x) "nan"

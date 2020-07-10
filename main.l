@@ -74,6 +74,10 @@
       (clip (clip s 0 (- (# s) (# rh))) (# lh))
     s))
 
+(define-global simple-id? (x)
+  (let r (errsafe ((idx reader read-string) x))
+    (when (= r x) r)))
+
 (target py:
   (define-global pp-obj (x)
     (set s (pp-to-string (entries x))
