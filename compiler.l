@@ -112,8 +112,7 @@
   (let args1 (obj)
     (define rest ()
       (set (get args1 'rest) true)
-      `(target py: (unstash _args _keys)
-         (unstash (list ,"..."))))
+      `(unstash (list ,"...") (target py: (obj ,"..."))))
     (if (atom? args)
         (list args1 `(let ,(list args (rest)) ,@body))
       (let ((doc body) (body-docstring body)
@@ -380,8 +379,10 @@
 
 (define precedence (form)
   (unless (or (atom? form) (unary? form))
-    (each (k v) infix
-      (if (has? v (hd form)) (return (index k)))))
+    (when (atom? (hd form))
+      (each (k v) infix
+        ;(print (str (list k v (hd form))))
+        (if (has? v (hd form)) (return (index k))))))
   0)
 
 (define getop (op)

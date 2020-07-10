@@ -1095,54 +1095,61 @@ setenv("list", {
   _stash: true,
   macro: function (..._42args) {
     var __body2 = unstash([..._42args]);
-    if (_35(__body2) > 2 && (__body2[1] === "for" && __body2[3] === "in")) {
-      var ____id10 = __body2;
-      var __expr2 = has(____id10, 0);
-      var __body3 = cut(____id10, 1);
-      var __comps1 = [];
-      var __cond1 = undefined;
-      while (_35(__body3) > 2 && (__body3[0] === "for" && __body3[2] === "in")) {
-        var ____id11 = __body3;
-        var ___for1 = has(____id11, 0);
-        var __names1 = has(____id11, 1);
-        var ___in1 = has(____id11, 2);
-        var __l9 = has(____id11, 3);
-        var __body12 = cut(____id11, 4);
-        add(__comps1, [__names1, __l9]);
-        __body3 = __body12;
-      }
-      if (hd(__body3) === "if") {
-        var ____id12 = __body3;
-        var ___if1 = has(____id12, 0);
-        var __expr3 = has(____id12, 1);
-        __cond1 = __expr3;
-      }
-      return ["%list", __expr2, __comps1, __cond1];
+    if (one63(__body2) && (hd63(__body2, "...") && has(setenv("target", {
+      _stash: true,
+      toplevel: true
+    }), "value") === "py")) {
+      return "_args";
     } else {
-      var __x68 = unique("x");
-      var __l10 = [];
-      var __forms1 = [];
-      var ____o19 = __body2;
-      var __k36 = undefined;
-      for (__k36 in ____o19) {
-        var __v21 = ____o19[__k36];
-        var __e81 = undefined;
-        if (numeric63(__k36)) {
-          __e81 = parseInt(__k36);
-        } else {
-          __e81 = __k36;
+      if (_35(__body2) > 2 && (__body2[1] === "for" && __body2[3] === "in")) {
+        var ____id10 = __body2;
+        var __expr2 = has(____id10, 0);
+        var __body3 = cut(____id10, 1);
+        var __comps1 = [];
+        var __cond1 = undefined;
+        while (_35(__body3) > 2 && (__body3[0] === "for" && __body3[2] === "in")) {
+          var ____id11 = __body3;
+          var ___for1 = has(____id11, 0);
+          var __names1 = has(____id11, 1);
+          var ___in1 = has(____id11, 2);
+          var __l9 = has(____id11, 3);
+          var __body12 = cut(____id11, 4);
+          add(__comps1, [__names1, __l9]);
+          __body3 = __body12;
         }
-        var __k37 = __e81;
-        if (number63(__k37)) {
-          __l10[__k37] = __v21;
-        } else {
-          add(__forms1, ["%set", ["%get", __x68, ["quote", __k37]], __v21]);
+        if (hd(__body3) === "if") {
+          var ____id12 = __body3;
+          var ___if1 = has(____id12, 0);
+          var __expr3 = has(____id12, 1);
+          __cond1 = __expr3;
         }
-      }
-      if (some63(__forms1)) {
-        return join(["let", __x68, ["object", join(["%array"], __l10)]], __forms1, [__x68]);
+        return ["%list", __expr2, __comps1, __cond1];
       } else {
-        return join(["%array"], __l10);
+        var __x68 = unique("x");
+        var __l10 = [];
+        var __forms1 = [];
+        var ____o19 = __body2;
+        var __k36 = undefined;
+        for (__k36 in ____o19) {
+          var __v21 = ____o19[__k36];
+          var __e81 = undefined;
+          if (numeric63(__k36)) {
+            __e81 = parseInt(__k36);
+          } else {
+            __e81 = __k36;
+          }
+          var __k37 = __e81;
+          if (number63(__k37)) {
+            __l10[__k37] = __v21;
+          } else {
+            add(__forms1, ["%set", ["%get", __x68, ["quote", __k37]], __v21]);
+          }
+        }
+        if (some63(__forms1)) {
+          return join(["let", __x68, ["object", join(["%array"], __l10)]], __forms1, [__x68]);
+        } else {
+          return join(["%array"], __l10);
+        }
       }
     }
   }
@@ -1233,38 +1240,45 @@ setenv("obj", {
   _stash: true,
   macro: function (..._42args) {
     var __body10 = unstash([..._42args]);
-    if (_35(__body10) > 2 && (__body10[1] === "for" && __body10[3] === "in")) {
-      var ____id26 = __body10;
-      var __expr8 = has(____id26, 0);
-      var __body111 = cut(____id26, 1);
-      var __comps3 = [];
-      var __cond7 = undefined;
-      while (_35(__body111) > 2 && (__body111[0] === "for" && __body111[2] === "in")) {
-        var ____id27 = __body111;
-        var ___for3 = has(____id27, 0);
-        var __names3 = has(____id27, 1);
-        var ___in3 = has(____id27, 2);
-        var __l121 = has(____id27, 3);
-        var __body14 = cut(____id27, 4);
-        add(__comps3, [__names3, __l121]);
-        __body111 = __body14;
-      }
-      if (hd(__body111) === "if") {
-        var ____id28 = __body111;
-        var ___if3 = has(____id28, 0);
-        var __expr9 = has(____id28, 1);
-        __cond7 = __expr9;
-      }
-      if (list63(__expr8) && hd63(__expr8, ",")) {
-        __expr8 = join([":"], tl(__expr8));
-      }
-      var ____x131 = object(["%list", __expr8, __comps3, __cond7]);
-      ____x131.kind = "object";
-      return ____x131;
+    if (one63(__body10) && (hd63(__body10, "...") && has(setenv("target", {
+      _stash: true,
+      toplevel: true
+    }), "value") === "py")) {
+      return "_keys";
     } else {
-      return join(["%object"], mapo(function (x) {
-        return x;
-      }, __body10));
+      if (_35(__body10) > 2 && (__body10[1] === "for" && __body10[3] === "in")) {
+        var ____id26 = __body10;
+        var __expr8 = has(____id26, 0);
+        var __body111 = cut(____id26, 1);
+        var __comps3 = [];
+        var __cond7 = undefined;
+        while (_35(__body111) > 2 && (__body111[0] === "for" && __body111[2] === "in")) {
+          var ____id27 = __body111;
+          var ___for3 = has(____id27, 0);
+          var __names3 = has(____id27, 1);
+          var ___in3 = has(____id27, 2);
+          var __l121 = has(____id27, 3);
+          var __body14 = cut(____id27, 4);
+          add(__comps3, [__names3, __l121]);
+          __body111 = __body14;
+        }
+        if (hd(__body111) === "if") {
+          var ____id28 = __body111;
+          var ___if3 = has(____id28, 0);
+          var __expr9 = has(____id28, 1);
+          __cond7 = __expr9;
+        }
+        if (list63(__expr8) && hd63(__expr8, ",")) {
+          __expr8 = join([":"], tl(__expr8));
+        }
+        var ____x131 = object(["%list", __expr8, __comps3, __cond7]);
+        ____x131.kind = "object";
+        return ____x131;
+      } else {
+        return join(["%object"], mapo(function (x) {
+          return x;
+        }, __body10));
+      }
     }
   }
 });
@@ -2955,9 +2969,9 @@ bind42 = function (args, body) {
   var __args131 = {};
   var rest = function () {
     __args131.rest = true;
-    var ____x934 = object(["target", ["unstash", ["list", "..."]]]);
-    ____x934.py = ["unstash", "_args", "_keys"];
-    return ____x934;
+    var ____x936 = object(["target"]);
+    ____x936.py = ["obj", "..."];
+    return ["unstash", ["list", "..."], ____x936];
   };
   if (atom63(args)) {
     return [__args131, join(["let", [args, rest()]], body)];
@@ -3609,19 +3623,21 @@ var index = function (k) {
 };
 var precedence = function (form) {
   if (!( atom63(form) || unary63(form))) {
-    var ____o37 = infix;
-    var __k58 = undefined;
-    for (__k58 in ____o37) {
-      var __v41 = ____o37[__k58];
-      var __e114 = undefined;
-      if (numeric63(__k58)) {
-        __e114 = parseInt(__k58);
-      } else {
-        __e114 = __k58;
-      }
-      var __k59 = __e114;
-      if (has63(__v41, hd(form))) {
-        return index(__k59);
+    if (atom63(hd(form))) {
+      var ____o37 = infix;
+      var __k58 = undefined;
+      for (__k58 in ____o37) {
+        var __v41 = ____o37[__k58];
+        var __e114 = undefined;
+        if (numeric63(__k58)) {
+          __e114 = parseInt(__k58);
+        } else {
+          __e114 = __k58;
+        }
+        var __k59 = __e114;
+        if (has63(__v41, hd(form))) {
+          return index(__k59);
+        }
       }
     }
   }

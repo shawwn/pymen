@@ -846,43 +846,46 @@ def __f24(place=None):
 setenv("wipe", macro=__f24)
 def __f25(*_args, **_keys):
   __body2 = unstash(_args, _keys)
-  if L_35(__body2) > 2 and (__body2[1] == "for" and __body2[3] == "in"):
-    ____id10 = __body2
-    __expr2 = has(____id10, 0)
-    __body3 = cut(____id10, 1)
-    __comps1 = []
-    __cond1 = None
-    while L_35(__body3) > 2 and (__body3[0] == "for" and __body3[2] == "in"):
-      ____id11 = __body3
-      ___for1 = has(____id11, 0)
-      __names1 = has(____id11, 1)
-      ___in1 = has(____id11, 2)
-      __l8 = has(____id11, 3)
-      __body12 = cut(____id11, 4)
-      add(__comps1, [__names1, __l8])
-      __body3 = __body12
-    if hd(__body3) == "if":
-      ____id12 = __body3
-      ___if1 = has(____id12, 0)
-      __expr3 = has(____id12, 1)
-      __cond1 = __expr3
-    return ["%list", __expr2, __comps1, __cond1]
+  if one63(__body2) and (hd63(__body2, "...") and has(setenv("target", toplevel=True), "value") == "py"):
+    return "_args"
   else:
-    __x54 = unique("x")
-    __l9 = {}
-    __forms1 = []
-    ____o18 = __body2
-    __k19 = None
-    for __k19 in indices(____o18):
-      __v21 = ____o18[__k19]
-      if number63(__k19):
-        __l9[__k19] = __v21
-      else:
-        add(__forms1, ["%set", ["%get", __x54, ["quote", __k19]], __v21])
-    if some63(__forms1):
-      return join(["let", __x54, ["object", join(["%array"], __l9)]], __forms1, [__x54])
+    if L_35(__body2) > 2 and (__body2[1] == "for" and __body2[3] == "in"):
+      ____id10 = __body2
+      __expr2 = has(____id10, 0)
+      __body3 = cut(____id10, 1)
+      __comps1 = []
+      __cond1 = None
+      while L_35(__body3) > 2 and (__body3[0] == "for" and __body3[2] == "in"):
+        ____id11 = __body3
+        ___for1 = has(____id11, 0)
+        __names1 = has(____id11, 1)
+        ___in1 = has(____id11, 2)
+        __l8 = has(____id11, 3)
+        __body12 = cut(____id11, 4)
+        add(__comps1, [__names1, __l8])
+        __body3 = __body12
+      if hd(__body3) == "if":
+        ____id12 = __body3
+        ___if1 = has(____id12, 0)
+        __expr3 = has(____id12, 1)
+        __cond1 = __expr3
+      return ["%list", __expr2, __comps1, __cond1]
     else:
-      return join(["%array"], __l9)
+      __x54 = unique("x")
+      __l9 = {}
+      __forms1 = []
+      ____o18 = __body2
+      __k19 = None
+      for __k19 in indices(____o18):
+        __v21 = ____o18[__k19]
+        if number63(__k19):
+          __l9[__k19] = __v21
+        else:
+          add(__forms1, ["%set", ["%get", __x54, ["quote", __k19]], __v21])
+      if some63(__forms1):
+        return join(["let", __x54, ["object", join(["%array"], __l9)]], __forms1, [__x54])
+      else:
+        return join(["%array"], __l9)
 
 setenv("list", macro=__f25)
 def __f26(*_args, **_keys):
@@ -953,35 +956,38 @@ def __f32(cond=None, *_args, **_keys):
 setenv("unless", macro=__f32)
 def __f33(*_args, **_keys):
   __body10 = unstash(_args, _keys)
-  if L_35(__body10) > 2 and (__body10[1] == "for" and __body10[3] == "in"):
-    ____id26 = __body10
-    __expr8 = has(____id26, 0)
-    __body111 = cut(____id26, 1)
-    __comps3 = []
-    __cond7 = None
-    while L_35(__body111) > 2 and (__body111[0] == "for" and __body111[2] == "in"):
-      ____id27 = __body111
-      ___for3 = has(____id27, 0)
-      __names3 = has(____id27, 1)
-      ___in3 = has(____id27, 2)
-      __l111 = has(____id27, 3)
-      __body14 = cut(____id27, 4)
-      add(__comps3, [__names3, __l111])
-      __body111 = __body14
-    if hd(__body111) == "if":
-      ____id28 = __body111
-      ___if3 = has(____id28, 0)
-      __expr9 = has(____id28, 1)
-      __cond7 = __expr9
-    if list63(__expr8) and hd63(__expr8, ","):
-      __expr8 = join([":"], tl(__expr8))
-    ____x111 = object(["%list", __expr8, __comps3, __cond7])
-    ____x111["kind"] = "object"
-    return ____x111
+  if one63(__body10) and (hd63(__body10, "...") and has(setenv("target", toplevel=True), "value") == "py"):
+    return "_keys"
   else:
-    def __f34(x=None):
-      return x
-    return join(["%object"], mapo(__f34, __body10))
+    if L_35(__body10) > 2 and (__body10[1] == "for" and __body10[3] == "in"):
+      ____id26 = __body10
+      __expr8 = has(____id26, 0)
+      __body111 = cut(____id26, 1)
+      __comps3 = []
+      __cond7 = None
+      while L_35(__body111) > 2 and (__body111[0] == "for" and __body111[2] == "in"):
+        ____id27 = __body111
+        ___for3 = has(____id27, 0)
+        __names3 = has(____id27, 1)
+        ___in3 = has(____id27, 2)
+        __l111 = has(____id27, 3)
+        __body14 = cut(____id27, 4)
+        add(__comps3, [__names3, __l111])
+        __body111 = __body14
+      if hd(__body111) == "if":
+        ____id28 = __body111
+        ___if3 = has(____id28, 0)
+        __expr9 = has(____id28, 1)
+        __cond7 = __expr9
+      if list63(__expr8) and hd63(__expr8, ","):
+        __expr8 = join([":"], tl(__expr8))
+      ____x111 = object(["%list", __expr8, __comps3, __cond7])
+      ____x111["kind"] = "object"
+      return ____x111
+    else:
+      def __f34(x=None):
+        return x
+      return join(["%object"], mapo(__f34, __body10))
 
 setenv("obj", macro=__f33)
 def __f35(bs=None, *_args, **_keys):

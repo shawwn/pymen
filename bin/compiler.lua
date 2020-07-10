@@ -189,9 +189,9 @@ function bind42(args, body)
   local __args1 = {}
   local function rest()
     __args1.rest = true
-    local ____x31 = object({"target", {"unstash", {"list", "..."}}})
-    ____x31.py = {"unstash", "_args", "_keys"}
-    return ____x31
+    local ____x33 = object({"target"})
+    ____x33.py = {"obj", "..."}
+    return {"unstash", {"list", "..."}, ____x33}
   end
   if atom63(args) then
     return {__args1, join({"let", {args, rest()}}, body)}
@@ -858,12 +858,14 @@ local function index(k)
 end
 local function precedence(form)
   if not( atom63(form) or unary63(form)) then
-    local ____o9 = infix
-    local __k7 = nil
-    for __k7 in next, ____o9 do
-      local __v8 = ____o9[__k7]
-      if has63(__v8, hd(form)) then
-        return index(__k7)
+    if atom63(hd(form)) then
+      local ____o9 = infix
+      local __k7 = nil
+      for __k7 in next, ____o9 do
+        local __v8 = ____o9[__k7]
+        if has63(__v8, hd(form)) then
+          return index(__k7)
+        end
       end
     end
   end

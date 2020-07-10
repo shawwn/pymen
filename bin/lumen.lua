@@ -944,47 +944,54 @@ setenv("list", {
   _stash = true,
   macro = function (...)
     local __body2 = unstash({...})
-    if _35(__body2) > 2 and (__body2[2] == "for" and __body2[4] == "in") then
-      local ____id10 = __body2
-      local __expr2 = has(____id10, 1)
-      local __body3 = cut(____id10, 1)
-      local __comps1 = {}
-      local __cond1 = nil
-      while _35(__body3) > 2 and (__body3[1] == "for" and __body3[3] == "in") do
-        local ____id11 = __body3
-        local ___for1 = has(____id11, 1)
-        local __names1 = has(____id11, 2)
-        local ___in1 = has(____id11, 3)
-        local __l9 = has(____id11, 4)
-        local __body12 = cut(____id11, 4)
-        add(__comps1, {__names1, __l9})
-        __body3 = __body12
-      end
-      if hd(__body3) == "if" then
-        local ____id12 = __body3
-        local ___if1 = has(____id12, 1)
-        local __expr3 = has(____id12, 2)
-        __cond1 = __expr3
-      end
-      return {"%list", __expr2, __comps1, __cond1}
+    if one63(__body2) and (hd63(__body2, "...") and has(setenv("target", {
+      _stash = true,
+      toplevel = true
+    }), "value") == "py") then
+      return "_args"
     else
-      local __x67 = unique("x")
-      local __l10 = {}
-      local __forms1 = {}
-      local ____o19 = __body2
-      local __k20 = nil
-      for __k20 in next, ____o19 do
-        local __v21 = ____o19[__k20]
-        if number63(__k20) then
-          __l10[__k20] = __v21
-        else
-          add(__forms1, {"%set", {"%get", __x67, {"quote", __k20}}, __v21})
+      if _35(__body2) > 2 and (__body2[2] == "for" and __body2[4] == "in") then
+        local ____id10 = __body2
+        local __expr2 = has(____id10, 1)
+        local __body3 = cut(____id10, 1)
+        local __comps1 = {}
+        local __cond1 = nil
+        while _35(__body3) > 2 and (__body3[1] == "for" and __body3[3] == "in") do
+          local ____id11 = __body3
+          local ___for1 = has(____id11, 1)
+          local __names1 = has(____id11, 2)
+          local ___in1 = has(____id11, 3)
+          local __l9 = has(____id11, 4)
+          local __body12 = cut(____id11, 4)
+          add(__comps1, {__names1, __l9})
+          __body3 = __body12
         end
-      end
-      if some63(__forms1) then
-        return join({"let", __x67, {"object", join({"%array"}, __l10)}}, __forms1, {__x67})
+        if hd(__body3) == "if" then
+          local ____id12 = __body3
+          local ___if1 = has(____id12, 1)
+          local __expr3 = has(____id12, 2)
+          __cond1 = __expr3
+        end
+        return {"%list", __expr2, __comps1, __cond1}
       else
-        return join({"%array"}, __l10)
+        local __x67 = unique("x")
+        local __l10 = {}
+        local __forms1 = {}
+        local ____o19 = __body2
+        local __k20 = nil
+        for __k20 in next, ____o19 do
+          local __v21 = ____o19[__k20]
+          if number63(__k20) then
+            __l10[__k20] = __v21
+          else
+            add(__forms1, {"%set", {"%get", __x67, {"quote", __k20}}, __v21})
+          end
+        end
+        if some63(__forms1) then
+          return join({"let", __x67, {"object", join({"%array"}, __l10)}}, __forms1, {__x67})
+        else
+          return join({"%array"}, __l10)
+        end
       end
     end
   end
@@ -1075,38 +1082,45 @@ setenv("obj", {
   _stash = true,
   macro = function (...)
     local __body10 = unstash({...})
-    if _35(__body10) > 2 and (__body10[2] == "for" and __body10[4] == "in") then
-      local ____id26 = __body10
-      local __expr8 = has(____id26, 1)
-      local __body111 = cut(____id26, 1)
-      local __comps3 = {}
-      local __cond7 = nil
-      while _35(__body111) > 2 and (__body111[1] == "for" and __body111[3] == "in") do
-        local ____id27 = __body111
-        local ___for3 = has(____id27, 1)
-        local __names3 = has(____id27, 2)
-        local ___in3 = has(____id27, 3)
-        local __l121 = has(____id27, 4)
-        local __body14 = cut(____id27, 4)
-        add(__comps3, {__names3, __l121})
-        __body111 = __body14
-      end
-      if hd(__body111) == "if" then
-        local ____id28 = __body111
-        local ___if3 = has(____id28, 1)
-        local __expr9 = has(____id28, 2)
-        __cond7 = __expr9
-      end
-      if list63(__expr8) and hd63(__expr8, ",") then
-        __expr8 = join({":"}, tl(__expr8))
-      end
-      local ____x130 = object({"%list", __expr8, __comps3, __cond7})
-      ____x130.kind = "object"
-      return ____x130
+    if one63(__body10) and (hd63(__body10, "...") and has(setenv("target", {
+      _stash = true,
+      toplevel = true
+    }), "value") == "py") then
+      return "_keys"
     else
-      return join({"%object"}, mapo(function (x)
-        return x
-      end, __body10))
+      if _35(__body10) > 2 and (__body10[2] == "for" and __body10[4] == "in") then
+        local ____id26 = __body10
+        local __expr8 = has(____id26, 1)
+        local __body111 = cut(____id26, 1)
+        local __comps3 = {}
+        local __cond7 = nil
+        while _35(__body111) > 2 and (__body111[1] == "for" and __body111[3] == "in") do
+          local ____id27 = __body111
+          local ___for3 = has(____id27, 1)
+          local __names3 = has(____id27, 2)
+          local ___in3 = has(____id27, 3)
+          local __l121 = has(____id27, 4)
+          local __body14 = cut(____id27, 4)
+          add(__comps3, {__names3, __l121})
+          __body111 = __body14
+        end
+        if hd(__body111) == "if" then
+          local ____id28 = __body111
+          local ___if3 = has(____id28, 1)
+          local __expr9 = has(____id28, 2)
+          __cond7 = __expr9
+        end
+        if list63(__expr8) and hd63(__expr8, ",") then
+          __expr8 = join({":"}, tl(__expr8))
+        end
+        local ____x130 = object({"%list", __expr8, __comps3, __cond7})
+        ____x130.kind = "object"
+        return ____x130
+      else
+        return join({"%object"}, mapo(function (x)
+          return x
+        end, __body10))
+      end
     end
   end
 })

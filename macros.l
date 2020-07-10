@@ -25,7 +25,11 @@
     `(%delete ,place)))
 
 (define-macro list body
-  (if (and (> (# body) 2)
+  (if (and (one? body)
+           (hd? body "...")
+           (target? 'py))
+      '_args
+      (and (> (# body) 2)
            (= (at body 1) 'for)
            (= (at body 3) 'in))
       (let ((expr rest: body) body
@@ -75,7 +79,11 @@
   `(%if (%not ,cond) (%do ,@body)))
 
 (define-macro obj body
-  (if (and (> (# body) 2)
+  (if (and (one? body)
+           (hd? body "...")
+           (target? 'py))
+      '_keys
+      (and (> (# body) 2)
            (= (at body 1) 'for)
            (= (at body 3) 'in))
       (let ((expr rest: body) body

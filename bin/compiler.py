@@ -156,9 +156,9 @@ def bind42(args=None, body=None):
   __args1 = {}
   def rest():
     __args1["rest"] = True
-    ____x31 = object(["target", ["unstash", ["list", "..."]]])
-    ____x31["py"] = ["unstash", "_args", "_keys"]
-    return ____x31
+    ____x33 = object(["target"])
+    ____x33["py"] = ["obj", "..."]
+    return ["unstash", ["list", "..."], ____x33]
   if atom63(args):
     return [__args1, join(["let", [args, rest()]], body)]
   else:
@@ -683,12 +683,13 @@ def index(k=None):
 
 def precedence(form=None):
   if not( atom63(form) or unary63(form)):
-    ____o9 = infix
-    __k7 = None
-    for __k7 in indices(____o9):
-      __v8 = ____o9[__k7]
-      if has63(__v8, hd(form)):
-        return index(__k7)
+    if atom63(hd(form)):
+      ____o9 = infix
+      __k7 = None
+      for __k7 in indices(____o9):
+        __v8 = ____o9[__k7]
+        if has63(__v8, hd(form)):
+          return index(__k7)
   return 0
 
 def getop(op=None):

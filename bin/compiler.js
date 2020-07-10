@@ -209,9 +209,9 @@ bind42 = function (args, body) {
   var __args1 = {};
   var rest = function () {
     __args1.rest = true;
-    var ____x31 = object(["target", ["unstash", ["list", "..."]]]);
-    ____x31.py = ["unstash", "_args", "_keys"];
-    return ____x31;
+    var ____x33 = object(["target"]);
+    ____x33.py = ["obj", "..."];
+    return ["unstash", ["list", "..."], ____x33];
   };
   if (atom63(args)) {
     return [__args1, join(["let", [args, rest()]], body)];
@@ -863,19 +863,21 @@ var index = function (k) {
 };
 var precedence = function (form) {
   if (!( atom63(form) || unary63(form))) {
-    var ____o9 = infix;
-    var __k13 = undefined;
-    for (__k13 in ____o9) {
-      var __v8 = ____o9[__k13];
-      var __e59 = undefined;
-      if (numeric63(__k13)) {
-        __e59 = parseInt(__k13);
-      } else {
-        __e59 = __k13;
-      }
-      var __k14 = __e59;
-      if (has63(__v8, hd(form))) {
-        return index(__k14);
+    if (atom63(hd(form))) {
+      var ____o9 = infix;
+      var __k13 = undefined;
+      for (__k13 in ____o9) {
+        var __v8 = ____o9[__k13];
+        var __e59 = undefined;
+        if (numeric63(__k13)) {
+          __e59 = parseInt(__k13);
+        } else {
+          __e59 = __k13;
+        }
+        var __k14 = __e59;
+        if (has63(__v8, hd(form))) {
+          return index(__k14);
+        }
       }
     }
   }
