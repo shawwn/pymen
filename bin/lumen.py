@@ -1822,7 +1822,7 @@ def __f119(form=None):
   L_print(compile(expand(["%set", "lumen-result", __form7])))
   return __form7
 
-setenv("prc", macro=__f119)
+setenv("see", macro=__f119)
 import reader
 import compiler
 import system

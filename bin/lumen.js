@@ -2376,7 +2376,7 @@ setenv("dbg", {
     return ____x725;
   }
 });
-setenv("prc", {
+setenv("see", {
   _stash: true,
   macro: function (form) {
     var __form7 = expand(form);

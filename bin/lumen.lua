@@ -2248,7 +2248,7 @@ setenv("dbg", {
     return ____x815
   end
 })
-setenv("prc", {
+setenv("see", {
   _stash = true,
   macro = function (form)
     local __form7 = expand(form)

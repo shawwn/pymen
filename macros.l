@@ -510,7 +510,7 @@
 (define-macro dbg ()
   `(target py: (do (import pdb) ((idx pdb set-trace))) (do)))
 
-(define-macro prc (form)
+(define-macro see (form)
   (let form (expand form)
     (print (compile (expand `(%set lumen-result ,form))))
     form))
