@@ -692,17 +692,18 @@ def precedence(form=None):
   return 0
 
 def getop(op=None):
-  def __f6(level=None):
-    __x106 = has(level, op)
-    if __x106 == True:
-      return op
-    else:
-      if string63(__x106):
-        return __x106
+  if string63(op):
+    def __f6(level=None):
+      __x106 = has(level, op)
+      if __x106 == True:
+        return op
       else:
-        if is63(__x106):
-          return has(__x106, has(setenv("target", toplevel=True), "value"))
-  return find(__f6, infix)
+        if string63(__x106):
+          return __x106
+        else:
+          if is63(__x106):
+            return has(__x106, has(setenv("target", toplevel=True), "value"))
+    return find(__f6, infix)
 
 def infix63(x=None):
   return is63(getop(x))

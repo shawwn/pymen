@@ -870,23 +870,25 @@ local function precedence(form)
   return 0
 end
 local function getop(op)
-  return find(function (level)
-    local __x110 = has(level, op)
-    if __x110 == true then
-      return op
-    else
-      if string63(__x110) then
-        return __x110
+  if string63(op) then
+    return find(function (level)
+      local __x110 = has(level, op)
+      if __x110 == true then
+        return op
       else
-        if is63(__x110) then
-          return has(__x110, has(setenv("target", {
-            _stash = true,
-            toplevel = true
-          }), "value"))
+        if string63(__x110) then
+          return __x110
+        else
+          if is63(__x110) then
+            return has(__x110, has(setenv("target", {
+              _stash = true,
+              toplevel = true
+            }), "value"))
+          end
         end
       end
-    end
-  end, infix)
+    end, infix)
+  end
 end
 local function infix63(x)
   return is63(getop(x))

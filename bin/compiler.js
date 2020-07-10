@@ -882,23 +882,25 @@ var precedence = function (form) {
   return 0;
 };
 var getop = function (op) {
-  return find(function (level) {
-    var __x106 = has(level, op);
-    if (__x106 === true) {
-      return op;
-    } else {
-      if (string63(__x106)) {
-        return __x106;
+  if (string63(op)) {
+    return find(function (level) {
+      var __x106 = has(level, op);
+      if (__x106 === true) {
+        return op;
       } else {
-        if (is63(__x106)) {
-          return has(__x106, has(setenv("target", {
-            _stash: true,
-            toplevel: true
-          }), "value"));
+        if (string63(__x106)) {
+          return __x106;
+        } else {
+          if (is63(__x106)) {
+            return has(__x106, has(setenv("target", {
+              _stash: true,
+              toplevel: true
+            }), "value"));
+          }
         }
       }
-    }
-  }, infix);
+    }, infix);
+  }
 };
 var infix63 = function (x) {
   return is63(getop(x));
