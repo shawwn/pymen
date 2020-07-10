@@ -506,10 +506,8 @@
                  (let ((kind _ name rest: body) body)
                    (add forms `((,x (%as ,kind ,name)) ,@body)))
                  (= x 'except)
-                 (if (one? body)
-                     (add forms `((,x Exception) ,@body))
-                   (let ((kind rest: body) body)
-                     (add forms `((,x ,kind) ,@body))))
+                 (let ((kind rest: body) body)
+                   (add forms `((,x ,kind) ,@body)))
                 (error "Unknown try clause"))))
        ,fin)))
 
