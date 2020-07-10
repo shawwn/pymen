@@ -21,8 +21,7 @@
 (define-global has? (l k)
   (target js: ((idx l hasOwnProperty) k)
           py: (if (isinstance l dict)
-                  (and (or (number? k) (string? k))
-                       (%in k l))
+                  (%in k l)
                 (and (number? k) (>= k 0) (< k (len l))))
           lua: (is? (get l k))))
 

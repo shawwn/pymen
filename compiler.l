@@ -384,12 +384,13 @@
   0)
 
 (define getop (op)
-  (find (fn (level)
-          (let x (has level op)
-            (if (= x true) op
-                (string? x) x
-                (is? x) (has x target))))
-        infix))
+  (when (string? op)
+    (find (fn (level)
+            (let x (has level op)
+              (if (= x true) op
+                  (string? x) x
+                  (is? x) (has x target))))
+          infix)))
 
 (define infix? (x)
   (is? (getop x)))
