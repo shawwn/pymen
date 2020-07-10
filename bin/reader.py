@@ -55,10 +55,10 @@ def skip_non_code(s=None):
 read_table = {}
 eof = {}
 def more63(s=None, x=None):
-  return is63(s["more"]) and x == s["more"]
+  return is63(s["more"]) and x is s["more"]
 
 def eof63(s=None, x=None):
-  return x == eof or more63(s, x)
+  return x is eof or more63(s, x)
 
 def read_1(s=None):
   skip_non_code(s)

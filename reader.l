@@ -32,10 +32,10 @@
 
 (define more? (s x)
   (and (is? (get s 'more))
-       (= x (get s 'more))))
+       (is x (get s 'more))))
 
 (define eof? (s x)
-  (or (= x eof) (more? s x)))
+  (or (is x eof) (more? s x)))
 
 (define read-1 (s)
   (skip-non-code s)

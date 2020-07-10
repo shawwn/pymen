@@ -469,7 +469,7 @@
   `(%throw ,@args))
 
 (define-macro is args
-  `(%is ,@args))
+  `(target py: (%is ,@args) (= ,@args)))
 
 (define-macro in args
   `(%in ,@args))

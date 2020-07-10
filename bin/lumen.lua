@@ -2142,7 +2142,9 @@ setenv("is", {
   _stash = true,
   macro = function (...)
     local __args49 = unstash({...})
-    return join({"%is"}, __args49)
+    local ____x805 = object({"target", join({"="}, __args49)})
+    ____x805.py = join({"%is"}, __args49)
+    return ____x805
   end
 })
 setenv("in", {
@@ -2163,14 +2165,14 @@ setenv("%expand-case", {
   _stash = true,
   macro = function (x, ...)
     local ____r226 = unstash({...})
-    local __x819 = destash33(x, ____r226)
+    local __x823 = destash33(x, ____r226)
     local ____id115 = ____r226
     local __body65 = cut(____id115, 0)
     local __e35 = nil
-    if atom63(__x819) then
-      __e35 = {__x819}
+    if atom63(__x823) then
+      __e35 = {__x823}
     else
-      __e35 = __x819
+      __e35 = __x823
     end
     local ____id116 = __e35
     local __a26 = has(____id116, 1)
@@ -2195,11 +2197,11 @@ setenv("%cases", {
         return join({"%expand-case"}, hd(__args55))
       else
         local __r229 = unique("r")
-        return join({"with", __r229, "nil"}, map(function (__x839)
-          local ____id118 = __x839
-          local __x840 = has(____id118, 1)
+        return join({"with", __r229, "nil"}, map(function (__x843)
+          local ____id118 = __x843
+          local __x844 = has(____id118, 1)
           local __body67 = cut(____id118, 1)
-          return {"%expand-case", __x840, {"%set", __r229, join({"%do"}, __body67)}}
+          return {"%expand-case", __x844, {"%set", __r229, join({"%do"}, __body67)}}
         end, almost(__args55)), {join({"%expand-case"}, last(__args55))})
       end
     end
@@ -2209,40 +2211,40 @@ setenv("try", {
   _stash = true,
   macro = function (x, ...)
     local ____r232 = unstash({...})
-    local __x861 = destash33(x, ____r232)
+    local __x865 = destash33(x, ____r232)
     local ____id123 = ____r232
     local __cases1 = cut(____id123, 0)
     local __fin1 = {"finally"}
     local ____o27 = __cases1
     local ____i46 = nil
     for ____i46 in next, ____o27 do
-      local __x863 = ____o27[____i46]
-      if hd63(__x863, "finally") then
-        __fin1 = __x863
+      local __x867 = ____o27[____i46]
+      if hd63(__x867, "finally") then
+        __fin1 = __x867
       end
     end
     local __forms7 = {}
-    local ____x866 = __cases1
+    local ____x870 = __cases1
     local ____i47 = 0
-    while ____i47 < _35(____x866) do
-      local ____id124 = ____x866[____i47 + 1]
-      local __x867 = has(____id124, 1)
+    while ____i47 < _35(____x870) do
+      local ____id124 = ____x870[____i47 + 1]
+      local __x871 = has(____id124, 1)
       local __body71 = cut(____id124, 1)
-      if __x867 == "finally" then
+      if __x871 == "finally" then
       else
-        if __x867 == "except" and has(__body71, 1) == "as" then
+        if __x871 == "except" and has(__body71, 1) == "as" then
           local ____id125 = __body71
           local __kind2 = has(____id125, 1)
           local ___1 = has(____id125, 2)
           local __name19 = has(____id125, 3)
           local __body72 = cut(____id125, 3)
-          add(__forms7, join({{__x867, {"%as", __kind2, __name19}}}, __body72))
+          add(__forms7, join({{__x871, {"%as", __kind2, __name19}}}, __body72))
         else
-          if __x867 == "except" then
+          if __x871 == "except" then
             local ____id126 = __body71
             local __kind3 = has(____id126, 1)
             local __body73 = cut(____id126, 1)
-            add(__forms7, join({{__x867, __kind3}}, __body73))
+            add(__forms7, join({{__x871, __kind3}}, __body73))
           else
             error("Unknown try clause")
           end
@@ -2250,7 +2252,7 @@ setenv("try", {
       end
       ____i47 = ____i47 + 1
     end
-    return join({"%cases", {"try", __x861}}, __forms7, {__fin1})
+    return join({"%cases", {"try", __x865}}, __forms7, {__fin1})
   end
 })
 setenv("errsafe", {
@@ -2265,9 +2267,9 @@ setenv("errsafe", {
 setenv("dbg", {
   _stash = true,
   macro = function ()
-    local ____x890 = object({"target", {"do"}})
-    ____x890.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
-    return ____x890
+    local ____x894 = object({"target", {"do"}})
+    ____x894.py = {"do", {"import", "pdb"}, {{"idx", "pdb", "set-trace"}}}
+    return ____x894
   end
 })
 setenv("see", {
@@ -2290,10 +2292,10 @@ function pp(x)
     local __c4 = "  "
     local __nl = nil
     print("(")
-    local ____x898 = x
+    local ____x902 = x
     local ____i48 = 0
-    while ____i48 < _35(____x898) do
-      local __v32 = ____x898[____i48 + 1]
+    while ____i48 < _35(____x902) do
+      local __v32 = ____x902[____i48 + 1]
       if __nl then
         print("")
       end
@@ -2487,17 +2489,17 @@ function read_toplevel(str, more)
   else
     __e44 = nil
   end
-  local __x910 = __e44
-  if __x910 == more then
+  local __x914 = __e44
+  if __x914 == more then
     return more
   else
-    if nil63(__x910) then
-      return __x910
+    if nil63(__x914) then
+      return __x914
     else
-      if one63(__x910) then
-        return hd(__x910)
+      if one63(__x914) then
+        return hd(__x914)
       else
-        return __x910
+        return __x914
       end
     end
   end
@@ -2653,10 +2655,10 @@ local function main(args)
         end
         __i51 = __i51 + 1
       end
-      local ____x915 = __pre
+      local ____x919 = __pre
       local ____i52 = 0
-      while ____i52 < _35(____x915) do
-        local __file = ____x915[____i52 + 1]
+      while ____i52 < _35(____x919) do
+        local __file = ____x919[____i52 + 1]
         run_file(__file)
         ____i52 = ____i52 + 1
       end

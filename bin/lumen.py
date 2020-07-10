@@ -1741,7 +1741,9 @@ def __f109(*_args, **_keys):
 setenv("raise", macro=__f109)
 def __f110(*_args, **_keys):
   __args45 = unstash(_args, _keys)
-  return join(["%is"], __args45)
+  ____x722 = object(["target", join(["="], __args45)])
+  ____x722["py"] = join(["%is"], __args45)
+  return ____x722
 
 setenv("is", macro=__f110)
 def __f111(*_args, **_keys):
@@ -1756,14 +1758,14 @@ def __f112(*_args, **_keys):
 setenv("as", macro=__f112)
 def __f113(x=None, *_args, **_keys):
   ____r235 = unstash(_args, _keys)
-  __x733 = destash33(x, ____r235)
+  __x737 = destash33(x, ____r235)
   ____id113 = ____r235
   __body65 = cut(____id113, 0)
   __e32 = None
-  if atom63(__x733):
-    __e32 = [__x733]
+  if atom63(__x737):
+    __e32 = [__x737]
   else:
-    __e32 = __x733
+    __e32 = __x737
   ____id114 = __e32
   __a26 = has(____id114, 0)
   __bs25 = cut(____id114, 1)
@@ -1784,53 +1786,53 @@ def __f114(*_args, **_keys):
       return join(["%expand-case"], hd(__args51))
     else:
       __r238 = unique("r")
-      def __f115(__x752=None):
-        ____id116 = __x752
-        __x753 = has(____id116, 0)
+      def __f115(__x756=None):
+        ____id116 = __x756
+        __x757 = has(____id116, 0)
         __body67 = cut(____id116, 1)
-        return ["%expand-case", __x753, ["%set", __r238, join(["%do"], __body67)]]
+        return ["%expand-case", __x757, ["%set", __r238, join(["%do"], __body67)]]
       return join(["with", __r238, "nil"], map(__f115, almost(__args51)), [join(["%expand-case"], last(__args51))])
 
 setenv("%cases", macro=__f114)
 def __f116(x=None, *_args, **_keys):
   ____r241 = unstash(_args, _keys)
-  __x773 = destash33(x, ____r241)
+  __x777 = destash33(x, ____r241)
   ____id1211 = ____r241
   __cases1 = cut(____id1211, 0)
   __fin1 = ["finally"]
   ____o26 = __cases1
   ____i45 = None
   for ____i45 in indices(____o26):
-    __x775 = ____o26[____i45]
-    if hd63(__x775, "finally"):
-      __fin1 = __x775
+    __x779 = ____o26[____i45]
+    if hd63(__x779, "finally"):
+      __fin1 = __x779
   __forms7 = []
-  ____x778 = __cases1
+  ____x782 = __cases1
   ____i46 = 0
-  while ____i46 < L_35(____x778):
-    ____id122 = ____x778[____i46]
-    __x779 = has(____id122, 0)
+  while ____i46 < L_35(____x782):
+    ____id122 = ____x782[____i46]
+    __x783 = has(____id122, 0)
     __body71 = cut(____id122, 1)
-    if __x779 == "finally":
+    if __x783 == "finally":
       pass
     else:
-      if __x779 == "except" and has(__body71, 1) == "as":
+      if __x783 == "except" and has(__body71, 1) == "as":
         ____id123 = __body71
         __kind2 = has(____id123, 0)
         ___1 = has(____id123, 1)
         __name19 = has(____id123, 2)
         __body72 = cut(____id123, 3)
-        add(__forms7, join([[__x779, ["%as", __kind2, __name19]]], __body72))
+        add(__forms7, join([[__x783, ["%as", __kind2, __name19]]], __body72))
       else:
-        if __x779 == "except":
+        if __x783 == "except":
           ____id124 = __body71
           __kind3 = has(____id124, 0)
           __body73 = cut(____id124, 1)
-          add(__forms7, join([[__x779, __kind3]], __body73))
+          add(__forms7, join([[__x783, __kind3]], __body73))
         else:
           raise Exception("Unknown try clause")
     ____i46 = ____i46 + 1
-  return join(["%cases", ["try", __x773]], __forms7, [__fin1])
+  return join(["%cases", ["try", __x777]], __forms7, [__fin1])
 
 setenv("try", macro=__f116)
 def __f117(x=None, L_else=None):
@@ -1840,9 +1842,9 @@ def __f117(x=None, L_else=None):
 
 setenv("errsafe", macro=__f117)
 def __f118():
-  ____x802 = object(["target", ["do"]])
-  ____x802["py"] = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]]
-  return ____x802
+  ____x806 = object(["target", ["do"]])
+  ____x806["py"] = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]]
+  return ____x806
 
 setenv("dbg", macro=__f118)
 def __f119(form=None):
@@ -1873,10 +1875,10 @@ from pprint import pprint as pp
 def entries(x=None):
   __r252 = []
   __mods = []
-  ____x810 = dir(x)
+  ____x814 = dir(x)
   ____i47 = 0
-  while ____i47 < L_35(____x810):
-    __k25 = ____x810[____i47]
+  while ____i47 < L_35(____x814):
+    __k25 = ____x814[____i47]
     if not( clip(__k25, 0, 2) == "__"):
       __v32 = getattr(x, __k25)
       if function63(__v32):
@@ -1887,11 +1889,11 @@ def entries(x=None):
         else:
           add(__r252, [__k25, __v32])
     ____i47 = ____i47 + 1
-  ____x812 = __mods
+  ____x816 = __mods
   ____i48 = 0
-  while ____i48 < L_35(____x812):
-    __x813 = ____x812[____i48]
-    add(__r252, __x813)
+  while ____i48 < L_35(____x816):
+    __x817 = ____x816[____i48]
+    add(__r252, __x817)
     ____i48 = ____i48 + 1
   return __r252
 
@@ -1945,18 +1947,18 @@ def pp_obj(x=None):
   s = s.rstrip()
   s = strip_outer(s, "[", "]")
   s = cat(" ", s)
-  ____x816 = lines(s)
+  ____x820 = lines(s)
   ____i50 = 0
-  while ____i50 < L_35(____x816):
-    __x817 = ____x816[____i50]
-    __ind = get_indentation(__x817)
-    __x817 = __x817.rstrip(",")
-    __id126 = simple_id63(strip_outer(__x817.strip(), "'", "'"))
+  while ____i50 < L_35(____x820):
+    __x821 = ____x820[____i50]
+    __ind = get_indentation(__x821)
+    __x821 = __x821.rstrip(",")
+    __id126 = simple_id63(strip_outer(__x821.strip(), "'", "'"))
     __e35 = None
     if __id126:
       __e35 = cat(__ind, __id126)
     else:
-      __e35 = __x817
+      __e35 = __x821
     L_print(__e35)
     ____i50 = ____i50 + 1
   return L_print(repr(x))
@@ -2061,17 +2063,17 @@ def read_toplevel(L_str=None, more=None):
     __e36 = __v36
   else:
     __e36 = None
-  __x827 = __e36
-  if __x827 == more:
+  __x831 = __e36
+  if __x831 == more:
     return more
   else:
-    if nil63(__x827):
-      return __x827
+    if nil63(__x831):
+      return __x831
     else:
-      if one63(__x827):
-        return hd(__x827)
+      if one63(__x831):
+        return hd(__x831)
       else:
-        return __x827
+        return __x831
 
 def rep(L_str=None):
   __v37 = eval(read_toplevel(L_str))
@@ -2186,10 +2188,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i51 = __i51 + 1
-      ____x831 = __pre
+      ____x835 = __pre
       ____i52 = 0
-      while ____i52 < L_35(____x831):
-        __file = ____x831[____i52]
+      while ____i52 < L_35(____x835):
+        __file = ____x835[____i52]
         run_file(__file)
         ____i52 = ____i52 + 1
       if nil63(__input):
