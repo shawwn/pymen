@@ -106,7 +106,9 @@
 
 (target py:
   (define-global docstring (x)
-    (errsafe (str (idx x __doc__)))))
+    (errsafe
+      (let x (idx x __doc__)
+        (if (string? x) x (str x))))))
 
 (target py:
   (define-global lumen-set-globals (x)

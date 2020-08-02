@@ -1978,7 +1978,13 @@ def pp_toplevel(x=None):
 def docstring(x=None):
   def __f121():
     try:
-      return [True, L_str(x.__doc__)]
+      __x824 = x.__doc__
+      __e36 = None
+      if string63(__x824):
+        __e36 = __x824
+      else:
+        __e36 = L_str(__x824)
+      return [True, __e36]
     except:
       import sys
       e = sys.exc_info()
@@ -2058,22 +2064,22 @@ def read_toplevel(L_str=None, more=None):
   ____id129 = __f123()
   __ok9 = has(____id129, 0)
   __v36 = has(____id129, 1)
-  __e36 = None
+  __e37 = None
   if __ok9:
-    __e36 = __v36
+    __e37 = __v36
   else:
-    __e36 = None
-  __x831 = __e36
-  if __x831 == more:
+    __e37 = None
+  __x832 = __e37
+  if __x832 == more:
     return more
   else:
-    if nil63(__x831):
-      return __x831
+    if nil63(__x832):
+      return __x832
     else:
-      if one63(__x831):
-        return hd(__x831)
+      if one63(__x832):
+        return hd(__x832)
       else:
-        return __x831
+        return __x832
 
 def rep(L_str=None):
   __v37 = eval(read_toplevel(L_str))
@@ -2188,10 +2194,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i51 = __i51 + 1
-      ____x835 = __pre
+      ____x836 = __pre
       ____i52 = 0
-      while ____i52 < L_35(____x835):
-        __file = ____x835[____i52]
+      while ____i52 < L_35(____x836):
+        __file = ____x836[____i52]
         run_file(__file)
         ____i52 = ____i52 + 1
       if nil63(__input):
