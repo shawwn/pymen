@@ -2389,7 +2389,9 @@ setenv("errsafe", {
     if (nil63(_else)) {
       _else = "nil";
     }
-    return ["let", [["ok", "v"], ["guard", x]], ["if", "ok", "v", _else]];
+    var __ok7 = unique("ok");
+    var __v33 = unique("v");
+    return ["let", [[__ok7, __v33], ["guard", x]], ["if", __ok7, __v33, _else]];
   }
 });
 setenv("dbg", {
@@ -2423,14 +2425,14 @@ pp = function (x) {
     var ____x896 = x;
     var ____i48 = 0;
     while (____i48 < _35(____x896)) {
-      var __v32 = ____x896[____i48];
+      var __v34 = ____x896[____i48];
       if (__nl) {
         print("");
       }
       disp(__c4);
       __nl = true;
       __c4 = "  ";
-      print(str(__v32));
+      print(str(__v34));
       ____i48 = ____i48 + 1;
     }
     return print(")");
@@ -2472,11 +2474,11 @@ simple_id63 = function (x) {
       return [false, e];
     }
   })();
-  var __ok6 = has(____id125, 0);
-  var __v33 = has(____id125, 1);
+  var ____ok8 = has(____id125, 0);
+  var ____v35 = has(____id125, 1);
   var __e53 = undefined;
-  if (__ok6) {
-    __e53 = __v33;
+  if (____ok8) {
+    __e53 = ____v35;
   } else {
     __e53 = undefined;
   }
@@ -2533,14 +2535,14 @@ eval_print = function (form) {
       return [false, e];
     }
   })();
-  var __ok7 = has(____id126, 0);
-  var __v34 = has(____id126, 1);
+  var __ok9 = has(____id126, 0);
+  var __v36 = has(____id126, 1);
   var __ex = has(____id126, 2);
-  if (! __ok7) {
-    return print_exception(__v34, __ex);
+  if (! __ok9) {
+    return print_exception(__v36, __ex);
   } else {
-    if (is63(__v34)) {
-      return toplevel_print(__v34);
+    if (is63(__v36)) {
+      return toplevel_print(__v36);
     }
   }
 };
@@ -2554,11 +2556,11 @@ read_toplevel = function (str, more) {
       return [false, e];
     }
   })();
-  var __ok8 = has(____id127, 0);
-  var __v35 = has(____id127, 1);
+  var ____ok10 = has(____id127, 0);
+  var ____v37 = has(____id127, 1);
   var __e54 = undefined;
-  if (__ok8) {
-    __e54 = __v35;
+  if (____ok10) {
+    __e54 = ____v37;
   } else {
     __e54 = undefined;
   }
@@ -2578,9 +2580,9 @@ read_toplevel = function (str, more) {
   }
 };
 var rep = function (str) {
-  var __v36 = _eval(read_toplevel(str));
-  if (is63(__v36)) {
-    return toplevel_print(__v36);
+  var __v38 = _eval(read_toplevel(str));
+  if (is63(__v38)) {
+    return toplevel_print(__v38);
   }
 };
 var repl = function () {

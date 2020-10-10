@@ -2392,7 +2392,9 @@ setenv("errsafe", {
     if (nil63(_else)) {
       _else = "nil";
     }
-    return ["let", [["ok", "v"], ["guard", x]], ["if", "ok", "v", _else]];
+    var __ok7 = unique("ok");
+    var __v33 = unique("v");
+    return ["let", [[__ok7, __v33], ["guard", x]], ["if", __ok7, __v33, _else]];
   }
 });
 setenv("dbg", {
@@ -2628,9 +2630,9 @@ read_table["("] = function (s) {
         } else {
           if (key63(__x901)) {
             var __k44 = clip(__x901, 0, edge(__x901));
-            var __v32 = read(s);
+            var __v34 = read(s);
             __l16 = object(__l16);
-            __l16[__k44] = __v32;
+            __l16[__k44] = __v34;
           } else {
             add(__l16, __x901);
           }
@@ -2837,7 +2839,7 @@ var stash42 = function (args) {
       var ____o28 = args;
       var __k45 = undefined;
       for (__k45 in ____o28) {
-        var __v33 = ____o28[__k45];
+        var __v35 = ____o28[__k45];
         var __e97 = undefined;
         if (numeric63(__k45)) {
           __e97 = parseInt(__k45);
@@ -2846,7 +2848,7 @@ var stash42 = function (args) {
         }
         var __k46 = __e97;
         if (! number63(__k46)) {
-          add(__l17, ["%literal", __k46, "|=|", __v33]);
+          add(__l17, ["%literal", __k46, "|=|", __v35]);
         }
       }
       return __l17;
@@ -2855,7 +2857,7 @@ var stash42 = function (args) {
       var ____o29 = args;
       var __k47 = undefined;
       for (__k47 in ____o29) {
-        var __v34 = ____o29[__k47];
+        var __v36 = ____o29[__k47];
         var __e96 = undefined;
         if (numeric63(__k47)) {
           __e96 = parseInt(__k47);
@@ -2865,7 +2867,7 @@ var stash42 = function (args) {
         var __k48 = __e96;
         if (! number63(__k48)) {
           add(__l18, literal(__k48));
-          add(__l18, __v34);
+          add(__l18, __v36);
         }
       }
       return join(args, [__l18]);
@@ -2914,7 +2916,7 @@ bind = function (lh, rh) {
           var ____o30 = lh;
           var __k49 = undefined;
           for (__k49 in ____o30) {
-            var __v35 = ____o30[__k49];
+            var __v37 = ____o30[__k49];
             var __e98 = undefined;
             if (numeric63(__k49)) {
               __e98 = parseInt(__k49);
@@ -2931,10 +2933,10 @@ bind = function (lh, rh) {
             var __x914 = __e99;
             if (is63(__k50)) {
               var __e100 = undefined;
-              if (__v35 === true) {
+              if (__v37 === true) {
                 __e100 = __k50;
               } else {
-                __e100 = __v35;
+                __e100 = __v37;
               }
               var __k51 = __e100;
               __bs26 = join(__bs26, bind(__k51, __x914));
@@ -2984,7 +2986,7 @@ bind42 = function (args, body) {
     var ____o31 = args;
     var __k52 = undefined;
     for (__k52 in ____o31) {
-      var __v36 = ____o31[__k52];
+      var __v38 = ____o31[__k52];
       var __e101 = undefined;
       if (numeric63(__k52)) {
         __e101 = parseInt(__k52);
@@ -2993,19 +2995,19 @@ bind42 = function (args, body) {
       }
       var __k53 = __e101;
       if (number63(__k53)) {
-        if (atom63(__v36)) {
-          add(__args131, __v36);
+        if (atom63(__v38)) {
+          add(__args131, __v38);
         } else {
-          if (hd(__v36) === "o") {
-            var ____id130 = __v36;
+          if (hd(__v38) === "o") {
+            var ____id130 = __v38;
             var ___4 = has(____id130, 0);
             var ___var2 = has(____id130, 1);
             var __val5 = has(____id130, 2);
             add(__args131, ___var2);
             add(__inits, ["%if", ["nil?", ___var2], ["%set", ___var2, __val5]]);
           } else {
-            if (hd(__v36) === "t") {
-              var ____id131 = __v36;
+            if (hd(__v38) === "t") {
+              var ____id131 = __v38;
               var ___5 = has(____id131, 0);
               var ___var3 = has(____id131, 1);
               var __val6 = has(____id131, 2);
@@ -3015,7 +3017,7 @@ bind42 = function (args, body) {
             } else {
               var __x948 = unique("x");
               add(__args131, __x948);
-              __bs27 = join(__bs27, [__v36, __x948]);
+              __bs27 = join(__bs27, [__v38, __x948]);
             }
           }
         }
@@ -3026,8 +3028,8 @@ bind42 = function (args, body) {
       var __n42 = _35(__args131);
       var __i58 = 0;
       while (__i58 < __n42) {
-        var __v37 = __args131[__i58];
-        __pre = join(__pre, [__v37, ["destash!", __v37, __r295]]);
+        var __v39 = __args131[__i58];
+        __pre = join(__pre, [__v39, ["destash!", __v39, __r295]]);
         __i58 = __i58 + 1;
       }
       __bs27 = join(__bs27, [props(args), __r295]);
@@ -3205,7 +3207,7 @@ var quasiquote_list = function (form, depth) {
   var ____o34 = form;
   var __k54 = undefined;
   for (__k54 in ____o34) {
-    var __v38 = ____o34[__k54];
+    var __v40 = ____o34[__k54];
     var __e105 = undefined;
     if (numeric63(__k54)) {
       __e105 = parseInt(__k54);
@@ -3215,13 +3217,13 @@ var quasiquote_list = function (form, depth) {
     var __k55 = __e105;
     if (! number63(__k55)) {
       var __e106 = undefined;
-      if (quasisplice63(__v38, depth)) {
-        __e106 = quasiexpand(__v38[1]);
+      if (quasisplice63(__v40, depth)) {
+        __e106 = quasiexpand(__v40[1]);
       } else {
-        __e106 = quasiexpand(__v38, depth);
+        __e106 = quasiexpand(__v40, depth);
       }
-      var __v39 = __e106;
-      last(__xs14)[__k55] = __v39;
+      var __v41 = __e106;
+      last(__xs14)[__k55] = __v41;
     }
   }
   var ____x977 = form;
@@ -3545,7 +3547,7 @@ mapo = function (f, t) {
   var ____o36 = t;
   var __k56 = undefined;
   for (__k56 in ____o36) {
-    var __v40 = ____o36[__k56];
+    var __v42 = ____o36[__k56];
     var __e113 = undefined;
     if (numeric63(__k56)) {
       __e113 = parseInt(__k56);
@@ -3553,7 +3555,7 @@ mapo = function (f, t) {
       __e113 = __k56;
     }
     var __k57 = __e113;
-    var __x991 = f(__v40);
+    var __x991 = f(__v42);
     if (is63(__x991)) {
       add(__o35, literal(__k57));
       add(__o35, __x991);
@@ -3625,7 +3627,7 @@ var precedence = function (form) {
       var ____o37 = infix;
       var __k58 = undefined;
       for (__k58 in ____o37) {
-        var __v41 = ____o37[__k58];
+        var __v43 = ____o37[__k58];
         var __e114 = undefined;
         if (numeric63(__k58)) {
           __e114 = parseInt(__k58);
@@ -3633,7 +3635,7 @@ var precedence = function (form) {
           __e114 = __k58;
         }
         var __k59 = __e114;
-        if (has63(__v41, hd(form))) {
+        if (has63(__v43, hd(form))) {
           return index(__k59);
         }
       }
@@ -5053,7 +5055,7 @@ setenv("%array", {
     var ____o39 = __forms12;
     var __k67 = undefined;
     for (__k67 in ____o39) {
-      var __v43 = ____o39[__k67];
+      var __v45 = ____o39[__k67];
       var __e162 = undefined;
       if (numeric63(__k67)) {
         __e162 = parseInt(__k67);
@@ -5062,7 +5064,7 @@ setenv("%array", {
       }
       var __k68 = __e162;
       if (number63(__k68)) {
-        __s121 = __s121 + (__c18 + compile(__v43));
+        __s121 = __s121 + (__c18 + compile(__v45));
         __c18 = ", ";
       }
     }
@@ -5117,7 +5119,7 @@ setenv("%object", {
     var ____o41 = pair(__forms14);
     var __k72 = undefined;
     for (__k72 in ____o41) {
-      var __v46 = ____o41[__k72];
+      var __v48 = ____o41[__k72];
       var __e166 = undefined;
       if (numeric63(__k72)) {
         __e166 = parseInt(__k72);
@@ -5126,9 +5128,9 @@ setenv("%object", {
       }
       var __k73 = __e166;
       if (number63(__k73)) {
-        var ____id177 = __v46;
+        var ____id177 = __v48;
         var __k74 = has(____id177, 0);
-        var __v47 = has(____id177, 1);
+        var __v49 = has(____id177, 1);
         if (! string63(__k74)) {
           throw new Error("Illegal key: " + str(__k74));
         }
@@ -5139,7 +5141,7 @@ setenv("%object", {
           _stash: true,
           toplevel: true
         }), "value") + 1;
-        var ____x1155 = compile(__v47);
+        var ____x1155 = compile(__v49);
         setenv("indent-level", {
           _stash: true,
           toplevel: true
@@ -5181,8 +5183,8 @@ setenv("%list", {
     while (____i79 < _35(____x1163)) {
       var ____id183 = ____x1163[____i79];
       var __k76 = has(____id183, 0);
-      var __v49 = has(____id183, 1);
-      __s16 = __s16 + (" for " + (compile(__k76) + (" in " + compile(__v49))));
+      var __v51 = has(____id183, 1);
+      __s16 = __s16 + (" for " + (compile(__k76) + (" in " + compile(__v51))));
       ____i79 = ____i79 + 1;
     }
     if (is63(__cond14)) {

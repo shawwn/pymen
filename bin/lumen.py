@@ -1838,7 +1838,9 @@ setenv("try", macro=__f116)
 def __f117(x=None, L_else=None):
   if nil63(L_else):
     L_else = "nil"
-  return ["let", [["ok", "v"], ["guard", x]], ["if", "ok", "v", L_else]]
+  __ok7 = unique("ok")
+  __v33 = unique("v")
+  return ["let", [[__ok7, __v33], ["guard", x]], ["if", __ok7, __v33, L_else]]
 
 setenv("errsafe", macro=__f117)
 def __f118():
@@ -1880,14 +1882,14 @@ def entries(x=None):
   while ____i47 < L_35(____x814):
     __k25 = ____x814[____i47]
     if not( clip(__k25, 0, 2) == "__"):
-      __v32 = getattr(x, __k25)
-      if function63(__v32):
+      __v34 = getattr(x, __k25)
+      if function63(__v34):
         add(__r252, __k25)
       else:
-        if module63(__v32):
+        if module63(__v34):
           add(__mods, cat(".", __k25))
         else:
-          add(__r252, [__k25, __v32])
+          add(__r252, [__k25, __v34])
     ____i47 = ____i47 + 1
   ____x816 = __mods
   ____i48 = 0
@@ -1931,11 +1933,11 @@ def simple_id63(x=None):
       e = sys.exc_info()
       return [False, e[1], e]
   ____id125 = __f120()
-  __ok6 = has(____id125, 0)
-  __v33 = has(____id125, 1)
+  ____ok8 = has(____id125, 0)
+  ____v35 = has(____id125, 1)
   __e34 = None
-  if __ok6:
-    __e34 = __v33
+  if ____ok8:
+    __e34 = ____v35
   else:
     __e34 = None
   __r260 = __e34
@@ -1990,10 +1992,10 @@ def docstring(x=None):
       e = sys.exc_info()
       return [False, e[1], e]
   ____id127 = __f121()
-  __ok7 = has(____id127, 0)
-  __v34 = has(____id127, 1)
-  if __ok7:
-    return __v34
+  ____ok9 = has(____id127, 0)
+  ____v36 = has(____id127, 1)
+  if ____ok9:
+    return ____v36
   else:
     return None
 
@@ -2043,14 +2045,14 @@ def eval_print(form=None):
       e = sys.exc_info()
       return [False, e[1], e]
   ____id128 = __f122()
-  __ok8 = has(____id128, 0)
-  __v35 = has(____id128, 1)
+  __ok10 = has(____id128, 0)
+  __v37 = has(____id128, 1)
   __ex = has(____id128, 2)
-  if not __ok8:
-    return print_exception(__v35, __ex)
+  if not __ok10:
+    return print_exception(__v37, __ex)
   else:
-    if is63(__v35):
-      return toplevel_print(__v35)
+    if is63(__v37):
+      return toplevel_print(__v37)
 
 def read_toplevel(L_str=None, more=None):
   __s3 = reader.stream(L_str, more)
@@ -2062,11 +2064,11 @@ def read_toplevel(L_str=None, more=None):
       e = sys.exc_info()
       return [False, e[1], e]
   ____id129 = __f123()
-  __ok9 = has(____id129, 0)
-  __v36 = has(____id129, 1)
+  ____ok11 = has(____id129, 0)
+  ____v38 = has(____id129, 1)
   __e37 = None
-  if __ok9:
-    __e37 = __v36
+  if ____ok11:
+    __e37 = ____v38
   else:
     __e37 = None
   __x832 = __e37
@@ -2082,9 +2084,9 @@ def read_toplevel(L_str=None, more=None):
         return __x832
 
 def rep(L_str=None):
-  __v37 = eval(read_toplevel(L_str))
-  if is63(__v37):
-    return toplevel_print(__v37)
+  __v39 = eval(read_toplevel(L_str))
+  if is63(__v39):
+    return toplevel_print(__v39)
 
 def repl():
   o = {"buf": ""}

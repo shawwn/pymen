@@ -512,8 +512,9 @@
        ,fin)))
 
 (define-macro errsafe (x (o else 'nil))
-  `(let ((ok v) (guard ,x))
-     (if ok v ,else)))
+  (let-unique (ok v)
+    `(let ((,ok ,v) (guard ,x))
+       (if ,ok ,v ,else))))
 
 (define-macro dbg ()
   `(target py: (do (import pdb) ((idx pdb set-trace))) (do)))

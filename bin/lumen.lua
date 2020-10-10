@@ -2261,7 +2261,9 @@ setenv("errsafe", {
     if nil63(_else) then
       _else = "nil"
     end
-    return {"let", {{"ok", "v"}, {"guard", x}}, {"if", "ok", "v", _else}}
+    local __ok7 = unique("ok")
+    local __v33 = unique("v")
+    return {"let", {{__ok7, __v33}, {"guard", x}}, {"if", __ok7, __v33, _else}}
   end
 })
 setenv("dbg", {
@@ -2295,14 +2297,14 @@ function pp(x)
     local ____x902 = x
     local ____i48 = 0
     while ____i48 < _35(____x902) do
-      local __v32 = ____x902[____i48 + 1]
+      local __v34 = ____x902[____i48 + 1]
       if __nl then
         print("")
       end
       disp(__c4)
       __nl = true
       __c4 = "  "
-      print(str(__v32))
+      print(str(__v34))
       ____i48 = ____i48 + 1
     end
     return print(")")
@@ -2315,7 +2317,7 @@ function dir(x)
   local ____o28 = x
   local __k26 = nil
   for __k26 in next, ____o28 do
-    local __v33 = ____o28[__k26]
+    local __v35 = ____o28[__k26]
     add(__r242, __k26)
   end
   return __r242
@@ -2367,11 +2369,11 @@ function simple_id63(x)
       }
     end
   end)}
-  local __ok6 = has(____id127, 1)
-  local __v34 = has(____id127, 2)
+  local ____ok8 = has(____id127, 1)
+  local ____v36 = has(____id127, 2)
   local __e39 = nil
-  if __ok6 then
-    __e39 = __v34
+  if ____ok8 then
+    __e39 = ____v36
   else
     __e39 = nil
   end
@@ -2444,14 +2446,14 @@ function eval_print(form)
       }
     end
   end)}
-  local __ok7 = has(____id128, 1)
-  local __v35 = has(____id128, 2)
+  local __ok9 = has(____id128, 1)
+  local __v37 = has(____id128, 2)
   local __ex = has(____id128, 3)
-  if not __ok7 then
-    return print_exception(__v35, __ex)
+  if not __ok9 then
+    return print_exception(__v37, __ex)
   else
-    if is63(__v35) then
-      return toplevel_print(__v35)
+    if is63(__v37) then
+      return toplevel_print(__v37)
     end
   end
 end
@@ -2481,11 +2483,11 @@ function read_toplevel(str, more)
       }
     end
   end)}
-  local __ok8 = has(____id129, 1)
-  local __v36 = has(____id129, 2)
+  local ____ok10 = has(____id129, 1)
+  local ____v38 = has(____id129, 2)
   local __e44 = nil
-  if __ok8 then
-    __e44 = __v36
+  if ____ok10 then
+    __e44 = ____v38
   else
     __e44 = nil
   end
@@ -2505,9 +2507,9 @@ function read_toplevel(str, more)
   end
 end
 local function rep(str)
-  local __v37 = eval(read_toplevel(str))
-  if is63(__v37) then
-    return toplevel_print(__v37)
+  local __v39 = eval(read_toplevel(str))
+  if is63(__v39) then
+    return toplevel_print(__v39)
   end
 end
 local function repl()
