@@ -36,10 +36,10 @@ def has(l=None, k=None, L_else=None):
 ____r7 = None
 try:
   from collections.abc import Sequence
-  ____r7 = None
+  ____r7 = Sequence
 except ImportError:
   from collections import Sequence
-  ____r7 = None
+  ____r7 = Sequence
 finally:
   pass
 import numpy as np
