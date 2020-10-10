@@ -678,6 +678,13 @@
        `(%block ,name ,(lower h hoist)
           ,(lower-body body tail?)))))
 
+(define lower-import ((name rest: alias) hoist stmt? tail?)
+  (let (as (if (= (hd alias) "as") (at alias 1) (hd alias))
+        id (or as name))
+    (add hoist `(import ,name ,@alias))
+    (unless stmt?
+      id)))
+
 (define lower-function (args hoist)
   (if (target? 'py)
       (let-unique (f)
@@ -736,6 +743,7 @@
           (= x '%with) (lower-with args hoist stmt? tail?)
           (= x '%block) (lower-block args hoist stmt? tail?)
           (= x '%cases) (lower-cases args hoist stmt? tail?)
+          (= x 'import) (lower-import args hoist stmt? tail?)
           (= x '%function) (lower-function args hoist)
           (or (= x '%local-function)
               (= x '%global-function))
