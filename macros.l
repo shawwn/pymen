@@ -132,12 +132,16 @@
            ,@body)))))
 
 (define-macro define-macro (name args rest: body)
-  (let form `(setenv ',name macro: (fn ,args ,@body))
+  (let (id (unique (cat name "--macro"))
+        form `(do (define ,id ,args ,@body)
+                  (setenv ',name macro: ,id)))
     (eval form)
     form))
 
 (define-macro define-special (name args rest: body)
-  (let form `(setenv ',name special: (fn ,args ,@body) ,@(props body))
+  (let (id (unique (cat name "--special"))
+        form `(do (define ,id ,args ,@body)
+                  (setenv ',name special: ,id ,@(props body))))
     (eval form)
     form))
 
