@@ -530,6 +530,12 @@ def valid_code63(n=None):
 def compile_keyword(x=None):
   return escape(x)
 
+def compile_name(name=None):
+  if keyword63(name):
+    return compile(clip(name, 1))
+  else:
+    return compile(name)
+
 def compile_id(id=None, raw63=None):
   if keyword63(id):
     return compile_keyword(id)
@@ -600,16 +606,16 @@ def unique(x=None):
 
 def key(k=None):
   if has(setenv("target", toplevel=True), "value") == "py":
-    return k
+    return compile(k)
   else:
-    __i13 = inner(k)
-    if valid_id63(__i13):
-      return __i13
-    else:
-      if has(setenv("target", toplevel=True), "value") == "js":
-        return k
+    if string_literal63(k):
+      __i13 = inner(k)
+      if valid_id63(__i13):
+        return __i13
       else:
         return cat("[", k, "]")
+    else:
+      return cat("[", compile(k), "]")
 
 def mapo(f=None, t=None):
   __o7 = []
@@ -866,7 +872,7 @@ def method_call63(form=None):
 
 def compile_call(form=None):
   __f = hd(form)
-  __f1 = compile(__f)
+  __f1 = compile_name(__f)
   __args3 = stash42(tl(form))
   __e55 = None
   if method_call63(hd(__args3)):
@@ -880,10 +886,10 @@ def compile_call(form=None):
     return cat(__f1, __args4)
 
 def op_delims(parent=None, child=None, *_args, **_keys):
-  ____r76 = unstash(_args, _keys)
-  __parent = destash33(parent, ____r76)
-  __child = destash33(child, ____r76)
-  ____id13 = ____r76
+  ____r77 = unstash(_args, _keys)
+  __parent = destash33(parent, ____r77)
+  __child = destash33(child, ____r77)
+  ____id13 = ____r77
   __right = has(____id13, "right")
   __e56 = None
   if __right:
@@ -929,16 +935,16 @@ def compile_body(body=None):
     return __s2
 
 def compile_function(args=None, body=None, *_args, **_keys):
-  ____r79 = unstash(_args, _keys)
-  __args5 = destash33(args, ____r79)
-  __body4 = destash33(body, ____r79)
-  ____id18 = ____r79
+  ____r80 = unstash(_args, _keys)
+  __args5 = destash33(args, ____r80)
+  __body4 = destash33(body, ____r80)
+  ____id18 = ____r80
   __name3 = has(____id18, "name")
   __prefix = has(____id18, "prefix")
   __async = has(____id18, "async")
   __e57 = None
   if __name3:
-    __e57 = compile(__name3)
+    __e57 = compile_name(__name3)
   else:
     __e57 = ""
   __id19 = __e57
@@ -989,10 +995,10 @@ def can_return63(form=None):
   return is63(form) and (atom63(form) or not( hd(form) == "%return") and not statement63(hd(form)))
 
 def compile(form=None, raw63=None, *_args, **_keys):
-  ____r81 = unstash(_args, _keys)
-  __form = destash33(form, ____r81)
-  __raw63 = destash33(raw63, ____r81)
-  ____id20 = ____r81
+  ____r82 = unstash(_args, _keys)
+  __form = destash33(form, ____r82)
+  __raw63 = destash33(raw63, ____r82)
+  ____id20 = ____r82
   __stmt1 = has(____id20, "stmt")
   if nil63(__form):
     return ""
@@ -1391,11 +1397,11 @@ def __L_37while__special(cond=None, form=None):
 
 setenv("%while", special=__L_37while__special, stmt=True, tr=True)
 def __L_37for__special(t=None, k=None, form=None, *_args, **_keys):
-  ____r119 = unstash(_args, _keys)
-  __t2 = destash33(t, ____r119)
-  __k11 = destash33(k, ____r119)
-  __form5 = destash33(form, ____r119)
-  ____id39 = ____r119
+  ____r120 = unstash(_args, _keys)
+  __t2 = destash33(t, ____r120)
+  __k11 = destash33(k, ____r120)
+  __form5 = destash33(form, ____r120)
+  ____id39 = ____r120
   __async2 = has(____id39, "async")
   __t3 = compile(__t2)
   __k12 = compile(__k11)
@@ -1417,10 +1423,10 @@ def __L_37for__special(t=None, k=None, form=None, *_args, **_keys):
 
 setenv("%for", special=__L_37for__special, stmt=True, tr=True)
 def __L_37with__special(t=None, form=None, *_args, **_keys):
-  ____r121 = unstash(_args, _keys)
-  __t6 = destash33(t, ____r121)
-  __form7 = destash33(form, ____r121)
-  ____id41 = ____r121
+  ____r122 = unstash(_args, _keys)
+  __t6 = destash33(t, ____r122)
+  __form7 = destash33(form, ____r122)
+  ____id41 = ____r122
   __async4 = has(____id41, "async")
   __t7 = compile(__t6)
   __ind9 = indentation()
@@ -1498,18 +1504,18 @@ def __L_37break__special():
 
 setenv("%break", special=__L_37break__special, stmt=True)
 def __L_37function__special(args=None, *_args, **_keys):
-  ____r131 = unstash(_args, _keys)
-  __args121 = destash33(args, ____r131)
-  ____id43 = ____r131
+  ____r132 = unstash(_args, _keys)
+  __args121 = destash33(args, ____r132)
+  ____id43 = ____r132
   __body23 = cut(____id43, 0)
   return apply(compile_function, join([__args121], __body23, []))
 
 setenv("%function", special=__L_37function__special)
 def __L_37global_function__special(name=None, args=None, *_args, **_keys):
-  ____r133 = unstash(_args, _keys)
-  __name9 = destash33(name, ____r133)
-  __args14 = destash33(args, ____r133)
-  ____id45 = ____r133
+  ____r134 = unstash(_args, _keys)
+  __name9 = destash33(name, ____r134)
+  __args14 = destash33(args, ____r134)
+  ____id45 = ____r134
   __body25 = cut(____id45, 0)
   if has(setenv("target", toplevel=True), "value") == "lua" or has(setenv("target", toplevel=True), "value") == "py":
     ____x213 = object([__args14])
@@ -1523,10 +1529,10 @@ def __L_37global_function__special(name=None, args=None, *_args, **_keys):
 
 setenv("%global-function", special=__L_37global_function__special, stmt=True, tr=True)
 def __L_37local_function__special(name=None, args=None, *_args, **_keys):
-  ____r135 = unstash(_args, _keys)
-  __name11 = destash33(name, ____r135)
-  __args16 = destash33(args, ____r135)
-  ____id47 = ____r135
+  ____r136 = unstash(_args, _keys)
+  __name11 = destash33(name, ____r136)
+  __args16 = destash33(args, ____r136)
+  ____id47 = ____r136
   __body27 = cut(____id47, 0)
   if has(setenv("target", toplevel=True), "value") == "lua" or has(setenv("target", toplevel=True), "value") == "py":
     ____x224 = object([__args16])
@@ -1704,8 +1710,6 @@ def __L_37object__special(*_args, **_keys):
       ____id51 = __v13
       __k20 = has(____id51, 0)
       __v14 = has(____id51, 1)
-      if not string63(__k20):
-        raise Exception(cat("Illegal key: ", L_str(__k20)))
       setenv("indent-level", toplevel=True)["value"] = has(setenv("indent-level", toplevel=True), "value") + 1
       ____x241 = compile(__v14)
       setenv("indent-level", toplevel=True)["value"] = has(setenv("indent-level", toplevel=True), "value") - 1
@@ -1715,11 +1719,11 @@ def __L_37object__special(*_args, **_keys):
 
 setenv("%object", special=__L_37object__special)
 def __L_37list__special(form=None, comps=None, cond=None, *_args, **_keys):
-  ____r155 = unstash(_args, _keys)
-  __form9 = destash33(form, ____r155)
-  __comps1 = destash33(comps, ____r155)
-  __cond6 = destash33(cond, ____r155)
-  ____id55 = ____r155
+  ____r156 = unstash(_args, _keys)
+  __form9 = destash33(form, ____r156)
+  __comps1 = destash33(comps, ____r156)
+  __cond6 = destash33(cond, ____r156)
+  ____id55 = ____r156
   __kind1 = has(____id55, "kind")
   __s12 = compile(__form9)
   __e96 = None
@@ -1758,9 +1762,9 @@ def __global__special(x=None):
 
 setenv("global", special=__global__special, stmt=True, tr=True)
 def __import__special(name=None, *_args, **_keys):
-  ____r159 = unstash(_args, _keys)
-  __name13 = destash33(name, ____r159)
-  ____id60 = ____r159
+  ____r160 = unstash(_args, _keys)
+  __name13 = destash33(name, ____r160)
+  ____id60 = ____r160
   __alias3 = cut(____id60, 0)
   __ind19 = indentation()
   __e97 = None
@@ -1780,22 +1784,22 @@ def __import__special(name=None, *_args, **_keys):
 
 setenv("import", special=__import__special, stmt=True)
 def __from__special(name=None, *_args, **_keys):
-  ____r163 = unstash(_args, _keys)
-  __name15 = destash33(name, ____r163)
-  ____id64 = ____r163
+  ____r164 = unstash(_args, _keys)
+  __name15 = destash33(name, ____r164)
+  ____id64 = ____r164
   __imports1 = cut(____id64, 0)
   __ind21 = indentation()
   __id65 = __name15
-  __r164 = None
-  __r164 = drop(__imports1)
+  __r165 = None
+  __r165 = drop(__imports1)
   __e98 = None
   if last(__imports1) == "as":
     __e98 = drop(__imports1)
   else:
-    add(__imports1, __r164)
-    __r164 = None
-    __e98 = __r164
-  __L_as2 = __r164
+    add(__imports1, __r165)
+    __r165 = None
+    __e98 = __r165
+  __L_as2 = __r165
   __e99 = None
   if hd(__imports1) == "import":
     __e99 = tl(__imports1)

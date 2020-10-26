@@ -1,17 +1,17 @@
 var delimiters = {
-  "(": true,
-  ")": true,
-  ";": true,
-  ",": true,
-  "\r": true,
-  "\n": true
+  ["("]: true,
+  [")"]: true,
+  [";"]: true,
+  [","]: true,
+  ["\r"]: true,
+  ["\n"]: true
 };
-var closing_delimiters = {")": true};
+var closing_delimiters = {[")"]: true};
 var whitespace = {
-  " ": true,
-  "\t": true,
-  "\r": true,
-  "\n": true
+  [" "]: true,
+  ["\t"]: true,
+  ["\r"]: true,
+  ["\n"]: true
 };
 var stream = function (str, more) {
   return {

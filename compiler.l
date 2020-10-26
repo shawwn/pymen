@@ -310,6 +310,9 @@
 (define compile-keyword (x)
   (escape x))
 
+(define-global compile-name (name)
+  (if (keyword? name) (compile (clip name 1)) (compile name)))
+
 (define-global compile-id (id raw?)
   (if (keyword? id)
       (compile-keyword id)
@@ -346,11 +349,14 @@
             (cat "__" x))))))
 
 (define-global key (k)
-  (if (target? 'py) k
-    (let i (inner k)
-      (if (valid-id? i) i
-          (target? 'js) k
-        (cat "[" k "]")))))
+  (if (target? 'py)
+      (compile k)
+      (string-literal? k)
+      (let i (inner k)
+        (if (valid-id? i)
+            i
+          (cat "[" k "]")))
+      (cat "[" (compile k) "]")))
 
 (define-global mapo (f t)
   (with o ()
@@ -491,7 +497,7 @@
 
 (define compile-call (form)
   (let (f (hd form)
-        f1 (compile f)
+        f1 (compile-name f)
         args (stash* (tl form))
         args (if (method-call? (hd args))
                  (mapcat compile args "")
@@ -525,7 +531,7 @@
         s)))
 
 (define-global compile-function (args body name: name prefix: prefix async: async)
-  (let (id (if name (compile name) "")
+  (let (id (if name (compile-name name) "")
         args1 (if (has args 'rest)
                   `(,@args ,"...")
                 args)
@@ -1006,8 +1012,6 @@
     (each (k v) (pair forms)
       (when (number? k)
         (let ((k v) v)
-          (unless (string? k)
-            (error (cat "Illegal key: " (str k))))
           (cat! s c (key k) sep (with-indent (compile v)))
           (set c (cat "," (either pad " "))))))
     (cat s end "}")))
