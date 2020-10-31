@@ -103,7 +103,7 @@
                 js: (get (idx require cache) ((idx require resolve) module))))
         (require module))))
 
-(define run (command)
+(define shell (command)
   (target
     js: ((idx ((idx child_process execSync) command) toString))
     lua: (let f ((idx io popen) command)
@@ -123,4 +123,4 @@
         exit
         argv
         reload
-        run)
+        shell)

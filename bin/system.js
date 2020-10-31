@@ -47,7 +47,7 @@ var reload = function (module) {
   delete require.cache[require.resolve(module)];
   return require(module);
 };
-var run = function (command) {
+var shell = function (command) {
   return child_process.execSync(command).toString();
 };
 exports["read-file"] = read_file;
@@ -71,4 +71,4 @@ exports.read_line = read_line;
 exports.exit = exit;
 exports.argv = argv;
 exports.reload = reload;
-exports.run = run;
+exports.shell = shell;

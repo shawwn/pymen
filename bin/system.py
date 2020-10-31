@@ -71,6 +71,6 @@ argv = cut(sys.argv, 1)
 def reload(module=None):
   return 
 
-def run(command=None):
+def shell(command=None):
   pass
 

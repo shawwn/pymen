@@ -78,7 +78,7 @@ local function reload(module)
   package.loaded[module] = nil
   return require(module)
 end
-local function run(command)
+local function shell(command)
   local __f2 = io.popen(command)
   local __x2 = __f2.read(__f2, "*all")
   __f2.close(__f2)
@@ -106,5 +106,5 @@ __exports.read_line = read_line
 __exports.exit = exit
 __exports.argv = argv
 __exports.reload = reload
-__exports.run = run
+__exports.shell = shell
 return __exports
