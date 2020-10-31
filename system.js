@@ -44,10 +44,10 @@ var exit = function (code) {
 };
 var argv = cut(process.argv, 2);
 var realpath = function (filename) {
-  return require("path").resolve(filename);
+  return fs.realpathSync(filename);
 };
 var reload = function (module) {
-  delete require.cache[require.resolve(module)];
+  delete require.cache[realpath(require.resolve(module))];
   return require(module);
 };
 var shell = function (command) {
@@ -133,3 +133,4 @@ exports["call-with-file-directory"] = call_with_file_directory;
 exports.call_with_file_directory = call_with_file_directory;
 exports.dirname = dirname;
 exports.basename = basename;
+exports.realpath = realpath;

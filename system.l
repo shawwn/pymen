@@ -106,8 +106,8 @@
   (target lua: (if (and uv (uv .fs_realpath))
                    ((uv .fs_realpath) filename)
                    filename)
-          js: ((require 'path) (.resolve filename))
-          py: (os .path (.realpath filename))))
+          js: (fs (.realpathSync filename))  ;((require 'path) (.resolve filename))
+          py: (fs (.realpath filename))))
 
 (define reload (module)
   (target py: ((import importlib) (.reload module))
@@ -115,7 +115,7 @@
                        (wipe (get (idx package loaded) file))))
         (wipe (target
                 lua: (get (idx package loaded) module)
-                js: (get (idx require cache) ((idx require resolve) module))))
+                js: (get (idx require cache) (realpath ((idx require resolve) module)))))
         (require module))))
 
 (define shell (command)
@@ -173,4 +173,5 @@
         call-with-directory
         call-with-file-directory
         dirname
-        basename)
+        basename
+        realpath)

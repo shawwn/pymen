@@ -70,7 +70,7 @@ def exit(code=None):
 
 argv = cut(sys.argv, 1)
 def realpath(filename=None):
-  return os.path.realpath(filename)
+  return fs.realpath(filename)
 
 def reload(module=None):
   import importlib

@@ -226,4 +226,5 @@ __exports["call-with-file-directory"] = call_with_file_directory
 __exports.call_with_file_directory = call_with_file_directory
 __exports.dirname = dirname
 __exports.basename = basename
+__exports.realpath = realpath
 return __exports
