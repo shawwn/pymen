@@ -1,6 +1,6 @@
   return {
     name = "shawwn/pymendev",
-    version = "0.0.3",
+    version = "0.0.4",
     description = "A simple description of my little package.",
     tags = { "lua", "lit", "luvit" },
     license = "MIT",
