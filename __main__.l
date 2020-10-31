@@ -1,0 +1,12 @@
+(target py: (from .runtime import *))
+(target py: (from . import macros))
+(target py: (from . import reader))
+(target py: (from . import compiler))
+(target py: (from . import system))
+(target py: (from . import main))
+; (from . import main)
+; (from .compiler import bind*)
+; (from .compiler import compile)
+(from .compiler import *)
+((main .main) (system .argv))
+

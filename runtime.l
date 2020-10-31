@@ -1,5 +1,5 @@
-(target py: (set lumen-globals (globals)))
-(define-global environment (list (obj)))
+;(define-global environment (or (_G .environment) (list (obj))))
+(defvar environment (list (obj)))
 
 (define-global nil? (x)
   (target
@@ -38,7 +38,8 @@
 
 (define-global array? (x)
   (target js: ((idx Array isArray) x)
-          py: (isinstance x (tuple (list Sequence (idx np ndarray))))
+          py: (and (not (string? x))
+                   (isinstance x (tuple (list Sequence (idx np ndarray)))))
           lua: (= (type x) 'table)))
 
 (target py:
@@ -463,6 +464,10 @@
                    c))
           (cat! s1 c1)))
       (cat s1 "\""))))
+
+(define-global simple-id? (x)
+  (let r (errsafe (read-string x))
+    (when (= r x) r)))
 
 (define-global str (x repr stack)
   (if (nil? x) "nil"

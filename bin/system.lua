@@ -1,3 +1,15 @@
+(function ()
+  local __id1 = process
+  local __e = nil
+  if __id1 then
+    __e = __id1
+  else
+        local luv = require("luv")
+    __e = luv
+  end
+  process = __e
+  return process
+end)()
 local function call_with_file(f, path, mode)
   local h,e = io.open(path, mode)
   if not h then
@@ -19,29 +31,29 @@ local function write_file(path, data)
 end
 local function file_exists63(path)
   local __f = io.open(path)
-  local __id = is63(__f)
-  local __e = nil
-  if __id then
-    local __r6 = is63(__f.read(__f, 0)) or 0 == __f.seek(__f, "end")
+  local __id2 = is63(__f)
+  local __e1 = nil
+  if __id2 then
+    local __r7 = is63(__f.read(__f, 0)) or 0 == __f.seek(__f, "end")
     __f.close(__f)
-    __e = __r6
+    __e1 = __r7
   else
-    __e = __id
+    __e1 = __id2
   end
-  return __e
+  return __e1
 end
 local function directory_exists63(path)
   local __f1 = io.open(path)
-  local __id1 = is63(__f1)
-  local __e1 = nil
-  if __id1 then
-    local __r8 = not __f1.read(__f1, 0) and not( 0 == __f1.seek(__f1, "end"))
+  local __id3 = is63(__f1)
+  local __e2 = nil
+  if __id3 then
+    local __r9 = not __f1.read(__f1, 0) and not( 0 == __f1.seek(__f1, "end"))
     __f1.close(__f1)
-    __e1 = __r8
+    __e2 = __r9
   else
-    __e1 = __id1
+    __e2 = __id3
   end
-  return __e1
+  return __e2
 end
 local path_separator = char(_G.package.config, 0)
 local function path_join(...)
@@ -84,6 +96,72 @@ local function shell(command)
   __f2.close(__f2)
   return __x2
 end
+local function cwd()
+  return process.cwd()
+end
+local function chdir(path)
+  return process.chdir(path)
+end
+local function call_with_directory(path, f)
+  if not directory_exists63(path) then
+        local pdb = require("pdb")
+    pdb.set_trace()
+    error("Directory doesn't exist")
+  end
+  local __pwd = cwd()
+  chdir(path)
+  local ____id = {xpcall(function ()
+    return f()
+  end, function (m)
+    if obj63(m) then
+      return m
+    else
+      local __e3 = nil
+      if string63(m) then
+        __e3 = clip(m, search(m, ": ") + 2)
+      else
+        local __e4 = nil
+        if nil63(m) then
+          __e4 = ""
+        else
+          __e4 = str(m)
+        end
+        __e3 = __e4
+      end
+      return {
+        stack = debug.traceback(),
+        message = __e3
+      }
+    end
+  end)}
+  local __ok = has(____id, 1)
+  local __v = has(____id, 2)
+  chdir(__pwd)
+  if __ok then
+    return __v
+  else
+    error(__v)
+  end
+end
+local function dirname(filename)
+  local __result = apply(path_join, almost(split(filename, path_separator)))
+  if none63(__result) then
+    return "."
+  else
+    return __result
+  end
+end
+local function basename(filename)
+  return last(split(filename, path_separator))
+end
+local function call_with_file_directory(file, f)
+  if not file_exists63(file) then
+        local pdb = require("pdb")
+    pdb.set_trace()
+    error("File doesn't exist")
+  end
+  return call_with_directory(dirname(file), f)
+end
 local __exports = exports or {}
 __exports["read-file"] = read_file
 __exports.read_file = read_file
@@ -107,4 +185,12 @@ __exports.exit = exit
 __exports.argv = argv
 __exports.reload = reload
 __exports.shell = shell
+__exports.cwd = cwd
+__exports.chdir = chdir
+__exports["call-with-directory"] = call_with_directory
+__exports.call_with_directory = call_with_directory
+__exports["call-with-file-directory"] = call_with_file_directory
+__exports.call_with_file_directory = call_with_file_directory
+__exports.dirname = dirname
+__exports.basename = basename
 return __exports

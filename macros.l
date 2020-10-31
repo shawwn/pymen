@@ -1,3 +1,6 @@
+(target py: (from .runtime import *))
+(target py: (from .compiler import *))
+
 (define-macro quote (form)
   (quoted form))
 

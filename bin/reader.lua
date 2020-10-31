@@ -112,7 +112,7 @@ local function read_all(s)
   end
   return __r10
 end
-function read_string(str, more)
+function _G.read_string(str, more)
   local __s = stream(str, more)
   local __x1 = read(__s)
   if not( __x1 == eof) then

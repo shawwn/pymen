@@ -1,7 +1,9 @@
-(target py: (from lumen import *))
+(target py: (from .runtime import *))
 (target py: (import sys))
+(target py: (import os))
 (target js: (define fs (require 'fs)))
 (target js: (define child_process (require 'child_process)))
+(target lua: (define uv (errsafe (require 'luv))))
 
 (target lua:
   (define call-with-file (f path mode)
@@ -32,6 +34,7 @@
 
 (define file-exists? (path)
   (target
+    py: ((idx (idx os path) isfile) path)
     js: (and ((idx fs existsSync) path 'utf8)
              ((idx ((idx fs statSync) path) isFile)))
     lua: (let f ((idx io open) path)
@@ -42,6 +45,7 @@
 
 (define directory-exists? (path)
   (target
+    py: ((idx (idx os path) isdir) path)
     js: (and ((idx fs existsSync) path 'utf8)
              ((idx ((idx fs statSync) path) isDirectory)))
     lua: (let f ((idx io open) path)
@@ -53,13 +57,15 @@
 (define path-separator
   (target
     js: (idx (require 'path) sep)
-    lua: (char (idx (idx _G package) config) 0)))
+    lua: (char (idx (idx _G package) config) 0)
+    py: (os .path .sep)))
 
 (define path-join parts
   (or (reduce (fn (x y) (cat x path-separator y)) parts) ""))
 
 (define get-environment-variable (name)
   (target
+    py: ((idx os getenv) name)
     js: (get (idx process env) name)
     lua: ((idx os getenv) name)))
 
@@ -96,9 +102,18 @@
           py: (cut (idx sys argv) 1)
           lua: arg))
 
+(define realpath (filename)
+  (target lua: (if (and uv (uv .fs_realpath))
+                   ((uv .fs_realpath) filename)
+                   filename)
+          js: ((require 'path) (.resolve filename))
+          py: (os .path (.realpath filename))))
+
 (define reload (module)
-  (target py: ||
-    (do (wipe (target
+  (target py: ((import importlib) (.reload module))
+    (do (target lua: (let-when file (realpath (requireResolve module))
+                       (wipe (get (idx package loaded) file))))
+        (wipe (target
                 lua: (get (idx package loaded) module)
                 js: (get (idx require cache) ((idx require resolve) module))))
         (require module))))
@@ -109,6 +124,35 @@
     lua: (let f ((idx io popen) command)
            (with x ((idx f read) f '*all)
              ((idx f close) f)))))
+
+(define cwd ()
+  (target py: ((idx os getcwd)) ((target js: process lua: uv) (.cwd))))
+
+(define chdir (path)
+  (target py: ((idx os chdir) path) ((target js: process lua: uv) (.chdir path))))
+
+(define call-with-directory (path f)
+  (unless (directory-exists? path)
+    ((import pdb) (.set-trace))
+    (error "Directory doesn't exist"))
+  (let pwd (cwd)
+    (chdir path)
+    (let ((ok v) (guard (f)))
+      (chdir pwd)
+      (if ok v (throw v)))))
+
+(define dirname (filename)
+  (let result (apply path-join (almost (split filename path-separator)))
+    (if (none? result) "." result)))
+
+(define basename (filename)
+  (last (split filename path-separator)))
+
+(define call-with-file-directory (file f)
+  (unless (file-exists? file)
+    ((import pdb) (.set-trace))
+    (error "File doesn't exist"))
+  (call-with-directory (dirname file) f))
 
 (export read-file
         write-file
@@ -123,4 +167,10 @@
         exit
         argv
         reload
-        shell)
+        shell
+        cwd
+        chdir
+        call-with-directory
+        call-with-file-directory
+        dirname
+        basename)

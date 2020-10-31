@@ -11,10 +11,12 @@ OBJS :=	runtime.o	\
 	macros.o	\
 	main.o
 
-MODS := bin/lumen.x	\
+MODS := bin/runtime.x	\
+	bin/macros.x	\
 	bin/reader.x	\
 	bin/compiler.x	\
-	bin/system.x
+	bin/system.x	\
+	bin/main.x
 
 all: $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py) bin/pymen.js
 

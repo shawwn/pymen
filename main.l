@@ -1,7 +1,9 @@
-(import reader)
-(import compiler)
-(import system)
-(target py: |from compiler import *|)
+(target py: (from .runtime import *) js: (require "./runtime.l") lua: (import runtime))
+(target py: (from .macros import *) js: (require "./macros.l") lua: (import macros))
+(target py: (from . import reader) (import reader))
+(target py: (from . import compiler) (import compiler))
+(target py: (from . import system) (import system))
+; (target py: (from compiler import *))
 (target py: (import traceback))
 (target py: (import numpy as np))
 
@@ -73,10 +75,6 @@
            (string-ends? s rh))
       (clip (clip s 0 (- (# s) (# rh))) (# lh))
     s))
-
-(define-global simple-id? (x)
-  (let r (errsafe ((idx reader read-string) x))
-    (when (= r x) r)))
 
 (target py:
   (define-global pp-obj (x)
@@ -199,20 +197,34 @@
         (unless (= s ctrl-c)
           (if (is? s) (rep1 (cat s "\n")) (break)))))))
 
+(define-macro with-file-directory (file name rest: body)
+  (let-unique (cwd)
+  `(let (,cwd (system (.cwd))
+         ,name ,file
+         ,name (system (.basename ,file)))
+     (system (.chdir (system (.dirname ,file))))
+     (after (do ,@body)
+        (system (.chdir ,cwd))))))
+
 (define-global read-file (path)
-  ((idx system read-file) path))
+  (with-file-directory path name
+    ((idx system read-file) name)))
 
 (define-global read-from-file (path)
-  (let s ((idx reader stream) (read-file path))
-    ((idx reader read-all) s)))
+  (let data (read-file path)
+    (with-file-directory path name
+      (let s ((idx reader stream) data)
+        ((idx reader read-all) s)))))
 
 (define-global expand-file (path)
   (let body (read-from-file path)
-    ((idx compiler expand) `(do ,@body))))
+    (with-file-directory path name
+      ((idx compiler expand) `(do ,@body)))))
 
 (define-global compile-file (path)
   (let form (expand-file path)
-    ((idx compiler compile) form stmt: true)))
+    (with-file-directory path name
+      ((idx compiler compile) form stmt: true))))
 
 (define-global load (path)
   (let (previous target previous-indent indent-level)
@@ -221,7 +233,8 @@
     (let code (compile-file path)
       (set indent-level previous-indent)
       (set target previous)
-      ((idx compiler run) code))))
+      (with-file-directory path name
+        ((idx compiler run) code)))))
 
 (define script-file? (path)
   (not (or (= "-" (char path 0))
@@ -281,7 +294,7 @@
 
 (define main? ()
   (target
-    lua: true
+    lua: false
     js: (and (not (undefined? require))
              (not (undefined? module))
              (= (idx require main) module))

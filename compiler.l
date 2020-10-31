@@ -1,4 +1,4 @@
-(target py: (from lumen import *))
+(target py: (from .runtime import *))
 
 (define-global getenv (k p)
   (when (string? k)
@@ -285,7 +285,7 @@
           "instanceof" "let" "return" "switch" "throw"
           "try" "typeof" "var" "void" "with")
     lua: (set-of
-          "and" "end" "in" "load" "repeat" "while" "break"
+          "and" "end" "in" "repeat" "while" "break"
           "false" "local" "return" "do" "for" "nil" "then"
           "else" "function" "not" "true" "elseif" "if" "or"
           "until")
@@ -314,7 +314,8 @@
   (if (keyword? name) (compile (clip name 1)) (compile name)))
 
 (define-global compile-id (id raw?)
-  (if (keyword? id)
+  (if (none? id) id
+      (keyword? id)
       (compile-keyword id)
       (= (code id 0) 46) ; .
       (cat "." (compile-id (clip id 1) true))
@@ -791,16 +792,19 @@
     (let |f,e| (load1 code)
       (if f (f) (error (cat e " in " code))))))
 
+
+(target py: (define-global lumen-globals* (globals)))
+
 (target py:
   (define run (code globals locals)
-    (let (globals (either globals lumen-globals)
+    (let (globals (either globals lumen-globals*)
           locals (either locals globals))
       (|exec| code globals locals)
       nil)))
 
 (define eval-result (globals locals)
   (target py:
-    (let state (or locals globals lumen-globals)
+    (let state (or locals globals lumen-globals*)
       (get state "lumen_result"))
     lumen-result))
 
@@ -918,7 +922,7 @@
 
 (define-special %global-function (name args rest: body) stmt: true tr: true
   (if (or (target? 'lua) (target? 'py))
-      (let x (apply compile-function args body name: name)
+      (let x (apply compile-function args body name: (if (target? 'lua) `(%idx _G ,name) name))
         (cat (indentation) x))
     (compile `(%set ,name (%function ,args ,@body)) stmt: true)))
 

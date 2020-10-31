@@ -1,4 +1,4 @@
-(target py: (from lumen import *))
+(target py: (from .runtime import *))
 
 (define delimiters (set-of "(" ")" ";" "," "\r" "\n"))
 (define closing-delimiters (set-of ")"))
