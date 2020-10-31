@@ -3,22 +3,22 @@ local delimiters = {
   [")"] = true,
   [";"] = true,
   [","] = true,
-  ["\n"] = true,
-  ["\r"] = true
+  ["\r"] = true,
+  ["\n"] = true
 }
 local closing_delimiters = {[")"] = true}
 local whitespace = {
-  ["\r"] = true,
   [" "] = true,
-  ["\n"] = true,
-  ["\t"] = true
+  ["\t"] = true,
+  ["\r"] = true,
+  ["\n"] = true
 }
 local function stream(str, more)
   return {
-    more = more,
     pos = 0,
+    string = str,
     len = _35(str),
-    string = str
+    more = more
   }
 end
 local function peek_char(s)

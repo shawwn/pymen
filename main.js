@@ -1,3 +1,5 @@
+require("./runtime.l");
+require("./macros.l");
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
@@ -176,23 +178,81 @@ var repl = function () {
   ___in.setEncoding("utf8");
   return ___in.on("data", rep1);
 };
+var __with_file_directory__macro = function (file, name, ..._42args) {
+  var ____r19 = unstash([..._42args]);
+  var __file1 = destash33(file, ____r19);
+  var __name1 = destash33(name, ____r19);
+  var ____id3 = ____r19;
+  var __body1 = cut(____id3, 0);
+  var __cwd1 = unique("cwd");
+  return ["let", [__cwd1, ["system", [".cwd"]], __name1, __file1, __name1, ["system", [".basename", __file1]]], ["system", [".chdir", ["system", [".dirname", __file1]]]], ["after", join(["do"], __body1), ["system", [".chdir", __cwd1]]]];
+};
+setenv("with-file-directory", {
+  _stash: true,
+  macro: __with_file_directory__macro
+});
 read_file = function (path) {
-  return system.read_file(path);
+  var ____cwd2 = system.cwd();
+  var __name2 = path;
+  var __name3 = system.basename(path);
+  system.chdir(system.dirname(path));
+  var ____r22 = undefined;
+  try{
+    ____r22 = system.read_file(__name3);
+  }
+  finally{
+    system.chdir(____cwd2);
+  }
+  return ____r22;
 };
 read_from_file = function (path) {
-  var __s1 = reader.stream(read_file(path));
-  return reader.read_all(__s1);
+  var __data = read_file(path);
+  var ____cwd3 = system.cwd();
+  var __name4 = path;
+  var __name5 = system.basename(path);
+  system.chdir(system.dirname(path));
+  var ____r25 = undefined;
+  try{
+    var __s1 = reader.stream(__data);
+    ____r25 = reader.read_all(__s1);
+  }
+  finally{
+    system.chdir(____cwd3);
+  }
+  return ____r25;
 };
 expand_file = function (path) {
-  var __body = read_from_file(path);
-  return compiler.expand(join(["do"], __body));
+  var __body2 = read_from_file(path);
+  var ____cwd4 = system.cwd();
+  var __name6 = path;
+  var __name7 = system.basename(path);
+  system.chdir(system.dirname(path));
+  var ____r28 = undefined;
+  try{
+    ____r28 = compiler.expand(join(["do"], __body2));
+  }
+  finally{
+    system.chdir(____cwd4);
+  }
+  return ____r28;
 };
 compile_file = function (path) {
   var __form2 = expand_file(path);
-  return compiler.compile(__form2, {
-    _stash: true,
-    stmt: true
-  });
+  var ____cwd5 = system.cwd();
+  var __name8 = path;
+  var __name9 = system.basename(path);
+  system.chdir(system.dirname(path));
+  var ____r31 = undefined;
+  try{
+    ____r31 = compiler.compile(__form2, {
+      _stash: true,
+      stmt: true
+    });
+  }
+  finally{
+    system.chdir(____cwd5);
+  }
+  return ____r31;
 };
 load = function (path) {
   var __previous = has(setenv("target", {
@@ -220,7 +280,18 @@ load = function (path) {
     _stash: true,
     toplevel: true
   }).value = __previous;
-  return compiler.run(__code);
+  var ____cwd6 = system.cwd();
+  var __name10 = path;
+  var __name11 = system.basename(path);
+  system.chdir(system.dirname(path));
+  var ____r34 = undefined;
+  try{
+    ____r34 = compiler.run(__code);
+  }
+  finally{
+    system.chdir(____cwd6);
+  }
+  return ____r34;
 };
 var script_file63 = function (path) {
   return !( "-" === char(path, 0) || (".py" === clip(path, _35(path) - 3) || (".js" === clip(path, _35(path) - 3) || ".lua" === clip(path, _35(path) - 4))));
@@ -289,11 +360,11 @@ var main = function (args) {
         }
         __i2 = __i2 + 1;
       }
-      var ____x14 = __pre;
+      var ____x44 = __pre;
       var ____i3 = 0;
-      while (____i3 < _35(____x14)) {
-        var __file = ____x14[____i3];
-        run_file(__file);
+      while (____i3 < _35(____x44)) {
+        var __file2 = ____x44[____i3];
+        run_file(__file2);
         ____i3 = ____i3 + 1;
       }
       if (nil63(__input)) {
@@ -329,4 +400,3 @@ exports.main = main;
 exports.reader = reader;
 exports.compiler = compiler;
 exports.system = system;
-

@@ -69,6 +69,9 @@ def exit(code=None):
   pass
 
 argv = cut(sys.argv, 1)
+def realpath(filename=None):
+  return os.path.realpath(filename)
+
 def reload(module=None):
   import importlib
   return importlib.reload(module)

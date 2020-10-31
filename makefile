@@ -11,12 +11,12 @@ OBJS :=	runtime.o	\
 	macros.o	\
 	main.o
 
-MODS := bin/runtime.x	\
-	bin/macros.x	\
-	bin/reader.x	\
-	bin/compiler.x	\
-	bin/system.x	\
-	bin/main.x
+MODS := runtime.x	\
+	macros.x	\
+	reader.x	\
+	compiler.x	\
+	system.x	\
+	main.x
 
 all: $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py) bin/pymen.js
 
@@ -31,15 +31,15 @@ bin/lumen.lua: $(OBJS:.o=.l)
 
 bin/lumen.py: $(OBJS:.o=.l)
 
-bin/%.js : %.l
+./%.js : %.l
 	@echo $@
 	@$(LUMEN) -c $< -o $@ -t js
 
-bin/%.lua : %.l
+./%.lua : %.l
 	@echo $@
 	@$(LUMEN) -c $< -o $@ -t lua
 
-bin/%.py : %.l
+./%.py : %.l
 	@echo $@
 	@$(LUMEN) -c $< -o $@ -t py
 

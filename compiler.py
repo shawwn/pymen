@@ -463,7 +463,6 @@ reserved = {
     "and": True,
     "end": True,
     "in": True,
-    "load": True,
     "repeat": True,
     "while": True,
     "break": True,
@@ -1525,14 +1524,14 @@ def __L_37global_function__special(name=None, args=None, *_args, **_keys):
     ____x215 = object([__args14])
     __e84 = None
     if has(setenv("target", toplevel=True), "value") == "lua":
-      __e84 = ["idx", "_G", __name9]
+      __e84 = ["%idx", "_G", __name9]
     else:
       __e84 = __name9
     ____x215["name"] = __e84
     ____x217 = object([])
     __e85 = None
     if has(setenv("target", toplevel=True), "value") == "lua":
-      __e85 = ["idx", "_G", __name9]
+      __e85 = ["%idx", "_G", __name9]
     else:
       __e85 = __name9
     ____x217["name"] = __e85
