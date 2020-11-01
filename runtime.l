@@ -1,3 +1,240 @@
+(target py: (do |
+
+class Dictator(dict):
+  def __getattr__(self, k):
+    try:
+      return self[k]
+    except KeyError:
+      raise AttributeError(k)
+  def __setattr__(self, k, v):
+    self[k] = v
+  def __delattr__(self, k):
+    del self[k]
+
+| nil)
+  js: (%global-function Dictator (x) (Object (.create x)))
+  lua: (%global-function Dictator (x) x))
+
+(%global-function dictator (x)
+  (Dictator (object x)))
+        
+(%global-function mapping-new ()
+  (with self (dictator `(%mapping))
+    (set (self .map) (target js: (new (Map)) (obj)))))
+    ;(set (self .map) (obj))))
+
+(%global-function mapping? (x)
+  (hd? x '%mapping))
+
+(%global-function mapping-get (self k)
+  (if (sym? k) (set k (str k))
+      (var? k) (set k (str k)))
+  (target js: ((self .map) (.get k))
+    (get (self .map) k)))
+
+(%global-function mapping-set (self k v)
+  (if (sym? k) (set k (str k))
+      (var? k) (set k (str k)))
+  (target js: ((self .map) (.set k v))
+    (set (get (self .map) k) v)))
+
+(%global-function mapping-has (self k)
+  (if (sym? k) (set k (str k))
+      (var? k) (set k (str k)))
+  (target js: ((self .map) (.has k))
+    (has? (self .map) k)))
+
+(%global-function mapping-values (self)
+  (with l ()
+    (each (k v) (self .map)
+      (add l v))))
+
+(%global-function sym-new (meta ns name)
+  (with self (dictator `(%sym))
+    (set (self .meta) meta
+         (self .ns) ns
+         (self .name) name)))
+
+(%global-function sym? (x)
+  (hd? x '%sym))
+
+(%global-function sym-to-primitive (self hint)
+  (if (self .ns)
+      (cat (self .ns .name) "/" (self .name))
+    (self .name)))
+
+(%global-function sym-to-string (self)
+  (sym-to-primitive self "str"))
+
+(%global-function sym-compile (self)
+  (compile (sym-to-string self)))
+
+(%global-function sym-fqn? (self)
+  (and (this .name) (this .ns)))
+
+(%global-function sym-eq (self y)
+  (= (name self) (name y)))
+
+(%global-function intern (ns name meta)
+  (when (nil? name)
+    (set name ns ns nil))
+  (sym-new meta ns name))
+
+(%global-function unbound-new (self)
+  (dictator `(%unbound) self: self))
+
+(%global-function unbound? (x)
+  (hd? x '%unbound))
+
+(%global-function var-new (ns sym root)
+  (with self (dictator `(%var))
+    (set (self .ns) ns
+         (self .sym) sym
+         (self .root) (if (is? root) root (unbound-new self)))))
+
+(%global-function var? (x)
+  (hd? x '%var))
+
+(%global-function var-has-root (self)
+  (not (unbound? (self .root))))
+
+(%global-function var-bind-root (self root getter setter)
+  (set (self .getter) getter
+       (self .setter) setter
+       (self .root) root))
+
+(%global-function var-unbind-root (self)
+  (set (self .getter) nil
+       (self .setter) nil
+       (self .root) (unbound-new self)))
+
+(%global-function var-deref (self ...)
+  (let x (hd (list ...))
+    (if (none? (list ...))
+        (let b (var-get-thread-binding self)
+          (if (is? b) (var-val b)
+              (self .getter) (self (.getter))
+            (self .root)))
+        (self .setter)
+        (self (.setter x))
+      (set (self .root) x))))
+
+(%global-function var-get (self)
+  (var-deref self))
+
+(%global-function var-set (self val)
+  (let b (var-get-thread-binding self)
+    (when (is? b)
+      (return (set (b .val) val)))
+    (error (cat "Can't change/establish root binding of: " (var-fqn self) " with set"))))
+
+(%global-function var-get-thread-binding (self)
+  (let fqn (var-fqn self)
+    (get (hd (_G .environment)) fqn)))
+
+(%global-function var-push-thread-bindings (bindings)
+  (add (_G .environment) bindings))
+
+(%global-function var-pop-thread-bindings ()
+  (drop (_G .environment)))
+
+(%global-function var-fqn (self)
+  (cat "#'" (str (self .ns .name)) "/" (self .sym .name)))
+
+(%global-function var-to-string (self)
+  (var-fqn self))
+
+(%global-function namespace-new (name)
+  (with self (dictator `(%namespace))
+    (set (self .name) name
+         (self .mappings) (mapping-new)
+         (self .aliases) (mapping-new))
+    (mapping-set (namespace-namespaces) name self)))
+
+(%global-function namespace? (x)
+  (hd? x '%namespace))
+
+(%global-function namespace-namespaces ()
+  (or (_G .namespaces*)
+      (set (_G .namespaces*) (mapping-new))))
+
+(%global-function namespace-all ()
+  (mapping-values (namespace-namespaces)))
+
+(%global-function namespace-sym (s)
+  (if (string? s)
+      (let i (search s "/")
+        (if (is? i)
+            (set s (sym-new nil (clip s 0 i) (clip s (+ i 1))))
+          (set s (sym-new nil nil s)))))
+  s)
+
+(%global-function namespace-find (name)
+  (mapping-get (namespace-namespaces) (namespace-sym name)))
+
+(%global-function namespace-find-or-create (name)
+  (set name (namespace-sym name))
+  (let ns (namespace-find name)
+    (or ns (namespace-new name))))
+
+(%global-function namespace-intern (self sym)
+  (set sym (namespace-sym sym))
+  (when (sym .ns)
+    (error "Can't intern namespace-qualified symbol"))
+  (let (m (self .mappings)
+        o nil
+        v nil)
+    (while (nil? (set o (mapping-get m sym)))
+      (when (nil? v)
+        (set v (var-new self sym)))
+      (mapping-set m sym v))
+    (when (and (var? v)
+               (= (o .ns) self))
+      (return o))
+    (when (nil? v)
+      (set v (var-new self sym)))
+    (namespace-warn-or-fail-on-replace self sym o v)
+    (mapping-set m sym v)
+    v))
+
+(%global-function namespace-warn-or-fail-on-replace (self sym o v)
+  (when (var? o)
+    (let ns (o .ns)
+      (when (or (= ns self)
+                (and (var? v)
+                     (= (v .ns) (_G .RT .LUMEN_NS))))
+        (return))
+      (unless (= ns (_G .RT .LUMEN_NS))
+        (error (cat (str sym) " already refers to: " (str o) " in namespace: " (str name))))))
+  (print (cat (str sym) " already refers to: " (str o) " in namespace: " (str name) ", being replaced by: " + (str v))))
+
+
+(%global-function compiler-ns ()
+  (_G .RT .CURRENT_NS))
+
+(%global-function compiler-current-ns (...)
+  (let x (hd (list ...))
+    (if (none? (list ...))
+        (var-deref (compiler-ns))
+      (let ns (namespace-find-or-create x)
+        (var-bind-root (compiler-ns) ns)))))
+
+(set (_G .*ns*) compiler-current-ns)
+
+(%global-function current-ns (x)
+  (if (nil? x) ((_G .*ns*)) ((_G .*ns*) x)))
+
+(%global-function syms-of-namespace ()
+  (set (_G .RT) (namespace-find-or-create "RT")
+       (_G .RT .CURRENT_NS) (namespace-intern (_G .RT) "CURRENT_NS"))
+  ((_G .*ns*) "lumen.runtime")
+  ((_G .*ns*) "lumen.macros")
+  ((_G .*ns*) "lumen.reader")
+  ((_G .*ns*) "lumen.compiler")
+  ((_G .*ns*) "lumen.system")
+  ((_G .*ns*) "lumen.main")
+  ((_G .*ns*) "lumen.runtime"))
+
 ;(define-global environment (or (_G .environment) (list (obj))))
 (defvar environment (list (obj)))
 
@@ -87,7 +324,7 @@
 (define-global one? (x) (= (# x 1) 1))
 (define-global two? (x) (= (# x 2) 2))
 
-(define-global hd (l) (target py: (has l 0) (at l 0)))
+(define-global hd (l) (if (is? l) (target py: (has l 0) (at l 0))))
 
 (target js: (define-global type (x) (typeof x)))
 
@@ -469,6 +706,10 @@
   (let r (errsafe (read-string x))
     (when (= r x) r)))
 
+(target js:
+  (define-global tostring (x)
+    ((require 'util) (.inspect x))))
+
 (define-global str (x repr stack)
   (if (nil? x) "nil"
       (nan? x) "nan"
@@ -480,6 +721,11 @@
       (atom? x) (tostring x)
       (function? x) "function"
       (and stack (in? x stack)) "circular"
+      (sym? x) (sym-to-string x)
+      (var? x) (var-to-string x)
+      (target js: (%literal x | instanceof | Map) false)
+      ;(str ((Object .entries) x))
+      (tostring x)
       (target js: false
               lua: (not (= (type x) 'table))
               py: (not (or (array? x) (obj? x))))
@@ -530,6 +776,50 @@
           (set (get entry k) v)))
       (set (get frame k) entry))))
 
+
+(define-global fetchenv (k rest: keys)
+  (when (sym? k)
+    (set k (str k)))
+  (when (string? k)
+    (let (frame (if toplevel?
+                    (hd (_G .environment))
+                  (last (_G .environment)))
+          entry (or (get frame k) (obj)))
+      (set (get frame k) entry))))
+
+(define-global assignenv (k p toplevel?)
+  (when (sym? k)
+    (set k (str k)))
+  (when (string? k)
+    (let (frame (if toplevel?
+                    (hd (_G .environment))
+                  (last (_G .environment)))
+          entry (or (get frame k) (obj)))
+      (set (get frame k) p)
+      k)))
+
+(define-global prn (x ...)
+  (print (str (list x ...)))
+  x)
+
+(define-global putenv (name kind x (o props (obj)) toplevel?)
+  (print (str `(putenv ,name ,kind ,x ,props ,toplevel?)))
+  (when (sym? name)
+    (set name (str name)))
+  (when (string? name)
+    (let (p (prn (join (obj) props (%object kind x)) 'p)
+          ns (prn (current-ns) 'current-ns)
+          full (prn (cat (str (ns .name)) "/" name) 'full)
+          val (var-deref (prn (namespace-intern ns name) 'interned) p))
+      (set (get (at (_G .environment) (edge (_G .environment))) full) p)
+      p)))
+
+(define-global setenv% (name kind x props toplevel?)
+  (print (str `(setenv% ,name ,kind ,x ,props ,toplevel?)))
+  (let e (assignenv name (putenv name kind x props toplevel?) toplevel?)
+    (when e
+      (namespace-intern (current-ns) e))))
+
 (target
   py: (define-global print (x)
         (do (|print| x) nil))
@@ -562,3 +852,5 @@
 (define-global trunc (idx math floor))
 
 (define-variable target (language))
+
+(syms-of-namespace)

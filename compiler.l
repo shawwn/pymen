@@ -1,4 +1,14 @@
+
 (target py: (from .runtime import *))
+
+;(ns lumen.compiler)
+
+; (during-compilation
+;   (ns lumen.compiler))
+
+; (when-compiling
+;   (macroexpand `(ns lumen.compiler))
+;   nil)
 
 (define-global getenv (k p)
   (when (string? k)
@@ -770,7 +780,8 @@
   (lower (macroexpand form)))
 
 (target js:
-  (defvar global (if (not (undefined? window)) window
+  (defvar global (if (not (undefined? _G)) _G
+                     (not (undefined? window)) window
                      (not (undefined? self)) self this)))
 
 (target js:

@@ -1,6 +1,14 @@
 (target py: (from .runtime import *))
 (target py: (from .compiler import *))
 
+(define-macro ns (name)
+  ;(current-ns name)
+  ;(if (_G .*ns*) ((_G .*ns*) name))
+  ;`(when-compiling ((_G .*ns*) ,(escape name)) nil))
+  `(current-ns ,(escape name)))
+
+(ns lumen.macros)
+
 (define-macro quote (form)
   (quoted form))
 
@@ -134,18 +142,29 @@
          (let (,x ,y)
            ,@body)))))
 
+(define-macro void body
+  `(do ,@body (do)))
+
+(define-macro %setenv (name kind rest: keys)
+  `(void
+     (setenv% ',name ',kind ,(get keys kind) ,@(with ks (cut keys) (wipe (get ks kind)) ks))
+     ;(setenv ',name ,@keys)))
+     ))
+
 (define-macro define-macro (name args rest: body)
   (let (id (unique (cat name "--macro"))
         form `(do (define ,id ,args ,@body)
-                  (setenv ',name macro: ,id)))
-    (eval form)
+                  ;(setenv ',name macro: ,id)
+                  (%setenv ,name macro macro: ,id)
+                  ))
+    ;(eval form)
     form))
 
 (define-macro define-special (name args rest: body)
   (let (id (unique (cat name "--special"))
         form `(do (define ,id ,args ,@body)
-                  (setenv ',name special: ,id ,@(props body))))
-    (eval form)
+                  (%setenv ,name special special: ,id ,@(props body))))
+    ;(eval form)
     form))
 
 (define-macro define-symbol (name expansion)

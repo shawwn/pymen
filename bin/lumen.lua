@@ -2880,7 +2880,7 @@ local function script_file63(path)
 end
 local function run_file(path)
   if script_file63(path) then
-    return _load(path)
+    return load(path)
   else
     return compiler.run(system.read_file(path))
   end
@@ -2899,7 +2899,7 @@ end
 local function main(args)
   local __arg = hd(args)
   if __arg and script_file63(__arg) then
-    return _load(__arg)
+    return load(__arg)
   else
     if __arg == "-h" or __arg == "--help" then
       return usage()

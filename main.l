@@ -273,7 +273,7 @@
             argv (idx system argv))
         (for i (# argv)
           (let a (at argv i)
-            (if (or (= a "-c") (= a "-o") (= a "-t") (= a "-e"))
+            (if (or (= a "-c") (= a "-o") (= a "-t") (= a "-e") (= a "-l"))
                 (if (= i (edge argv))
                     (print (cat "missing argument for " a))
                   (do (inc i)
@@ -281,7 +281,8 @@
                         (if (= a "-c") (set input val)
                             (= a "-o") (set output val)
                             (= a "-t") (set target1 val)
-                            (= a "-e") (set expr val)))))
+                            (= a "-e") (set expr val)
+                            (= a "-l") (load val)))))
                 (not (= "-" (char a 0))) (add pre a))))
         (step file pre
           (run-file file))

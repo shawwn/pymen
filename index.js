@@ -46,7 +46,7 @@ if (_G.require.main === module) {
 }
 _G.require('module').Module._initPaths();
 
-Object.assign(exports, _G.require("./lumen.l"));
+Object.assign(exports, _G.require("./main.l"));
 if (_G.require.main === module) {
   exports.main(process.argv.slice(2));
 }
