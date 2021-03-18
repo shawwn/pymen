@@ -827,10 +827,15 @@ def call(f=None, *_args, **_keys):
   __args3 = cut(____id4, 0)
   return apply(__f3, __args3)
 
+def identifier(k=None):
+  def __f21(a=None, b=None):
+    return cat(a, "_", b)
+  return reduce(__f21, split(k, "-"))
+
 def setenv(k=None, *_args, **_keys):
-  ____r101 = unstash(_args, _keys)
-  __k16 = destash33(k, ____r101)
-  ____id5 = ____r101
+  ____r103 = unstash(_args, _keys)
+  __k16 = destash33(k, ____r103)
+  ____id5 = ____r103
   __keys = cut(____id5, 0)
   if string63(__k16):
     __e13 = None
@@ -849,8 +854,9 @@ def setenv(k=None, *_args, **_keys):
     __k17 = None
     for __k17 in indices(____o17):
       __v22 = ____o17[__k17]
-      if not( __k17 == "toplevel"):
-        __entry[__k17] = __v22
+      __k18 = identifier(__k17)
+      if not( __k18 == "toplevel"):
+        __entry[__k18] = __v22
     __frame[__k16] = __entry
     return __frame[__k16]
 

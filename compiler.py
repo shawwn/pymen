@@ -7,7 +7,7 @@ def getenv(k=None, p=None):
         __b = environment[__i][k]
         __e42 = None
         if p:
-          __e42 = has(__b, p)
+          __e42 = has(__b, compile_id(p))
         else:
           __e42 = __b
         return __e42

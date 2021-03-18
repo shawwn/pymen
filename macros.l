@@ -7,18 +7,19 @@
 (define-macro quasiquote (form)
   (quasiexpand form 1))
 
-
 (define-global get-place (place setfn)
   (let place (macroexpand place)
     (if (or (atom? place)
-            (and (= (hd place) '%get)
-                 (nil? (getenv '%get 'place-expander)))
+            (and (hd? place '%get) (nil? (getenv '%get 'place-expander)))
+            (and (hd? place '%idx) (nil? (getenv '%idx 'place-expander)))
             (accessor-literal? (hd (tl place))))
         (setfn place (fn (v) `(%set ,place ,v)))
+        (and (hd? place 'has) (nil? (getenv 'has 'place-expander)))
+        (setfn place (fn (v) `(%set (%get ,@(tl place)) ,v)))
       (let (head (hd place)
             gf (getenv head 'place-expander))
         (if gf (apply gf setfn (tl place))
-          (error (cat (str place) " is not a valid place expression")))))))
+          (error (cat (str place) " is not a valid place expression: no place-expander for " head)))))))
 
 (define-macro let-place (vars place rest: body)
   `(get-place ,place (fn ,vars ,@body)))
@@ -39,22 +40,10 @@
      (fn (setfn rest: args)
        (%call define-setter ',name (fn ,arglist ,@body) setfn args))))
 
-(define-macro set! args
+(define-macro set args
   `(%do ,@(map (fn ((lh rh))
                  (let-place (getter setter) lh
                    (setter rh)))
-               (pair args))))
-
-(define-setter char (c str pos)
-  `(set! ,str (cat (clip ,str 0 ,pos) ,c (clip ,str (+ ,pos 1)))))
-
-
-(define-macro set args
-  `(%do ,@(map (fn ((lh rh))
-                 (set lh (macroexpand lh))
-                 (if (and (not (atom? lh)) (= (hd lh) 'has))
-                     `(%set (%get ,@(tl lh)) ,rh)
-                   `(%set ,lh ,rh)))
                (pair args))))
 
 (define-macro at (l i)
@@ -376,6 +365,30 @@
 (define-macro during-compilation body
   (with form `(%do ,@body)
     (eval form)))
+
+(define-setter has (v l k)
+  `(%set (%get ,l ,k) ,v))
+
+(define-setter char (c str pos)
+  `(set ,str (cat (clip ,str 0 ,pos) ,c (clip ,str (+ ,pos 1)))))
+
+(define-setter clip (c str from upto)
+  `(set ,str (cat (clip ,str 0 ,from) ,c (clip ,str ,upto))))
+
+(define-setter inner (c str)
+  `(set ,str (cat (char ,str 0) ,c (char ,str (edge ,str)))))
+
+(define-setter cut (v l from upto)
+  `(set ,l (join (cut ,l 0 ,from) ,v (cut ,l ,(either upto `(# ,l))) (keys ,v))))
+
+(define-setter tl (v l from)
+  `(set (cut ,l ,(either from 1)) ,v))
+
+(define-setter hd (v l n)
+  `(set (at ,l ,(either n 0)) ,v))
+
+(define-setter last (v l)
+  `(set (at ,l (edge ,l)) ,v))
 
 (define-macro def (name rest: body)
   `(define-global ,name ,@body))

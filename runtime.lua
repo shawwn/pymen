@@ -892,10 +892,15 @@ function _G.call(f, ...)
   local __args3 = cut(____id4, 0)
   return apply(__f3, __args3)
 end
+local function identifier(k)
+  return reduce(function (a, b)
+    return a .. ("_" .. b)
+  end, split(k, "-"))
+end
 function _G.setenv(k, ...)
-  local ____r94 = unstash({...})
-  local __k17 = destash33(k, ____r94)
-  local ____id5 = ____r94
+  local ____r96 = unstash({...})
+  local __k17 = destash33(k, ____r96)
+  local ____id5 = ____r96
   local __keys = cut(____id5, 0)
   if string63(__k17) then
     local __e14 = nil
@@ -916,8 +921,9 @@ function _G.setenv(k, ...)
     local __k18 = nil
     for __k18 in next, ____o18 do
       local __v22 = ____o18[__k18]
-      if not( __k18 == "toplevel") then
-        __entry[__k18] = __v22
+      local __k19 = identifier(__k18)
+      if not( __k19 == "toplevel") then
+        __entry[__k19] = __v22
       end
     end
     __frame[__k17] = __entry

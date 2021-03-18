@@ -542,6 +542,11 @@
 (define-global call (f rest: args)
   (apply f args))
 
+; hack to replace dashes with underscores, for python
+; compatibility with "place-expander"
+(define identifier (k)
+  (reduce (fn (a b) (cat a "_" b)) (split k "-")))
+
 (define-global setenv (k rest: keys)
   (when (string? k)
     (let (frame (if (has? keys 'toplevel)
@@ -549,8 +554,9 @@
                   (last environment))
           entry (if (has? frame k) (get frame k) (obj)))
       (each (k v) keys
-        (unless (= k 'toplevel)
-          (set (get entry k) v)))
+        (let k (identifier k)
+          (unless (= k 'toplevel)
+            (set (get entry k) v))))
       (set (get frame k) entry))))
 
 (target

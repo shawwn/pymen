@@ -1018,10 +1018,15 @@ call = function (f, ..._42args) {
   var __args3 = cut(____id4, 0);
   return apply(__f3, __args3);
 };
+var identifier = function (k) {
+  return reduce(function (a, b) {
+    return a + ("_" + b);
+  }, split(k, "-"));
+};
 setenv = function (k, ..._42args) {
-  var ____r97 = unstash([..._42args]);
-  var __k33 = destash33(k, ____r97);
-  var ____id5 = ____r97;
+  var ____r99 = unstash([..._42args]);
+  var __k33 = destash33(k, ____r99);
+  var ____id5 = ____r99;
   var __keys = cut(____id5, 0);
   if (string63(__k33)) {
     var __e28 = undefined;
@@ -1049,8 +1054,9 @@ setenv = function (k, ..._42args) {
         __e30 = __k34;
       }
       var __k35 = __e30;
-      if (!( __k35 === "toplevel")) {
-        __entry[__k35] = __v22;
+      var __k36 = identifier(__k35);
+      if (!( __k36 === "toplevel")) {
+        __entry[__k36] = __v22;
       }
     }
     __frame[__k33] = __entry;
