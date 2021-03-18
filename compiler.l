@@ -6,7 +6,7 @@
       (while (>= i 0)
         (if (has? (at environment i) k)
             (let b (get (at environment i) k)
-              (return (if p (has b p) b)))
+              (return (if p (has b (compile-id p)) b)))
           (dec i))))))
 
 (define macro-function (k)
@@ -489,6 +489,12 @@
   (or (and (not (atom? x))
            (= (hd x) '%function))
       (> (precedence x) 0)))
+
+(define-global accessor-literal? (x)
+  (and (string? x)
+       (= (char x 0) ".")
+       (not (= (char x 1) "."))
+       (some? (char x 1))))
 
 (define-global method-call? (form)
   (let x (if (list? form) (hd form) form)

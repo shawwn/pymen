@@ -1,4 +1,4 @@
-#!/usr/bin/env bin/lumen
+#!/usr/bin/env bin/pymen
 
 (define usage () "
 JSON RPC.

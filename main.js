@@ -1,8 +1,8 @@
-require("./runtime.l");
-require("./macros.l");
-var reader = require("reader");
-var compiler = require("compiler");
-var system = require("system");
+require("./runtime");
+require("./macros");
+reader = require("./reader");
+compiler = require("./compiler");
+system = require("./system");
 disp = function (str) {
   system.write(str);
   return system.flush();
@@ -293,6 +293,18 @@ load = function (path) {
   }
   return ____r34;
 };
+run_script = function (path, argv) {
+  if (nil63(argv)) {
+    argv = [];
+  }
+  print(str(["run-script", path, argv]));
+  system.set_argv(argv);
+  _G.exports = {};
+  load(path);
+  if (has(_G.exports, "main")) {
+    return _G.exports.main(argv);
+  }
+};
 var script_file63 = function (path) {
   return !( "-" === char(path, 0) || (".py" === clip(path, _35(path) - 3) || (".js" === clip(path, _35(path) - 3) || ".lua" === clip(path, _35(path) - 4))));
 };
@@ -315,9 +327,10 @@ var usage = function () {
   return print(" -e <expr>\tExpression to evaluate");
 };
 var main = function (args) {
+  print(str(args));
   var __arg = hd(args);
   if (__arg && script_file63(__arg)) {
-    return load(__arg);
+    return run_script(__arg, tl(args));
   } else {
     if (__arg === "-h" || __arg === "--help") {
       return usage();
@@ -327,7 +340,7 @@ var main = function (args) {
       var __output = undefined;
       var __target1 = undefined;
       var __expr = undefined;
-      var __argv = system.argv;
+      var __argv = args;
       var __i2 = 0;
       while (__i2 < _35(__argv)) {
         var __a = __argv[__i2];
@@ -360,10 +373,10 @@ var main = function (args) {
         }
         __i2 = __i2 + 1;
       }
-      var ____x44 = __pre;
+      var ____x45 = __pre;
       var ____i3 = 0;
-      while (____i3 < _35(____x44)) {
-        var __file2 = ____x44[____i3];
+      while (____i3 < _35(____x45)) {
+        var __file2 = ____x45[____i3];
         run_file(__file2);
         ____i3 = ____i3 + 1;
       }
@@ -394,7 +407,7 @@ var main63 = function () {
   return !( typeof(require) === "undefined") && (!( typeof(module) === "undefined") && require.main === module);
 };
 if (main63()) {
-  main(system.argv);
+  main(system.get_argv());
 }
 exports.main = main;
 exports.reader = reader;

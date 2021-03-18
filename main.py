@@ -1,8 +1,11 @@
+import sys
+_G = sys.modules["__main__"]
 from .runtime import *
 from .macros import *
 from . import reader
 from . import compiler
 from . import system
+compiler.lumen_globals42 = globals()
 import traceback
 ____r = None
 try:
@@ -12,9 +15,9 @@ except ImportError:
   ____r = None
 finally:
   pass
-from types import ModuleType as module
+import inspect
 def module63(x=None):
-  return isinstance(x, module)
+  return inspect.ismodule(x)
 
 import inspect
 def class63(x=None):
@@ -332,8 +335,8 @@ def run_script(path=None, argv=None):
   system.set_argv(argv)
   _G.exports = {}
   load(path)
-  if _G.exports.main:
-    return _G.exports.main(argv)
+  if has(_G.exports, "main"):
+    return _G.exports["main"](argv)
 
 def script_file63(path=None):
   return not( "-" == char(path, 0) or (".py" == clip(path, L_35(path) - 3) or (".js" == clip(path, L_35(path) - 3) or ".lua" == clip(path, L_35(path) - 4))))

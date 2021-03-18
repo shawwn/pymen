@@ -52,27 +52,27 @@ local function write_file(path, data)
 end
 local function file_exists63(path)
   local __f = io.open(path)
-  local __id2 = is63(__f)
+  local __id3 = is63(__f)
   local __e3 = nil
-  if __id2 then
+  if __id3 then
     local __r6 = is63(__f.read(__f, 0)) or 0 == __f.seek(__f, "end")
     __f.close(__f)
     __e3 = __r6
   else
-    __e3 = __id2
+    __e3 = __id3
   end
   return __e3
 end
 local function directory_exists63(path)
   local __f1 = io.open(path)
-  local __id3 = is63(__f1)
+  local __id4 = is63(__f1)
   local __e4 = nil
-  if __id3 then
+  if __id4 then
     local __r8 = not __f1.read(__f1, 0) and not( 0 == __f1.seek(__f1, "end"))
     __f1.close(__f1)
     __e4 = __r8
   else
-    __e4 = __id3
+    __e4 = __id4
   end
   return __e4
 end
@@ -106,7 +106,83 @@ end
 local function exit(code)
   return os.exit(code)
 end
-local argv = arg
+local argv = nil
+function _G.set_argv(l)
+  argv = l
+  return argv
+end
+function _G.get_argv()
+  if nil63(argv) then
+    set_argv(_G.arg or (_G.args or {}))
+  end
+  return argv
+end
+local function opt63(x)
+  return string63(x) and (char(x, 0) == "-" and not( x == "-"))
+end
+function _G.parse_positional(args, pos)
+  if nil63(pos) then
+    pos = 0
+  end
+  return cut(args, either(pos, 0), first(opt63, args, pos))
+end
+function _G.parse_option(args)
+  if opt63(hd(args)) then
+    return {hd(args), parse_positional(args, 1)}
+  end
+end
+function _G.parse_arguments(aliases, argv)
+  local __l = argv or get_argv()
+  local __a = aliases or {}
+  local __r22 = parse_positional(__l)
+  __l = cut(__l, _35(__r22))
+  while true do
+    local __p = parse_option(__l)
+    if not __p then
+      break
+    end
+    local ____y = __p
+    if yes(____y) then
+      local ____id1 = ____y
+      local __op = has(____id1, 1)
+      local __args2 = has(____id1, 2)
+      if __op == "--" then
+        __l = cut(__l, 1)
+        break
+      end
+      __l = cut(__l, 1 + _35(__args2))
+      local __e5 = nil
+      if clip(__op, 0, 2) == "--" then
+        __e5 = clip(__op, 2)
+      else
+        __e5 = clip(__op, 1)
+      end
+      local __k = __e5
+      local __k1 = has(__a, __k, __k)
+      local __e6 = nil
+      if none63(__args2) then
+        __e6 = true
+      else
+        __e6 = __args2
+      end
+      local __v1 = __e6
+      __r22[__k1] = __v1
+      add(__r22, {__k1, __v1})
+    end
+  end
+  __r22.rest = __l
+  set_argv(__r22.rest)
+  return __r22
+end
+function _G.arguments(aliases, argv)
+  local __argv = argv or get_argv()
+  local __r24 = parse_arguments(__argv, aliases)
+  set_argv(__r24.rest)
+  __r24.rest = nil
+  if not empty63(__r24) then
+    return __r24
+  end
+end
 local function realpath(filename)
   if uv and uv.fs_realpath then
     return uv.fs_realpath(filename)
@@ -115,9 +191,9 @@ local function realpath(filename)
   end
 end
 local function reload(module)
-  local ____y = realpath(requireResolve(module))
-  if yes(____y) then
-    local __file = ____y
+  local ____y1 = realpath(requireResolve(module))
+  if yes(____y1) then
+    local __file = ____y1
     package.loaded[__file] = nil
   end
   package.loaded[module] = nil
@@ -125,9 +201,9 @@ local function reload(module)
 end
 local function shell(command)
   local __f2 = io.popen(command)
-  local __x5 = __f2.read(__f2, "*all")
+  local __x7 = __f2.read(__f2, "*all")
   __f2.close(__f2)
-  return __x5
+  return __x7
 end
 local function cwd()
   return uv.cwd()
@@ -143,37 +219,37 @@ local function call_with_directory(path, f)
   end
   local __pwd = cwd()
   chdir(path)
-  local ____id1 = {xpcall(function ()
+  local ____id2 = {xpcall(function ()
     return f()
   end, function (m)
     if obj63(m) then
       return m
     else
-      local __e5 = nil
+      local __e7 = nil
       if string63(m) then
-        __e5 = clip(m, search(m, ": ") + 2)
+        __e7 = clip(m, search(m, ": ") + 2)
       else
-        local __e6 = nil
+        local __e8 = nil
         if nil63(m) then
-          __e6 = ""
+          __e8 = ""
         else
-          __e6 = str(m)
+          __e8 = str(m)
         end
-        __e5 = __e6
+        __e7 = __e8
       end
       return {
         stack = debug.traceback(),
-        message = __e5
+        message = __e7
       }
     end
   end)}
-  local __ok1 = has(____id1, 1)
-  local __v1 = has(____id1, 2)
+  local __ok1 = has(____id2, 1)
+  local __v2 = has(____id2, 2)
   chdir(__pwd)
   if __ok1 then
-    return __v1
+    return __v2
   else
-    error(__v1)
+    error(__v2)
   end
 end
 local function dirname(filename)
@@ -216,6 +292,17 @@ __exports["read-line"] = read_line
 __exports.read_line = read_line
 __exports.exit = exit
 __exports.argv = argv
+__exports["set-argv"] = set_argv
+__exports.set_argv = set_argv
+__exports["get-argv"] = get_argv
+__exports.get_argv = get_argv
+__exports["parse-positional"] = parse_positional
+__exports.parse_positional = parse_positional
+__exports["parse-option"] = parse_option
+__exports.parse_option = parse_option
+__exports["parse-arguments"] = parse_arguments
+__exports.parse_arguments = parse_arguments
+__exports.arguments = arguments
 __exports.reload = reload
 __exports.shell = shell
 __exports.cwd = cwd

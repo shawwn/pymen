@@ -1101,6 +1101,9 @@ end
 local function parenthesize_call63(x)
   return not atom63(x) and hd(x) == "%function" or precedence(x) > 0
 end
+function _G.accessor_literal63(x)
+  return string63(x) and (char(x, 0) == "." and (not( char(x, 1) == ".") and some63(char(x, 1))))
+end
 function _G.method_call63(form)
   local __e60 = nil
   if list63(form) then
@@ -1129,10 +1132,10 @@ local function compile_call(form)
   end
 end
 local function op_delims(parent, child, ...)
-  local ____r75 = unstash({...})
-  local __parent = destash33(parent, ____r75)
-  local __child = destash33(child, ____r75)
-  local ____id15 = ____r75
+  local ____r76 = unstash({...})
+  local __parent = destash33(parent, ____r76)
+  local __child = destash33(child, ____r76)
+  local ____id15 = ____r76
   local __right = has(____id15, "right")
   local __e62 = nil
   if __right then
@@ -1215,10 +1218,10 @@ function _G.compile_body(body)
   end
 end
 function _G.compile_function(args, body, ...)
-  local ____r78 = unstash({...})
-  local __args9 = destash33(args, ____r78)
-  local __body4 = destash33(body, ____r78)
-  local ____id20 = ____r78
+  local ____r79 = unstash({...})
+  local __args9 = destash33(args, ____r79)
+  local __body4 = destash33(body, ____r79)
+  local ____id20 = ____r79
   local __name3 = has(____id20, "name")
   local __prefix = has(____id20, "prefix")
   local __async = has(____id20, "async")
@@ -1296,10 +1299,10 @@ local function can_return63(form)
   return is63(form) and (atom63(form) or not( hd(form) == "%return") and not statement63(hd(form)))
 end
 function _G.compile(form, raw63, ...)
-  local ____r80 = unstash({...})
-  local __form = destash33(form, ____r80)
-  local __raw63 = destash33(raw63, ____r80)
-  local ____id22 = ____r80
+  local ____r81 = unstash({...})
+  local __form = destash33(form, ____r81)
+  local __raw63 = destash33(raw63, ____r81)
+  local ____id22 = ____r81
   local __stmt1 = has(____id22, "stmt")
   if nil63(__form) then
     return ""
@@ -1820,11 +1823,11 @@ setenv("%while", {
   tr = true
 })
 local function ___37for__special(t, k, form, ...)
-  local ____r118 = unstash({...})
-  local __t2 = destash33(t, ____r118)
-  local __k11 = destash33(k, ____r118)
-  local __form5 = destash33(form, ____r118)
-  local ____id41 = ____r118
+  local ____r119 = unstash({...})
+  local __t2 = destash33(t, ____r119)
+  local __k11 = destash33(k, ____r119)
+  local __form5 = destash33(form, ____r119)
+  local ____id41 = ____r119
   local __async2 = has(____id41, "async")
   local __t3 = compile(__t2)
   local __k12 = compile(__k11)
@@ -1860,10 +1863,10 @@ setenv("%for", {
   tr = true
 })
 local function ___37with__special(t, form, ...)
-  local ____r120 = unstash({...})
-  local __t6 = destash33(t, ____r120)
-  local __form7 = destash33(form, ____r120)
-  local ____id43 = ____r120
+  local ____r121 = unstash({...})
+  local __t6 = destash33(t, ____r121)
+  local __form7 = destash33(form, ____r121)
+  local ____id43 = ____r121
   local __async4 = has(____id43, "async")
   local __t7 = compile(__t6)
   local __ind9 = indentation()
@@ -2003,9 +2006,9 @@ setenv("%break", {
   stmt = true
 })
 local function ___37function__special(args, ...)
-  local ____r130 = unstash({...})
-  local __args16 = destash33(args, ____r130)
-  local ____id45 = ____r130
+  local ____r131 = unstash({...})
+  local __args16 = destash33(args, ____r131)
+  local ____id45 = ____r131
   local __body23 = cut(____id45, 0)
   return apply(compile_function, join({__args16}, __body23, {}))
 end
@@ -2014,10 +2017,10 @@ setenv("%function", {
   special = ___37function__special
 })
 local function ___37global_function__special(name, args, ...)
-  local ____r132 = unstash({...})
-  local __name9 = destash33(name, ____r132)
-  local __args18 = destash33(args, ____r132)
-  local ____id47 = ____r132
+  local ____r133 = unstash({...})
+  local __name9 = destash33(name, ____r133)
+  local __args18 = destash33(args, ____r133)
+  local ____id47 = ____r133
   local __body25 = cut(____id47, 0)
   if has(setenv("target", {
     _stash = true,
@@ -2064,10 +2067,10 @@ setenv("%global-function", {
   tr = true
 })
 local function ___37local_function__special(name, args, ...)
-  local ____r134 = unstash({...})
-  local __name11 = destash33(name, ____r134)
-  local __args20 = destash33(args, ____r134)
-  local ____id49 = ____r134
+  local ____r135 = unstash({...})
+  local __name11 = destash33(name, ____r135)
+  local __args20 = destash33(args, ____r135)
+  local ____id49 = ____r135
   local __body27 = cut(____id49, 0)
   if has(setenv("target", {
     _stash = true,
@@ -2392,11 +2395,11 @@ setenv("%object", {
   special = ___37object__special
 })
 local function ___37list__special(form, comps, cond, ...)
-  local ____r154 = unstash({...})
-  local __form9 = destash33(form, ____r154)
-  local __comps1 = destash33(comps, ____r154)
-  local __cond6 = destash33(cond, ____r154)
-  local ____id57 = ____r154
+  local ____r155 = unstash({...})
+  local __form9 = destash33(form, ____r155)
+  local __comps1 = destash33(comps, ____r155)
+  local __cond6 = destash33(cond, ____r155)
+  local ____id57 = ____r155
   local __kind1 = has(____id57, "kind")
   local __s12 = compile(__form9)
   local __e104 = nil
@@ -2454,9 +2457,9 @@ setenv("global", {
   tr = true
 })
 local function __import__special(name, ...)
-  local ____r158 = unstash({...})
-  local __name13 = destash33(name, ____r158)
-  local ____id62 = ____r158
+  local ____r159 = unstash({...})
+  local __name13 = destash33(name, ____r159)
+  local ____id62 = ____r159
   local __alias3 = cut(____id62, 0)
   local __ind19 = indentation()
   local __e105 = nil
@@ -2486,23 +2489,23 @@ setenv("import", {
   stmt = true
 })
 local function __from__special(name, ...)
-  local ____r162 = unstash({...})
-  local __name15 = destash33(name, ____r162)
-  local ____id66 = ____r162
+  local ____r163 = unstash({...})
+  local __name15 = destash33(name, ____r163)
+  local ____id66 = ____r163
   local __imports1 = cut(____id66, 0)
   local __ind21 = indentation()
   local __id67 = __name15
-  local __r163 = nil
-  __r163 = drop(__imports1)
+  local __r164 = nil
+  __r164 = drop(__imports1)
   local __e106 = nil
   if last(__imports1) == "as" then
     __e106 = drop(__imports1)
   else
-    add(__imports1, __r163)
-    __r163 = nil
-    __e106 = __r163
+    add(__imports1, __r164)
+    __r164 = nil
+    __e106 = __r164
   end
-  local __as4 = __r163
+  local __as4 = __r164
   local __e107 = nil
   if hd(__imports1) == "import" then
     __e107 = tl(__imports1)

@@ -1,15 +1,19 @@
+(target py: (import sys))
+(target py: (set _G (get (sys .modules) "__main__")))
 (target py: (from .runtime import *) js: (require "./runtime") lua: (import runtime))
 (target py: (from .macros import *) js: (require "./macros") lua: (import macros))
 (target py: (from . import reader) (set reader (require "./reader")))
 (target py: (from . import compiler) (set compiler (require "./compiler")))
 (target py: (from . import system) (set system (require "./system")))
 
+(target py: (set (compiler .lumen-globals*) (globals)))
+
 ; (target py: (from compiler import *))
 (target py: (import traceback))
 (target py: (try (import numpy as np) (except ImportError)))
 
-(target py: (from types import ModuleType as module))
-(target py: (define-global module? (x) (isinstance x module)))
+(target py: (import inspect))
+(target py: (define-global module? (x) ((idx inspect ismodule) x)))
 
 (target py: (import inspect))
 (target py: (define-global class? (x) ((idx inspect isclass) x)))
@@ -242,7 +246,7 @@
  ((idx system set-argv) argv)
  (set (_G .exports) (obj))
  (load path)
- (if (_G .exports .main) ((_G .exports .main) argv)))
+ (if (has (_G .exports) 'main) ((get (_G .exports) 'main) argv)))
 
 (define script-file? (path)
   (not (or (= "-" (char path 0))

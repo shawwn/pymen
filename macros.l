@@ -7,6 +7,48 @@
 (define-macro quasiquote (form)
   (quasiexpand form 1))
 
+
+(define-global get-place (place setfn)
+  (let place (macroexpand place)
+    (if (or (atom? place)
+            (and (= (hd place) '%get)
+                 (nil? (getenv '%get 'place-expander)))
+            (accessor-literal? (hd (tl place))))
+        (setfn place (fn (v) `(%set ,place ,v)))
+      (let (head (hd place)
+            gf (getenv head 'place-expander))
+        (if gf (apply gf setfn (tl place))
+          (error (cat (str place) " is not a valid place expression")))))))
+
+(define-macro let-place (vars place rest: body)
+  `(get-place ,place (fn ,vars ,@body)))
+
+(define-macro define-expander (name handler)
+  (with form `(setenv ',name place-expander: ,handler)
+    (eval form)))
+
+(define-global define-setter (name setter setfn args vars)
+  (if (none? args)
+      (let vars (reverse (or vars ()))
+        (setfn `(,name ,@vars) (fn (v) (apply setter v vars))))
+    (let v (hd args)
+      (%call define-setter name setter setfn (tl args) `(,v ,@vars)))))
+
+(define-macro define-setter (name arglist rest: body)
+  `(define-expander ,name
+     (fn (setfn rest: args)
+       (%call define-setter ',name (fn ,arglist ,@body) setfn args))))
+
+(define-macro set! args
+  `(%do ,@(map (fn ((lh rh))
+                 (let-place (getter setter) lh
+                   (setter rh)))
+               (pair args))))
+
+(define-setter char (c str pos)
+  `(set! ,str (cat (clip ,str 0 ,pos) ,c (clip ,str (+ ,pos 1)))))
+
+
 (define-macro set args
   `(%do ,@(map (fn ((lh rh))
                  (set lh (macroexpand lh))

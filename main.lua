@@ -1,8 +1,8 @@
 local runtime = require("runtime")
 local macros = require("macros")
-local reader = require("reader")
-local compiler = require("compiler")
-local system = require("system")
+reader = require("./reader")
+compiler = require("./compiler")
+system = require("./system")
 function _G.disp(str)
   system.write(str)
   return system.flush()
@@ -459,6 +459,18 @@ function _G.load(path)
     error(____r30)
   end
 end
+function _G.run_script(path, argv)
+  if nil63(argv) then
+    argv = {}
+  end
+  print(str({"run-script", path, argv}))
+  system.set_argv(argv)
+  _G.exports = {}
+  load(path)
+  if has(_G.exports, "main") then
+    return _G.exports.main(argv)
+  end
+end
 local function script_file63(path)
   return not( "-" == char(path, 0) or (".py" == clip(path, _35(path) - 3) or (".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))))
 end
@@ -481,9 +493,10 @@ local function usage()
   return print(" -e <expr>\tExpression to evaluate")
 end
 local function main(args)
+  print(str(args))
   local __arg = hd(args)
   if __arg and script_file63(__arg) then
-    return load(__arg)
+    return run_script(__arg, tl(args))
   else
     if __arg == "-h" or __arg == "--help" then
       return usage()
@@ -493,7 +506,7 @@ local function main(args)
       local __output = nil
       local __target1 = nil
       local __expr = nil
-      local __argv = system.argv
+      local __argv = args
       local __i3 = 0
       while __i3 < _35(__argv) do
         local __a = __argv[__i3 + 1]
@@ -526,10 +539,10 @@ local function main(args)
         end
         __i3 = __i3 + 1
       end
-      local ____x59 = __pre
+      local ____x60 = __pre
       local ____i4 = 0
-      while ____i4 < _35(____x59) do
-        local __file2 = ____x59[____i4 + 1]
+      while ____i4 < _35(____x60) do
+        local __file2 = ____x60[____i4 + 1]
         run_file(__file2)
         ____i4 = ____i4 + 1
       end
@@ -557,10 +570,10 @@ local function main(args)
   end
 end
 local function main63()
-  return false
+  return true
 end
 if main63() then
-  main(system.argv)
+  main(system.get_argv())
 end
 local __exports = exports or {}
 __exports.main = main

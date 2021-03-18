@@ -14,17 +14,17 @@ var directory_exists63 = function (path) {
 };
 var path_separator = require("path").sep;
 var path_join = function (..._42args) {
-  var __parts1 = unstash([..._42args]);
+  var __parts = unstash([..._42args]);
   return reduce(function (x, y) {
     return x + (path_separator + y);
-  }, __parts1) || "";
+  }, __parts) || "";
 };
 var get_environment_variable = function (name) {
   return process.env[name];
 };
 var write = function (x) {
-  var __out1 = process.stdout;
-  return __out1.write(x);
+  var __out = process.stdout;
+  return __out.write(x);
 };
 var flush = function (x) {
 };
@@ -68,55 +68,55 @@ parse_option = function (args) {
   }
 };
 parse_arguments = function (aliases, argv) {
-  var __l1 = argv || get_argv();
-  var __a1 = aliases || {};
-  var __r46 = parse_positional(__l1);
-  __l1 = cut(__l1, _35(__r46));
+  var __l = argv || get_argv();
+  var __a = aliases || {};
+  var __r17 = parse_positional(__l);
+  __l = cut(__l, _35(__r17));
   while (true) {
-    var __p1 = parse_option(__l1);
-    if (! __p1) {
+    var __p = parse_option(__l);
+    if (! __p) {
       break;
     }
-    var ____y1 = __p1;
-    if (yes(____y1)) {
-      var ____id2 = ____y1;
-      var __op1 = has(____id2, 0);
-      var __args3 = has(____id2, 1);
-      if (__op1 === "--") {
-        __l1 = cut(__l1, 1);
+    var ____y = __p;
+    if (yes(____y)) {
+      var ____id = ____y;
+      var __op = has(____id, 0);
+      var __args = has(____id, 1);
+      if (__op === "--") {
+        __l = cut(__l, 1);
         break;
       }
-      __l1 = cut(__l1, 1 + _35(__args3));
-      var __e2 = undefined;
-      if (clip(__op1, 0, 2) === "--") {
-        __e2 = clip(__op1, 2);
+      __l = cut(__l, 1 + _35(__args));
+      var __e = undefined;
+      if (clip(__op, 0, 2) === "--") {
+        __e = clip(__op, 2);
       } else {
-        __e2 = clip(__op1, 1);
+        __e = clip(__op, 1);
       }
-      var __k2 = __e2;
-      var __k3 = has(__a1, __k2, __k2);
-      var __e3 = undefined;
-      if (none63(__args3)) {
-        __e3 = true;
+      var __k = __e;
+      var __k1 = has(__a, __k, __k);
+      var __e1 = undefined;
+      if (none63(__args)) {
+        __e1 = true;
       } else {
-        __e3 = __args3;
+        __e1 = __args;
       }
-      var __v2 = __e3;
-      __r46[__k3] = __v2;
-      add(__r46, [__k3, __v2]);
+      var __v = __e1;
+      __r17[__k1] = __v;
+      add(__r17, [__k1, __v]);
     }
   }
-  __r46.rest = __l1;
-  set_argv(__r46.rest);
-  return __r46;
+  __r17.rest = __l;
+  set_argv(__r17.rest);
+  return __r17;
 };
 arguments = function (aliases, argv) {
-  var __argv1 = argv || get_argv();
-  var __r48 = parse_arguments(__argv1, aliases);
-  set_argv(__r48.rest);
-  delete __r48.rest;
-  if (! empty63(__r48)) {
-    return __r48;
+  var __argv = argv || get_argv();
+  var __r19 = parse_arguments(__argv, aliases);
+  set_argv(__r19.rest);
+  delete __r19.rest;
+  if (! empty63(__r19)) {
+    return __r19;
   }
 };
 var realpath = function (filename) {
@@ -141,9 +141,9 @@ var call_with_directory = function (path, f) {
     pdb.set_trace();
     throw new Error("Directory doesn't exist");
   }
-  var __pwd1 = cwd();
+  var __pwd = cwd();
   chdir(path);
-  var ____id3 = (function () {
+  var ____id1 = (function () {
     try {
       return [true, f()];
     }
@@ -151,21 +151,21 @@ var call_with_directory = function (path, f) {
       return [false, e];
     }
   })();
-  var __ok1 = has(____id3, 0);
-  var __v3 = has(____id3, 1);
-  chdir(__pwd1);
-  if (__ok1) {
-    return __v3;
+  var __ok = has(____id1, 0);
+  var __v1 = has(____id1, 1);
+  chdir(__pwd);
+  if (__ok) {
+    return __v1;
   } else {
-    throw __v3;
+    throw __v1;
   }
 };
 var dirname = function (filename) {
-  var __result1 = apply(path_join, almost(split(filename, path_separator)));
-  if (none63(__result1)) {
+  var __result = apply(path_join, almost(split(filename, path_separator)));
+  if (none63(__result)) {
     return ".";
   } else {
-    return __result1;
+    return __result;
   }
 };
 var basename = function (filename) {

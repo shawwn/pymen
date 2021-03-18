@@ -8,5 +8,8 @@
 ; (from .compiler import bind*)
 ; (from .compiler import compile)
 (from .compiler import *)
+(target py: (import sys))
+(target py: (set _G (main ._G)))
+(target py: (set (compiler .lumen-globals*) (globals)))
 ((main .main) ((system .get-argv)))
 
