@@ -429,4 +429,5 @@ package.loaded.reader = _G.lumen.reader
 package.loaded.compiler = _G.lumen.compiler
 package.loaded.system = _G.lumen.system
 package.loaded.lumen = _G.lumen
-return _G.lumen.main(argv)
+--return _G.lumen.main(_G.lumen.system.get_argv())
+return _G.lumen.main(_G.lumen.system.argv)

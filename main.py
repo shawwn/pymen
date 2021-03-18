@@ -4,7 +4,14 @@ from . import reader
 from . import compiler
 from . import system
 import traceback
-import numpy as np
+____r = None
+try:
+  import numpy as np
+  ____r = np
+except ImportError:
+  ____r = None
+finally:
+  pass
 from types import ModuleType as module
 def module63(x=None):
   return isinstance(x, module)
@@ -19,7 +26,7 @@ def disp(L_str=None):
 
 from pprint import pprint as pp
 def entries(x=None):
-  __r4 = []
+  __r5 = []
   __mods = []
   ____x = dir(x)
   ____i = 0
@@ -28,39 +35,39 @@ def entries(x=None):
     if not( clip(__k, 0, 2) == "__"):
       __v = getattr(x, __k)
       if function63(__v):
-        add(__r4, __k)
+        add(__r5, __k)
       else:
         if module63(__v):
           add(__mods, cat(".", __k))
         else:
-          add(__r4, [__k, __v])
+          add(__r5, [__k, __v])
     ____i = ____i + 1
   ____x2 = __mods
   ____i1 = 0
   while ____i1 < L_35(____x2):
     __x3 = ____x2[____i1]
-    add(__r4, __x3)
+    add(__r5, __x3)
     ____i1 = ____i1 + 1
-  return __r4
+  return __r5
 
 from io import StringIO
 def pp_to_string(x=None):
-  __r6 = StringIO()
-  pp(x, __r6)
-  return __r6.getvalue()
+  __r7 = StringIO()
+  pp(x, __r7)
+  return __r7.getvalue()
 
 def lines(x=None):
   return split(x, "\n")
 
 def get_indentation(s=None):
-  __r9 = ""
+  __r10 = ""
   __i2 = 0
   while __i2 < L_35(s):
     __c = char(s, __i2)
     if __c == " ":
-      __r9 = cat(__r9, __c)
+      __r10 = cat(__r10, __c)
     __i2 = __i2 + 1
-  return __r9
+  return __r10
 
 def strip_outer(s=None, lh=None, rh=None):
   if string_starts63(s, lh) and string_ends63(s, rh):
@@ -238,10 +245,10 @@ def repl():
         break
 
 def __with_file_directory__macro(file=None, name=None, *_args, **_keys):
-  ____r28 = unstash(_args, _keys)
-  __file1 = destash33(file, ____r28)
-  __name1 = destash33(name, ____r28)
-  ____id5 = ____r28
+  ____r29 = unstash(_args, _keys)
+  __file1 = destash33(file, ____r29)
+  __name1 = destash33(name, ____r29)
+  ____id5 = ____r29
   __body1 = cut(____id5, 0)
   __cwd1 = unique("cwd")
   return ["let", [__cwd1, ["system", [".cwd"]], __name1, __file1, __name1, ["system", [".basename", __file1]]], ["system", [".chdir", ["system", [".dirname", __file1]]]], ["after", join(["do"], __body1), ["system", [".chdir", __cwd1]]]]
@@ -252,12 +259,12 @@ def read_file(path=None):
   __name2 = path
   __name3 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r31 = None
+  ____r32 = None
   try:
-    ____r31 = system.read_file(__name3)
+    ____r32 = system.read_file(__name3)
   finally:
     system.chdir(____cwd2)
-  return ____r31
+  return ____r32
 
 def read_from_file(path=None):
   __data = read_file(path)
@@ -265,13 +272,13 @@ def read_from_file(path=None):
   __name4 = path
   __name5 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r34 = None
+  ____r35 = None
   try:
     __s2 = reader.stream(__data)
-    ____r34 = reader.read_all(__s2)
+    ____r35 = reader.read_all(__s2)
   finally:
     system.chdir(____cwd3)
-  return ____r34
+  return ____r35
 
 def expand_file(path=None):
   __body2 = read_from_file(path)
@@ -279,12 +286,12 @@ def expand_file(path=None):
   __name6 = path
   __name7 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r37 = None
+  ____r38 = None
   try:
-    ____r37 = compiler.expand(join(["do"], __body2))
+    ____r38 = compiler.expand(join(["do"], __body2))
   finally:
     system.chdir(____cwd4)
-  return ____r37
+  return ____r38
 
 def compile_file(path=None):
   __form2 = expand_file(path)
@@ -292,12 +299,12 @@ def compile_file(path=None):
   __name8 = path
   __name9 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r40 = None
+  ____r41 = None
   try:
-    ____r40 = compiler.compile(__form2, stmt=True)
+    ____r41 = compiler.compile(__form2, stmt=True)
   finally:
     system.chdir(____cwd5)
-  return ____r40
+  return ____r41
 
 def load(path=None):
   __previous = has(setenv("target", toplevel=True), "value")
@@ -311,12 +318,22 @@ def load(path=None):
   __name10 = path
   __name11 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r43 = None
+  ____r44 = None
   try:
-    ____r43 = compiler.run(__code)
+    ____r44 = compiler.run(__code)
   finally:
     system.chdir(____cwd6)
-  return ____r43
+  return ____r44
+
+def run_script(path=None, argv=None):
+  if nil63(argv):
+    argv = []
+  L_print(L_str(["run-script", path, argv]))
+  system.set_argv(argv)
+  _G.exports = {}
+  load(path)
+  if _G.exports.main:
+    return _G.exports.main(argv)
 
 def script_file63(path=None):
   return not( "-" == char(path, 0) or (".py" == clip(path, L_35(path) - 3) or (".js" == clip(path, L_35(path) - 3) or ".lua" == clip(path, L_35(path) - 4))))
@@ -339,9 +356,10 @@ def usage():
   return L_print(" -e <expr>\tExpression to evaluate")
 
 def main(args=None):
+  L_print(L_str(args))
   __arg = hd(args)
   if __arg and script_file63(__arg):
-    return load(__arg)
+    return run_script(__arg, tl(args))
   else:
     if __arg == "-h" or __arg == "--help":
       return usage()
@@ -351,7 +369,7 @@ def main(args=None):
       __output = None
       __target1 = None
       __expr = None
-      __argv = system.argv
+      __argv = args
       __i4 = 0
       while __i4 < L_35(__argv):
         __a = __argv[__i4]
@@ -376,10 +394,10 @@ def main(args=None):
           if not( "-" == char(__a, 0)):
             add(__pre, __a)
         __i4 = __i4 + 1
-      ____x49 = __pre
+      ____x50 = __pre
       ____i5 = 0
-      while ____i5 < L_35(____x49):
-        __file2 = ____x49[____i5]
+      while ____i5 < L_35(____x50):
+        __file2 = ____x50[____i5]
         run_file(__file2)
         ____i5 = ____i5 + 1
       if nil63(__input):
@@ -400,4 +418,4 @@ def main63():
   return __name__ == "__main__"
 
 if main63():
-  main(system.argv)
+  main(system.get_argv())

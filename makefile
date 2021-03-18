@@ -16,20 +16,13 @@ MODS := runtime.x	\
 	reader.x	\
 	compiler.x	\
 	system.x	\
+	lumen.x	\
 	main.x
 
 all: $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py) bin/pymen.js
 
 clean:
-	@git checkout bin/*.js
-	@git checkout bin/*.lua
-	@git checkout bin/*.py
-
-bin/lumen.js: $(OBJS:.o=.l)
-
-bin/lumen.lua: $(OBJS:.o=.l)
-
-bin/lumen.py: $(OBJS:.o=.l)
+	@git checkout -- $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py)
 
 ./%.js : %.l
 	@echo $@

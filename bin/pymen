@@ -9,6 +9,7 @@ do
     bin="${x}"
 done
 cd "$(dirname "${bin}")"
+cd ..
 home="$(pwd)"
 cd "${dir}"
 
@@ -19,7 +20,7 @@ else
     host=python3
 fi
 
-code=lumen.py
 export PYTHONPATH="${PYTHONPATH}:${up}:${home}:${dir}:${dir}/.."
 
-exec ${host} "${home}/${code}" "$@"
+set -x
+exec ${host} "${home}" "$@"

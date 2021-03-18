@@ -16,9 +16,6 @@ cd "${dir}"
 if [ ! -z "${LUMEN_HOST}" ]
 then
     host="${LUMEN_HOST}"
-elif node -v > /dev/null 2>&1
-then
-    host=node
 elif luajit -v > /dev/null 2>&1
 then
     host=luajit
@@ -31,14 +28,12 @@ fi
 
 case $host in
     node*)
-        code=lumen.js
-        export NODE_PATH="$NODE_PATH:${home}:${dir}/lib";;
+        code=index.js;;
     py*)
-        code=lumen.py
-        export PYTHONPATH="${PYTHONPATH}:${home}:${dir}";;
+        code=.;;
     *)
-        code=lumen.lua
-        export LUA_PATH="$LUA_PATH;${home}/?.lua;${dir}/lib/?.lua;;";;
+        code=main.lua;;
 esac
 
+set -x
 exec ${host} "${home}/${code}" "$@"

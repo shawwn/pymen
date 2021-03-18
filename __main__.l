@@ -8,5 +8,5 @@
 ; (from .compiler import bind*)
 ; (from .compiler import compile)
 (from .compiler import *)
-((main .main) (system .argv))
+((main .main) ((system .get-argv)))
 

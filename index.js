@@ -13,7 +13,7 @@ _G.shellquote = (x) => ("'" + x.replace(/[']/g, '\'\\\'\'') + "'")
 
 var child_process = require('child_process')
 
-var lumen_bin = _G.path.join(__dirname, "bin", "lumen")
+var lumen_bin = _G.path.join(__dirname, "bin", "lumen-lua")
 
 var shell = function (command, ...args) {
   var cmdline = command + ' ' + args.map(_G.shellquote).join(' ')
@@ -22,6 +22,7 @@ var shell = function (command, ...args) {
 
 _G.compile_file_2 = (filename) => {
   var pwd = process.cwd()
+  console.log('compile-file', filename)
   try {
     process.chdir(_G.path.dirname(filename))
     return shell(lumen_bin, "-c", _G.path.basename(filename), "-t", "js")
@@ -46,7 +47,9 @@ if (_G.require.main === module) {
 }
 _G.require('module').Module._initPaths();
 
-Object.assign(exports, _G.require("./lumen.l"));
+console.log('here')
+Object.assign(exports, _G.require("./lumen.js"));
+console.log('here', exports)
 if (_G.require.main === module) {
   exports.main(process.argv.slice(2));
 }

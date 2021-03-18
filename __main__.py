@@ -20,4 +20,4 @@ def import_parents(level=1):
 if __name__ == '__main__' and not __package__:
     pymen = import_parents(level=1)
     sys.modules['pymen'] = pymen
-    pymen.main.main(pymen.system.argv)
+    pymen.main.main(pymen.system.get_argv())

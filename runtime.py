@@ -43,9 +43,18 @@ except ImportError:
   ____r7 = Sequence
 finally:
   pass
-import numpy as np
+____r8 = None
+try:
+  import numpy as np
+  from numpy import ndarray
+  ____r8 = ndarray
+except ImportError:
+  ndarray = Sequence
+  ____r8 = ndarray
+finally:
+  pass
 def array63(x=None):
-  return not string63(x) and isinstance(x, tuple([Sequence, np.ndarray]))
+  return not string63(x) and isinstance(x, tuple([Sequence, ndarray]))
 
 def indices(x=None):
   if isinstance(x, dict):
@@ -79,19 +88,22 @@ def object(x=None):
     return x
 
 def length(x=None, upto=None):
-  __n1 = -1
-  __upto = either(upto, inf)
-  ____o1 = x
-  __k1 = None
-  for __k1 in indices(____o1):
-    __v2 = ____o1[__k1]
-    if number63(__k1):
-      if __k1 > __n1:
-        __n1 = __k1
-        if __n1 >= __upto:
-          break
-  __n1 = __n1 + 1
-  return __n1
+  if nil63(x):
+    return 0
+  else:
+    __n1 = -1
+    __upto = either(upto, inf)
+    ____o1 = x
+    __k1 = None
+    for __k1 in indices(____o1):
+      __v2 = ____o1[__k1]
+      if number63(__k1):
+        if __k1 > __n1:
+          __n1 = __k1
+          if __n1 >= __upto:
+            break
+    __n1 = __n1 + 1
+    return __n1
 
 def L_35(x=None, upto=None):
   if string63(x) or array63(x):
@@ -112,7 +124,8 @@ def two63(x=None):
   return L_35(x, 2) == 2
 
 def hd(l=None):
-  return has(l, 0)
+  if is63(l):
+    return has(l, 0)
 
 import numbers
 def string63(x=None):
@@ -231,7 +244,8 @@ def inner(x=None):
   return clip(x, 1, edge(x))
 
 def tl(l=None):
-  return cut(l, 1)
+  if is63(l):
+    return cut(l, 1)
 
 def char(s=None, n=None):
   __n8 = n or 0
@@ -263,9 +277,9 @@ def drop(l=None):
   else:
     __n9 = edge(l)
     if __n9 >= 0:
-      __r43 = l[__n9]
+      __r44 = l[__n9]
       del l[__n9]
-      return __r43
+      return __r44
 
 def last(l=None):
   return has(l, edge(l))
@@ -292,13 +306,13 @@ def reduce(f=None, x=None, L_else=None):
 
 def join(*_args, **_keys):
   __ls = unstash(_args, _keys)
-  __r48 = {}
+  __r49 = {}
   ____x4 = __ls
   ____i8 = 0
   while ____i8 < L_35(____x4):
     __l3 = ____x4[____i8]
     if __l3:
-      __n10 = L_35(__r48)
+      __n10 = L_35(__r49)
       ____o5 = __l3
       __k5 = None
       for __k5 in indices(____o5):
@@ -307,59 +321,80 @@ def join(*_args, **_keys):
           __k5 = __k5 + __n10
         else:
           __l3 = object(__l3)
-        __r48[__k5] = __v6
+        __r49[__k5] = __v6
     ____i8 = ____i8 + 1
-  return __r48
+  return __r49
 
-def find(f=None, t=None):
+def testify(x=None, test=None):
+  if function63(x):
+    return x
+  else:
+    if test:
+      def __f5(y=None):
+        return test(y, x)
+      return __f5
+    else:
+      def __f4(y=None):
+        return x == y
+      return __f4
+
+def find(x=None, t=None):
+  __f = testify(x)
   ____o6 = t
   ____i10 = None
   for ____i10 in indices(____o6):
     __x5 = ____o6[____i10]
-    __y = f(__x5)
+    __y = __f(__x5)
     if __y:
       return __y
 
-def first(f=None, l=None):
-  ____x6 = l
-  ____i11 = 0
-  while ____i11 < L_35(____x6):
-    __x7 = ____x6[____i11]
-    __y1 = f(__x7)
-    if __y1:
-      return __y1
-    ____i11 = ____i11 + 1
+def first(x=None, l=None, pos=None):
+  __f1 = testify(x)
+  __i11 = either(pos, 0)
+  __n13 = -1
+  ____o7 = l
+  __k6 = None
+  for __k6 in indices(____o7):
+    __v7 = ____o7[__k6]
+    if number63(__k6):
+      __n13 = max(__n13, __k6)
+  __n13 = __n13 + 1
+  while __i11 < __n13:
+    __v8 = l[__i11]
+    ____y1 = __f1(__v8)
+    if yes(____y1):
+      __y2 = ____y1
+      return __i11
+    __i11 = __i11 + 1
 
 def in63(x=None, t=None):
-  def __f2(y=None):
-    return x == y
-  return find(__f2, t)
+  return find(testify(x), t)
 
 def pair(l=None):
   __l12 = dupe(l)
-  __n13 = L_35(l)
-  __i12 = 0
-  while __i12 < __n13:
-    __a = l[__i12]
+  __n15 = L_35(l)
+  __i13 = 0
+  while __i13 < __n15:
+    __a = l[__i13]
     __e4 = None
-    if __i12 + 1 < __n13:
-      __e4 = l[__i12 + 1]
+    if __i13 + 1 < __n15:
+      __e4 = l[__i13 + 1]
     __b = __e4
     add(__l12, [__a, __b])
-    __i12 = __i12 + 1
-    __i12 = __i12 + 1
+    __i13 = __i13 + 1
+    __i13 = __i13 + 1
   return __l12
 
 import functools
 def sortfunc(f=None):
   if f:
-    def __f3(a=None, b=None):
+    def __f6(a=None, b=None):
       if f(a, b):
         return -1
       else:
         return 1
-    __f = __f3
-    return functools.cmp_to_key(__f)
+    __f2 = __f6
+    return functools.cmp_to_key(__f2)
 
 def sort(l=None, f=None):
   l.sort(key=sortfunc(f))
@@ -367,75 +402,75 @@ def sort(l=None, f=None):
 
 def map(f=None, x=None):
   __t2 = dupe(x)
-  ____x9 = x
-  ____i13 = 0
-  while ____i13 < L_35(____x9):
-    __v7 = ____x9[____i13]
-    __y2 = f(__v7)
-    if is63(__y2):
-      add(__t2, __y2)
-    ____i13 = ____i13 + 1
-  ____o7 = x
-  __k6 = None
-  for __k6 in indices(____o7):
-    __v8 = ____o7[__k6]
-    if not number63(__k6):
-      __y3 = f(__v8)
-      if is63(__y3):
-        __t2[__k6] = __y3
-  return __t2
-
-def mapcat(f=None, x=None, sep=None):
-  __r59 = ""
-  __c = ""
-  ____x10 = x
-  ____i15 = 0
-  while ____i15 < L_35(____x10):
-    __v9 = ____x10[____i15]
-    __e5 = None
-    if f:
-      __e5 = f(__v9)
-    else:
-      __e5 = __v9
-    __y4 = __e5
-    if is63(__y4):
-      __r59 = cat(__r59, __c, __y4)
-      __c = sep or ""
-    ____i15 = ____i15 + 1
-  return __r59
-
-def keep(f=None, x=None):
-  def __f4(v=None):
-    if yes(f(v)):
-      return v
-  return map(__f4, x)
-
-def props63(t=None):
-  ____o8 = t
+  ____x7 = x
+  ____i14 = 0
+  while ____i14 < L_35(____x7):
+    __v9 = ____x7[____i14]
+    __y3 = f(__v9)
+    if is63(__y3):
+      add(__t2, __y3)
+    ____i14 = ____i14 + 1
+  ____o8 = x
   __k7 = None
   for __k7 in indices(____o8):
     __v10 = ____o8[__k7]
     if not number63(__k7):
+      __y4 = f(__v10)
+      if is63(__y4):
+        __t2[__k7] = __y4
+  return __t2
+
+def mapcat(f=None, x=None, sep=None):
+  __r62 = ""
+  __c = ""
+  ____x8 = x
+  ____i16 = 0
+  while ____i16 < L_35(____x8):
+    __v11 = ____x8[____i16]
+    __e5 = None
+    if f:
+      __e5 = f(__v11)
+    else:
+      __e5 = __v11
+    __y5 = __e5
+    if is63(__y5):
+      __r62 = cat(__r62, __c, __y5)
+      __c = sep or ""
+    ____i16 = ____i16 + 1
+  return __r62
+
+def keep(f=None, x=None):
+  def __f7(v=None):
+    if yes(f(v)):
+      return v
+  return map(__f7, x)
+
+def props63(t=None):
+  ____o9 = t
+  __k8 = None
+  for __k8 in indices(____o9):
+    __v12 = ____o9[__k8]
+    if not number63(__k8):
       return True
   return False
 
 def empty63(t=None):
-  ____o9 = t
-  ____i17 = None
-  for ____i17 in indices(____o9):
-    __x11 = ____o9[____i17]
+  ____o10 = t
+  ____i18 = None
+  for ____i18 in indices(____o10):
+    __x9 = ____o10[____i18]
     return False
   return True
 
 def stash(args=None):
   if props63(args):
     __p = {}
-    ____o10 = args
-    __k8 = None
-    for __k8 in indices(____o10):
-      __v11 = ____o10[__k8]
-      if not number63(__k8):
-        __p[__k8] = __v11
+    ____o11 = args
+    __k9 = None
+    for __k9 in indices(____o11):
+      __v13 = ____o11[__k9]
+      if not number63(__k9):
+        __p[__k9] = __v13
     __p["_stash"] = True
     add(args, __p)
   if array63(args):
@@ -450,46 +485,46 @@ def unstash(args=None, params=None):
     __l4 = last(args)
     if obj63(__l4) and has63(__l4, "_stash"):
       __args1 = object(almost(args))
-      ____o11 = __l4
-      __k9 = None
-      for __k9 in indices(____o11):
-        __v12 = ____o11[__k9]
-        if not( __k9 == "_stash"):
-          __args1[__k9] = __v12
+      ____o12 = __l4
+      __k10 = None
+      for __k10 in indices(____o12):
+        __v14 = ____o12[__k10]
+        if not( __k10 == "_stash"):
+          __args1[__k10] = __v14
       if params:
-        ____o12 = params
-        __k10 = None
-        for __k10 in indices(____o12):
-          __v13 = ____o12[__k10]
-          __args1[__k10] = __v13
+        ____o13 = params
+        __k11 = None
+        for __k11 in indices(____o13):
+          __v15 = ____o13[__k11]
+          __args1[__k11] = __v15
       return __args1
     else:
       if params:
         __args11 = object(args)
-        ____o13 = params
-        __k11 = None
-        for __k11 in indices(____o13):
-          __v14 = ____o13[__k11]
-          __args11[__k11] = __v14
+        ____o14 = params
+        __k12 = None
+        for __k12 in indices(____o14):
+          __v16 = ____o14[__k12]
+          __args11[__k12] = __v16
         return __args11
       else:
         return args
 
 def destash33(l=None, args1=None):
   if obj63(l) and has63(l, "_stash"):
-    ____o14 = l
-    __k12 = None
-    for __k12 in indices(____o14):
-      __v15 = ____o14[__k12]
-      if not( __k12 == "_stash"):
-        args1[__k12] = __v15
+    ____o15 = l
+    __k13 = None
+    for __k13 in indices(____o15):
+      __v17 = ____o15[__k13]
+      if not( __k13 == "_stash"):
+        args1[__k13] = __v17
   else:
     return l
 
 def search(s=None, pattern=None, start=None):
-  __i23 = s.find(pattern, start)
-  if __i23 >= 0:
-    return __i23
+  __i24 = s.find(pattern, start)
+  if __i24 >= 0:
+    return __i24
 
 def string_ends63(L_str=None, x=None, pos=None):
   __e6 = None
@@ -535,111 +570,111 @@ def cat2(a=None, b=None):
 
 def cat(*_args, **_keys):
   __xs = unstash(_args, _keys)
-  def __f5(a=None, b=None):
+  def __f8(a=None, b=None):
     return cat2(a, b)
-  return reduce(__f5, __xs, "")
+  return reduce(__f8, __xs, "")
 
 def L_43(*_args, **_keys):
   __xs1 = unstash(_args, _keys)
-  def __f6(a=None, b=None):
+  def __f9(a=None, b=None):
     return a + b
-  return reduce(__f6, __xs1, 0)
+  return reduce(__f9, __xs1, 0)
 
 def L_45(*_args, **_keys):
   __xs2 = unstash(_args, _keys)
-  def __f7(b=None, a=None):
+  def __f10(b=None, a=None):
     return a - b
-  return reduce(__f7, reverse(__xs2), 0)
+  return reduce(__f10, reverse(__xs2), 0)
 
 def L_42(*_args, **_keys):
   __xs3 = unstash(_args, _keys)
-  def __f8(a=None, b=None):
+  def __f11(a=None, b=None):
     return a * b
-  return reduce(__f8, __xs3, 1)
+  return reduce(__f11, __xs3, 1)
 
 def L_47(*_args, **_keys):
   __xs4 = unstash(_args, _keys)
-  def __f9(b=None, a=None):
+  def __f12(b=None, a=None):
     return a / b
-  return reduce(__f9, reverse(__xs4), 1)
+  return reduce(__f12, reverse(__xs4), 1)
 
 def L_37(*_args, **_keys):
   __xs5 = unstash(_args, _keys)
-  def __f10(b=None, a=None):
+  def __f13(b=None, a=None):
     return a % b
-  return reduce(__f10, reverse(__xs5), 1)
+  return reduce(__f13, reverse(__xs5), 1)
 
 def pairwise(f=None, xs=None):
-  __i24 = 0
-  while __i24 < edge(xs):
-    __a1 = xs[__i24]
-    __b1 = xs[__i24 + 1]
+  __i25 = 0
+  while __i25 < edge(xs):
+    __a1 = xs[__i25]
+    __b1 = xs[__i25 + 1]
     if not f(__a1, __b1):
       return False
-    __i24 = __i24 + 1
+    __i25 = __i25 + 1
   return True
 
 def L_60(*_args, **_keys):
   __xs6 = unstash(_args, _keys)
-  def __f11(a=None, b=None):
+  def __f14(a=None, b=None):
     return a < b
-  return pairwise(__f11, __xs6)
+  return pairwise(__f14, __xs6)
 
 def L_62(*_args, **_keys):
   __xs7 = unstash(_args, _keys)
-  def __f12(a=None, b=None):
+  def __f15(a=None, b=None):
     return a > b
-  return pairwise(__f12, __xs7)
+  return pairwise(__f15, __xs7)
 
 def L_61(*_args, **_keys):
   __xs8 = unstash(_args, _keys)
-  def __f13(a=None, b=None):
+  def __f16(a=None, b=None):
     return a == b
-  return pairwise(__f13, __xs8)
+  return pairwise(__f16, __xs8)
 
 def L_6061(*_args, **_keys):
   __xs9 = unstash(_args, _keys)
-  def __f14(a=None, b=None):
+  def __f17(a=None, b=None):
     return a <= b
-  return pairwise(__f14, __xs9)
+  return pairwise(__f17, __xs9)
 
 def L_6261(*_args, **_keys):
   __xs10 = unstash(_args, _keys)
-  def __f15(a=None, b=None):
+  def __f18(a=None, b=None):
     return a >= b
-  return pairwise(__f15, __xs10)
+  return pairwise(__f18, __xs10)
 
 def number_code63(n=None):
   return n > 47 and n < 58
 
 def number(s=None):
   if string63(s):
-    ____r87 = None
+    ____r90 = None
     try:
       return int(s)
     except ValueError:
-      ____r87 = None
+      ____r90 = None
     finally:
       pass
-    ____r88 = None
+    ____r91 = None
     try:
       return float(s)
     except ValueError:
-      ____r88 = None
+      ____r91 = None
     finally:
       pass
-    return ____r88
+    return ____r91
   else:
     if number63(s):
       return s
 
 def numeric63(s=None):
-  __n22 = L_35(s)
-  __i25 = 0
-  while __i25 < __n22:
-    if not number_code63(code(s, __i25)):
+  __n24 = L_35(s)
+  __i26 = 0
+  while __i26 < __n24:
+    if not number_code63(code(s, __i26)):
       return False
-    __i25 = __i25 + 1
+    __i26 = __i26 + 1
   return some63(s)
 
 def tostring(x=None):
@@ -650,9 +685,9 @@ def escape(s=None):
     return "".join(["\"", s, "\""])
   else:
     __s1 = "\""
-    __i26 = 0
-    while __i26 < L_35(s):
-      __c1 = char(s, __i26)
+    __i27 = 0
+    while __i27 < L_35(s):
+      __c1 = char(s, __i27)
       __e8 = None
       if __c1 == "\n":
         __e8 = "\\n"
@@ -675,28 +710,28 @@ def escape(s=None):
         __e8 = __e9
       __c11 = __e8
       __s1 = cat(__s1, __c11)
-      __i26 = __i26 + 1
+      __i27 = __i27 + 1
     return cat(__s1, "\"")
 
 def simple_id63(x=None):
-  def __f16():
+  def __f19():
     try:
       return [True, read_string(x)]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id = __f16()
+  ____id = __f19()
   ____ok = has(____id, 0)
-  ____v16 = has(____id, 1)
+  ____v18 = has(____id, 1)
   __e12 = None
   if ____ok:
-    __e12 = ____v16
+    __e12 = ____v18
   else:
     __e12 = None
-  __r93 = __e12
-  if __r93 == x:
-    return __r93
+  __r96 = __e12
+  if __r96 == x:
+    return __r96
 
 def L_str(x=None, repr=None, stack=None):
   if nil63(x):
@@ -744,41 +779,41 @@ def L_str(x=None, repr=None, stack=None):
                         __ks = []
                         __l5 = stack or []
                         add(__l5, x)
-                        ____o15 = x
-                        __k13 = None
-                        for __k13 in indices(____o15):
-                          __v17 = ____o15[__k13]
-                          if number63(__k13):
-                            __xs11[__k13] = L_str(__v17, repr, __l5)
+                        ____o16 = x
+                        __k14 = None
+                        for __k14 in indices(____o16):
+                          __v19 = ____o16[__k14]
+                          if number63(__k14):
+                            __xs11[__k14] = L_str(__v19, repr, __l5)
                           else:
-                            if function63(__v17):
-                              add(__ks, [cat(".", __k13), ""])
+                            if function63(__v19):
+                              add(__ks, [cat(".", __k14), ""])
                             else:
-                              add(__ks, [cat(__k13, ": "), L_str(__v17, repr, __l5)])
-                        def __f17(__x17=None, __x18=None):
-                          ____id1 = __x17
+                              add(__ks, [cat(__k14, ": "), L_str(__v19, repr, __l5)])
+                        def __f20(__x15=None, __x16=None):
+                          ____id1 = __x15
                           __a2 = has(____id1, 0)
-                          ____id2 = __x18
+                          ____id2 = __x16
                           __b2 = has(____id2, 0)
                           return __a2 < __b2
-                        sort(__ks, __f17)
+                        sort(__ks, __f20)
                         drop(__l5)
-                        ____x19 = __xs11
-                        ____i28 = 0
-                        while ____i28 < L_35(____x19):
-                          __v18 = ____x19[____i28]
-                          __s = cat(__s, __sp, __v18)
-                          __sp = " "
-                          ____i28 = ____i28 + 1
-                        ____x20 = __ks
+                        ____x17 = __xs11
                         ____i29 = 0
-                        while ____i29 < L_35(____x20):
-                          ____id3 = ____x20[____i29]
-                          __k14 = has(____id3, 0)
-                          __v19 = has(____id3, 1)
-                          __s = cat(__s, __sp, __k14, __v19)
+                        while ____i29 < L_35(____x17):
+                          __v20 = ____x17[____i29]
+                          __s = cat(__s, __sp, __v20)
                           __sp = " "
                           ____i29 = ____i29 + 1
+                        ____x18 = __ks
+                        ____i30 = 0
+                        while ____i30 < L_35(____x18):
+                          ____id3 = ____x18[____i30]
+                          __k15 = has(____id3, 0)
+                          __v21 = has(____id3, 1)
+                          __s = cat(__s, __sp, __k15, __v21)
+                          __sp = " "
+                          ____i30 = ____i30 + 1
                         return cat(__s, ")")
 
 def apply(f=None, args=None):
@@ -786,18 +821,18 @@ def apply(f=None, args=None):
   return f(*__args2)
 
 def call(f=None, *_args, **_keys):
-  ____r97 = unstash(_args, _keys)
-  __f1 = destash33(f, ____r97)
-  ____id4 = ____r97
+  ____r100 = unstash(_args, _keys)
+  __f3 = destash33(f, ____r100)
+  ____id4 = ____r100
   __args3 = cut(____id4, 0)
-  return apply(__f1, __args3)
+  return apply(__f3, __args3)
 
 def setenv(k=None, *_args, **_keys):
-  ____r98 = unstash(_args, _keys)
-  __k15 = destash33(k, ____r98)
-  ____id5 = ____r98
+  ____r101 = unstash(_args, _keys)
+  __k16 = destash33(k, ____r101)
+  ____id5 = ____r101
   __keys = cut(____id5, 0)
-  if string63(__k15):
+  if string63(__k16):
     __e13 = None
     if has63(__keys, "toplevel"):
       __e13 = hd(environment)
@@ -805,19 +840,19 @@ def setenv(k=None, *_args, **_keys):
       __e13 = last(environment)
     __frame = __e13
     __e14 = None
-    if has63(__frame, __k15):
-      __e14 = __frame[__k15]
+    if has63(__frame, __k16):
+      __e14 = __frame[__k16]
     else:
       __e14 = {}
     __entry = __e14
-    ____o16 = __keys
-    __k16 = None
-    for __k16 in indices(____o16):
-      __v20 = ____o16[__k16]
-      if not( __k16 == "toplevel"):
-        __entry[__k16] = __v20
-    __frame[__k15] = __entry
-    return __frame[__k15]
+    ____o17 = __keys
+    __k17 = None
+    for __k17 in indices(____o17):
+      __v22 = ____o17[__k17]
+      if not( __k17 == "toplevel"):
+        __entry[__k17] = __v22
+    __frame[__k16] = __entry
+    return __frame[__k16]
 
 def L_print(x=None):
   print(x)

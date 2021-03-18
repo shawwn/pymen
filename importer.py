@@ -32,7 +32,7 @@ import os.path
 
 import logging
 logger = logging.getLogger ('pymen.importer')
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 import os
 import stat
@@ -279,16 +279,16 @@ class PymenFinder (MetaPathFinder):
 
         logger.debug (python_path)
         for path in python_path:
-            full_path= os.path.join (path, last_mile)
-            init_full_path= os.path.join (full_path, '__init__.l')
-            module_full_path= full_path+'.l'
+            for ending in ['index.l', '__init__.l']:
+                full_path= os.path.join (path, last_mile)
+                init_full_path= os.path.join (full_path, ending)
+                module_full_path= full_path+'.l'
 
-            logger.debug ('trying %s', init_full_path)
-            if -d (full_path) and -a (init_full_path):
-                logger.debug ('found package %s', full_path)
-                return ModuleSpec (full_name, loader, origin=os.path.abspath(init_full_path))
+                logger.debug ('trying %s', init_full_path)
+                if -d (full_path) and -a (init_full_path):
+                    logger.debug ('found package %s', full_path)
+                    return ModuleSpec (full_name, loader, origin=os.path.abspath(init_full_path))
 
-            else:
                 logger.debug ('trying %s', module_full_path)
                 if -a (module_full_path):
                     logger.debug ('found module %s', module_full_path)

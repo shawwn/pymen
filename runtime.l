@@ -34,12 +34,17 @@
   (try (from (idx collections abc) import Sequence)
     (except ImportError
       (from collections import Sequence))))
-(target py: (import numpy as np))
+(target py:
+  (try
+    (do (import numpy as np)
+        (from numpy import ndarray))
+    (except  ImportError
+      (set ndarray Sequence))))
 
 (define-global array? (x)
   (target js: ((idx Array isArray) x)
           py: (and (not (string? x))
-                   (isinstance x (tuple (list Sequence (idx np ndarray)))))
+                   (isinstance x (tuple (list Sequence ndarray))))
           lua: (= (type x) 'table)))
 
 (target py:
@@ -64,18 +69,19 @@
     x))
 
 (define-global length (x upto)
-  (with n -1
-    (let upto (either upto inf)
-      (each (k v) x
-        (when (number? k)
-          (target lua: (dec k))
-          (when (> k n)
-            (set n k)
-            (if (>= n upto) (break)))))
-      (inc n))))
+  (if (nil? x) 0
+    (with n -1
+      (let upto (either upto inf)
+        (each (k v) x
+          (when (number? k)
+            (target lua: (dec k))
+            (when (> k n)
+              (set n k)
+              (if (>= n upto) (break)))))
+        (inc n)))))
 
 (define-global # (x upto)
-  (target lua: (%literal |#| x)
+  (target lua: (if x (%literal |#| x) 0)
     (if (or (string? x)
             (array? x))
         (target js: (idx x length)
@@ -87,7 +93,7 @@
 (define-global one? (x) (= (# x 1) 1))
 (define-global two? (x) (= (# x 2) 2))
 
-(define-global hd (l) (target py: (has l 0) (at l 0)))
+(define-global hd (l) (if (is? l) (target py: (has l 0) (at l 0))))
 
 (target js: (define-global type (x) (typeof x)))
 
@@ -175,7 +181,7 @@
 (define-global inner (x)
   (clip x 1 (edge x)))
 
-(define-global tl (l) (cut l 1))
+(define-global tl (l) (if (is? l) (cut l 1)))
 
 (define-global char (s n)
   (target js: ((idx s charAt) n)
@@ -243,18 +249,35 @@
             (if (number? k) (inc k n) (set l (object l)))
             (set (get r k) v)))))))
 
-(define-global find (f t)
-  (each x t
-    (let y (f x)
-      (if y (return y)))))
+(define-global testify (x test)
+  (if (function? x) x
+      test
+      (fn (y) (test y x))
+    (fn (y) (= x y))))
 
-(define-global first (f l)
-  (step x l
-    (let y (f x)
-      (if y (return y)))))
+(define-global find (x t)
+  (let f (testify x)
+    (each x t
+      (let y (f x)
+        (if y (return y))))))
+
+(define-global first (x l pos)
+  (let (f (testify x)
+        i (either pos 0)
+        n -1)
+    (each (k v) l
+      (when (number? k)
+        (target lua: (dec k))
+        (set n (max n k))))
+    (inc n)
+    (while (< i n)
+      (let v (at l i)
+        (let-when y (f v)
+          (return i)))
+      (inc i))))
 
 (define-global in? (x t)
-  (find (fn (y) (= x y)) t))
+  (find (testify x) t))
 
 (define-global pair (l)
   (with l1 (dupe l)

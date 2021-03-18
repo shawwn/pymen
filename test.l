@@ -4,8 +4,11 @@
 (define failed 0)
 (define tests ())
 
-(import reader)
-(import compiler)
+(target py: (from .runtime import *) (require "./runtime"))
+(target py: (from .macros import *) (require "./macros"))
+(target py: (from . import reader) (set reader (require "./reader")))
+(target py: (from . import compiler) (set compiler (require "./compiler")))
+(target py: (from . import system) (set system (require "./system")))
 
 (define-macro test (x msg)
   `(if (not ,x)
@@ -29,7 +32,7 @@
 (define-macro define-test (name rest: body)
   `(add tests (list ',name (fn () (prep) ,@body))))
 
-(define-global run ()
+(define-global main ()
   (step (name f) tests
     (let result (f)
       (when (string? result)
@@ -1123,4 +1126,6 @@ c"
     (test= '(13 (3 4 foo: 7)) (g 1 2 3 4 foo: 7))
     (test= '(()) l)))
 
-(run)
+(when (undefined? exports)
+  (set exports (or (_G .exports) (obj))))
+(export main)

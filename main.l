@@ -1,11 +1,12 @@
-(target py: (from .runtime import *) js: (require "./runtime.l") lua: (import runtime))
-(target py: (from .macros import *) js: (require "./macros.l") lua: (import macros))
-(target py: (from . import reader) (import reader))
-(target py: (from . import compiler) (import compiler))
-(target py: (from . import system) (import system))
+(target py: (from .runtime import *) js: (require "./runtime") lua: (import runtime))
+(target py: (from .macros import *) js: (require "./macros") lua: (import macros))
+(target py: (from . import reader) (set reader (require "./reader")))
+(target py: (from . import compiler) (set compiler (require "./compiler")))
+(target py: (from . import system) (set system (require "./system")))
+
 ; (target py: (from compiler import *))
 (target py: (import traceback))
-(target py: (import numpy as np))
+(target py: (try (import numpy as np) (except ImportError)))
 
 (target py: (from types import ModuleType as module))
 (target py: (define-global module? (x) (isinstance x module)))
@@ -236,6 +237,13 @@
       (with-file-directory path name
         ((idx compiler run) code)))))
 
+(define-global run-script (path (o argv ()))
+  (print (str `(run-script ,path ,argv)))
+ ((idx system set-argv) argv)
+ (set (_G .exports) (obj))
+ (load path)
+ (if (_G .exports .main) ((_G .exports .main) argv)))
+
 (define script-file? (path)
   (not (or (= "-" (char path 0))
            (= ".py" (clip path (- (# path) 3)))
@@ -259,9 +267,10 @@
   (print " -e <expr>\tExpression to evaluate"))
 
 (define main (args)
+  (print (str args))
   (let arg (hd args)
     (if (and arg (script-file? arg))
-        (load arg)
+        (run-script arg (tl args))
         (or (= arg "-h")
             (= arg "--help"))
         (usage)
@@ -270,7 +279,7 @@
             output nil
             target1 nil
             expr nil
-            argv (idx system argv))
+            argv args)
         (for i (# argv)
           (let a (at argv i)
             (if (or (= a "-c") (= a "-o") (= a "-t") (= a "-e"))
@@ -294,14 +303,14 @@
 
 (define main? ()
   (target
-    lua: false
+    lua: true
     js: (and (not (undefined? require))
              (not (undefined? module))
              (= (idx require main) module))
     py: (= __name__ "__main__")))
 
 (when (main?)
-  (main (idx system argv)))
+  (main ((idx system get-argv))))
 
 (export main
         reader

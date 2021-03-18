@@ -97,10 +97,61 @@
   (target js: ((idx process exit) code)
           lua: ((idx os exit) code)))
 
-(define argv
-  (target js: (cut (idx process argv) 2)
-          py: (cut (idx sys argv) 1)
-          lua: arg))
+; (define argv
+;   (target js: (cut (idx process argv) 2)
+;           py: (cut (idx sys argv) 1)
+;           lua: arg))
+
+(define argv nil)
+
+(define-global set-argv (l)
+  (global argv)
+  (set argv l))
+
+(define-global get-argv ()
+  (when (nil? argv)
+    (set-argv (target js: (cut (get process 'argv) 2)
+                      lua: (or (get _G 'arg) (get _G 'args) ())
+                      py: (cut (idx sys argv) 1))))
+  argv)
+
+(define opt? (x)
+  (and (string? x) (= (char x 0) "-") (not (= x "-"))))
+
+(define-global parse-positional (args (o pos 0))
+  (cut args (either pos 0) (first opt? args pos)))
+
+(define-global parse-option (args)
+  (when (opt? (hd args))
+    `(,(hd args) ,(parse-positional args 1))))
+
+(define-global parse-arguments (aliases argv)
+  (let (l (or argv (get-argv))
+        a (or aliases (obj)))
+    (with r (parse-positional l)
+      (set l (cut l (# r)))
+      (while true
+        (let p (parse-option l)
+          (unless p (break))
+          (let-when (op args) p
+            (when (= op "--")
+              (set l (cut l 1))
+              (break))
+            (set l (cut l (+ 1 (# args))))
+            (let (k (if (= (clip op 0 2) "--") (clip op 2) (clip op 1))
+                  k (has a k k)
+                  v (if (none? args) true args))
+              (set (get r k) v)
+              (add r (list k v))))))
+      (set (get r 'rest) l)
+      (set-argv (get r 'rest)))))
+
+(define-global arguments (aliases argv)
+  (let argv (or argv (get-argv))
+    (let r (parse-arguments argv aliases)
+      (set-argv (get r 'rest))
+      (wipe (get r 'rest))
+      (unless (empty? r) r))))
 
 (define realpath (filename)
   (target lua: (if (and uv (uv .fs_realpath))
@@ -166,6 +217,12 @@
         read-line
         exit
         argv
+        set-argv
+        get-argv
+        parse-positional
+        parse-option
+        parse-arguments
+        arguments
         reload
         shell
         cwd

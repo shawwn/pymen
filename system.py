@@ -68,7 +68,74 @@ def read_line(on_ctrl_c=None):
 def exit(code=None):
   pass
 
-argv = cut(sys.argv, 1)
+argv = None
+def set_argv(l=None):
+  global argv
+  argv = l
+  return argv
+
+def get_argv():
+  if nil63(argv):
+    set_argv(cut(sys.argv, 1))
+  return argv
+
+def opt63(x=None):
+  return string63(x) and (char(x, 0) == "-" and not( x == "-"))
+
+def parse_positional(args=None, pos=None):
+  if nil63(pos):
+    pos = 0
+  return cut(args, either(pos, 0), first(opt63, args, pos))
+
+def parse_option(args=None):
+  if opt63(hd(args)):
+    return [hd(args), parse_positional(args, 1)]
+
+def parse_arguments(aliases=None, argv=None):
+  __l = argv or get_argv()
+  __a = aliases or {}
+  __r21 = parse_positional(__l)
+  __l = cut(__l, L_35(__r21))
+  while True:
+    __p = parse_option(__l)
+    if not __p:
+      break
+    ____y = __p
+    if yes(____y):
+      ____id = ____y
+      __op = has(____id, 0)
+      __args = has(____id, 1)
+      if __op == "--":
+        __l = cut(__l, 1)
+        break
+      __l = cut(__l, 1 + L_35(__args))
+      __e3 = None
+      if clip(__op, 0, 2) == "--":
+        __e3 = clip(__op, 2)
+      else:
+        __e3 = clip(__op, 1)
+      __k = __e3
+      __k1 = has(__a, __k, __k)
+      __e4 = None
+      if none63(__args):
+        __e4 = True
+      else:
+        __e4 = __args
+      __v = __e4
+      __r21[__k1] = __v
+      add(__r21, [__k1, __v])
+  __r21["rest"] = __l
+  set_argv(__r21["rest"])
+  return __r21
+
+def arguments(aliases=None, argv=None):
+  __argv = argv or get_argv()
+  __r23 = parse_arguments(__argv, aliases)
+  set_argv(__r23["rest"])
+  del __r23["rest"]
+  if not empty63(__r23):
+    return __r23
+
 def realpath(filename=None):
   return fs.realpath(filename)
 
@@ -99,14 +166,14 @@ def call_with_directory(path=None, f=None):
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id = __f3()
-  __ok = has(____id, 0)
-  __v = has(____id, 1)
+  ____id1 = __f3()
+  __ok = has(____id1, 0)
+  __v1 = has(____id1, 1)
   chdir(__pwd)
   if __ok:
-    return __v
+    return __v1
   else:
-    raise __v
+    raise __v1
 
 def dirname(filename=None):
   __result = apply(path_join, almost(split(filename, path_separator)))
