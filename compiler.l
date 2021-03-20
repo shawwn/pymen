@@ -6,7 +6,7 @@
       (while (>= i 0)
         (if (has? (at environment i) k)
             (let b (get (at environment i) k)
-              (return (if p (has b (compile-id p)) b)))
+              (return (if p (has b (identifier p)) b)))
           (dec i))))))
 
 (define macro-function (k)

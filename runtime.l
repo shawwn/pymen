@@ -544,7 +544,7 @@
 
 ; hack to replace dashes with underscores, for python
 ; compatibility with "place-expander"
-(define identifier (k)
+(define-global identifier (k)
   (reduce (fn (a b) (cat a "_" b)) (split k "-")))
 
 (define-global setenv (k rest: keys)
