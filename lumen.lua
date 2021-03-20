@@ -892,7 +892,7 @@ function _G.call(f, ...)
   local __args3 = cut(____id4, 0)
   return apply(__f3, __args3)
 end
-local function identifier(k)
+function _G.identifier(k)
   return reduce(function (a, b)
     return a .. ("_" .. b)
   end, split(k, "-"))

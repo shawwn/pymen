@@ -1018,7 +1018,7 @@ call = function (f, ..._42args) {
   var __args3 = cut(____id4, 0);
   return apply(__f3, __args3);
 };
-var identifier = function (k) {
+identifier = function (k) {
   return reduce(function (a, b) {
     return a + ("_" + b);
   }, split(k, "-"));

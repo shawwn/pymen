@@ -6,7 +6,7 @@ function _G.getenv(k, p)
         local __b = environment[__i + 1][k]
         local __e42 = nil
         if p then
-          __e42 = has(__b, compile_id(p))
+          __e42 = has(__b, identifier(p))
         else
           __e42 = __b
         end

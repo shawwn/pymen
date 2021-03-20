@@ -6,7 +6,7 @@ getenv = function (k, p) {
         var __b = environment[__i][k];
         var __e42 = undefined;
         if (p) {
-          __e42 = has(__b, compile_id(p));
+          __e42 = has(__b, identifier(p));
         } else {
           __e42 = __b;
         }
