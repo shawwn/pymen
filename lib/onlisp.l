@@ -59,6 +59,25 @@
   (let-place (getter setter) place
     (setter `(join (list ,x) ,getter))))
 
+(mac pull (x place (o test))
+  (let-place (getter setter) place
+    (setter `(delete ,x ,getter ,test))))
+
+(def find (x lst (o test equal?))
+  (each y lst
+    (when (test x y)
+      (return y))))
+
+(def delete (item sequence (o test equal?))
+  (keep (fn (x) (not (test x item)))
+        sequence))
+
+(def eq? (a b)
+  (= a b))
+
+(def equal? (a b)
+  (= (str a) (str b)))
+
 (from argparse import Namespace)
 
 (when (undefined? Proc)
@@ -150,11 +169,6 @@
      (catch *halt* (loop (print 'looping) (time.sleep 0.5) (pick-process)))
      ))
 
-(def delete (item sequence)
-  (|print| 'delete item sequence)
-  (keep (fn (x) (not (= x item)))
-        sequence))
-
 (def pick-process ()
   (let ((p val) (most-urgent-process))
     (global *proc*, *procs*)
@@ -214,8 +228,37 @@
   (print ("Foo was called with {}" (.format x)))
   (=values (if (is? x) (+ x 1))))
 
-(see
 (program two-foos (a b)
   (fork (foo a) 99)
   (fork (foo b) 99))
-)
+
+
+(defconst bboard* ())
+
+(def claim f (global bboard*) (push f bboard*))
+
+(def unclaim f (global bboard*) (pull f bboard* test: equal?))
+
+(def check f (find f bboard* test: equal?))
+
+(=defun visitor (door)
+  (write ("Approach {}. " (.format door)))
+  (claim 'knock door)
+  (wait d (check 'open door)
+    (write ("Enter {}. " (.format door)))
+    (unclaim 'knock door)
+    (claim 'inside door)))
+
+(=defun host (door)
+  (wait k (check 'knock door)
+    (write ("Open {}. " (.format door)))
+    (claim 'open door)
+    (wait g (check 'inside door)
+      (print ("Close {}." (.format door)))
+      (unclaim 'open door))))
+
+(program ballet ()
+  (fork (visitor 'door1) 1)
+  (fork (host 'door1) 1)
+  (fork (visitor 'door2) 1)
+  (fork (host 'door2) 1))
