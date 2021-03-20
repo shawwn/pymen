@@ -282,3 +282,47 @@
 (program barbarians ()
   (fork (capture 'rome) 100)
   (fork (plunder 'rome) 98))
+
+(defconst paths* ())
+(defconst failsym '@)
+
+(=defun fail ()
+  (global paths*)
+  (if (none? paths*)
+      (=values failsym)
+    (let p1 (hd paths*)
+      (set paths* (tl paths*))
+      (p1))))
+
+(=defun choose (choices)
+  (global paths*)
+  (join! paths* (map (fn (choice)
+                       (fn () (=values choice)))
+                     choices))
+  (fail))
+
+(def null? (x)
+  (or (no x)
+      (and (obj? x)
+           (none? x))))
+
+(=defun path (node1 node2)
+  (if (null? (neighbors node1))
+      (fail)
+      (in node2 (neighbors node1))
+      (=values (list node2))
+    (=bind (n) (choose (neighbors node1))
+      (=bind (m) (path n node2)
+        (=values `(,n ,m))))))
+
+(defconst nodes*
+  (obj a: '(b d)
+       b: '(c)
+       c: '(a)
+       d: '(e)
+       e: '()))
+
+(def neighbors (n)
+  (get nodes* n))
+
+        
