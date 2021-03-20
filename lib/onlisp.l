@@ -262,3 +262,23 @@
   (fork (host 'door1) 1)
   (fork (visitor 'door2) 1)
   (fork (host 'door2) 1))
+
+
+(=defun capture (city)
+  (take city)
+  (setpri 1)
+  (yielding
+    (fortify city)))
+
+(=defun plunder (city)
+  (loot city)
+  (ransom city))
+
+(def take (c) (print ("Liberating {}." (.format c))))
+(def fortify (c) (print ("Rebuilding {}." (.format c))))
+(def loot (c) (print ("Nationalizing {}." (.format c))))
+(def ransom (c) (print ("Refinancing {}." (.format c))))
+
+(program barbarians ()
+  (fork (capture 'rome) 100)
+  (fork (plunder 'rome) 98))
