@@ -300,12 +300,10 @@
               (error (cat "Unknown register: " (str name)))
             (car (cdr val)))))
       (def execute ()
-        (let insts (get-contents pc)
-          (if (null? insts)
-              'done
-              (do
-                ((instruction-execution-proc (car insts)))
-                (execute)))))
+        (while true
+          (let insts (get-contents pc)
+            (if (null? insts) (return 'done))
+            ((instruction-execution-proc (car insts))))))
       (def dispatch (message)
         (if (= message 'start)
             (do (set-contents! pc the-instruction-sequence)
@@ -608,16 +606,21 @@
   (get-register-contents gcd-machine 'a))
 
 
+(def list args (new-list args))
+
 (def make-my-machine ()
   (make-machine
     '(a b)
     (list (list '+ +) (list '- -) (list '* *) (list '/ /)
           (list '= =) (list '> >) (list '< <) (list '>= >=) (list '<= <=)
-          (list 'print print))
+          (list 'print print)
+          (list 'list list))
     '(start
        (save a)
        (perform (op print) (const 42))
        (assign a (op +) (const 1) (const 2))
+       (assign a (op list) (reg a) (const 3))
+       (perform (op print) (reg a))
        (restore a)
       done)))
 
