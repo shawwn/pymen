@@ -1658,3 +1658,14 @@ setenv("see", {
   _stash = true,
   macro = __see__macro
 })
+local function __class__macro(name, ...)
+  local ____r194 = unstash({...})
+  local __name23 = destash33(name, ____r194)
+  local ____id147 = ____r194
+  local __body79 = cut(____id147, 0)
+  return join({"%block", "class", __name23}, __body79)
+end
+setenv("class", {
+  _stash = true,
+  macro = __class__macro
+})

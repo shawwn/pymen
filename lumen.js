@@ -2737,6 +2737,17 @@ setenv("see", {
   _stash: true,
   macro: __see__macro
 });
+var __class__macro = function (name, ..._42args) {
+  var ____r296 = unstash([..._42args]);
+  var __name23 = destash33(name, ____r296);
+  var ____id151 = ____r296;
+  var __body79 = cut(____id151, 0);
+  return join(["%block", "class", __name23], __body79);
+};
+setenv("class", {
+  _stash: true,
+  macro: __class__macro
+});
 require("./runtime");
 require("./macros");
 reader = require("./reader");
@@ -2751,10 +2762,10 @@ pp = function (x) {
     var __c4 = "  ";
     var __nl = undefined;
     print("(");
-    var ____x1002 = x;
+    var ____x1006 = x;
     var ____i49 = 0;
-    while (____i49 < _35(____x1002)) {
-      var __v38 = ____x1002[____i49];
+    while (____i49 < _35(____x1006)) {
+      var __v38 = ____x1006[____i49];
       if (__nl) {
         print("");
       }
@@ -2776,16 +2787,16 @@ lines = function (x) {
   return split(x, "\n");
 };
 get_indentation = function (s) {
-  var __r300 = "";
+  var __r302 = "";
   var __i50 = 0;
   while (__i50 < _35(s)) {
     var __c5 = char(s, __i50);
     if (__c5 === " ") {
-      __r300 = __r300 + __c5;
+      __r302 = __r302 + __c5;
     }
     __i50 = __i50 + 1;
   }
-  return __r300;
+  return __r302;
 };
 strip_outer = function (s, lh, rh) {
   if (string_starts63(s, lh) && string_ends63(s, rh)) {
@@ -2834,7 +2845,7 @@ eval_self_form = function (form) {
 };
 eval_print = function (form) {
   var __form10 = eval_self_form(form);
-  var ____id150 = (function () {
+  var ____id152 = (function () {
     try {
       return [true, compiler.eval(__form10)];
     }
@@ -2842,9 +2853,9 @@ eval_print = function (form) {
       return [false, e];
     }
   })();
-  var __ok9 = has(____id150, 0);
-  var __v39 = has(____id150, 1);
-  var __ex = has(____id150, 2);
+  var __ok9 = has(____id152, 0);
+  var __v39 = has(____id152, 1);
+  var __ex = has(____id152, 2);
   if (! __ok9) {
     return print_exception(__v39, __ex);
   } else {
@@ -2855,7 +2866,7 @@ eval_print = function (form) {
 };
 read_toplevel = function (str, more) {
   var __s3 = reader.stream(str, more);
-  var ____id151 = (function () {
+  var ____id153 = (function () {
     try {
       return [true, reader.read_all(__s3)];
     }
@@ -2863,25 +2874,25 @@ read_toplevel = function (str, more) {
       return [false, e];
     }
   })();
-  var ____ok10 = has(____id151, 0);
-  var ____v40 = has(____id151, 1);
+  var ____ok10 = has(____id153, 0);
+  var ____v40 = has(____id153, 1);
   var __e55 = undefined;
   if (____ok10) {
     __e55 = ____v40;
   } else {
     __e55 = undefined;
   }
-  var __x1011 = __e55;
-  if (__x1011 === more) {
+  var __x1015 = __e55;
+  if (__x1015 === more) {
     return more;
   } else {
-    if (nil63(__x1011)) {
-      return __x1011;
+    if (nil63(__x1015)) {
+      return __x1015;
     } else {
-      if (one63(__x1011)) {
-        return hd(__x1011);
+      if (one63(__x1015)) {
+        return hd(__x1015);
       } else {
-        return __x1011;
+        return __x1015;
       }
     }
   }
@@ -2918,13 +2929,13 @@ var repl = function () {
   return ___in4.on("data", rep1);
 };
 var __with_file_directory__macro = function (file, name, ..._42args) {
-  var ____r314 = unstash([..._42args]);
-  var __file1 = destash33(file, ____r314);
-  var __name23 = destash33(name, ____r314);
-  var ____id153 = ____r314;
-  var __body79 = cut(____id153, 0);
+  var ____r316 = unstash([..._42args]);
+  var __file1 = destash33(file, ____r316);
+  var __name25 = destash33(name, ____r316);
+  var ____id155 = ____r316;
+  var __body81 = cut(____id155, 0);
   var __cwd1 = unique("cwd");
-  return ["let", [__cwd1, ["system", [".cwd"]], __name23, __file1, __name23, ["system", [".basename", __file1]]], ["system", [".chdir", ["system", [".dirname", __file1]]]], ["after", join(["do"], __body79), ["system", [".chdir", __cwd1]]]];
+  return ["let", [__cwd1, ["system", [".cwd"]], __name25, __file1, __name25, ["system", [".basename", __file1]]], ["system", [".chdir", ["system", [".dirname", __file1]]]], ["after", join(["do"], __body81), ["system", [".chdir", __cwd1]]]];
 };
 setenv("with-file-directory", {
   _stash: true,
@@ -2932,58 +2943,58 @@ setenv("with-file-directory", {
 });
 read_file = function (path) {
   var ____cwd2 = system.cwd();
-  var __name24 = path;
-  var __name25 = system.basename(path);
+  var __name26 = path;
+  var __name27 = system.basename(path);
   system.chdir(system.dirname(path));
-  var ____r317 = undefined;
+  var ____r319 = undefined;
   try{
-    ____r317 = system.read_file(__name25);
+    ____r319 = system.read_file(__name27);
   }
   finally{
     system.chdir(____cwd2);
   }
-  return ____r317;
+  return ____r319;
 };
 read_from_file = function (path) {
   var __data = read_file(path);
   var ____cwd3 = system.cwd();
-  var __name26 = path;
-  var __name27 = system.basename(path);
+  var __name28 = path;
+  var __name29 = system.basename(path);
   system.chdir(system.dirname(path));
-  var ____r320 = undefined;
+  var ____r322 = undefined;
   try{
     var __s4 = reader.stream(__data);
-    ____r320 = reader.read_all(__s4);
+    ____r322 = reader.read_all(__s4);
   }
   finally{
     system.chdir(____cwd3);
   }
-  return ____r320;
+  return ____r322;
 };
 expand_file = function (path) {
-  var __body80 = read_from_file(path);
+  var __body82 = read_from_file(path);
   var ____cwd4 = system.cwd();
-  var __name28 = path;
-  var __name29 = system.basename(path);
+  var __name30 = path;
+  var __name31 = system.basename(path);
   system.chdir(system.dirname(path));
-  var ____r323 = undefined;
+  var ____r325 = undefined;
   try{
-    ____r323 = compiler.expand(join(["do"], __body80));
+    ____r325 = compiler.expand(join(["do"], __body82));
   }
   finally{
     system.chdir(____cwd4);
   }
-  return ____r323;
+  return ____r325;
 };
 compile_file = function (path) {
   var __form12 = expand_file(path);
   var ____cwd5 = system.cwd();
-  var __name30 = path;
-  var __name31 = system.basename(path);
+  var __name32 = path;
+  var __name33 = system.basename(path);
   system.chdir(system.dirname(path));
-  var ____r326 = undefined;
+  var ____r328 = undefined;
   try{
-    ____r326 = compiler.compile(__form12, {
+    ____r328 = compiler.compile(__form12, {
       _stash: true,
       stmt: true
     });
@@ -2991,7 +3002,7 @@ compile_file = function (path) {
   finally{
     system.chdir(____cwd5);
   }
-  return ____r326;
+  return ____r328;
 };
 load = function (path) {
   var __previous = has(setenv("target", {
@@ -3020,17 +3031,17 @@ load = function (path) {
     toplevel: true
   }).value = __previous;
   var ____cwd6 = system.cwd();
-  var __name32 = path;
-  var __name33 = system.basename(path);
+  var __name34 = path;
+  var __name35 = system.basename(path);
   system.chdir(system.dirname(path));
-  var ____r329 = undefined;
+  var ____r331 = undefined;
   try{
-    ____r329 = compiler.run(__code);
+    ____r331 = compiler.run(__code);
   }
   finally{
     system.chdir(____cwd6);
   }
-  return ____r329;
+  return ____r331;
 };
 run_script = function (path, argv) {
   if (nil63(argv)) {
@@ -3112,10 +3123,10 @@ var main = function (args) {
         }
         __i51 = __i51 + 1;
       }
-      var ____x1047 = __pre;
+      var ____x1051 = __pre;
       var ____i52 = 0;
-      while (____i52 < _35(____x1047)) {
-        var __file2 = ____x1047[____i52];
+      while (____i52 < _35(____x1051)) {
+        var __file2 = ____x1051[____i52];
         run_file(__file2);
         ____i52 = ____i52 + 1;
       }

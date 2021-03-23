@@ -1638,3 +1638,14 @@ setenv("see", {
   _stash: true,
   macro: __see__macro
 });
+var __class__macro = function (name, ..._42args) {
+  var ____r196 = unstash([..._42args]);
+  var __name23 = destash33(name, ____r196);
+  var ____id145 = ____r196;
+  var __body79 = cut(____id145, 0);
+  return join(["%block", "class", __name23], __body79);
+};
+setenv("class", {
+  _stash: true,
+  macro: __class__macro
+});

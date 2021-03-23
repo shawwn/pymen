@@ -1170,3 +1170,11 @@ def __see__macro(form=None):
   return __form9
 
 setenv("see", macro=__see__macro)
+def __class__macro(name=None, *_args, **_keys):
+  ____r196 = unstash(_args, _keys)
+  __name23 = destash33(name, ____r196)
+  ____id145 = ____r196
+  __body79 = cut(____id145, 0)
+  return join(["%block", "class", __name23], __body79)
+
+setenv("class", macro=__class__macro)

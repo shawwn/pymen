@@ -2623,6 +2623,17 @@ setenv("see", {
   _stash = true,
   macro = __see__macro
 })
+local function __class__macro(name, ...)
+  local ____r291 = unstash({...})
+  local __name23 = destash33(name, ____r291)
+  local ____id153 = ____r291
+  local __body79 = cut(____id153, 0)
+  return join({"%block", "class", __name23}, __body79)
+end
+setenv("class", {
+  _stash = true,
+  macro = __class__macro
+})
 local runtime = require("runtime")
 local macros = require("macros")
 reader = require("./reader")
@@ -2637,10 +2648,10 @@ function _G.pp(x)
     local __c4 = "  "
     local __nl = nil
     print("(")
-    local ____x1008 = x
+    local ____x1012 = x
     local ____i49 = 0
-    while ____i49 < _35(____x1008) do
-      local __v38 = ____x1008[____i49 + 1]
+    while ____i49 < _35(____x1012) do
+      local __v38 = ____x1012[____i49 + 1]
       if __nl then
         print("")
       end
@@ -2656,29 +2667,29 @@ function _G.pp(x)
   end
 end
 function _G.dir(x)
-  local __r293 = {}
+  local __r295 = {}
   local ____o29 = x
   local __k28 = nil
   for __k28 in next, ____o29 do
     local __v39 = ____o29[__k28]
-    add(__r293, __k28)
+    add(__r295, __k28)
   end
-  return __r293
+  return __r295
 end
 function _G.lines(x)
   return split(x, "\n")
 end
 function _G.get_indentation(s)
-  local __r296 = ""
+  local __r298 = ""
   local __i51 = 0
   while __i51 < _35(s) do
     local __c5 = char(s, __i51)
     if __c5 == " " then
-      __r296 = __r296 .. __c5
+      __r298 = __r298 .. __c5
     end
     __i51 = __i51 + 1
   end
-  return __r296
+  return __r298
 end
 function _G.strip_outer(s, lh, rh)
   if string_starts63(s, lh) and string_ends63(s, rh) then
@@ -2727,7 +2738,7 @@ function _G.eval_self_form(form)
 end
 function _G.eval_print(form)
   local __form10 = eval_self_form(form)
-  local ____id152 = {xpcall(function ()
+  local ____id154 = {xpcall(function ()
     return compiler.eval(__form10)
   end, function (m)
     if obj63(m) then
@@ -2751,9 +2762,9 @@ function _G.eval_print(form)
       }
     end
   end)}
-  local __ok9 = has(____id152, 1)
-  local __v40 = has(____id152, 2)
-  local __ex = has(____id152, 3)
+  local __ok9 = has(____id154, 1)
+  local __v40 = has(____id154, 2)
+  local __ex = has(____id154, 3)
   if not __ok9 then
     return print_exception(__v40, __ex)
   else
@@ -2764,7 +2775,7 @@ function _G.eval_print(form)
 end
 function _G.read_toplevel(str, more)
   local __s3 = reader.stream(str, more)
-  local ____id153 = {xpcall(function ()
+  local ____id155 = {xpcall(function ()
     return reader.read_all(__s3)
   end, function (m)
     if obj63(m) then
@@ -2788,25 +2799,25 @@ function _G.read_toplevel(str, more)
       }
     end
   end)}
-  local ____ok10 = has(____id153, 1)
-  local ____v41 = has(____id153, 2)
+  local ____ok10 = has(____id155, 1)
+  local ____v41 = has(____id155, 2)
   local __e44 = nil
   if ____ok10 then
     __e44 = ____v41
   else
     __e44 = nil
   end
-  local __x1017 = __e44
-  if __x1017 == more then
+  local __x1021 = __e44
+  if __x1021 == more then
     return more
   else
-    if nil63(__x1017) then
-      return __x1017
+    if nil63(__x1021) then
+      return __x1021
     else
-      if one63(__x1017) then
-        return hd(__x1017)
+      if one63(__x1021) then
+        return hd(__x1021)
       else
-        return __x1017
+        return __x1021
       end
     end
   end
@@ -2850,13 +2861,13 @@ local function repl()
   end
 end
 local function __with_file_directory__macro(file, name, ...)
-  local ____r310 = unstash({...})
-  local __file1 = destash33(file, ____r310)
-  local __name23 = destash33(name, ____r310)
-  local ____id155 = ____r310
-  local __body79 = cut(____id155, 0)
+  local ____r312 = unstash({...})
+  local __file1 = destash33(file, ____r312)
+  local __name25 = destash33(name, ____r312)
+  local ____id157 = ____r312
+  local __body81 = cut(____id157, 0)
   local __cwd1 = unique("cwd")
-  return {"let", {__cwd1, {"system", {".cwd"}}, __name23, __file1, __name23, {"system", {".basename", __file1}}}, {"system", {".chdir", {"system", {".dirname", __file1}}}}, {"after", join({"do"}, __body79), {"system", {".chdir", __cwd1}}}}
+  return {"let", {__cwd1, {"system", {".cwd"}}, __name25, __file1, __name25, {"system", {".basename", __file1}}}, {"system", {".chdir", {"system", {".dirname", __file1}}}}, {"after", join({"do"}, __body81), {"system", {".chdir", __cwd1}}}}
 end
 setenv("with-file-directory", {
   _stash = true,
@@ -2864,11 +2875,11 @@ setenv("with-file-directory", {
 })
 function _G.read_file(path)
   local ____cwd2 = system.cwd()
-  local __name24 = path
-  local __name25 = system.basename(path)
+  local __name26 = path
+  local __name27 = system.basename(path)
   system.chdir(system.dirname(path))
-  local ____id156 = {xpcall(function ()
-    return system.read_file(__name25)
+  local ____id158 = {xpcall(function ()
+    return system.read_file(__name27)
   end, function (m)
     if obj63(m) then
       return m
@@ -2891,22 +2902,22 @@ function _G.read_file(path)
       }
     end
   end)}
-  local ____ok11 = has(____id156, 1)
-  local ____r312 = has(____id156, 2)
+  local ____ok11 = has(____id158, 1)
+  local ____r314 = has(____id158, 2)
   system.chdir(____cwd2)
   if ____ok11 then
-    return ____r312
+    return ____r314
   else
-    error(____r312)
+    error(____r314)
   end
 end
 function _G.read_from_file(path)
   local __data = read_file(path)
   local ____cwd3 = system.cwd()
-  local __name26 = path
-  local __name27 = system.basename(path)
+  local __name28 = path
+  local __name29 = system.basename(path)
   system.chdir(system.dirname(path))
-  local ____id157 = {xpcall(function ()
+  local ____id159 = {xpcall(function ()
     local __s5 = reader.stream(__data)
     return reader.read_all(__s5)
   end, function (m)
@@ -2931,23 +2942,23 @@ function _G.read_from_file(path)
       }
     end
   end)}
-  local ____ok12 = has(____id157, 1)
-  local ____r314 = has(____id157, 2)
+  local ____ok12 = has(____id159, 1)
+  local ____r316 = has(____id159, 2)
   system.chdir(____cwd3)
   if ____ok12 then
-    return ____r314
+    return ____r316
   else
-    error(____r314)
+    error(____r316)
   end
 end
 function _G.expand_file(path)
-  local __body80 = read_from_file(path)
+  local __body82 = read_from_file(path)
   local ____cwd4 = system.cwd()
-  local __name28 = path
-  local __name29 = system.basename(path)
+  local __name30 = path
+  local __name31 = system.basename(path)
   system.chdir(system.dirname(path))
-  local ____id158 = {xpcall(function ()
-    return compiler.expand(join({"do"}, __body80))
+  local ____id160 = {xpcall(function ()
+    return compiler.expand(join({"do"}, __body82))
   end, function (m)
     if obj63(m) then
       return m
@@ -2970,22 +2981,22 @@ function _G.expand_file(path)
       }
     end
   end)}
-  local ____ok13 = has(____id158, 1)
-  local ____r316 = has(____id158, 2)
+  local ____ok13 = has(____id160, 1)
+  local ____r318 = has(____id160, 2)
   system.chdir(____cwd4)
   if ____ok13 then
-    return ____r316
+    return ____r318
   else
-    error(____r316)
+    error(____r318)
   end
 end
 function _G.compile_file(path)
   local __form12 = expand_file(path)
   local ____cwd5 = system.cwd()
-  local __name30 = path
-  local __name31 = system.basename(path)
+  local __name32 = path
+  local __name33 = system.basename(path)
   system.chdir(system.dirname(path))
-  local ____id159 = {xpcall(function ()
+  local ____id161 = {xpcall(function ()
     return compiler.compile(__form12, {
       _stash = true,
       stmt = true
@@ -3012,13 +3023,13 @@ function _G.compile_file(path)
       }
     end
   end)}
-  local ____ok14 = has(____id159, 1)
-  local ____r318 = has(____id159, 2)
+  local ____ok14 = has(____id161, 1)
+  local ____r320 = has(____id161, 2)
   system.chdir(____cwd5)
   if ____ok14 then
-    return ____r318
+    return ____r320
   else
-    error(____r318)
+    error(____r320)
   end
 end
 function _G.load(path)
@@ -3048,10 +3059,10 @@ function _G.load(path)
     toplevel = true
   }).value = __previous
   local ____cwd6 = system.cwd()
-  local __name32 = path
-  local __name33 = system.basename(path)
+  local __name34 = path
+  local __name35 = system.basename(path)
   system.chdir(system.dirname(path))
-  local ____id160 = {xpcall(function ()
+  local ____id162 = {xpcall(function ()
     return compiler.run(__code)
   end, function (m)
     if obj63(m) then
@@ -3075,13 +3086,13 @@ function _G.load(path)
       }
     end
   end)}
-  local ____ok15 = has(____id160, 1)
-  local ____r320 = has(____id160, 2)
+  local ____ok15 = has(____id162, 1)
+  local ____r322 = has(____id162, 2)
   system.chdir(____cwd6)
   if ____ok15 then
-    return ____r320
+    return ____r322
   else
-    error(____r320)
+    error(____r322)
   end
 end
 function _G.run_script(path, argv)
@@ -3164,10 +3175,10 @@ local function main(args)
         end
         __i52 = __i52 + 1
       end
-      local ____x1068 = __pre
+      local ____x1072 = __pre
       local ____i53 = 0
-      while ____i53 < _35(____x1068) do
-        local __file2 = ____x1068[____i53 + 1]
+      while ____i53 < _35(____x1072) do
+        local __file2 = ____x1072[____i53 + 1]
         run_file(__file2)
         ____i53 = ____i53 + 1
       end

@@ -2056,6 +2056,14 @@ def __see__macro(form=None):
   return __form9
 
 setenv("see", macro=__see__macro)
+def __class__macro(name=None, *_args, **_keys):
+  ____r301 = unstash(_args, _keys)
+  __name23 = destash33(name, ____r301)
+  ____id151 = ____r301
+  __body79 = cut(____id151, 0)
+  return join(["%block", "class", __name23], __body79)
+
+setenv("class", macro=__class__macro)
 import sys
 _G = sys.modules["__main__"]
 from .runtime import *
@@ -2065,12 +2073,12 @@ from . import compiler
 from . import system
 compiler.lumen_globals42 = globals()
 import traceback
-____r300 = None
+____r302 = None
 try:
   import numpy as np
-  ____r300 = np
+  ____r302 = np
 except ImportError:
-  ____r300 = None
+  ____r302 = None
 finally:
   pass
 import inspect
@@ -2087,48 +2095,48 @@ def disp(L_str=None):
 
 from pprint import pprint as pp
 def entries(x=None):
-  __r305 = []
+  __r307 = []
   __mods = []
-  ____x909 = dir(x)
+  ____x912 = dir(x)
   ____i48 = 0
-  while ____i48 < L_35(____x909):
-    __k27 = ____x909[____i48]
+  while ____i48 < L_35(____x912):
+    __k27 = ____x912[____i48]
     if not( clip(__k27, 0, 2) == "__"):
       __v38 = getattr(x, __k27)
       if function63(__v38):
-        add(__r305, __k27)
+        add(__r307, __k27)
       else:
         if module63(__v38):
           add(__mods, cat(".", __k27))
         else:
-          add(__r305, [__k27, __v38])
+          add(__r307, [__k27, __v38])
     ____i48 = ____i48 + 1
-  ____x911 = __mods
+  ____x914 = __mods
   ____i49 = 0
-  while ____i49 < L_35(____x911):
-    __x912 = ____x911[____i49]
-    add(__r305, __x912)
+  while ____i49 < L_35(____x914):
+    __x915 = ____x914[____i49]
+    add(__r307, __x915)
     ____i49 = ____i49 + 1
-  return __r305
+  return __r307
 
 from io import StringIO
 def pp_to_string(x=None):
-  __r307 = StringIO()
-  pp(x, __r307)
-  return __r307.getvalue()
+  __r309 = StringIO()
+  pp(x, __r309)
+  return __r309.getvalue()
 
 def lines(x=None):
   return split(x, "\n")
 
 def get_indentation(s=None):
-  __r310 = ""
+  __r312 = ""
   __i50 = 0
   while __i50 < L_35(s):
     __c4 = char(s, __i50)
     if __c4 == " ":
-      __r310 = cat(__r310, __c4)
+      __r312 = cat(__r312, __c4)
     __i50 = __i50 + 1
-  return __r310
+  return __r312
 
 def strip_outer(s=None, lh=None, rh=None):
   if string_starts63(s, lh) and string_ends63(s, rh):
@@ -2141,18 +2149,18 @@ def pp_obj(x=None):
   s = s.rstrip()
   s = strip_outer(s, "[", "]")
   s = cat(" ", s)
-  ____x913 = lines(s)
+  ____x916 = lines(s)
   ____i51 = 0
-  while ____i51 < L_35(____x913):
-    __x914 = ____x913[____i51]
-    __ind = get_indentation(__x914)
-    __x914 = __x914.rstrip(",")
-    __id150 = simple_id63(strip_outer(__x914.strip(), "'", "'"))
+  while ____i51 < L_35(____x916):
+    __x917 = ____x916[____i51]
+    __ind = get_indentation(__x917)
+    __x917 = __x917.rstrip(",")
+    __id152 = simple_id63(strip_outer(__x917.strip(), "'", "'"))
     __e35 = None
-    if __id150:
-      __e35 = cat(__ind, __id150)
+    if __id152:
+      __e35 = cat(__ind, __id152)
     else:
-      __e35 = __x914
+      __e35 = __x917
     L_print(__e35)
     ____i51 = ____i51 + 1
   return L_print(repr(x))
@@ -2172,20 +2180,20 @@ def pp_toplevel(x=None):
 def docstring(x=None):
   def __f53():
     try:
-      __x917 = x.__doc__
+      __x920 = x.__doc__
       __e36 = None
-      if string63(__x917):
-        __e36 = __x917
+      if string63(__x920):
+        __e36 = __x920
       else:
-        __e36 = L_str(__x917)
+        __e36 = L_str(__x920)
       return [True, __e36]
     except:
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id151 = __f53()
-  ____ok9 = has(____id151, 0)
-  ____v39 = has(____id151, 1)
+  ____id153 = __f53()
+  ____ok9 = has(____id153, 0)
+  ____v39 = has(____id153, 1)
   if ____ok9:
     return ____v39
   else:
@@ -2236,10 +2244,10 @@ def eval_print(form=None):
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id152 = __f54()
-  __ok10 = has(____id152, 0)
-  __v40 = has(____id152, 1)
-  __ex = has(____id152, 2)
+  ____id154 = __f54()
+  __ok10 = has(____id154, 0)
+  __v40 = has(____id154, 1)
+  __ex = has(____id154, 2)
   if not __ok10:
     return print_exception(__v40, __ex)
   else:
@@ -2255,25 +2263,25 @@ def read_toplevel(L_str=None, more=None):
       import sys
       e = sys.exc_info()
       return [False, e[1], e]
-  ____id153 = __f55()
-  ____ok11 = has(____id153, 0)
-  ____v41 = has(____id153, 1)
+  ____id155 = __f55()
+  ____ok11 = has(____id155, 0)
+  ____v41 = has(____id155, 1)
   __e37 = None
   if ____ok11:
     __e37 = ____v41
   else:
     __e37 = None
-  __x925 = __e37
-  if __x925 == more:
+  __x928 = __e37
+  if __x928 == more:
     return more
   else:
-    if nil63(__x925):
-      return __x925
+    if nil63(__x928):
+      return __x928
     else:
-      if one63(__x925):
-        return hd(__x925)
+      if one63(__x928):
+        return hd(__x928)
       else:
-        return __x925
+        return __x928
 
 def rep(L_str=None):
   __v42 = eval(read_toplevel(L_str))
@@ -2306,66 +2314,66 @@ def repl():
         break
 
 def __with_file_directory__macro(file=None, name=None, *_args, **_keys):
-  ____r329 = unstash(_args, _keys)
-  __file1 = destash33(file, ____r329)
-  __name23 = destash33(name, ____r329)
-  ____id155 = ____r329
-  __body79 = cut(____id155, 0)
+  ____r331 = unstash(_args, _keys)
+  __file1 = destash33(file, ____r331)
+  __name25 = destash33(name, ____r331)
+  ____id157 = ____r331
+  __body81 = cut(____id157, 0)
   __cwd1 = unique("cwd")
-  return ["let", [__cwd1, ["system", [".cwd"]], __name23, __file1, __name23, ["system", [".basename", __file1]]], ["system", [".chdir", ["system", [".dirname", __file1]]]], ["after", join(["do"], __body79), ["system", [".chdir", __cwd1]]]]
+  return ["let", [__cwd1, ["system", [".cwd"]], __name25, __file1, __name25, ["system", [".basename", __file1]]], ["system", [".chdir", ["system", [".dirname", __file1]]]], ["after", join(["do"], __body81), ["system", [".chdir", __cwd1]]]]
 
 setenv("with-file-directory", macro=__with_file_directory__macro)
 def read_file(path=None):
   ____cwd2 = system.cwd()
-  __name24 = path
-  __name25 = system.basename(path)
+  __name26 = path
+  __name27 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r332 = None
+  ____r334 = None
   try:
-    ____r332 = system.read_file(__name25)
+    ____r334 = system.read_file(__name27)
   finally:
     system.chdir(____cwd2)
-  return ____r332
+  return ____r334
 
 def read_from_file(path=None):
   __data = read_file(path)
   ____cwd3 = system.cwd()
-  __name26 = path
-  __name27 = system.basename(path)
-  system.chdir(system.dirname(path))
-  ____r335 = None
-  try:
-    __s5 = reader.stream(__data)
-    ____r335 = reader.read_all(__s5)
-  finally:
-    system.chdir(____cwd3)
-  return ____r335
-
-def expand_file(path=None):
-  __body80 = read_from_file(path)
-  ____cwd4 = system.cwd()
   __name28 = path
   __name29 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r338 = None
+  ____r337 = None
   try:
-    ____r338 = compiler.expand(join(["do"], __body80))
+    __s5 = reader.stream(__data)
+    ____r337 = reader.read_all(__s5)
+  finally:
+    system.chdir(____cwd3)
+  return ____r337
+
+def expand_file(path=None):
+  __body82 = read_from_file(path)
+  ____cwd4 = system.cwd()
+  __name30 = path
+  __name31 = system.basename(path)
+  system.chdir(system.dirname(path))
+  ____r340 = None
+  try:
+    ____r340 = compiler.expand(join(["do"], __body82))
   finally:
     system.chdir(____cwd4)
-  return ____r338
+  return ____r340
 
 def compile_file(path=None):
   __form12 = expand_file(path)
   ____cwd5 = system.cwd()
-  __name30 = path
-  __name31 = system.basename(path)
+  __name32 = path
+  __name33 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r341 = None
+  ____r343 = None
   try:
-    ____r341 = compiler.compile(__form12, stmt=True)
+    ____r343 = compiler.compile(__form12, stmt=True)
   finally:
     system.chdir(____cwd5)
-  return ____r341
+  return ____r343
 
 def load(path=None):
   __previous = has(setenv("target", toplevel=True), "value")
@@ -2376,15 +2384,15 @@ def load(path=None):
   setenv("indent-level", toplevel=True)["value"] = __previous_indent
   setenv("target", toplevel=True)["value"] = __previous
   ____cwd6 = system.cwd()
-  __name32 = path
-  __name33 = system.basename(path)
+  __name34 = path
+  __name35 = system.basename(path)
   system.chdir(system.dirname(path))
-  ____r344 = None
+  ____r346 = None
   try:
-    ____r344 = compiler.run(__code)
+    ____r346 = compiler.run(__code)
   finally:
     system.chdir(____cwd6)
-  return ____r344
+  return ____r346
 
 def run_script(path=None, argv=None):
   if nil63(argv):
@@ -2455,10 +2463,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i52 = __i52 + 1
-      ____x959 = __pre
+      ____x962 = __pre
       ____i53 = 0
-      while ____i53 < L_35(____x959):
-        __file2 = ____x959[____i53]
+      while ____i53 < L_35(____x962):
+        __file2 = ____x962[____i53]
         run_file(__file2)
         ____i53 = ____i53 + 1
       if nil63(__input):

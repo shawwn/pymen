@@ -585,3 +585,6 @@
   (let form (expand form)
     (print (compile (expand `(%set lumen-result ,form))))
     form))
+
+(define-macro class (name rest: body)
+  `(%block class ,name ,@body))
