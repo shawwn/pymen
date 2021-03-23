@@ -721,9 +721,10 @@
 ; 5.2.2 the assembler
 
 (def assemble (controller-text machine)
+  (print (str `(assemble ,controller-text ,machine)))
   (extract-labels controller-text
                   (fn (insts labels)
-                    (print (str `(assemble 'insts ,insts 'labels ,labels)))
+                    ; (print (str `(assemble 'insts ,insts 'labels ,labels)))
                     (update-insts! insts labels machine)
                     insts)))
 
@@ -732,12 +733,12 @@
        (not (string-literal? x))))
 
 (def extract-labels (text receive)
-  (print (str `(extract-labels ,text ,receive)))
+  ; (print (str `(extract-labels ,text ,receive)))
   (if (null? text)
       (receive (new-list) (new-list))
       (extract-labels (cdr text)
                       (fn (insts labels)
-                        (print (str `(extract-labels insts ,insts labels ,labels)))
+                        ; (print (str `(extract-labels insts ,insts labels ,labels)))
                         (let next-inst (car text)
                           (if (sym? next-inst)
                               (receive insts
@@ -1008,7 +1009,9 @@
   (make-machine
     '(exp env val proc arg1 continue unev)
     eceval-operations
-    '(read-eval-print-loop
+    '(
+       (branch (label external-entry))
+      read-eval-print-loop
        (perform (op initialize-stack))
        (perform
          (op prompt-for-input) (const ";;; EC-Eval input:"))
@@ -1071,6 +1074,11 @@
        (perform (op user-print) (reg val))
        ;(goto (label read-eval-print-loop))
        (goto (label done))
+      external-entry
+        (perform (op initialize-stack))
+        (assign env (op get-global-environment))
+        (assign continue (label print-result))
+        (goto (reg val))
       done
        )))
 
@@ -1113,3 +1121,14 @@
 
 (def test-eceval ()
   (start eceval))
+
+(def compile-and-go (expressions)
+  (let instructions (assemble expressions eceval)
+    (set-register-contents! eceval 'val instructions)
+    (set-register-contents! eceval 'flag true)
+    (start eceval)))
+
+(def test-compile-and-go ()
+  (compile-and-go '((assign val (const 42))
+                    (goto (reg continue))))
+  nil)
