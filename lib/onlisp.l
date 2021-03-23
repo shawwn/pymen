@@ -307,7 +307,7 @@
 (during-compilation
 (def null? (x)
   (or (no x)
-      (and (obj? x)
+      (and (list? x)
            (none? x)))))
 
 (=defun path (node1 node2)
@@ -335,7 +335,7 @@
 (def cons (a b)
   (if (null? b)
       `(,a)
-      (obj? b)
+      (list? b)
       `(,a ,@b)
     `(,a rest: ,b)))
 
