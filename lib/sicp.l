@@ -667,7 +667,7 @@
         stack (make-stack)
         the-instruction-sequence (new-list))
     (let (the-ops (list (list 'initialize-stack
-                              (fn () (stack 'initialize))))
+                              (set-name (fn () (stack 'initialize)) 'initialize_stack)))
           register-table (list (list 'pc pc) (list 'flag flag)))
       (def allocate-register (name)
         (nonlocal register-table)
@@ -901,7 +901,7 @@
       (let c (constant-exp-value exp)
         (fn () c))
       (label-exp? exp)
-      (let insts (lookup-label labels (label-explabel exp))
+      (let insts (lookup-label labels (label-exp-label exp))
         (fn () insts))
       (register-exp? exp)
       (let r (get-register machine (register-exp-reg exp))
@@ -915,13 +915,16 @@
 (def label-exp? (exp) (tagged-list? exp 'label))
 (def label-exp-label (exp) (cadr exp))
 
+(def mapcar (f l)
+  (if (null? l) (new-list l) (map f l)))
+
 (def make-operation-exp (exp machine labels operations)
   (let (op (lookup-prim (operation-exp-op exp) operations)
-        aprocs (map (fn (e)
-                      (make-primitive-exp e machine labels))
+        aprocs (mapcar (fn (e)
+                         (make-primitive-exp e machine labels))
                     (operation-exp-operands exp)))
     (set-name (fn ()
-                (apply op (map (fn (p) (p)) aprocs)))
+                (apply op (mapcar (fn (p) (p)) aprocs)))
               "operation_exp")))
 
 (def operation-exp? (exp)
@@ -998,3 +1001,62 @@
 
 (def test-my-machine ()
   (start my-machine))
+
+; 5.4.1 the core of the explicit-control evaluator
+
+(def make-eceval-machine ()
+  (make-machine
+    '(exp env val proc arg1 continue uenv)
+    eceval-operations
+    '(read-eval-print-loop
+       (perform (op initialize-stack))
+       (perform
+         (op prompt-for-input) (const ";;; EC-Eval input:"))
+       (assign exp (op read))
+       (assign env (op get-global-environment))
+       (assign continue (label print-result))
+       (perform (op announce-output) (const ";;; EC-Eval expr:"))
+       (perform (op user-print) (reg exp))
+       (goto (label eval-dispatch))
+      eval-dispatch
+       (assign val (const "None"))
+       (goto (reg continue))
+      print-result
+       (perform (op announce-output) (const ";;; EC-Eval value:"))
+       (perform (op user-print) (reg val))
+       ;(goto (label read-eval-print-loop))
+       (goto (label done))
+      done
+       )))
+
+(def prompt-for-input (prompt)
+  (print prompt)
+  )
+
+(def get-global-environment ()
+  the-global-environment)
+
+(def announce-output (message)
+  (print message))
+
+(def user-print (value)
+  (print (str value)))
+
+(def halt ()
+  (raise (Exception)))
+
+(def eceval-operations
+  (list (list 'self-evaluating? self-evaluating?)
+        ; complete list of operations for eceval machine
+        (list 'prompt-for-input prompt-for-input)
+        (list 'read read)
+        (list 'get-global-environment get-global-environment)
+        (list 'announce-output announce-output)
+        (list 'user-print user-print)
+        (list 'halt halt)
+        ))
+
+(defconst eceval (make-eceval-machine))
+
+(def test-eceval ()
+  (start eceval))
