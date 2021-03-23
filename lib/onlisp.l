@@ -454,3 +454,17 @@
   nil)
 
 
+
+(during-compilation
+
+(defmacro choose-bind (var binds rest: body)
+  `(=bind (,var) (choose ,binds)
+     ,@body))
+
+)
+
+(=defun choose-bind-test ()
+  (choose-bind x '(0 1 2 3 4 5 6 7 8 9)
+    (write (str x))
+    (if (= x 6) x (fail))))
+
