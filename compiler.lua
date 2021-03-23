@@ -2456,10 +2456,26 @@ setenv("global", {
   stmt = true,
   tr = true
 })
+local function __nonlocal__special(x)
+  if has(setenv("target", {
+    _stash = true,
+    toplevel = true
+  }), "value") == "py" then
+    return indentation() .. ("nonlocal " .. (compile(x) .. "\n"))
+  else
+    return ""
+  end
+end
+setenv("nonlocal", {
+  _stash = true,
+  special = __nonlocal__special,
+  stmt = true,
+  tr = true
+})
 local function __import__special(name, ...)
-  local ____r159 = unstash({...})
-  local __name13 = destash33(name, ____r159)
-  local ____id62 = ____r159
+  local ____r161 = unstash({...})
+  local __name13 = destash33(name, ____r161)
+  local ____id62 = ____r161
   local __alias3 = cut(____id62, 0)
   local __ind19 = indentation()
   local __e105 = nil
@@ -2489,23 +2505,23 @@ setenv("import", {
   stmt = true
 })
 local function __from__special(name, ...)
-  local ____r163 = unstash({...})
-  local __name15 = destash33(name, ____r163)
-  local ____id66 = ____r163
+  local ____r165 = unstash({...})
+  local __name15 = destash33(name, ____r165)
+  local ____id66 = ____r165
   local __imports1 = cut(____id66, 0)
   local __ind21 = indentation()
   local __id67 = __name15
-  local __r164 = nil
-  __r164 = drop(__imports1)
+  local __r166 = nil
+  __r166 = drop(__imports1)
   local __e106 = nil
   if last(__imports1) == "as" then
     __e106 = drop(__imports1)
   else
-    add(__imports1, __r164)
-    __r164 = nil
-    __e106 = __r164
+    add(__imports1, __r166)
+    __r166 = nil
+    __e106 = __r166
   end
-  local __as4 = __r164
+  local __as4 = __r166
   local __e107 = nil
   if hd(__imports1) == "import" then
     __e107 = tl(__imports1)

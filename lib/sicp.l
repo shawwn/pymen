@@ -151,3 +151,18 @@
 
 ; (with-draw smile* ((flip-vert (shrink-to-upper-right (beside (painter-outline) (painter-outline fill: red*)))) a-frame))
 ; (smile*.save "test.png")
+
+
+; ============================
+
+
+(def make-register (name)
+  (let contents '*unassigned*
+    (def dispatch (message)
+      (if (= message 'get) contents
+          (= message 'set)
+          (fn (value)
+            (nonlocal contents)
+            (set contents value))
+        (error (cat "register: unknown request " (str message)))))
+    dispatch))

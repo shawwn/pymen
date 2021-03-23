@@ -2499,10 +2499,26 @@ setenv("global", {
   stmt: true,
   tr: true
 });
+var __nonlocal__special = function (x) {
+  if (has(setenv("target", {
+    _stash: true,
+    toplevel: true
+  }), "value") === "py") {
+    return indentation() + ("nonlocal " + (compile(x) + "\n"));
+  } else {
+    return "";
+  }
+};
+setenv("nonlocal", {
+  _stash: true,
+  special: __nonlocal__special,
+  stmt: true,
+  tr: true
+});
 var __import__special = function (name, ..._42args) {
-  var ____r161 = unstash([..._42args]);
-  var __name13 = destash33(name, ____r161);
-  var ____id60 = ____r161;
+  var ____r163 = unstash([..._42args]);
+  var __name13 = destash33(name, ____r163);
+  var ____id60 = ____r163;
   var __alias3 = cut(____id60, 0);
   var __ind19 = indentation();
   var __e114 = undefined;
@@ -2532,23 +2548,23 @@ setenv("import", {
   stmt: true
 });
 var __from__special = function (name, ..._42args) {
-  var ____r165 = unstash([..._42args]);
-  var __name15 = destash33(name, ____r165);
-  var ____id64 = ____r165;
+  var ____r167 = unstash([..._42args]);
+  var __name15 = destash33(name, ____r167);
+  var ____id64 = ____r167;
   var __imports1 = cut(____id64, 0);
   var __ind21 = indentation();
   var __id65 = __name15;
-  var __r166 = undefined;
-  __r166 = drop(__imports1);
+  var __r168 = undefined;
+  __r168 = drop(__imports1);
   var __e115 = undefined;
   if (last(__imports1) === "as") {
     __e115 = drop(__imports1);
   } else {
-    add(__imports1, __r166);
-    __r166 = undefined;
-    __e115 = __r166;
+    add(__imports1, __r168);
+    __r168 = undefined;
+    __e115 = __r168;
   }
-  var __as4 = __r166;
+  var __as4 = __r168;
   var __e116 = undefined;
   if (hd(__imports1) === "import") {
     __e116 = tl(__imports1);

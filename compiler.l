@@ -1045,6 +1045,11 @@
       (cat (indentation) "global " (compile x) "\n")
     ""))
 
+(define-special nonlocal (x) stmt: true tr: true
+  (if (target? 'py)
+      (cat (indentation) "nonlocal " (compile x) "\n")
+    ""))
+
 (define-special import (name rest: alias) stmt: true
   (let (ind (indentation)
         as (if (= (hd alias) "as") (at alias 1) (hd alias))

@@ -1777,10 +1777,17 @@ def __global__special(x=None):
     return ""
 
 setenv("global", special=__global__special, stmt=True, tr=True)
+def __nonlocal__special(x=None):
+  if has(setenv("target", toplevel=True), "value") == "py":
+    return cat(indentation(), "nonlocal ", compile(x), "\n")
+  else:
+    return ""
+
+setenv("nonlocal", special=__nonlocal__special, stmt=True, tr=True)
 def __import__special(name=None, *_args, **_keys):
-  ____r161 = unstash(_args, _keys)
-  __name13 = destash33(name, ____r161)
-  ____id60 = ____r161
+  ____r163 = unstash(_args, _keys)
+  __name13 = destash33(name, ____r163)
+  ____id60 = ____r163
   __alias3 = cut(____id60, 0)
   __ind19 = indentation()
   __e101 = None
@@ -1800,22 +1807,22 @@ def __import__special(name=None, *_args, **_keys):
 
 setenv("import", special=__import__special, stmt=True)
 def __from__special(name=None, *_args, **_keys):
-  ____r165 = unstash(_args, _keys)
-  __name15 = destash33(name, ____r165)
-  ____id64 = ____r165
+  ____r167 = unstash(_args, _keys)
+  __name15 = destash33(name, ____r167)
+  ____id64 = ____r167
   __imports1 = cut(____id64, 0)
   __ind21 = indentation()
   __id65 = __name15
-  __r166 = None
-  __r166 = drop(__imports1)
+  __r168 = None
+  __r168 = drop(__imports1)
   __e102 = None
   if last(__imports1) == "as":
     __e102 = drop(__imports1)
   else:
-    add(__imports1, __r166)
-    __r166 = None
-    __e102 = __r166
-  __L_as2 = __r166
+    add(__imports1, __r168)
+    __r168 = None
+    __e102 = __r168
+  __L_as2 = __r168
   __e103 = None
   if hd(__imports1) == "import":
     __e103 = tl(__imports1)
