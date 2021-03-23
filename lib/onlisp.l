@@ -68,6 +68,9 @@
     (when (test x y)
       (return y))))
 
+(def member (x lst (o test equal?))
+  (find x lst test))
+
 (def delete (item sequence (o test equal?))
   (keep (fn (x) (not (test x item)))
         sequence))
@@ -301,10 +304,11 @@
                      choices))
   (fail))
 
+(during-compilation
 (def null? (x)
   (or (no x)
       (and (obj? x)
-           (none? x))))
+           (none? x)))))
 
 (=defun path (node1 node2)
   (if (null? (neighbors node1))
@@ -313,7 +317,7 @@
       (=values (list node2))
     (=bind (n) (choose (neighbors node1))
       (=bind (m) (path n node2)
-        (=values `(,n ,m))))))
+        (=values `(,n ,@m))))))
 
 (defconst nodes*
   (obj a: '(b d)
@@ -325,4 +329,128 @@
 (def neighbors (n)
   (get nodes* n))
 
-        
+
+
+(during-compilation
+(def cons (a b)
+  (if (null? b)
+      `(,a)
+      (obj? b)
+      `(,a ,@b)
+    `(,a rest: ,b)))
+
+(def car (a)
+  (if (null? a) a (hd a)))
+
+(def cdr (a)
+  (if (null? a) a
+    (let x (tl a)
+      (if (none? x)
+          (has x 'rest)
+        x))))
+
+(def assoc (x values (o test equal?))
+  (let-when pos (first (fn (entry)
+                         (test (car entry) x))
+                       values)
+    (at values pos)))
+
+(def nth (n lst)
+  (when (< n (len lst))
+    (at lst n)))
+)
+
+(during-compilation
+
+(defmacro defnode (name rest: body)
+  ; body = arcs
+  `(=defun ,name (pos regs) (choose (list ,@body))))
+
+(defmacro down (sub next rest: body)
+  ; body = cmds
+  `(=bind (* pos regs) (,sub pos (cons nil regs))
+     (,next pos ,(compile-cmds body))))
+
+(defmacro cate (category next rest: body)
+  ; body = cmds
+  `(if (= (len *sent*) pos)
+       (fail)
+       (let * (nth pos *sent*)
+         (if (member ',category (types *))
+             (,next (+ pos 1) ,(compile-cmds body))
+             (fail)))))
+
+(defmacro jump (next rest: body)
+  ; body = cmds
+  `(,next pos ,(compile-cmds body)))
+
+(def compile-cmds (cmds)
+  (if (null? cmds)
+      'regs
+      `(,@(car cmds) ,(compile-cmds (cdr cmds)))))
+
+(defmacro up (expr)
+  `(let * (nth pos *sent*)
+     (=values ,expr pos (cdr regs))))
+
+(defmacro getr (key (o regs 'regs))
+  `(let result (cdr (assoc ',key (car ,regs)))
+     (if (null? (cdr result)) (car result) result)))
+
+(defmacro set-register (key val regs)
+  `(cons (cons (cons ,key ,val) (car ,regs))
+         (cdr ,regs)))
+
+(defmacro setr (key val regs)
+  `(set-register ',key (list ,val) ,regs))
+
+(defmacro pushr (key val regs)
+  `(set-register ',key
+                 (cons ,val (cdr (assoc ',key (car ,regs))))
+                 ,regs))
+
+(defmacro with-parses (node sent rest: body)
+  (let-unique (pos regs)
+    `(do
+       (global *sent*)
+       (global *paths*)
+       (set *sent* ,sent)
+       (set *paths* ())
+       (=bind (parse ,pos ,regs) (,node 0 '(()))
+         (if (= ,pos (len *sent*))
+             (do ,@body (fail))
+             (fail))))))
+
+)
+
+(during-compilation
+  (defconst *sent* ())
+)
+
+(during-compilation
+
+(defnode s
+  (cate noun s2
+    (do (print ("Setting subj to {}" (.format (str *)))))
+    (setr subj *)))
+
+(defnode s2
+  (cate verb s3
+    (do (print ("Setting v to {}" (.format (str *)))))
+    (setr v *)))
+
+(defnode s3
+  (up `(sentence
+         (subject ,(getr subj))
+         (verb ,(getr v)))))
+
+)
+(def types (w)
+  (cdr (assoc w '((spot noun) (runs verb)))))
+
+
+(def parse-test ()
+  (with-parses s '(spot runs) (print ("Parsing: {}" (.format parse))))
+  nil)
+
+
