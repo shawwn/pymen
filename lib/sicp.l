@@ -155,7 +155,25 @@
 
 ; ============================
 
-(during-compilation
+(import pymen.reader)
+(import pymen.system)
+(import traceback)
+
+(def read ()
+  (def o (obj buf: "" result: nil))
+  (def ctrl-c ()
+    (traceback.print-exc))
+  (def rep1 (s)
+    (cat! (get o 'buf) s)
+    (let (more ()
+          form (read-toplevel (get o 'buf) more))
+      (unless (= form more)
+        (set (get o 'result) form))))
+  (while (nil? (get o 'result))
+    (let s (pymen.system (.read-line ctrl-c))
+      (unless (= s ctrl-c)
+        (if (is? s) (rep1 (cat s "\n")) (break)))))
+  (get o 'result))
 
 (def null? (x)
   (or (no x)
@@ -190,14 +208,40 @@
           (has x 'rest)
         x))))
 
+(def set-car! (cell x)
+  (|assert| (and (list? cell) (some? cell)))
+  (set (at cell 0) x)
+  cell)
+
+(def set-cdr! (cell x)
+  (|assert| (and (list? cell) (some? cell)))
+  (while (> (# cell) 1)
+    (drop cell))
+  (when (has cell 'rest)
+    (wipe (get cell 'rest)))
+  (if (list? x)
+      (do (step v x
+            (add cell v))
+          (when (has x 'rest)
+            (set (get cell 'rest) (get x 'rest))))
+    (set (get cell 'rest) x))
+  cell)
+
 (def cadr (x) (car (cdr x)))
 (def cddr (x) (cdr (cdr x)))
+(def caddr (x) (car (cdr (cdr x))))
+(def caadr (x) (car (car (cdr x))))
+(def cdadr (x) (cdr (car (cdr x))))
+(def cdddr (x) (cdr (cdr (cdr x))))
+(def cadddr (x) (car (cdr (cdr (cdr x)))))
 
 (def eq? (a b)
-  (= a b))
+  (or (= a b)
+      (and (null? a) (null? b))))
 
 (def equal? (a b)
-  (= (repr a) (repr b)))
+  (or (= (repr a) (repr b))
+      (and (null? a) (null? b))))
 
 (def assoc (x values (o test equal?))
   (let-when pos (first (fn (entry)
@@ -208,7 +252,344 @@
 (def nth (n lst)
   (when (< n (len lst))
     (at lst n)))
-)
+
+; 4.1.1 the core of the evaluator
+
+(def evaluate (exp (o env the-global-environment))
+  (if (self-evaluating? exp) exp
+      (variable? exp) (lookup-variable-value exp env)
+      (quoted? exp) (text-of-quotation exp)
+      (assignment? exp) (eval-assignment exp env)
+      (definition? exp) (eval-definition exp env)
+      (if? exp) (eval-if exp env)
+      (lambda? exp)
+      (make-procedure (lambda-parameters exp)
+                      (lambda-body exp)
+                      env)
+      (begin? exp)
+      (eval-sequence (begin-actions exp) env)
+      (cond? exp) (evaluate (cond->if exp) env)
+      (application? exp)
+      (applying (evaluate (operator exp) env)
+                (list-of-values (operands exp) env))
+    (error (cat "Unknown expression type -- EVAL: " exp))))
+
+; apply
+
+(def applying (procedure arguments)
+  (if (primitive-procedure? procedure)
+      (apply-primitive-procedure procedure arguments)
+      (compound-procedure? procedure)
+      (eval-sequence
+        (procedure-body procedure)
+        (extend-environment
+          (procedure-parameters procedure)
+          arguments
+          (procedure-environment procedure)))
+    (error (cat "Unknown procedure type -- APPLY: " (str procedure)))))
+
+; procedure arguments
+
+(def list-of-values (exps env)
+  (if (no-operands? exps)
+      (new-list)
+      (cons (evaluate (first-operand exps) env)
+            (list-of-values (rest-operands exps) env))))
+
+; conditionals
+
+(def eval-if (exp env)
+  (if (true? (evaluate (if-predicate exp) env))
+      (evaluate (if-consequent exp) env)
+      (evaluate (if-alternative exp) env)))
+
+; sequences
+
+(def eval-sequence (exps env)
+  (if (last-exp? exps) (evaluate (first-exp exps) env)
+    (do (evaluate (first-exp exps) env)
+        (eval-sequence (rest-exps exps) env))))
+
+; assignments and definitions
+
+(def eval-assignment (exp env)
+  (set-variable-value! (assignment-variable exp)
+                       (evaluate (assignment-value exp) env)
+                       env)
+  'ok)
+
+(def eval-definition (exp env)
+  (define-variable! (definition-variable exp)
+                    (evaluate (definition-value exp) env)
+                    env)
+  'ok)
+
+; 4.1.2 representing expressions
+
+(def self-evaluating? (exp)
+  (if (number? exp) true
+      (boolean? exp) true
+      (sym? exp) false
+      (string? exp) true
+    false))
+
+(def variable? (exp)
+  (sym? exp))
+
+(def quoted? (exp)
+  (tagged-list? exp 'quote))
+
+(def text-of-quotation (exp)
+  (cadr exp))
+
+(def tagged-list? (exp tag)
+  (if (pair? exp)
+      (eq? (car exp) tag)
+    false))
+
+(def assignment? (exp)
+  (tagged-list? exp 'set!))
+
+(def assignment-variable (exp) (cadr exp))
+(def assignment-value (exp) (caddr exp))
+
+(def definition? (exp)
+  (tagged-list? exp 'define))
+
+(def definition-variable (exp)
+  (if (sym? (cadr exp))
+      (cadr exp)
+      (caadr exp)))
+
+(def definition-value (exp)
+  (if (sym? (cadr exp))
+      (caddr exp)
+      (make-lambda (cdadr exp)
+                   (cddr exp))))
+
+(def lambda? (exp)
+  (tagged-list? exp 'lambda))
+
+(def lambda-parameters (exp)
+  (cadr exp))
+
+(def lambda-body (exp)
+  (cddr exp))
+
+(def make-lambda (parameters body)
+  (cons 'lambda (cons parameters body)))
+
+(def if? (exp) (tagged-list? exp 'if))
+
+(def if-predicate (exp) (cadr exp))
+
+(def if-consequent (exp) (caddr exp))
+
+(def if-alternative (exp)
+  (if (not (null? (cdddr exp)))
+      (cadddr exp)
+      'false))
+
+(def make-if (predicate consequent alternative)
+  (list 'if predicate consequent alternative))
+
+(def begin? (exp) (tagged-list? exp 'begin))
+
+(def begin-actions (exp) (cdr exp))
+
+(def last-exp? (seq) (null? (cdr seq)))
+
+(def first-exp (seq) (car seq))
+
+(def rest-exps (seq) (cdr seq))
+
+(def sequence->exp (seq)
+  (if (null? seq) seq
+      (last-exp? seq) (first-exp seq)
+    (make-begin seq)))
+
+(def make-begin (seq)
+  (cons 'begin seq))
+
+(def application? (exp) (pair? exp))
+(def operator (exp) (car exp))
+(def operands (exp) (cdr exp))
+(def no-operands? (ops) (null? ops))
+(def first-operand (ops) (car ops))
+(def rest-operands (ops) (cdr ops))
+
+; derived expressions
+
+(def cond? (exp) (tagged-list? exp 'cond))
+
+(def cond-clauses (exp) (cdr exp))
+
+(def cond-else-clause? (clause)
+  (eq? (cond-predicate clause) 'else))
+
+(def cond-predicate (clause) (car clause))
+
+(def cond-actions (clause) (cdr clause))
+
+(def cond->if (exp)
+  (expand-clauses (cond-clauses exp)))
+
+(def expand-clauses (clauses)
+  (if (null? clauses)
+      'false ; no else clause
+    (let (first (car clauses)
+          rest (cdr clauses))
+      (if (cond-else-clause? first)
+          (if (null? rest)
+              (sequence->exp (cond-actions first))
+            (error (cat "ELSE clause isn't last -- COND->IF: " (str clauses))))
+          (make-if (cond-predicate first)
+                   (sequence->exp (cond-actions first))
+                   (expand-clauses rest))))))
+
+; 4.1.3 evaluator data structures
+
+
+; testing of predicates
+
+(def true? (x)
+  (not (null? x)))
+
+(def false? (x)
+  (not (true? x)))
+
+; representing procedures
+
+(def make-procedure (parameters body env)
+  (list 'procedure parameters body env))
+
+(def compound-procedure? (p)
+  (tagged-list? p 'procedure))
+
+(def procedure-parameters (p) (cadr p))
+
+(def procedure-body (p) (caddr p))
+
+(def procedure-environment (p) (cadddr p))
+
+; operations on environments
+
+(def enclosing-environment (env) (cdr env))
+
+(def first-frame (env) (car env))
+
+(defconst the-empty-environment (new-list))
+
+(def make-frame (variables values)
+  (cons variables values))
+
+(def frame-variables (frame) (car frame))
+
+(def frame-values (frame) (cdr frame))
+
+(def add-binding-to-frame! (var val frame)
+  (set-car! frame (cons var (car frame)))
+  (set-cdr! frame (cons val (cdr frame))))
+
+(def length (x)
+  (with i 0
+    (while (not (null? x))
+      (inc i)
+      (set x (cdr x)))))
+
+(def extend-environment (vars vals base-env)
+  (if (= (length vars) (length vals))
+      (cons (make-frame vars vals) base-env)
+    (if (< (length vars) (length vals))
+        (error (cat "Too many arguments supplied: " (str vars) " " (str vals)))
+        (error (cat "Too few arguments supplied: " (str vars) " " (str vals))))))
+
+(def lookup-variable-value (var env)
+  (def env-loop (env)
+    (def scan (vars vals)
+      (if (null? vars)
+          (env-loop (enclosing-environment env))
+          (eq? var (car vars))
+          (car vals)
+        (scan (cdr vars) (cdr vals))))
+    (if (empty-environment? env)
+        (error (cat "Unbound variable: " (str var)))
+      (let frame (first-frame env)
+        (scan (frame-variables frame)
+              (frame-values frame)))))
+  (env-loop env))
+
+(def set-variable-value! (var val env)
+  (def env-loop (env)
+    (def scan (vars vals i)
+      (if (null? vars)
+          (env-loop (enclosing-environment env))
+          (eq? var (car vars))
+          (set (at (frame-values frame) i) val) ;(set-car! vals val)
+        (scan (cdr vars) (cdr vals) (+ i 1))))
+    (if (empty-environment? env)
+        (error (cat "Unbound variable -- SET!: " (str var)))
+      (let frame (first-frame env)
+        (scan (frame-variables frame)
+              (frame-values frame)
+              0))))
+  (env-loop env))
+
+(def empty-environment? (env)
+  ; (eq? env the-empty-environment)
+  (null? env))
+
+(def define-variable! (var val env)
+  (let frame (first-frame env)
+    (def scan (vars vals i)
+      (if (null? vars)
+          (add-binding-to-frame! var val frame)
+          (eq? var (car vars))
+          (set (at (frame-values frame) i) val) ;(set-car! vals val)
+        (scan (cdr vars) (cdr vals) (+ i 1))))
+    (scan (frame-variables frame)
+          (frame-values frame)
+          0)))
+
+(def setup-environment ()
+  (let initial-env (extend-environment (primitive-procedure-names)
+                                       (primitive-procedure-objects)
+                                       the-empty-environment)
+    (define-variable! "true" true initial-env)
+    (define-variable! "false" false initial-env)
+    initial-env))
+
+(def primitive-procedure? (proc)
+  (tagged-list? proc 'primitive))
+
+(def primitive-implementation (proc) (cadr proc))
+
+(def primitive-procedures
+  (list (list 'car car)
+        (list 'cdr cdr)
+        (list 'cons cons)
+        (list 'null? null?)
+        ; more primitives
+        ))
+
+(def primitive-procedure-names ()
+  (map car primitive-procedures))
+
+(def primitive-procedure-objects ()
+  (map (fn (proc) (list 'primitive (cadr proc)))
+       primitive-procedures))
+
+(def apply-in-underlying-scheme apply)
+
+(def apply-primitive-procedure (proc args)
+  (apply-in-underlying-scheme
+    (primitive-implementation proc) args))
+
+(defvar the-global-environment (setup-environment))
+
+; (evaluate '(define (append x y) (if (null? x) y (cons (car x) (append (cdr x) y)))))
+; (evaluate '(append '(a b c) '(d e f)))
+
 
 ; 5.2.1 the machine model
 
@@ -391,20 +772,6 @@
 (def set-instruction-execution-proc! (inst proc)
   (set-cdr! inst proc))
 
-(def set-cdr! (cell x)
-  (|assert| (and (list? cell) (some? cell)))
-  (while (> (# cell) 1)
-    (drop cell))
-  (when (has cell 'rest)
-    (wipe (get cell 'rest)))
-  (if (list? x)
-      (do (step v x
-            (add cell v))
-          (when (has x 'rest)
-            (set (get cell 'rest) (get x 'rest))))
-    (set (get cell 'rest) x))
-  cell)
-
 (def make-label-entry (label-name insts)
   (cons label-name insts))
 
@@ -541,7 +908,6 @@
         (fn () (get-contents r)))
     (error (cat "Unknown expression type -- ASSEMBLE: " (str exp)))))
 
-(def tagged-list? (lst tag) (eq? (car lst) tag))
 (def register-exp? (exp) (tagged-list? exp 'reg))
 (def register-exp-reg (exp) (cadr exp))
 (def constant-exp? (exp) (tagged-list? exp 'const))
@@ -618,9 +984,13 @@
     '(start
        (save a)
        (perform (op print) (const 42))
-       (assign a (op +) (const 1) (const 2))
+       (assign a (op +) (const 1) (const 2) (const 3))
+       (save a)
        (assign a (op list) (reg a) (const 3))
+       (save a)
        (perform (op print) (reg a))
+       (restore b)
+       (restore a)
        (restore a)
       done)))
 
