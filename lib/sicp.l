@@ -1006,7 +1006,7 @@
 
 (def make-eceval-machine ()
   (make-machine
-    '(exp env val proc arg1 continue uenv)
+    '(exp env val proc arg1 continue unev)
     eceval-operations
     '(read-eval-print-loop
        (perform (op initialize-stack))
@@ -1024,18 +1024,18 @@
       eval-dispatch
         (test (op self-evaluating?) (reg exp))
         (branch (label ev-self-eval))
-        ; (test (op variable?) (reg exp))
-        ; (branch (label ev-variable))
-        ; (test (op quoted?) (reg exp))
-        ; (branch (label ev-quoted))
+        (test (op variable?) (reg exp))
+        (branch (label ev-variable))
+        (test (op quoted?) (reg exp))
+        (branch (label ev-quoted))
         ; (test (op assignment?) (reg exp))
         ; (branch (label ev-assignment))
         ; (test (op definition?) (reg exp))
         ; (branch (label ev-definition))
         ; (test (op if?) (reg exp))
         ; (branch (label ev-if))
-        ; (test (op lambda?) (reg exp))
-        ; (branch (label ev-lambda))
+        (test (op lambda?) (reg exp))
+        (branch (label ev-lambda))
         ; (test (op begin?) (reg exp))
         ; (branch (label ev-begin))
         ; (test (op application?) (reg exp))
@@ -1053,6 +1053,18 @@
         (goto (label read-eval-print-loop))
       ev-self-eval
         (assign val (reg exp))
+        (goto (reg continue))
+      ev-variable
+        (assign val (op lookup-variable-value) (reg exp) (reg env))
+        (goto (reg continue))
+      ev-quoted
+        (assign val (op text-of-quotation) (reg exp))
+        (goto (reg continue))
+      ev-lambda
+        (assign unev (op lambda-parameters) (reg exp))
+        (assign exp (op lambda-body) (reg exp))
+        (assign val (op make-procedure)
+                (reg unev) (reg exp) (reg env))
         (goto (reg continue))
       print-result
        (perform (op announce-output) (const ";;; EC-Eval value:"))
@@ -1087,6 +1099,14 @@
         (list 'announce-output announce-output)
         (list 'user-print user-print)
         (list 'halt halt)
+        (list 'variable? variable?)
+         (list 'lookup-variable-value lookup-variable-value)
+        (list 'quoted? quoted)
+         (list 'text-of-quotation text-of-quotation)
+        (list 'lambda? lambda?)
+         (list 'lambda-parameters lambda-parameters)
+         (list 'lambda-body lambda-body)
+         (list 'make-procedure make-procedure)
         ))
 
 (defconst eceval (make-eceval-machine))
