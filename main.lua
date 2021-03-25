@@ -7,6 +7,7 @@ function _G.disp(str)
   system.write(str)
   return system.flush()
 end
+disp = disp
 function _G.pp(x)
   if list63(x) and _35(x) > 1 then
     local __c = "  "
@@ -30,6 +31,7 @@ function _G.pp(x)
     return print(str(x))
   end
 end
+pp = pp
 function _G.dir(x)
   local __r3 = {}
   local ____o = x
@@ -40,9 +42,11 @@ function _G.dir(x)
   end
   return __r3
 end
+dir = dir
 function _G.lines(x)
   return split(x, "\n")
 end
+lines = lines
 function _G.get_indentation(s)
   local __r6 = ""
   local __i2 = 0
@@ -55,6 +59,7 @@ function _G.get_indentation(s)
   end
   return __r6
 end
+get_indentation = get_indentation
 function _G.strip_outer(s, lh, rh)
   if string_starts63(s, lh) and string_ends63(s, rh) then
     return clip(clip(s, 0, _35(s) - _35(rh)), _35(lh))
@@ -62,13 +67,16 @@ function _G.strip_outer(s, lh, rh)
     return s
   end
 end
+strip_outer = strip_outer
 function _G.toplevel_print(v)
   return pp(v)
 end
+toplevel_print = toplevel_print
 function _G.print_exception(v, ex)
   print("error: " .. (v.message .. ("\n" .. v.stack)))
   return nil
 end
+print_exception = print_exception
 _37self = reader
 local function accessor_literal63(form)
   return string63(form) and (not string_literal63(form) and (not id_literal63(form) and (char(form, 0) == "." and (not( clip(form, 0, 2) == "..") and _35(form) > 1))))
@@ -100,6 +108,7 @@ function _G.eval_self_form(form)
     end
   end
 end
+eval_self_form = eval_self_form
 function _G.eval_print(form)
   local __form = eval_self_form(form)
   local ____id = {xpcall(function ()
@@ -137,6 +146,7 @@ function _G.eval_print(form)
     end
   end
 end
+eval_print = eval_print
 function _G.read_toplevel(str, more)
   local __s = reader.stream(str, more)
   local ____id1 = {xpcall(function ()
@@ -186,6 +196,7 @@ function _G.read_toplevel(str, more)
     end
   end
 end
+read_toplevel = read_toplevel
 local function rep(str)
   local __v4 = eval(read_toplevel(str))
   if is63(__v4) then
@@ -275,6 +286,7 @@ function _G.read_file(path)
     error(____r22)
   end
 end
+read_file = read_file
 function _G.read_from_file(path)
   local __data = read_file(path)
   local ____cwd3 = system.cwd()
@@ -315,6 +327,7 @@ function _G.read_from_file(path)
     error(____r24)
   end
 end
+read_from_file = read_from_file
 function _G.expand_file(path)
   local __body2 = read_from_file(path)
   local ____cwd4 = system.cwd()
@@ -354,6 +367,7 @@ function _G.expand_file(path)
     error(____r26)
   end
 end
+expand_file = expand_file
 function _G.compile_file(path)
   local __form2 = expand_file(path)
   local ____cwd5 = system.cwd()
@@ -396,6 +410,7 @@ function _G.compile_file(path)
     error(____r28)
   end
 end
+compile_file = compile_file
 function _G.load(path)
   local __previous = has(setenv("target", {
     _stash = true,
@@ -459,6 +474,7 @@ function _G.load(path)
     error(____r30)
   end
 end
+load = load
 function _G.run_script(path, argv)
   if nil63(argv) then
     argv = {}
@@ -471,6 +487,7 @@ function _G.run_script(path, argv)
     return _G.exports.main(argv)
   end
 end
+run_script = run_script
 local function script_file63(path)
   return not( "-" == char(path, 0) or (".py" == clip(path, _35(path) - 3) or (".js" == clip(path, _35(path) - 3) or ".lua" == clip(path, _35(path) - 4))))
 end
@@ -493,7 +510,6 @@ local function usage()
   return print(" -e <expr>\tExpression to evaluate")
 end
 local function main(args)
-  print(str(args))
   local __arg = hd(args)
   if __arg and script_file63(__arg) then
     return run_script(__arg, tl(args))

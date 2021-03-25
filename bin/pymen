@@ -13,14 +13,6 @@ cd ..
 home="$(pwd)"
 cd "${dir}"
 
-if [ ! -z "${LUMEN_HOST}" ]
-then
-    host="${LUMEN_HOST}"
-else
-    host=python3
-fi
+export LUMEN_HOST="${LUMEN_HOST:-python3}"
 
-export PYTHONPATH="${PYTHONPATH}:${up}:${home}:${dir}:${dir}/.."
-
-set -x
-exec ${host} "${home}" "$@"
+exec "${home}/bin/lumen" "$@"

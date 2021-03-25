@@ -47,9 +47,9 @@ if (_G.require.main === module) {
 }
 _G.require('module').Module._initPaths();
 
-console.log('here')
+//console.log('here')
 Object.assign(exports, _G.require("./lumen.js"));
-console.log('here', exports)
+//console.log('here', exports)
 if (_G.require.main === module) {
   exports.main(process.argv.slice(2));
 }

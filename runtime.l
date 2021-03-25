@@ -257,9 +257,12 @@
 
 (define-global find (x t)
   (let f (testify x)
-    (each x t
-      (let y (f x)
-        (if y (return y))))))
+    (each (k v) t
+      (let-when y (f v k)
+        (target lua:
+          (when (number? k)
+            (dec k)))
+        (return k)))))
 
 (define-global first (x l pos)
   (let (f (testify x)
@@ -277,7 +280,7 @@
       (inc i))))
 
 (define-global in? (x t)
-  (find (testify x) t))
+  (yes (find (testify x) t)))
 
 (define-global pair (l)
   (with l1 (dupe l)
@@ -489,6 +492,7 @@
       (cat s1 "\""))))
 
 (define-global simple-id? (x)
+  (target py: (from pymen.reader import read-string))
   (let r (errsafe (read-string x))
     (when (= r x) r)))
 

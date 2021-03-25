@@ -102,15 +102,22 @@
 
 (target py:
   (define-global pp-toplevel (x)
-    (pp-doc x)
+    (unless (or (atom? x)
+                (isinstance x list)
+                (isinstance x tuple)
+                (isinstance x dict)
+                (module? x))
+      (pp-doc x))
     (if (or (module? x) (class? x))
         (pp-obj x)
-      (pp x))))
+      (pp x))
+    (when (module? x)
+      (pp-doc x))))
 
 (target py:
   (define-global docstring (x)
     (errsafe
-      (let x (idx x __doc__)
+      (let-when x (inspect (.getdoc x))
         (if (string? x) x (str x))))))
 
 (target py:
@@ -243,10 +250,10 @@
 
 (define-global run-script (path (o argv ()))
   (print (str `(run-script ,path ,argv)))
- ((idx system set-argv) argv)
- (set (_G .exports) (obj))
- (load path)
- (if (has (_G .exports) 'main) ((get (_G .exports) 'main) argv)))
+  ((idx system set-argv) argv)
+  (set (_G .exports) (obj))
+  (load path)
+  (if (has (_G .exports) 'main) ((get (_G .exports) 'main) argv)))
 
 (define script-file? (path)
   (not (or (= "-" (char path 0))
@@ -271,7 +278,6 @@
   (print " -e <expr>\tExpression to evaluate"))
 
 (define main (args)
-  (print (str args))
   (let arg (hd args)
     (if (and arg (script-file? arg))
         (run-script arg (tl args))

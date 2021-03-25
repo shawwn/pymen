@@ -104,6 +104,7 @@ def read_string(L_str=None, more=None):
   if not( __x1 == eof):
     return __x1
 
+read_string = read_string
 def key63(atom=None):
   return string63(atom) and (L_35(atom) > 1 and char(atom, edge(atom)) == ":")
 

@@ -367,19 +367,27 @@
           (add o (literal k))
           (add o x))))))
 
-(define infix
-  `((%not: (js: ! lua: not py: not) %unm: -)
-    (%mul: * %div: / %idiv: // %mod: %)
+(define-global infix
+  `((%exp: **)
+    (%bnot: ~)
     (%cat: (js: + lua: .. py: +))
+    (%unm: - %unp: +)
+    (%mul: * %div: / %idiv: // %mod: %)
     (%add: + %sub: -)
+    (%lsh: << %rsh: >>)
+    (%band: &)
+    (%bxor: ^)
+    (%bor: ,"|")
     (%lt: < %gt: > %le: <= %ge: >=)
     (%eq: (js: === lua: == py: ==))
     (%in: (py: in) %is: (py: is))
+    (%not: (js: ! lua: not py: not) %unm: -) 
     (%and: (js: && lua: and py: and))
-    (%or: (js: ,"||" lua: or py: or))))
+    (%or: (js: ,"||" lua: or py: or))
+    ))
 
 (define unary? (form)
-  (and (two? form) (in? (hd form) '(%not %unm))))
+  (and (two? form) (in? (hd form) '(%not %unm %unp %bnot))))
 
 (define index (k)
   (target k lua: (when (number? k) (- k 1))))
@@ -393,12 +401,12 @@
 
 (define getop (op)
   (when (string? op)
-    (find (fn (level)
-            (let x (has level op)
-              (if (= x true) op
+    (each level infix
+      (let (x (has level op)
+            r (if (= x true) op
                   (string? x) x
-                  (is? x) (has x target))))
-          infix)))
+                  (is? x) (has x target)))
+        (if (is? r) (return r))))))
 
 (define infix? (x)
   (is? (getop x)))
@@ -800,12 +808,13 @@
 
 
 (target py: (define-global lumen-globals* (globals)))
+(target py: (import builtins))
 
 (target py:
   (define run (code globals locals)
     (let (globals (either globals lumen-globals*)
           locals (either locals globals))
-      (|exec| code globals locals)
+      ((builtins .exec) code globals locals)
       nil)))
 
 (define eval-result (globals locals)
@@ -1076,9 +1085,11 @@
       "")))
 
 (define-special , args
-  (if (none? args) ", "
-      (one? args) (cat ", " (compile (hd args)))
-    (mapcat compile args ", ")))
+  (cat "("
+       (if (none? args) ", "
+           (one? args) (cat (compile (hd args)) ",")
+         (mapcat compile args ", "))
+       ")"))
 
 (define-special : args
   (if (none? args) ":"

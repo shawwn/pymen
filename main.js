@@ -7,6 +7,7 @@ disp = function (str) {
   system.write(str);
   return system.flush();
 };
+disp = disp;
 pp = function (x) {
   if (list63(x) && _35(x) > 1) {
     var __c = "  ";
@@ -30,12 +31,15 @@ pp = function (x) {
     return print(str(x));
   }
 };
+pp = pp;
 dir = function (x) {
   return Object.getOwnPropertyNames(x);
 };
+dir = dir;
 lines = function (x) {
   return split(x, "\n");
 };
+lines = lines;
 get_indentation = function (s) {
   var __r5 = "";
   var __i1 = 0;
@@ -48,6 +52,7 @@ get_indentation = function (s) {
   }
   return __r5;
 };
+get_indentation = get_indentation;
 strip_outer = function (s, lh, rh) {
   if (string_starts63(s, lh) && string_ends63(s, rh)) {
     return clip(clip(s, 0, _35(s) - _35(rh)), _35(lh));
@@ -55,13 +60,16 @@ strip_outer = function (s, lh, rh) {
     return s;
   }
 };
+strip_outer = strip_outer;
 toplevel_print = function (v) {
   return pp(v);
 };
+toplevel_print = toplevel_print;
 print_exception = function (v, ex) {
   print(v.stack);
   return undefined;
 };
+print_exception = print_exception;
 _37self = reader;
 var accessor_literal63 = function (form) {
   return string63(form) && (! string_literal63(form) && (! id_literal63(form) && (char(form, 0) === "." && (!( clip(form, 0, 2) === "..") && _35(form) > 1))));
@@ -93,6 +101,7 @@ eval_self_form = function (form) {
     }
   }
 };
+eval_self_form = eval_self_form;
 eval_print = function (form) {
   var __form = eval_self_form(form);
   var ____id = (function () {
@@ -106,6 +115,8 @@ eval_print = function (form) {
   var __ok = has(____id, 0);
   var __v1 = has(____id, 1);
   var __ex = has(____id, 2);
+  var __166 = has(____id, ":row");
+  var __17 = has(____id, ":col");
   if (! __ok) {
     return print_exception(__v1, __ex);
   } else {
@@ -114,6 +125,7 @@ eval_print = function (form) {
     }
   }
 };
+eval_print = eval_print;
 read_toplevel = function (str, more) {
   var __s = reader.stream(str, more);
   var ____id1 = (function () {
@@ -147,6 +159,7 @@ read_toplevel = function (str, more) {
     }
   }
 };
+read_toplevel = read_toplevel;
 var rep = function (str) {
   var __v3 = _eval(read_toplevel(str));
   if (is63(__v3)) {
@@ -205,6 +218,7 @@ read_file = function (path) {
   }
   return ____r22;
 };
+read_file = read_file;
 read_from_file = function (path) {
   var __data = read_file(path);
   var ____cwd3 = system.cwd();
@@ -221,6 +235,7 @@ read_from_file = function (path) {
   }
   return ____r25;
 };
+read_from_file = read_from_file;
 expand_file = function (path) {
   var __body2 = read_from_file(path);
   var ____cwd4 = system.cwd();
@@ -236,6 +251,7 @@ expand_file = function (path) {
   }
   return ____r28;
 };
+expand_file = expand_file;
 compile_file = function (path) {
   var __form2 = expand_file(path);
   var ____cwd5 = system.cwd();
@@ -254,6 +270,7 @@ compile_file = function (path) {
   }
   return ____r31;
 };
+compile_file = compile_file;
 load = function (path) {
   var __previous = has(setenv("target", {
     _stash: true,
@@ -293,6 +310,7 @@ load = function (path) {
   }
   return ____r34;
 };
+load = load;
 run_script = function (path, argv) {
   if (nil63(argv)) {
     argv = [];
@@ -305,6 +323,7 @@ run_script = function (path, argv) {
     return _G.exports.main(argv);
   }
 };
+run_script = run_script;
 var script_file63 = function (path) {
   return !( "-" === char(path, 0) || (".py" === clip(path, _35(path) - 3) || (".js" === clip(path, _35(path) - 3) || ".lua" === clip(path, _35(path) - 4))));
 };
@@ -327,7 +346,6 @@ var usage = function () {
   return print(" -e <expr>\tExpression to evaluate");
 };
 var main = function (args) {
-  print(str(args));
   var __arg = hd(args);
   if (__arg && script_file63(__arg)) {
     return run_script(__arg, tl(args));

@@ -112,6 +112,8 @@
 (import pymen.reader)
 (import pymen.system)
 
+(import concurrent.futures)
+
 (def write (x)
   (pymen.system.write x)
   nil)
@@ -119,14 +121,21 @@
 (def read ()
   (pymen.reader.read-string (input)))
 
+(def aread ()
+  (with (concurrent.futures.ThreadPoolExecutor) as exec
+    (let x (exec.submit read)
+      (while (not (x.done))
+        (pick-process))
+      (x.result))))
+
 (def princ (x)
   (print (str x)))
 
 (defconst *default-proc*
           (make-proc state: (fn (x)
-                              (|print| "default proc" x)
+                              ;(|print| "default proc" x)
                               (write ">> ")
-                              (princ (eval (read)))
+                              (princ (eval (aread)))
                               (pick-process))))
 
 (mac do1 (expr rest: args)
@@ -174,7 +183,8 @@
 
 (def pick-process ()
   (let ((p val) (most-urgent-process))
-    (global *proc*, *procs*)
+    (global *proc*)
+    (global *procs*)
     (set *proc* p
          *procs* (delete p *procs*))
     ((proc-state p) val)))

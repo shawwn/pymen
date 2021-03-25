@@ -19,14 +19,17 @@ import inspect
 def module63(x=None):
   return inspect.ismodule(x)
 
+module63 = module63
 import inspect
 def class63(x=None):
   return inspect.isclass(x)
 
+class63 = class63
 def disp(L_str=None):
   system.write(L_str)
   return system.flush()
 
+disp = disp
 from pprint import pprint as pp
 def entries(x=None):
   __r5 = []
@@ -53,15 +56,18 @@ def entries(x=None):
     ____i1 = ____i1 + 1
   return __r5
 
+entries = entries
 from io import StringIO
 def pp_to_string(x=None):
   __r7 = StringIO()
   pp(x, __r7)
   return __r7.getvalue()
 
+pp_to_string = pp_to_string
 def lines(x=None):
   return split(x, "\n")
 
+lines = lines
 def get_indentation(s=None):
   __r10 = ""
   __i2 = 0
@@ -72,12 +78,14 @@ def get_indentation(s=None):
     __i2 = __i2 + 1
   return __r10
 
+get_indentation = get_indentation
 def strip_outer(s=None, lh=None, rh=None):
   if string_starts63(s, lh) and string_ends63(s, rh):
     return clip(clip(s, 0, L_35(s) - L_35(rh)), L_35(lh))
   else:
     return s
 
+strip_outer = strip_outer
 def pp_obj(x=None):
   s = pp_to_string(entries(x))
   s = s.rstrip()
@@ -99,27 +107,37 @@ def pp_obj(x=None):
     ____i3 = ____i3 + 1
   return L_print(repr(x))
 
+pp_obj = pp_obj
 def pp_doc(x=None):
   __doc = docstring(x)
   if __doc:
     return L_print(cat("\n\"\"\"\n", __doc.strip(), "\n\"\"\""))
 
+pp_doc = pp_doc
 def pp_toplevel(x=None):
-  pp_doc(x)
+  if not( atom63(x) or (isinstance(x, list) or (isinstance(x, tuple) or (isinstance(x, dict) or module63(x))))):
+    pp_doc(x)
   if module63(x) or class63(x):
-    return pp_obj(x)
+    pp_obj(x)
   else:
-    return pp(x)
+    pp(x)
+  if module63(x):
+    return pp_doc(x)
 
+pp_toplevel = pp_toplevel
 def docstring(x=None):
   def __f():
     try:
-      __x8 = x.__doc__
+      ____y = inspect.getdoc(x)
       __e1 = None
-      if string63(__x8):
-        __e1 = __x8
-      else:
-        __e1 = L_str(__x8)
+      if yes(____y):
+        __x8 = ____y
+        __e2 = None
+        if string63(__x8):
+          __e2 = __x8
+        else:
+          __e2 = L_str(__x8)
+        __e1 = __e2
       return [True, __e1]
     except:
       import sys
@@ -133,17 +151,21 @@ def docstring(x=None):
   else:
     return None
 
+docstring = docstring
 def lumen_set_globals(x=None):
   compiler.lumen_globals = x
   return compiler.lumen_globals
 
+lumen_set_globals = lumen_set_globals
 def toplevel_print(v=None):
   return pp_toplevel(v)
 
+toplevel_print = toplevel_print
 def print_exception(v=None, ex=None):
   traceback.print_exception(*ex)
   return None
 
+print_exception = print_exception
 L_37self = reader
 def accessor_literal63(form=None):
   return string63(form) and (not string_literal63(form) and (not id_literal63(form) and (char(form, 0) == "." and (not( clip(form, 0, 2) == "..") and L_35(form) > 1))))
@@ -169,6 +191,7 @@ def eval_self_form(form=None):
             else:
               return form
 
+eval_self_form = eval_self_form
 def eval_print(form=None):
   __form = eval_self_form(form)
   def __f1():
@@ -188,6 +211,7 @@ def eval_print(form=None):
     if is63(__v2):
       return toplevel_print(__v2)
 
+eval_print = eval_print
 def read_toplevel(L_str=None, more=None):
   __s = reader.stream(L_str, more)
   def __f2():
@@ -200,12 +224,12 @@ def read_toplevel(L_str=None, more=None):
   ____id3 = __f2()
   ____ok2 = has(____id3, 0)
   ____v3 = has(____id3, 1)
-  __e2 = None
+  __e3 = None
   if ____ok2:
-    __e2 = ____v3
+    __e3 = ____v3
   else:
-    __e2 = None
-  __x16 = __e2
+    __e3 = None
+  __x16 = __e3
   if __x16 == more:
     return more
   else:
@@ -217,6 +241,7 @@ def read_toplevel(L_str=None, more=None):
       else:
         return __x16
 
+read_toplevel = read_toplevel
 def rep(L_str=None):
   __v4 = eval(read_toplevel(L_str))
   if is63(__v4):
@@ -269,6 +294,7 @@ def read_file(path=None):
     system.chdir(____cwd2)
   return ____r32
 
+read_file = read_file
 def read_from_file(path=None):
   __data = read_file(path)
   ____cwd3 = system.cwd()
@@ -283,6 +309,7 @@ def read_from_file(path=None):
     system.chdir(____cwd3)
   return ____r35
 
+read_from_file = read_from_file
 def expand_file(path=None):
   __body2 = read_from_file(path)
   ____cwd4 = system.cwd()
@@ -296,6 +323,7 @@ def expand_file(path=None):
     system.chdir(____cwd4)
   return ____r38
 
+expand_file = expand_file
 def compile_file(path=None):
   __form2 = expand_file(path)
   ____cwd5 = system.cwd()
@@ -309,6 +337,7 @@ def compile_file(path=None):
     system.chdir(____cwd5)
   return ____r41
 
+compile_file = compile_file
 def load(path=None):
   __previous = has(setenv("target", toplevel=True), "value")
   __previous_indent = has(setenv("indent-level", toplevel=True), "value")
@@ -328,6 +357,7 @@ def load(path=None):
     system.chdir(____cwd6)
   return ____r44
 
+load = load
 def run_script(path=None, argv=None):
   if nil63(argv):
     argv = []
@@ -338,6 +368,7 @@ def run_script(path=None, argv=None):
   if has(_G.exports, "main"):
     return _G.exports["main"](argv)
 
+run_script = run_script
 def script_file63(path=None):
   return not( "-" == char(path, 0) or (".py" == clip(path, L_35(path) - 3) or (".js" == clip(path, L_35(path) - 3) or ".lua" == clip(path, L_35(path) - 4))))
 
@@ -359,7 +390,6 @@ def usage():
   return L_print(" -e <expr>\tExpression to evaluate")
 
 def main(args=None):
-  L_print(L_str(args))
   __arg = hd(args)
   if __arg and script_file63(__arg):
     return run_script(__arg, tl(args))

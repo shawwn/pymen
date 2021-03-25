@@ -47,12 +47,14 @@ set_argv = function (l) {
   argv = l;
   return argv;
 };
+set_argv = set_argv;
 get_argv = function () {
   if (nil63(argv)) {
     set_argv(cut(process.argv, 2));
   }
   return argv;
 };
+get_argv = get_argv;
 var opt63 = function (x) {
   return string63(x) && (char(x, 0) === "-" && !( x === "-"));
 };
@@ -62,11 +64,13 @@ parse_positional = function (args, pos) {
   }
   return cut(args, either(pos, 0), first(opt63, args, pos));
 };
+parse_positional = parse_positional;
 parse_option = function (args) {
   if (opt63(hd(args))) {
     return [hd(args), parse_positional(args, 1)];
   }
 };
+parse_option = parse_option;
 parse_arguments = function (aliases, argv) {
   var __l = argv || get_argv();
   var __a = aliases || {};
@@ -82,6 +86,8 @@ parse_arguments = function (aliases, argv) {
       var ____id = ____y;
       var __op = has(____id, 0);
       var __args = has(____id, 1);
+      var __135 = has(____id, ":row");
+      var __29 = has(____id, ":col");
       if (__op === "--") {
         __l = cut(__l, 1);
         break;
@@ -110,6 +116,7 @@ parse_arguments = function (aliases, argv) {
   set_argv(__r17.rest);
   return __r17;
 };
+parse_arguments = parse_arguments;
 arguments = function (aliases, argv) {
   var __argv = argv || get_argv();
   var __r19 = parse_arguments(__argv, aliases);
@@ -119,6 +126,7 @@ arguments = function (aliases, argv) {
     return __r19;
   }
 };
+arguments = arguments;
 var realpath = function (filename) {
   return fs.realpathSync(filename);
 };
@@ -153,6 +161,8 @@ var call_with_directory = function (path, f) {
   })();
   var __ok = has(____id1, 0);
   var __v1 = has(____id1, 1);
+  var __190 = has(____id1, ":row");
+  var __16 = has(____id1, ":col");
   chdir(__pwd);
   if (__ok) {
     return __v1;

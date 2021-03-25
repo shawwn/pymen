@@ -984,23 +984,23 @@ c"
 (define-test in?
   (test= true (in? 'x '(x y z)))
   (test= true (in? 7 '(5 6 7)))
-  (test= nil (in? 'baz '(no can do))))
+  (test= false (in? 'baz '(no can do))))
 
 (define-test find
   (test= nil (find (fn (x) x) ()))
-  (test= 7 (find (fn (x) x) '(7)))
-  (test= true (find (fn (x) (= x 7)) '(2 4 7)))
-  (test= true (find (fn (x) (= x 7)) '(2 4 foo: 7)))
-  (test= true (find (fn (x) (= x true)) '(2 4 bar: true)))
+  (test= 0 (find (fn (x) x) '(7)))
+  (test= 2 (find (fn (x) (= x 7)) '(2 4 7)))
+  (test= 'foo (find (fn (x) (= x 7)) '(2 4 foo: 7)))
+  (test= 'bar (find (fn (x) (= x true)) '(2 4 bar: true)))
   (test= true (in? 7 '(2 4 7)))
   (test= true (in? 7 '(2 4 foo: 7)))
   (test= true (in? true '(2 4 bar: true))))
 
 (define-test first
   (test= nil (first (fn (x) x) ()))
-  (test= 7 (first (fn (x) x) '(7)))
-  (test= true (first (fn (x) (= x 7)) '(2 4 7)))
-  (test= 4 (first (fn (x) (and (> x 3) x)) '(1 2 3 4 5 6))))
+  (test= 0 (first (fn (x) x) '(7)))
+  (test= 2 (first (fn (x) (= x 7)) '(2 4 7)))
+  (test= 3 (first (fn (x) (and (> x 3) x)) '(1 2 3 4 5 6))))
 
 (define-test sort
   (test= '(a b c) (sort '(c a b)))

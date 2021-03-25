@@ -18,6 +18,7 @@
 # along with ayrton.  If not, see <http://www.gnu.org/licenses/>.
 
 import importlib
+import importlib.util
 from importlib.abc import MetaPathFinder, Loader
 try:
     # py3.4
@@ -32,7 +33,7 @@ import os.path
 
 import logging
 logger = logging.getLogger ('pymen.importer')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 import os
 import stat
@@ -179,6 +180,9 @@ class PymenLoader (Loader):
       cwd = os.getcwd()
       try:
         os.chdir(os.path.dirname(filename) or ".")
+        if 'LUMEN_HOST' in os.environ:
+          del os.environ['LUMEN_HOST']
+        os.environ['LUMEN_HOST'] = 'node'
         p = subprocess.run(
             [lumen_bin,
               "-c", os.path.basename(filename),

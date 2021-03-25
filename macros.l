@@ -195,7 +195,9 @@
 (define-macro define-global (name x rest: body)
   (setenv name toplevel: true variable: true)
   (if (some? body)
-      `(%global-function ,name ,@(bind* x body) ,@(props body))
+      (let i (compile (compile name))
+        `(do (%global-function ,i ,@(bind* x body) ,@(props body))
+             (set ,name ,i)))
     `(set ,name ,x ,@(props body))))
 
 (define-macro get-value (x)
@@ -496,6 +498,16 @@
       (none? bs) a
       (one? bs) `(%or ,a ,@bs)
     `(%or ,a (or ,@bs))))
+
+(define-macro bnot args
+  `(band ,@(map (fn (x) `(%bnot ,x))
+                args)))
+
+(define-macro band (a rest: bs)
+  (if (none? bs) a `(%band ,a (band ,@bs))))
+
+(define-macro bor (a rest: bs)
+  (if (none? bs) a `(%bor ,a (bor ,@bs))))
 
 (define-macro break args
   `(%break ,@args))

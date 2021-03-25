@@ -74,11 +74,13 @@ def set_argv(l=None):
   argv = l
   return argv
 
+set_argv = set_argv
 def get_argv():
   if nil63(argv):
     set_argv(cut(sys.argv, 1))
   return argv
 
+get_argv = get_argv
 def opt63(x=None):
   return string63(x) and (char(x, 0) == "-" and not( x == "-"))
 
@@ -87,10 +89,12 @@ def parse_positional(args=None, pos=None):
     pos = 0
   return cut(args, either(pos, 0), first(opt63, args, pos))
 
+parse_positional = parse_positional
 def parse_option(args=None):
   if opt63(hd(args)):
     return [hd(args), parse_positional(args, 1)]
 
+parse_option = parse_option
 def parse_arguments(aliases=None, argv=None):
   __l = argv or get_argv()
   __a = aliases or {}
@@ -128,6 +132,7 @@ def parse_arguments(aliases=None, argv=None):
   set_argv(__r21["rest"])
   return __r21
 
+parse_arguments = parse_arguments
 def arguments(aliases=None, argv=None):
   __argv = argv or get_argv()
   __r23 = parse_arguments(__argv, aliases)
@@ -136,6 +141,7 @@ def arguments(aliases=None, argv=None):
   if not empty63(__r23):
     return __r23
 
+arguments = arguments
 def realpath(filename=None):
   return fs.realpath(filename)
 

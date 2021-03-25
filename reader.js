@@ -16,6 +16,8 @@ var whitespace = {
 var stream = function (str, more) {
   return {
     pos: 0,
+    row: 0,
+    col: 0,
     string: str,
     len: _35(str),
     more: more
@@ -26,6 +28,8 @@ var peek_char = function (s) {
   var __pos = has(____id, "pos");
   var __len = has(____id, "len");
   var __string = has(____id, "string");
+  var __10 = has(____id, ":row");
+  var __42 = has(____id, ":col");
   if (__pos < __len) {
     return char(__string, __pos);
   }
@@ -34,6 +38,11 @@ var read_char = function (s) {
   var __c = peek_char(s);
   if (__c) {
     s.pos = s.pos + 1;
+    s.col = s.col + 1;
+    if (__c === "\n") {
+      s.col = 0;
+      s.row = s.row + 1;
+    }
     return __c;
   }
 };
@@ -119,6 +128,7 @@ read_string = function (str, more) {
     return __x1;
   }
 };
+read_string = read_string;
 var key63 = function (atom) {
   return string63(atom) && (_35(atom) > 1 && char(atom, edge(atom)) === ":");
 };
@@ -223,6 +233,8 @@ read_table["("] = function (s) {
       }
     }
   }
+  __l1[":row"] = s.row;
+  __l1[":col"] = s.col;
   return __r20;
 };
 read_table[")"] = function (s) {

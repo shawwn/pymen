@@ -111,12 +111,14 @@ function _G.set_argv(l)
   argv = l
   return argv
 end
+set_argv = set_argv
 function _G.get_argv()
   if nil63(argv) then
     set_argv(_G.arg or (_G.args or {}))
   end
   return argv
 end
+get_argv = get_argv
 local function opt63(x)
   return string63(x) and (char(x, 0) == "-" and not( x == "-"))
 end
@@ -126,11 +128,13 @@ function _G.parse_positional(args, pos)
   end
   return cut(args, either(pos, 0), first(opt63, args, pos))
 end
+parse_positional = parse_positional
 function _G.parse_option(args)
   if opt63(hd(args)) then
     return {hd(args), parse_positional(args, 1)}
   end
 end
+parse_option = parse_option
 function _G.parse_arguments(aliases, argv)
   local __l = argv or get_argv()
   local __a = aliases or {}
@@ -174,6 +178,7 @@ function _G.parse_arguments(aliases, argv)
   set_argv(__r22.rest)
   return __r22
 end
+parse_arguments = parse_arguments
 function _G.arguments(aliases, argv)
   local __argv = argv or get_argv()
   local __r24 = parse_arguments(__argv, aliases)
@@ -183,6 +188,7 @@ function _G.arguments(aliases, argv)
     return __r24
   end
 end
+arguments = arguments
 local function realpath(filename)
   if uv and uv.fs_realpath then
     return uv.fs_realpath(filename)
