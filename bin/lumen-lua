@@ -26,14 +26,4 @@ else
     echo no host found
 fi
 
-case $host in
-    node*)
-        code=index.js;;
-    py*)
-        code=.;;
-    *)
-        code=main.lua;;
-esac
-
-set -x
-exec ${host} "${home}/${code}" "$@"
+exec "${home}/bin/lumen" "$@"
