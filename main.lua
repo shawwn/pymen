@@ -493,7 +493,6 @@ local function usage()
   return print(" -e <expr>\tExpression to evaluate")
 end
 local function main(args)
-  print(str(args))
   local __arg = hd(args)
   if __arg and script_file63(__arg) then
     return run_script(__arg, tl(args))

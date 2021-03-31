@@ -271,7 +271,6 @@
   (print " -e <expr>\tExpression to evaluate"))
 
 (define main (args)
-  (print (str args))
   (let arg (hd args)
     (if (and arg (script-file? arg))
         (run-script arg (tl args))

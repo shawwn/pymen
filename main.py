@@ -359,7 +359,6 @@ def usage():
   return L_print(" -e <expr>\tExpression to evaluate")
 
 def main(args=None):
-  L_print(L_str(args))
   __arg = hd(args)
   if __arg and script_file63(__arg):
     return run_script(__arg, tl(args))

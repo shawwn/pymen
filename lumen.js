@@ -3077,7 +3077,6 @@ var usage = function () {
   return print(" -e <expr>\tExpression to evaluate");
 };
 var main = function (args) {
-  print(str(args));
   var __arg = hd(args);
   if (__arg && script_file63(__arg)) {
     return run_script(__arg, tl(args));
