@@ -569,7 +569,7 @@ local function main(args)
   end
 end
 local function main63()
-  return true
+  return false
 end
 if main63() then
   main(system.get_argv())

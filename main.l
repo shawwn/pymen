@@ -306,7 +306,7 @@
 
 (define main? ()
   (target
-    lua: true
+    lua: false
     js: (and (not (undefined? require))
              (not (undefined? module))
              (= (idx require main) module))

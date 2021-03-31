@@ -26,4 +26,6 @@ else
     echo no host found
 fi
 
+export LUMEN_HOST="${host}"
+
 exec "${home}/bin/lumen" "$@"

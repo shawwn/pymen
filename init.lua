@@ -420,7 +420,7 @@ else
   _G.bit = (bit or bit32 or require("bindechex"))
   _G.JSON = JSON or require("json")
   _G.ustring = ustring or require("ustring")
-  _G.lumen = require("lumen")
+  _G.lumen = require("main")
 end
 package.loaded.json = JSON
 package.loaded.ustring = ustring
@@ -429,5 +429,5 @@ package.loaded.reader = _G.lumen.reader
 package.loaded.compiler = _G.lumen.compiler
 package.loaded.system = _G.lumen.system
 package.loaded.lumen = _G.lumen
---return _G.lumen.main(_G.lumen.system.get_argv())
-return _G.lumen.main(_G.lumen.system.argv)
+return _G.lumen.main(_G.lumen.system.get_argv())
+--return _G.lumen.main(_G.lumen.system.argv)

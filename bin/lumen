@@ -31,14 +31,14 @@ fi
 
 case $host in
     node*)
-        code=lumen.js
+        code="${home}/index.js"
         export NODE_PATH="$NODE_PATH:${home}:${dir}/lib";;
     py*)
-        code=lumen.py
+        code="${home}"
         export PYTHONPATH="${PYTHONPATH}:${home}:${dir}";;
     *)
-        code=lumen.lua
+        code="${home}/init.lua"
         export LUA_PATH="$LUA_PATH;${home}/?.lua;${dir}/lib/?.lua;;";;
 esac
 
-exec ${host} "${home}/${code}" "$@"
+exec ${host} "${code}" "$@"

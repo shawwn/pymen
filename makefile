@@ -16,7 +16,6 @@ MODS := runtime.x	\
 	reader.x	\
 	compiler.x	\
 	system.x	\
-	lumen.x	\
 	main.x
 
 all: $(MODS:.x=.js) $(MODS:.x=.lua) $(MODS:.x=.py) bin/pymen.js
