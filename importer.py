@@ -179,6 +179,7 @@ class PymenLoader (Loader):
       cwd = os.getcwd()
       try:
         os.chdir(os.path.dirname(filename) or ".")
+        os.environ.pop('LUMEN_HOST', None)
         p = subprocess.run(
             [lumen_bin,
               "-c", os.path.basename(filename),
