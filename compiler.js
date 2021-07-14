@@ -17,6 +17,15 @@ getenv = function (k, p) {
     }
   }
 };
+var transformer_function = function (k) {
+  return getenv(k, "transformer");
+};
+var transformer63 = function (k) {
+  return is63(transformer_function(k));
+};
+var transformer_form63 = function (form) {
+  return ! atom63(form) && transformer63(hd(form));
+};
 var macro_function = function (k) {
   return getenv(k, "macro");
 };
@@ -223,7 +232,7 @@ bind42 = function (args, body) {
     var __pre = [];
     var __bs1 = [];
     var __inits = [];
-    var __r21 = unique("r");
+    var __r24 = unique("r");
     var ____o3 = args;
     var __k7 = undefined;
     for (__k7 in ____o3) {
@@ -265,15 +274,15 @@ bind42 = function (args, body) {
       }
     }
     if (props63(args)) {
-      __pre = join(__pre, [__r21, rest()]);
+      __pre = join(__pre, [__r24, rest()]);
       var __n4 = _35(__args1);
       var __i5 = 0;
       while (__i5 < __n4) {
         var __v4 = __args1[__i5];
-        __pre = join(__pre, [__v4, ["destash!", __v4, __r21]]);
+        __pre = join(__pre, [__v4, ["destash!", __v4, __r24]]);
         __i5 = __i5 + 1;
       }
-      __bs1 = join(__bs1, [props(args), __r21]);
+      __bs1 = join(__bs1, [props(args), __r24]);
     }
     var __forms = join(["let", __pre], __inits, [join(["let", __bs1], __body)]);
     var __e49 = undefined;
@@ -314,7 +323,7 @@ var expand_function = function (__x59) {
   var __args = has(____id7, 1);
   var __body1 = cut(____id7, 2);
   add(environment, {});
-  var ____r29 = undefined;
+  var ____r32 = undefined;
   try{
     var ____o4 = __args;
     var ____i6 = undefined;
@@ -332,12 +341,12 @@ var expand_function = function (__x59) {
         variable: true
       });
     }
-    ____r29 = join(["%function", __args], macroexpand(__body1));
+    ____r32 = join(["%function", __args], macroexpand(__body1));
   }
   finally{
     drop(environment);
   }
-  return ____r29;
+  return ____r32;
 };
 var expand_definition = function (__x63) {
   var ____id8 = __x63;
@@ -346,7 +355,7 @@ var expand_definition = function (__x63) {
   var __args11 = has(____id8, 2);
   var __body2 = cut(____id8, 3);
   add(environment, {});
-  var ____r32 = undefined;
+  var ____r35 = undefined;
   try{
     var ____o5 = __args11;
     var ____i7 = undefined;
@@ -364,12 +373,12 @@ var expand_definition = function (__x63) {
         variable: true
       });
     }
-    ____r32 = join([__x64, __name1, __args11], macroexpand(__body2));
+    ____r35 = join([__x64, __name1, __args11], macroexpand(__body2));
   }
   finally{
     drop(environment);
   }
-  return ____r32;
+  return ____r35;
 };
 var expand_macro = function (form) {
   return macroexpand(expand1(form));
@@ -379,6 +388,9 @@ expand1 = function (__x67) {
   var __name2 = has(____id9, 0);
   var __body3 = cut(____id9, 1);
   return apply(macro_function(__name2), __body3);
+};
+var expand_transformer = function (form) {
+  return apply(transformer_function(hd(hd(form))), form);
 };
 real63 = function (x) {
   return number63(x) && (! nan63(x) && ! inf63(x));
@@ -428,10 +440,14 @@ macroexpand = function (form) {
                   if (macro63(__x70)) {
                     return expand_macro(form);
                   } else {
-                    if (parse_access63(__x70)) {
-                      return macroexpand(join([parse_access(__x70)], tl(form)));
+                    if (transformer_form63(__x70)) {
+                      return expand_transformer(form);
                     } else {
-                      return map(macroexpand, form);
+                      if (parse_access63(__x70)) {
+                        return macroexpand(join([parse_access(__x70)], tl(form)));
+                      } else {
+                        return map(macroexpand, form);
+                      }
                     }
                   }
                 }
@@ -1144,10 +1160,10 @@ var compile_call = function (form) {
   }
 };
 var op_delims = function (parent, child, ..._42args) {
-  var ____r78 = unstash([..._42args]);
-  var __parent = destash33(parent, ____r78);
-  var __child = destash33(child, ____r78);
-  var ____id13 = ____r78;
+  var ____r82 = unstash([..._42args]);
+  var __parent = destash33(parent, ____r82);
+  var __child = destash33(child, ____r82);
+  var ____id13 = ____r82;
   var __right = has(____id13, "right");
   var __e67 = undefined;
   if (__right) {
@@ -1230,10 +1246,10 @@ compile_body = function (body) {
   }
 };
 compile_function = function (args, body, ..._42args) {
-  var ____r81 = unstash([..._42args]);
-  var __args5 = destash33(args, ____r81);
-  var __body4 = destash33(body, ____r81);
-  var ____id18 = ____r81;
+  var ____r85 = unstash([..._42args]);
+  var __args5 = destash33(args, ____r85);
+  var __body4 = destash33(body, ____r85);
+  var ____id18 = ____r85;
   var __name3 = has(____id18, "name");
   var __prefix = has(____id18, "prefix");
   var __async = has(____id18, "async");
@@ -1311,10 +1327,10 @@ var can_return63 = function (form) {
   return is63(form) && (atom63(form) || !( hd(form) === "%return") && ! statement63(hd(form)));
 };
 compile = function (form, raw63, ..._42args) {
-  var ____r83 = unstash([..._42args]);
-  var __form = destash33(form, ____r83);
-  var __raw63 = destash33(raw63, ____r83);
-  var ____id20 = ____r83;
+  var ____r87 = unstash([..._42args]);
+  var __form = destash33(form, ____r87);
+  var __raw63 = destash33(raw63, ____r87);
+  var ____id20 = ____r87;
   var __stmt1 = has(____id20, "stmt");
   if (nil63(__form)) {
     return "";
@@ -1852,11 +1868,11 @@ setenv("%while", {
   tr: true
 });
 var ___37for__special = function (t, k, form, ..._42args) {
-  var ____r121 = unstash([..._42args]);
-  var __t2 = destash33(t, ____r121);
-  var __k18 = destash33(k, ____r121);
-  var __form5 = destash33(form, ____r121);
-  var ____id39 = ____r121;
+  var ____r125 = unstash([..._42args]);
+  var __t2 = destash33(t, ____r125);
+  var __k18 = destash33(k, ____r125);
+  var __form5 = destash33(form, ____r125);
+  var ____id39 = ____r125;
   var __async2 = has(____id39, "async");
   var __t3 = compile(__t2);
   var __k19 = compile(__k18);
@@ -1892,10 +1908,10 @@ setenv("%for", {
   tr: true
 });
 var ___37with__special = function (t, form, ..._42args) {
-  var ____r123 = unstash([..._42args]);
-  var __t6 = destash33(t, ____r123);
-  var __form7 = destash33(form, ____r123);
-  var ____id41 = ____r123;
+  var ____r127 = unstash([..._42args]);
+  var __t6 = destash33(t, ____r127);
+  var __form7 = destash33(form, ____r127);
+  var ____id41 = ____r127;
   var __async4 = has(____id41, "async");
   var __t7 = compile(__t6);
   var __ind9 = indentation();
@@ -2035,9 +2051,9 @@ setenv("%break", {
   stmt: true
 });
 var ___37function__special = function (args, ..._42args) {
-  var ____r133 = unstash([..._42args]);
-  var __args121 = destash33(args, ____r133);
-  var ____id43 = ____r133;
+  var ____r137 = unstash([..._42args]);
+  var __args121 = destash33(args, ____r137);
+  var ____id43 = ____r137;
   var __body23 = cut(____id43, 0);
   return apply(compile_function, join([__args121], __body23, []));
 };
@@ -2046,10 +2062,10 @@ setenv("%function", {
   special: ___37function__special
 });
 var ___37global_function__special = function (name, args, ..._42args) {
-  var ____r135 = unstash([..._42args]);
-  var __name9 = destash33(name, ____r135);
-  var __args14 = destash33(args, ____r135);
-  var ____id45 = ____r135;
+  var ____r139 = unstash([..._42args]);
+  var __name9 = destash33(name, ____r139);
+  var __args14 = destash33(args, ____r139);
+  var ____id45 = ____r139;
   var __body25 = cut(____id45, 0);
   if (has(setenv("target", {
     _stash: true,
@@ -2096,10 +2112,10 @@ setenv("%global-function", {
   tr: true
 });
 var ___37local_function__special = function (name, args, ..._42args) {
-  var ____r137 = unstash([..._42args]);
-  var __name11 = destash33(name, ____r137);
-  var __args16 = destash33(args, ____r137);
-  var ____id47 = ____r137;
+  var ____r141 = unstash([..._42args]);
+  var __name11 = destash33(name, ____r141);
+  var __args16 = destash33(args, ____r141);
+  var ____id47 = ____r141;
   var __body27 = cut(____id47, 0);
   if (has(setenv("target", {
     _stash: true,
@@ -2438,11 +2454,11 @@ setenv("%object", {
   special: ___37object__special
 });
 var ___37list__special = function (form, comps, cond, ..._42args) {
-  var ____r157 = unstash([..._42args]);
-  var __form9 = destash33(form, ____r157);
-  var __comps1 = destash33(comps, ____r157);
-  var __cond6 = destash33(cond, ____r157);
-  var ____id55 = ____r157;
+  var ____r161 = unstash([..._42args]);
+  var __form9 = destash33(form, ____r161);
+  var __comps1 = destash33(comps, ____r161);
+  var __cond6 = destash33(cond, ____r161);
+  var ____id55 = ____r161;
   var __kind1 = has(____id55, "kind");
   var __s12 = compile(__form9);
   var __e113 = undefined;
@@ -2516,9 +2532,9 @@ setenv("nonlocal", {
   tr: true
 });
 var __import__special = function (name, ..._42args) {
-  var ____r163 = unstash([..._42args]);
-  var __name13 = destash33(name, ____r163);
-  var ____id60 = ____r163;
+  var ____r167 = unstash([..._42args]);
+  var __name13 = destash33(name, ____r167);
+  var ____id60 = ____r167;
   var __alias3 = cut(____id60, 0);
   var __ind19 = indentation();
   var __e114 = undefined;
@@ -2548,23 +2564,23 @@ setenv("import", {
   stmt: true
 });
 var __from__special = function (name, ..._42args) {
-  var ____r167 = unstash([..._42args]);
-  var __name15 = destash33(name, ____r167);
-  var ____id64 = ____r167;
+  var ____r171 = unstash([..._42args]);
+  var __name15 = destash33(name, ____r171);
+  var ____id64 = ____r171;
   var __imports1 = cut(____id64, 0);
   var __ind21 = indentation();
   var __id65 = __name15;
-  var __r168 = undefined;
-  __r168 = drop(__imports1);
+  var __r172 = undefined;
+  __r172 = drop(__imports1);
   var __e115 = undefined;
   if (last(__imports1) === "as") {
     __e115 = drop(__imports1);
   } else {
-    add(__imports1, __r168);
-    __r168 = undefined;
-    __e115 = __r168;
+    add(__imports1, __r172);
+    __r172 = undefined;
+    __e115 = __r172;
   }
-  var __as4 = __r168;
+  var __as4 = __r172;
   var __e116 = undefined;
   if (hd(__imports1) === "import") {
     __e116 = tl(__imports1);

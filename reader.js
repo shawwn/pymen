@@ -1,12 +1,20 @@
 var delimiters = {
   ["("]: true,
   [")"]: true,
+  ["["]: true,
+  ["]"]: true,
+  ["{"]: true,
+  ["}"]: true,
   [";"]: true,
   [","]: true,
   ["\r"]: true,
   ["\n"]: true
 };
-var closing_delimiters = {[")"]: true};
+var closing_delimiters = {
+  [")"]: true,
+  ["]"]: true,
+  ["}"]: true
+};
 var whitespace = {
   [" "]: true,
   ["\t"]: true,
@@ -228,8 +236,56 @@ read_table["("] = function (s) {
 read_table[")"] = function (s) {
   throw new Error("Unexpected ) at " + s.pos);
 };
-var read_matching = function (opener, closer, s) {
+read_table["["] = function (s) {
+  read_char(s);
   var __r23 = undefined;
+  var __l2 = [["%brackets"]];
+  while (nil63(__r23)) {
+    skip_non_code(s);
+    var __c5 = peek_char(s);
+    if (__c5 === "]") {
+      read_char(s);
+      __r23 = __l2;
+    } else {
+      if (nil63(__c5)) {
+        __r23 = expected(s, "]");
+      } else {
+        var __x6 = read(s);
+        add(__l2, __x6);
+      }
+    }
+  }
+  return __r23;
+};
+read_table["]"] = function (s) {
+  throw new Error("Unexpected ] at " + s.pos);
+};
+read_table["{"] = function (s) {
+  read_char(s);
+  var __r26 = undefined;
+  var __l3 = [["%braces"]];
+  while (nil63(__r26)) {
+    skip_non_code(s);
+    var __c6 = peek_char(s);
+    if (__c6 === "}") {
+      read_char(s);
+      __r26 = __l3;
+    } else {
+      if (nil63(__c6)) {
+        __r26 = expected(s, "}");
+      } else {
+        var __x9 = read(s);
+        add(__l3, __x9);
+      }
+    }
+  }
+  return __r26;
+};
+read_table["}"] = function (s) {
+  throw new Error("Unexpected } at " + s.pos);
+};
+var read_matching = function (opener, closer, s) {
+  var __r29 = undefined;
   var __pos1 = s.pos;
   var __str1 = "";
   var __i1 = 0;
@@ -238,17 +294,17 @@ var read_matching = function (opener, closer, s) {
     __i1 = __i1 + 1;
   }
   if (__str1 === opener) {
-    while (nil63(__r23)) {
+    while (nil63(__r29)) {
       if (clip(s.string, s.pos, s.pos + _35(closer)) === closer) {
         var __i2 = 0;
         while (__i2 < _35(closer)) {
           __str1 = __str1 + read_char(s);
           __i2 = __i2 + 1;
         }
-        __r23 = __str1;
+        __r29 = __str1;
       } else {
         if (nil63(peek_char(s))) {
-          __r23 = expected(s, closer);
+          __r29 = expected(s, closer);
         } else {
           __str1 = __str1 + read_char(s);
           if (peek_char(s) === "\\") {
@@ -258,7 +314,7 @@ var read_matching = function (opener, closer, s) {
       }
     }
   }
-  return __r23;
+  return __r29;
 };
 read_table["\""] = function (s) {
   if (string_starts63(s.string, "\"\"\"", s.pos)) {
@@ -271,25 +327,25 @@ read_table["\""] = function (s) {
       s.pos = __j + 1;
       return clip(s.string, __i3, __j + 1);
     } else {
-      var __r25 = undefined;
+      var __r31 = undefined;
       read_char(s);
-      while (nil63(__r25)) {
-        var __c5 = peek_char(s);
-        if (__c5 === "\"") {
+      while (nil63(__r31)) {
+        var __c7 = peek_char(s);
+        if (__c7 === "\"") {
           read_char(s);
-          __r25 = clip(s.string, __i3, s.pos);
+          __r31 = clip(s.string, __i3, s.pos);
         } else {
-          if (nil63(__c5)) {
-            __r25 = expected(s, "\"");
+          if (nil63(__c7)) {
+            __r31 = expected(s, "\"");
           } else {
-            if (__c5 === "\\") {
+            if (__c7 === "\\") {
               read_char(s);
             }
             read_char(s);
           }
         }
       }
-      return __r25;
+      return __r31;
     }
   }
 };
@@ -313,11 +369,11 @@ read_table["`"] = function (s) {
 };
 read_table[","] = function (s) {
   read_char(s);
-  var __c6 = peek_char(s);
-  if (nil63(__c6) || (has63(whitespace, __c6) || has63(closing_delimiters, __c6))) {
+  var __c8 = peek_char(s);
+  if (nil63(__c8) || (has63(whitespace, __c8) || has63(closing_delimiters, __c8))) {
     return ",";
   } else {
-    if (__c6 === "@") {
+    if (__c8 === "@") {
       read_char(s);
       return wrap(s, "unquote-splicing");
     } else {

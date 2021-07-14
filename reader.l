@@ -1,7 +1,7 @@
 (target py: (from .runtime import *))
 
-(define delimiters (set-of "(" ")" ";" "," "\r" "\n"))
-(define closing-delimiters (set-of ")"))
+(define delimiters (set-of "(" ")" "[" "]" "{" "}" ";" "," "\r" "\n"))
+(define closing-delimiters (set-of ")" "]" "}"))
 (define whitespace (set-of " " "\t" "\r" "\n"))
 
 (define stream (str more)
@@ -140,6 +140,36 @@
 (define-reader (")" s)
   (error (cat "Unexpected ) at " (get s 'pos))))
 
+(define-reader ("[" s)
+  (read-char s)
+  (with r nil
+    (let l '((%brackets))
+      (while (nil? r)
+        (skip-non-code s)
+        (let c (peek-char s)
+          (if (= c "]") (do (read-char s) (set r l))
+              (nil? c) (set r (expected s "]"))
+            (let x (read s)
+              (add l x))))))))
+
+(define-reader ("]" s)
+  (error (cat "Unexpected ] at " (get s 'pos))))
+
+(define-reader ("{" s)
+  (read-char s)
+  (with r nil
+    (let l '((%braces))
+      (while (nil? r)
+        (skip-non-code s)
+        (let c (peek-char s)
+          (if (= c "}") (do (read-char s) (set r l))
+              (nil? c) (set r (expected s "}"))
+            (let x (read s)
+              (add l x))))))))
+
+(define-reader ("}" s)
+  (error (cat "Unexpected } at " (get s 'pos))))
+
 ; Simplify this.
 
 (define read-matching (opener closer s)
@@ -201,7 +231,9 @@
 (define-reader ("," s)
   (read-char s)
   (let c (peek-char s)
-    (if (or (nil? c) (has? whitespace c) (has? closing-delimiters c))
+    (if (or (nil? c)
+            (has? whitespace c)
+            (has? closing-delimiters c))
         ","
         (= c "@")
         (do (read-char s)

@@ -172,6 +172,13 @@
     (eval form)
     form))
 
+(define-macro define-transformer (name args rest: body)
+  (let (id (unique (cat name "--transformer"))
+        form `(do (define ,id ,args ,@body)
+                  (setenv ',name transformer: ,id)))
+    ;(eval form)
+    form))
+
 (define-macro define-special (name args rest: body)
   (let (id (unique (cat name "--special"))
         form `(do (define ,id ,args ,@body)
@@ -588,3 +595,24 @@
 
 (define-macro class (name rest: body)
   `(%block class ,name ,@body))
+
+(define-transformer expansion ((expansion) form)
+  form)
+
+(define-transformer compose ((compose rest: fns) rest: body)
+  (macroexpand
+    (if (none? fns) (do ,@body)
+        (one? fns) `(,@fns ,@body)
+      `((,compose ,@(almost fns)) (,(last fns) ,@body)))))
+
+(define-transformer complement ((complement form) rest: body)
+  (macroexpand
+    (if (hd? form 'complement)
+        `(,(at form 1) ,@body)
+      `(no (,form ,@body)))))
+
+(define-transformer %brackets ((%brackets) rest: body)
+  (macroexpand `(%function (%1 %2) (let-symbol (_ %1) ,body))))
+
+(define-transformer %braces ((%braces) rest: body)
+  (macroexpand `(%object ,@body)))

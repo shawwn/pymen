@@ -9,6 +9,15 @@
               (return (if p (has b (identifier p)) b)))
           (dec i))))))
 
+(define transformer-function (k)
+  (getenv k 'transformer))
+
+(define transformer? (k)
+  (is? (transformer-function k)))
+
+(define transformer-form? (form)
+  (and (not (atom? form)) (transformer? (hd form))))
+
 (define macro-function (k)
   (getenv k 'macro))
 
@@ -175,6 +184,9 @@
 (define-global expand1 ((name rest: body))
   (apply (macro-function name) body))
 
+(define expand-transformer (form)
+  (apply (transformer-function (hd (hd form))) form))
+
 (define-global real? (x)
   (and (number? x) (not (nan? x)) (not (inf? x))))
 
@@ -211,6 +223,7 @@
           (= x '%local-function) (expand-definition form)
           (= x '%expansion) (at form 1)
           (macro? x) (expand-macro form)
+          (transformer-form? x) (expand-transformer form)
           (parse-access? x) (macroexpand `(,(parse-access x) ,@(tl form)))
         (map macroexpand form)))))
 

@@ -1126,6 +1126,7 @@ c"
     (test= '(13 (3 4 foo: 7)) (g 1 2 3 4 foo: 7))
     (test= '(()) l)))
 
-(when (undefined? exports)
-  (set exports (or (_G .exports) (obj))))
+(target py: nil
+  (when (undefined? exports)
+    (set exports (or (_G .exports) (obj)))))
 (export main)

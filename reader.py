@@ -2,12 +2,20 @@ from .runtime import *
 delimiters = {
   "(": True,
   ")": True,
+  "[": True,
+  "]": True,
+  "{": True,
+  "}": True,
   ";": True,
   ",": True,
   "\r": True,
   "\n": True
 }
-closing_delimiters = {")": True}
+closing_delimiters = {
+  ")": True,
+  "]": True,
+  "}": True
+}
 whitespace = {
   " ": True,
   "\t": True,
@@ -211,8 +219,54 @@ def __f3(s=None):
   raise Exception(cat("Unexpected ) at ", s["pos"]))
 
 read_table[")"] = __f3
-def read_matching(opener=None, closer=None, s=None):
+def __f4(s=None):
+  read_char(s)
   __r23 = None
+  __l2 = [["%brackets"]]
+  while nil63(__r23):
+    skip_non_code(s)
+    __c5 = peek_char(s)
+    if __c5 == "]":
+      read_char(s)
+      __r23 = __l2
+    else:
+      if nil63(__c5):
+        __r23 = expected(s, "]")
+      else:
+        __x8 = read(s)
+        add(__l2, __x8)
+  return __r23
+
+read_table["["] = __f4
+def __f5(s=None):
+  raise Exception(cat("Unexpected ] at ", s["pos"]))
+
+read_table["]"] = __f5
+def __f6(s=None):
+  read_char(s)
+  __r26 = None
+  __l3 = [["%braces"]]
+  while nil63(__r26):
+    skip_non_code(s)
+    __c6 = peek_char(s)
+    if __c6 == "}":
+      read_char(s)
+      __r26 = __l3
+    else:
+      if nil63(__c6):
+        __r26 = expected(s, "}")
+      else:
+        __x11 = read(s)
+        add(__l3, __x11)
+  return __r26
+
+read_table["{"] = __f6
+def __f7(s=None):
+  raise Exception(cat("Unexpected } at ", s["pos"]))
+
+read_table["}"] = __f7
+def read_matching(opener=None, closer=None, s=None):
+  __r29 = None
   __pos1 = s["pos"]
   __L_str1 = ""
   __i1 = 0
@@ -220,23 +274,23 @@ def read_matching(opener=None, closer=None, s=None):
     __L_str1 = cat(__L_str1, read_char(s) or "")
     __i1 = __i1 + 1
   if __L_str1 == opener:
-    while nil63(__r23):
+    while nil63(__r29):
       if clip(s["string"], s["pos"], s["pos"] + L_35(closer)) == closer:
         __i2 = 0
         while __i2 < L_35(closer):
           __L_str1 = cat(__L_str1, read_char(s))
           __i2 = __i2 + 1
-        __r23 = __L_str1
+        __r29 = __L_str1
       else:
         if nil63(peek_char(s)):
-          __r23 = expected(s, closer)
+          __r29 = expected(s, closer)
         else:
           __L_str1 = cat(__L_str1, read_char(s))
           if peek_char(s) == "\\":
             __L_str1 = cat(__L_str1, read_char(s))
-  return __r23
+  return __r29
 
-def __f4(s=None):
+def __f8(s=None):
   if string_starts63(s["string"], "\"\"\"", s["pos"]):
     return read_matching("\"\"\"", "\"\"\"", s)
   else:
@@ -247,24 +301,24 @@ def __f4(s=None):
       s["pos"] = __j + 1
       return clip(s["string"], __i3, __j + 1)
     else:
-      __r25 = None
+      __r31 = None
       read_char(s)
-      while nil63(__r25):
-        __c5 = peek_char(s)
-        if __c5 == "\"":
+      while nil63(__r31):
+        __c7 = peek_char(s)
+        if __c7 == "\"":
           read_char(s)
-          __r25 = clip(s["string"], __i3, s["pos"])
+          __r31 = clip(s["string"], __i3, s["pos"])
         else:
-          if nil63(__c5):
-            __r25 = expected(s, "\"")
+          if nil63(__c7):
+            __r31 = expected(s, "\"")
           else:
-            if __c5 == "\\":
+            if __c7 == "\\":
               read_char(s)
             read_char(s)
-      return __r25
+      return __r31
 
-read_table["\""] = __f4
-def __f5(s=None):
+read_table["\""] = __f8
+def __f9(s=None):
   __i4 = s["pos"]
   __j1 = search(s["string"], "|", __i4 + 1)
   if is63(__j1) and __j1 < s["len"]:
@@ -273,27 +327,27 @@ def __f5(s=None):
   else:
     return expected(s, "|")
 
-read_table["|"] = __f5
-def __f6(s=None):
+read_table["|"] = __f9
+def __f10(s=None):
   read_char(s)
   return wrap(s, "quote")
 
-read_table["'"] = __f6
-def __f7(s=None):
+read_table["'"] = __f10
+def __f11(s=None):
   read_char(s)
   return wrap(s, "quasiquote")
 
-read_table["`"] = __f7
-def __f8(s=None):
+read_table["`"] = __f11
+def __f12(s=None):
   read_char(s)
-  __c6 = peek_char(s)
-  if nil63(__c6) or (has63(whitespace, __c6) or has63(closing_delimiters, __c6)):
+  __c8 = peek_char(s)
+  if nil63(__c8) or (has63(whitespace, __c8) or has63(closing_delimiters, __c8)):
     return ","
   else:
-    if __c6 == "@":
+    if __c8 == "@":
       read_char(s)
       return wrap(s, "unquote-splicing")
     else:
       return wrap(s, "unquote")
 
-read_table[","] = __f8
+read_table[","] = __f12

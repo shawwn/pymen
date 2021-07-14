@@ -1,12 +1,20 @@
 local delimiters = {
   ["("] = true,
   [")"] = true,
+  ["["] = true,
+  ["]"] = true,
+  ["{"] = true,
+  ["}"] = true,
   [";"] = true,
   [","] = true,
   ["\r"] = true,
   ["\n"] = true
 }
-local closing_delimiters = {[")"] = true}
+local closing_delimiters = {
+  [")"] = true,
+  ["]"] = true,
+  ["}"] = true
+}
 local whitespace = {
   [" "] = true,
   ["\t"] = true,
@@ -228,8 +236,56 @@ end
 read_table[")"] = function (s)
   error("Unexpected ) at " .. s.pos)
 end
-local function read_matching(opener, closer, s)
+read_table["["] = function (s)
+  read_char(s)
   local __r23 = nil
+  local __l2 = {{"%brackets"}}
+  while nil63(__r23) do
+    skip_non_code(s)
+    local __c5 = peek_char(s)
+    if __c5 == "]" then
+      read_char(s)
+      __r23 = __l2
+    else
+      if nil63(__c5) then
+        __r23 = expected(s, "]")
+      else
+        local __x6 = read(s)
+        add(__l2, __x6)
+      end
+    end
+  end
+  return __r23
+end
+read_table["]"] = function (s)
+  error("Unexpected ] at " .. s.pos)
+end
+read_table["{"] = function (s)
+  read_char(s)
+  local __r26 = nil
+  local __l3 = {{"%braces"}}
+  while nil63(__r26) do
+    skip_non_code(s)
+    local __c6 = peek_char(s)
+    if __c6 == "}" then
+      read_char(s)
+      __r26 = __l3
+    else
+      if nil63(__c6) then
+        __r26 = expected(s, "}")
+      else
+        local __x9 = read(s)
+        add(__l3, __x9)
+      end
+    end
+  end
+  return __r26
+end
+read_table["}"] = function (s)
+  error("Unexpected } at " .. s.pos)
+end
+local function read_matching(opener, closer, s)
+  local __r29 = nil
   local __pos1 = s.pos
   local __str1 = ""
   local __i1 = 0
@@ -238,17 +294,17 @@ local function read_matching(opener, closer, s)
     __i1 = __i1 + 1
   end
   if __str1 == opener then
-    while nil63(__r23) do
+    while nil63(__r29) do
       if clip(s.string, s.pos, s.pos + _35(closer)) == closer then
         local __i2 = 0
         while __i2 < _35(closer) do
           __str1 = __str1 .. read_char(s)
           __i2 = __i2 + 1
         end
-        __r23 = __str1
+        __r29 = __str1
       else
         if nil63(peek_char(s)) then
-          __r23 = expected(s, closer)
+          __r29 = expected(s, closer)
         else
           __str1 = __str1 .. read_char(s)
           if peek_char(s) == "\\" then
@@ -258,7 +314,7 @@ local function read_matching(opener, closer, s)
       end
     end
   end
-  return __r23
+  return __r29
 end
 read_table["\""] = function (s)
   if string_starts63(s.string, "\"\"\"", s.pos) then
@@ -271,25 +327,25 @@ read_table["\""] = function (s)
       s.pos = __j + 1
       return clip(s.string, __i3, __j + 1)
     else
-      local __r25 = nil
+      local __r31 = nil
       read_char(s)
-      while nil63(__r25) do
-        local __c5 = peek_char(s)
-        if __c5 == "\"" then
+      while nil63(__r31) do
+        local __c7 = peek_char(s)
+        if __c7 == "\"" then
           read_char(s)
-          __r25 = clip(s.string, __i3, s.pos)
+          __r31 = clip(s.string, __i3, s.pos)
         else
-          if nil63(__c5) then
-            __r25 = expected(s, "\"")
+          if nil63(__c7) then
+            __r31 = expected(s, "\"")
           else
-            if __c5 == "\\" then
+            if __c7 == "\\" then
               read_char(s)
             end
             read_char(s)
           end
         end
       end
-      return __r25
+      return __r31
     end
   end
 end
@@ -313,11 +369,11 @@ read_table["`"] = function (s)
 end
 read_table[","] = function (s)
   read_char(s)
-  local __c6 = peek_char(s)
-  if nil63(__c6) or (has63(whitespace, __c6) or has63(closing_delimiters, __c6)) then
+  local __c8 = peek_char(s)
+  if nil63(__c8) or (has63(whitespace, __c8) or has63(closing_delimiters, __c8)) then
     return ","
   else
-    if __c6 == "@" then
+    if __c8 == "@" then
       read_char(s)
       return wrap(s, "unquote-splicing")
     else
