@@ -53,16 +53,37 @@
 (message $N)
 
 (define foo (VAR)
-  (set $VAR 42))
+  (set $VAR 42)
+  (return $VAR))
 
 (foo X)
 (message $X)
 
-(define len (x VAR)
-  (string LENGTH x VAR))
+(define strlen (x VAR)
+  (string LENGTH $x $VAR)
+  (return $VAR))
 
-(len "foo" N)
-(message $N)
+(strlen "foobar" N)
+(message "$N: " $N)
+(unset N)
+
+(define count (x VAR)
+  (%call list LENGTH x $VAR)
+  (return $VAR))
+
+(when-compiling
+  ; (define-symbol ... (%ref ARGN))
+  nil)
+
+(define err ()
+  ; (message FATAL_ERROR (%ref ARGN))
+  (message FATAL_ERROR (arguments%))
+  (return))
+
+(set l '(a b c d e f g))
+(count $l N)
+(message "count: " $N)
+(unset N)
 
 (message (if (and (> 4 3) 2) "yes" "no"))
 
@@ -87,4 +108,91 @@
   (%call list POP_FRONT RGBA_LIST0 R G B A)
   (message STATUS "R=${R}, G=${G}, B=${B}, A=${A}"))
 
+(when-compiling
+  (define-macro step (vars l rest: body)
+    (let-unique (step-v)
+      `(do (set ,step-v ,l)
+           (while ,step-v
+             (%call list POP_FRONT ,step-v ,@(if (list? vars) vars (list vars)))
+             ,@body))))
+  nil)
+
+(step (R G B A) '((0 0 0 255)
+                  (0 0 255 0)
+                  (255 0 255 0)
+                  (0 255 255 0))
+  (message STATUS "R=${R}, G=${G}, B=${B}, A=${A}"))
+
+(step x '(a b c d)
+  (message $x))
+
+(when-compiling
+  (define-special ENV (name)
+    (escape (cat "$ENV{" (compile-id name) "}")))
+  nil)
+
+(message (ENV PATH))
+    
+
+(define replace (input pattern replacement VAR)
+  (string REPLACE $pattern $replacement $VAR $input)
+  (return $VAR))
+
+(replace (ENV PATH) ":" ";" PATH)
+;(string REPLACE ":" ";" PATH (ENV PATH))
+(message "$PATH: " $PATH)
+(step x $PATH
+  (message 'PATH: $x))
+
+(define blank? (x VAR)
+  (if (list $x STREQUAL "")
+      (set $VAR true)
+      (set $VAR false))
+  (return $VAR))
+
+(define is? (x VAR)
+  (strlen $x n)
+  (set $VAR (if (> $n 0) true false)))
+
+(set SPEEDTREE_SOURCE_DIR '/Users/shawn/ml/noh4/lib/SpeedTree/source/SourceCode)
+
+(file GLOB_RECURSE SpeedTree___cpp "${SPEEDTREE_SOURCE_DIR}/*.cpp")
+(step x $SpeedTree___cpp
+  (message $x))
+
+(define match? (input pattern VAR)
+  (string REGEX MATCH $pattern x $input)
+  (is? $x $VAR)
+  (return $VAR))
+
+(file GLOB_RECURSE files "*")
+
+(step x $files
+  (match? $x "[.]l$" ok)
+  (if $ok (message $x)))
+
+
+(blank? "foo" _)
+(message STATUS "(blank? \"foo\"): " $_)
+(blank? "" _)
+(message STATUS "(blank? \"\"): " $_)
+
+(define call (f)
+  (cmake-language CALL $f (arguments%))
+  (return))
+
+(call message "hi")
+
+(define eval (x)
+  (cmake-language EVAL CODE $x)
+  (return))
+
+(eval "message(\"hi\")")
+
+(when-compiling
+  (define-macro %code body
+    `(when-compiling (escape (compile (expand '(%do ,@body))))))
+  nil)
+
+(eval (%code (message "hi")))
 

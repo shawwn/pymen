@@ -105,7 +105,8 @@
 (define-macro arguments% (from)
   `(target js: ((%idx (%idx (%idx Array prototype) slice) call) arguments ,from)
            py: (|list| |_args|)
-           lua: (list |...|)))
+           lua: (list |...|)
+           cmake: (%ref ARGN)))
 
 (define body-docstring (body)
   (if (and (> (# body) 1)
