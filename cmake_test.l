@@ -47,8 +47,7 @@
     (message "no"))
 
 (when-compiling
-  (define-macro %dollar (x)
-    `(%id ,x)))
+  )
 
 (string LENGTH "foo" N)
 (message $N)
@@ -66,5 +65,26 @@
 (message $N)
 
 (message (if (and (> 4 3) 2) "yes" "no"))
+
+
+; https://gitlab.kitware.com/cmake/cmake/-/issues/19834#note_971155
+(message (%id (set RGBA_LIST0
+    (list
+      '(0 0 0 255)
+      '(0 0 255 0)
+      '(255 0 255 0)
+      '(0 255 255 0)))))
+
+(message $RGBA_LIST0)
+
+(set RGBA_LIST0
+     '((0 0 0 255)
+       (0 0 255 0)
+       (255 0 255 0)
+       (0 255 255 0)))
+
+(while RGBA_LIST0
+  (%call list POP_FRONT RGBA_LIST0 R G B A)
+  (message STATUS "R=${R}, G=${G}, B=${B}, A=${A}"))
 
 

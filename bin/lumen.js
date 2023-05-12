@@ -2529,6 +2529,13 @@ setenv("see", {
   _stash: true,
   macro: __see__macro
 });
+var ___37dollar__macro = function (x) {
+  return ["%id", x];
+};
+setenv("%dollar", {
+  _stash: true,
+  macro: ___37dollar__macro
+});
 var reader = require("reader");
 var compiler = require("compiler");
 var system = require("system");
@@ -2541,10 +2548,10 @@ pp = function (x) {
     var __c4 = "  ";
     var __nl = undefined;
     print("(");
-    var ____x900 = x;
+    var ____x902 = x;
     var ____i48 = 0;
-    while (____i48 < _35(____x900)) {
-      var __v34 = ____x900[____i48];
+    while (____i48 < _35(____x902)) {
+      var __v34 = ____x902[____i48];
       if (__nl) {
         print("");
       }
@@ -2566,16 +2573,16 @@ lines = function (x) {
   return split(x, "\n");
 };
 get_indentation = function (s) {
-  var __r254 = "";
+  var __r256 = "";
   var __i49 = 0;
   while (__i49 < _35(s)) {
     var __c5 = char(s, __i49);
     if (__c5 === " ") {
-      __r254 = __r254 + __c5;
+      __r256 = __r256 + __c5;
     }
     __i49 = __i49 + 1;
   }
-  return __r254;
+  return __r256;
 };
 strip_outer = function (s, lh, rh) {
   if (string_starts63(s, lh) && string_ends63(s, rh)) {
@@ -2601,9 +2608,9 @@ simple_id63 = function (x) {
   } else {
     __e53 = undefined;
   }
-  var __r257 = __e53;
-  if (__r257 === x) {
-    return __r257;
+  var __r259 = __e53;
+  if (__r259 === x) {
+    return __r259;
   }
 };
 toplevel_print = function (v) {
@@ -2683,17 +2690,17 @@ read_toplevel = function (str, more) {
   } else {
     __e54 = undefined;
   }
-  var __x912 = __e54;
-  if (__x912 === more) {
+  var __x914 = __e54;
+  if (__x914 === more) {
     return more;
   } else {
-    if (nil63(__x912)) {
-      return __x912;
+    if (nil63(__x914)) {
+      return __x914;
     } else {
-      if (one63(__x912)) {
-        return hd(__x912);
+      if (one63(__x914)) {
+        return hd(__x914);
       } else {
-        return __x912;
+        return __x914;
       }
     }
   }
@@ -2842,10 +2849,10 @@ var main = function (args) {
         }
         __i50 = __i50 + 1;
       }
-      var ____x917 = __pre;
+      var ____x919 = __pre;
       var ____i51 = 0;
-      while (____i51 < _35(____x917)) {
-        var __file = ____x917[____i51];
+      while (____i51 < _35(____x919)) {
+        var __file = ____x919[____i51];
         run_file(__file);
         ____i51 = ____i51 + 1;
       }

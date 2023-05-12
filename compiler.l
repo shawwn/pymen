@@ -911,6 +911,8 @@
         (cat ind "while (" cond ") {\n" body ind "}\n")
         (target? 'py)
         (cat ind "while " cond ":\n" body)
+        (target? 'cmake)
+        (cat ind "while(" cond ")\n" body ind "endwhile()\n")
       (cat ind "while " cond " do\n" body ind "end\n"))))
 
 (define-special %for (t k form async: async) stmt: true tr: true
@@ -964,7 +966,7 @@
   (cat (indentation) (if (target? 'py) "del " "delete ") (compile place)))
 
 (define-special %break () stmt: true
-  (cat (indentation) "break"))
+  (cat (indentation) "break" (if (target? 'cmake) "()" "")))
 
 (define-special %function (args rest: body)
   (apply compile-function args body))
@@ -1062,14 +1064,16 @@
     (cat t1 "." k1)))
 
 (define-special %array forms
-  (let (open (if (target? 'lua) "{" "[")
-        close (if (target? 'lua) "}" "]")
-        s "" c "")
-    (each (k v) forms
-      (when (number? k)
-        (cat! s c (compile v))
-        (set c ", ")))
-    (cat open s close)))
+  (if (target? 'cmake)
+      (mapcat compile forms " ")
+    (let (open (if (target? 'lua) "{" "[")
+          close (if (target? 'lua) "}" "]")
+          s "" c "")
+      (each (k v) forms
+        (when (number? k)
+          (cat! s c (compile v))
+          (set c ", ")))
+      (cat open s close))))
 
 (define-special %object forms
   (let (s (if (target? 'cmake) "" "{") c ""

@@ -1872,6 +1872,10 @@ def __see__macro(form=None):
   return __form7
 
 setenv("see", macro=__see__macro)
+def __L_37dollar__macro(x=None):
+  return ["%id", x]
+
+setenv("%dollar", macro=__L_37dollar__macro)
 import reader
 import compiler
 import system
@@ -1892,48 +1896,48 @@ def disp(L_str=None):
 
 from pprint import pprint as pp
 def entries(x=None):
-  __r257 = []
+  __r259 = []
   __mods = []
-  ____x818 = dir(x)
+  ____x820 = dir(x)
   ____i47 = 0
-  while ____i47 < L_35(____x818):
-    __k25 = ____x818[____i47]
+  while ____i47 < L_35(____x820):
+    __k25 = ____x820[____i47]
     if not( clip(__k25, 0, 2) == "__"):
       __v34 = getattr(x, __k25)
       if function63(__v34):
-        add(__r257, __k25)
+        add(__r259, __k25)
       else:
         if module63(__v34):
           add(__mods, cat(".", __k25))
         else:
-          add(__r257, [__k25, __v34])
+          add(__r259, [__k25, __v34])
     ____i47 = ____i47 + 1
-  ____x820 = __mods
+  ____x822 = __mods
   ____i48 = 0
-  while ____i48 < L_35(____x820):
-    __x821 = ____x820[____i48]
-    add(__r257, __x821)
+  while ____i48 < L_35(____x822):
+    __x823 = ____x822[____i48]
+    add(__r259, __x823)
     ____i48 = ____i48 + 1
-  return __r257
+  return __r259
 
 from io import StringIO
 def pp_to_string(x=None):
-  __r259 = StringIO()
-  pp(x, __r259)
-  return __r259.getvalue()
+  __r261 = StringIO()
+  pp(x, __r261)
+  return __r261.getvalue()
 
 def lines(x=None):
   return split(x, "\n")
 
 def get_indentation(s=None):
-  __r262 = ""
+  __r264 = ""
   __i49 = 0
   while __i49 < L_35(s):
     __c4 = char(s, __i49)
     if __c4 == " ":
-      __r262 = cat(__r262, __c4)
+      __r264 = cat(__r264, __c4)
     __i49 = __i49 + 1
-  return __r262
+  return __r264
 
 def strip_outer(s=None, lh=None, rh=None):
   if string_starts63(s, lh) and string_ends63(s, rh):
@@ -1957,27 +1961,27 @@ def simple_id63(x=None):
     __e34 = ____v35
   else:
     __e34 = None
-  __r265 = __e34
-  if __r265 == x:
-    return __r265
+  __r267 = __e34
+  if __r267 == x:
+    return __r267
 
 def pp_obj(x=None):
   s = pp_to_string(entries(x))
   s = s.rstrip()
   s = strip_outer(s, "[", "]")
   s = cat(" ", s)
-  ____x824 = lines(s)
+  ____x826 = lines(s)
   ____i50 = 0
-  while ____i50 < L_35(____x824):
-    __x825 = ____x824[____i50]
-    __ind = get_indentation(__x825)
-    __x825 = __x825.rstrip(",")
-    __id130 = simple_id63(strip_outer(__x825.strip(), "'", "'"))
+  while ____i50 < L_35(____x826):
+    __x827 = ____x826[____i50]
+    __ind = get_indentation(__x827)
+    __x827 = __x827.rstrip(",")
+    __id130 = simple_id63(strip_outer(__x827.strip(), "'", "'"))
     __e35 = None
     if __id130:
       __e35 = cat(__ind, __id130)
     else:
-      __e35 = __x825
+      __e35 = __x827
     L_print(__e35)
     ____i50 = ____i50 + 1
   return L_print(repr(x))
@@ -1997,12 +2001,12 @@ def pp_toplevel(x=None):
 def docstring(x=None):
   def __f29():
     try:
-      __x828 = x.__doc__
+      __x830 = x.__doc__
       __e36 = None
-      if string63(__x828):
-        __e36 = __x828
+      if string63(__x830):
+        __e36 = __x830
       else:
-        __e36 = L_str(__x828)
+        __e36 = L_str(__x830)
       return [True, __e36]
     except:
       import sys
@@ -2088,17 +2092,17 @@ def read_toplevel(L_str=None, more=None):
     __e37 = ____v38
   else:
     __e37 = None
-  __x836 = __e37
-  if __x836 == more:
+  __x838 = __e37
+  if __x838 == more:
     return more
   else:
-    if nil63(__x836):
-      return __x836
+    if nil63(__x838):
+      return __x838
     else:
-      if one63(__x836):
-        return hd(__x836)
+      if one63(__x838):
+        return hd(__x838)
       else:
-        return __x836
+        return __x838
 
 def rep(L_str=None):
   __v39 = eval(read_toplevel(L_str))
@@ -2213,10 +2217,10 @@ def main(args=None):
           if not( "-" == char(__a27, 0)):
             add(__pre, __a27)
         __i51 = __i51 + 1
-      ____x840 = __pre
+      ____x842 = __pre
       ____i52 = 0
-      while ____i52 < L_35(____x840):
-        __file = ____x840[____i52]
+      while ____i52 < L_35(____x842):
+        __file = ____x842[____i52]
         run_file(__file)
         ____i52 = ____i52 + 1
       if nil63(__input):

@@ -2391,6 +2391,13 @@ setenv("see", {
   _stash = true,
   macro = __see__macro
 })
+local function ___37dollar__macro(x)
+  return {"%id", x}
+end
+setenv("%dollar", {
+  _stash = true,
+  macro = ___37dollar__macro
+})
 local reader = require("reader")
 local compiler = require("compiler")
 local system = require("system")
@@ -2403,10 +2410,10 @@ function pp(x)
     local __c4 = "  "
     local __nl = nil
     print("(")
-    local ____x906 = x
+    local ____x908 = x
     local ____i48 = 0
-    while ____i48 < _35(____x906) do
-      local __v34 = ____x906[____i48 + 1]
+    while ____i48 < _35(____x908) do
+      local __v34 = ____x908[____i48 + 1]
       if __nl then
         print("")
       end
@@ -2422,29 +2429,29 @@ function pp(x)
   end
 end
 function dir(x)
-  local __r247 = {}
+  local __r249 = {}
   local ____o28 = x
   local __k26 = nil
   for __k26 in next, ____o28 do
     local __v35 = ____o28[__k26]
-    add(__r247, __k26)
+    add(__r249, __k26)
   end
-  return __r247
+  return __r249
 end
 function lines(x)
   return split(x, "\n")
 end
 function get_indentation(s)
-  local __r250 = ""
+  local __r252 = ""
   local __i50 = 0
   while __i50 < _35(s) do
     local __c5 = char(s, __i50)
     if __c5 == " " then
-      __r250 = __r250 .. __c5
+      __r252 = __r252 .. __c5
     end
     __i50 = __i50 + 1
   end
-  return __r250
+  return __r252
 end
 function strip_outer(s, lh, rh)
   if string_starts63(s, lh) and string_ends63(s, rh) then
@@ -2486,9 +2493,9 @@ function simple_id63(x)
   else
     __e39 = nil
   end
-  local __r253 = __e39
-  if __r253 == x then
-    return __r253
+  local __r255 = __e39
+  if __r255 == x then
+    return __r255
   end
 end
 function toplevel_print(v)
@@ -2600,17 +2607,17 @@ function read_toplevel(str, more)
   else
     __e44 = nil
   end
-  local __x918 = __e44
-  if __x918 == more then
+  local __x920 = __e44
+  if __x920 == more then
     return more
   else
-    if nil63(__x918) then
-      return __x918
+    if nil63(__x920) then
+      return __x920
     else
-      if one63(__x918) then
-        return hd(__x918)
+      if one63(__x920) then
+        return hd(__x920)
       else
-        return __x918
+        return __x920
       end
     end
   end
@@ -2766,10 +2773,10 @@ local function main(args)
         end
         __i51 = __i51 + 1
       end
-      local ____x923 = __pre
+      local ____x925 = __pre
       local ____i52 = 0
-      while ____i52 < _35(____x923) do
-        local __file = ____x923[____i52 + 1]
+      while ____i52 < _35(____x925) do
+        local __file = ____x925[____i52 + 1]
         run_file(__file)
         ____i52 = ____i52 + 1
       end
