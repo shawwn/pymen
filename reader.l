@@ -208,6 +208,10 @@
             (wrap s 'unquote-splicing))
       (wrap s 'unquote))))
 
+(define-reader ("$" s)
+  (read-char s)
+  (wrap s '%dollar))
+
 (export stream
         read
         read-all

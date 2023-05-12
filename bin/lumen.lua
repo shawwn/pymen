@@ -553,7 +553,7 @@ function split(s, sep)
     return __l5
   end
 end
-local function tostr(x)
+function tostr(x)
   if string63(x) then
     return x
   else

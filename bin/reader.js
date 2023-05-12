@@ -325,6 +325,10 @@ read_table[","] = function (s) {
     }
   }
 };
+read_table["$"] = function (s) {
+  read_char(s);
+  return wrap(s, "%dollar");
+};
 exports.stream = stream;
 exports.read = read;
 exports["read-all"] = read_all;

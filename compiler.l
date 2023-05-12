@@ -60,6 +60,11 @@
             (each (k v) args
               (unless (number? k)
                 (add l `(%literal ,k |=| ,v)))))
+          (target? 'cmake)
+          (with l (array args)
+            (each (k v) args
+              (unless (number? k)
+                (add l `(%literal ,k | | ,v)))))
         (let l '(%object "_stash" true)
           (each (k v) args
             (unless (number? k)
@@ -297,14 +302,14 @@
           "is" "try"
           "from" "str" "print")
     cmake: (set-of
-             "set"
-             "foreach" "endforeach"
-             "while" "endwhile"
-             "if" "elseif" "else"
-             "block" "endblock"
-             "macro" "endmacro"
-             "function" "endfunction"
-             "break" "return" "continue"
+             ; "set"
+             ; "foreach" "endforeach"
+             ; "while" "endwhile"
+             ; "if" "elseif" "else"
+             ; "block" "endblock"
+             ; "macro" "endmacro"
+             ; "function" "endfunction"
+             ; "break" "return" "continue"
              "AND" "OR"
              "TRUE" "FALSE" "ON" "OFF" "Y" "N"
              )
@@ -324,7 +329,9 @@
   (escape x))
 
 (define-global compile-name (name)
-  (if (keyword? name) (compile (clip name 1)) (compile name)))
+  (if (keyword? name)
+      (compile (clip name 1))
+      (compile name)))
 
 (define-global compile-id (id raw?)
   (if (keyword? id)
@@ -366,7 +373,9 @@
       (compile k)
       (string-literal? k)
       (let i (inner k)
-        (if (valid-id? i)
+        (if (target? 'cmake)
+            (screamcase (if (valid-id? i) i k))
+            (valid-id? i)
             i
           (cat "[" k "]")))
       (cat "[" (compile k) "]")))
@@ -380,15 +389,18 @@
           (add o x))))))
 
 (define infix
-  `((%not: (js: ! lua: not py: not) %unm: -)
+  `((%not: (js: ! lua: not py: not cmake: NOT) %unm: -)
     (%mul: * %div: / %idiv: // %mod: %)
     (%cat: (js: + lua: .. py: +))
     (%add: + %sub: -)
-    (%lt: < %gt: > %le: <= %ge: >=)
+    (%lt: (cmake: LESS all: <)
+     %gt: (cmake: GREATER all: >)
+     %le: (cmake: LESS_EQUAL all: <=)
+     %ge: (cmake: GREATER_EQUAL all: >=))
     (%eq: (js: === lua: == py: ==))
     (%in: (py: in) %is: (py: is))
-    (%and: (js: && lua: and py: and))
-    (%or: (js: ,"||" lua: or py: or))))
+    (%and: (js: && lua: and py: and cmake: AND))
+    (%or: (js: ,"||" lua: or py: or cmake: OR))))
 
 (define unary? (form)
   (and (two? form) (in? (hd form) '(%not %unm))))
@@ -409,7 +421,8 @@
             (let x (has level op)
               (if (= x true) op
                   (string? x) x
-                  (is? x) (has x target))))
+                  (is? x) (or (has x target)
+                              (has x 'all)))))
           infix)))
 
 (define infix? (x)
@@ -422,12 +435,13 @@
   (let (s "(" c "")
     (step x args
       (cat! s c (compile x))
-      (when (and (target? 'py)
+      (when (and (or (target? 'py)
+                     (target? 'cmake))
                  default?
                  (not (id-literal? x))
                  (not (= x "...")))
-        (cat! s "=None"))
-      (set c ", "))
+        (cat! s (if (target? 'cmake) "" "=None")))
+      (set c (if (if (target? 'cmake) " " ", "))))
     (cat s ")")))
 
 (define escape-newlines (s)
@@ -551,11 +565,13 @@
         args1 (if (has args 'rest)
                   `(,@args ,"...")
                 args)
-        args (compile-args args1 true)
+        args (if (target? 'cmake)
+                 (compile-args `((%literal ,id) ,@args1) true)
+                 (compile-args args1 true))
         body (compile-body body)
         ind (indentation)
         p (if prefix (cat prefix " ") "")
-        tr (if (target? 'js) "" "end")
+        tr (if (target? 'js) "" (target? 'cmake) "endfunction()" "end")
         a (if (and async (not (target? 'lua))) "async " ""))
     (if name (cat! tr "\n"))
     (if (target? 'js)
@@ -563,6 +579,8 @@
         (target? 'py)
         (let ws (if (none? ind) "\n" "")
           (cat a "def " id args ":\n" body ws))
+        (target? 'cmake)
+        (cat a "function" args "\n" body ind tr)
       (cat p "function " id args "\n" body ind tr))))
 
 (define can-return? (form)
@@ -625,7 +643,10 @@
         lh1 (lower lh hoist)
         rh1 (lower rh hoist))
     (add hoist `(%set ,lh1 ,rh1))
-    (unless (and stmt? (not tail?))
+    (unless (or (and stmt? (not tail?))
+                ;(target? 'cmake)
+                false
+                )
       lh1)))
 
 (define lower-if (args hoist stmt? tail?)
@@ -642,7 +663,7 @@
                    ,(lower `(%set ,e ,then))
                    ,@(if (is? else)
                          (list (lower `(%set ,e ,else))))))
-        e))))
+        (if (target? 'cmake) `(%id ,e) e)))))
 
 (define lower-short (x args hoist)
   (let ((a b) args
@@ -694,10 +715,10 @@
                      ,@(props body)))
         e))))
 
-(define lower-block (args hoist stmt? tail?)
+(define lower-block (kind args hoist stmt? tail?)
   (let ((name h rest: body) args)
     (add hoist
-       `(%block ,name ,(lower h hoist)
+       `(,kind ,name ,(lower h hoist)
           ,(lower-body body tail?)))))
 
 (define lower-from (args hoist stmt? tail?)
@@ -713,7 +734,8 @@
       id)))
 
 (define lower-function (args hoist)
-  (if (target? 'py)
+  (if (or (target? 'py)
+          (target? 'cmake))
       (let-unique (f)
         (lower `(%do (%local-function ,f ,@args) ,f) hoist))
     (let ((a rest: body) args)
@@ -768,7 +790,8 @@
           (= x '%while) (lower-while args hoist)
           (= x '%for) (lower-for args hoist)
           (= x '%with) (lower-with args hoist stmt? tail?)
-          (= x '%block) (lower-block args hoist stmt? tail?)
+          (= x '%block) (lower-block '%block args hoist stmt? tail?)
+          ; (= x '%cmake-block) (lower-block '%cmake-block args hoist stmt? tail?)
           (= x '%cases) (lower-cases args hoist stmt? tail?)
           (= x 'import) (lower-import args hoist stmt? tail?)
           (= x 'from) (lower-from args hoist stmt? tail?)
@@ -844,6 +867,14 @@
                 (= (hd x) '%break))
             (break))))))
 
+(define-special %cmake-block (body) stmt: true tr: true
+  (let (ind (indentation)
+        s "")
+    (cat! s ind "block(SCOPE_FOR VARIABLES)\n")
+    (cat! s (compile-body body))
+    (cat! s ind "endblock()\n")
+    s))
+
 (define-special %if (cond cons alt) stmt: true tr: true
   (let (cond (compile cond)
         cons (compile-body cons)
@@ -854,16 +885,22 @@
         (cat! s ind "if (" cond ") {\n" cons ind "}")
         (target? 'py)
         (cat! s ind "if " cond ":\n" cons)
+        (target? 'cmake)
+        (cat! s ind "if(" cond ")\n" cons)
       (cat! s ind "if " cond " then\n" cons))
     (if (and alt (target? 'js))
         (cat! s " else {\n" alt ind "}")
         (and alt (target? 'py))
         (cat! s ind "else:\n" alt)
+        (and alt (target? 'cmake))
+        (cat! s ind "else()\n" alt)
         alt (cat! s ind "else\n" alt))
     (if (target? 'lua)
         (cat s ind "end\n")
         (target? 'js)
         (cat s "\n")
+        (target? 'cmake)
+        (cat s ind "endif()\n")
       s)))
 
 (define-special %while (cond form) stmt: true tr: true
@@ -933,22 +970,33 @@
   (apply compile-function args body))
 
 (define-special %global-function (name args rest: body) stmt: true tr: true
-  (if (or (target? 'lua) (target? 'py))
+  (if (or (target? 'lua) (target? 'py) (target? 'cmake))
       (let x (apply compile-function args body name: name)
         (cat (indentation) x))
     (compile `(%set ,name (%function ,args ,@body)) stmt: true)))
 
 (define-special %local-function (name args rest: body) stmt: true tr: true
-  (if (or (target? 'lua) (target? 'py))
+  (if (or (target? 'lua) (target? 'py) (target? 'cmake))
       (let x (apply compile-function args body name: name prefix: 'local)
         (cat (indentation) x))
     (compile `(%local ,name (%function ,args ,@body)) stmt: true)))
 
+(define-special %ref (variable)
+  (cat "${" (compile-id (tostr variable)) "}"))
+
+(define-special %id (variable)
+  (escape (compile `(%ref ,variable))))
+
+
 (define-special %return (x) stmt: true
-  (let x (if (nil? x)
-             "return"
-           (cat "return " (compile x)))
-    (cat (indentation) x)))
+  (cat (indentation)
+       (if (target? 'cmake)
+           (compile (if (nil? x)
+                        '(return)
+                        `(return PROPAGATE ,x)))
+           (nil? x)
+           "return"
+           (cat "return " (compile x)))))
 
 (define-special %new (x)
   (cat "new " (compile x)))
@@ -973,6 +1021,8 @@
     (cat (indentation) e)))
 
 (define-special %local (name value) stmt: true
+  (when (target? 'cmake)
+    (return (compile `(%set ,name ,value))))
   (if (and (nil? value) (target? 'py)) (set value "nil"))
   (let (id (compile name)
         value1 (compile value)
@@ -983,8 +1033,11 @@
 
 (define-special %set (lh rh) stmt: true
   (let (lh (compile lh)
-        rh (compile (if (nil? rh) 'nil rh)))
-    (cat (indentation) lh " = " rh)))
+        rh (compile (if (nil? rh) 'nil rh))
+        ind (indentation))
+    (if (target? 'cmake)
+        (cat (indentation) "set(" lh " " rh ")")
+      (cat (indentation) lh " = " rh))))
 
 (define-special %get (t k)
   (let (t1 (compile t)
@@ -1041,8 +1094,13 @@
       (cat! s " if " (compile cond)))
     (cat lh s rh)))
 
+(define-global compile-literal (x)
+  (if (string-literal? x)
+      (inner x)
+      (compile x)))
+
 (define-special %literal args
-  (apply cat (map compile args)))
+  (mapcat compile-literal args))
 
 (define-special global (x) stmt: true tr: true
   (if (target? 'py)

@@ -1,287 +1,338 @@
-delimiters = 
-  ["("] ON
-  [")"] ON
-  [";"] ON
-  [","] ON
-  ["\r"] ON
-  ["\n"] ON
-
-closing_delimiters = [")"] ON
-whitespace = 
-  [" "] ON
-  ["\t"] ON
-  ["\r"] ON
-  ["\n"] ON
-
-stream = function (str, more)
-  return 
-    pos 0
-    string str
-    len _35(str)
-    more more
-  
-end
-peek_char = function (s)
-  ____id = s
-  __pos = has(____id, "pos")
-  __len = has(____id, "len")
-  __string = has(____id, "string")
-  if __pos < __len then
-    return char(__string, __pos)
-end
-read_char = function (s)
-  __c = peek_char(s)
-  if __c then
-    s.pos = s.pos + 1
-    return __c
-end
-skip_non_code = function (s)
+set(delimiters 
+  "(" ON
+  ")" ON
+  ";" ON
+  "," ON
+  "\R" ON
+  "\N" ON
+)
+set(closing_delimiters ")" ON)
+set(whitespace 
+  " " ON
+  "\T" ON
+  "\R" ON
+  "\N" ON
+)
+function(stream str more)
+  return(PROPAGATE 
+    POS 0
+    STRING str
+    LEN _35(str)
+    MORE more
+  )
+endfunction()
+function(peek_char s)
+  set(____id s)
+  set(__pos has(____id "pos"))
+  set(__len has(____id "len"))
+  set(__string has(____id "string"))
+  if(__pos LESS __len)
+    return(PROPAGATE char(__string __pos))
+  endif()
+endfunction()
+function(read_char s)
+  set(__c peek_char(s))
+  if(__c)
+    set(s.pos s.pos + 1)
+    return(PROPAGATE __c)
+  endif()
+endfunction()
+function(skip_non_code s)
   while ON do
-    __c1 = peek_char(s)
-    if nil63(__c1) then
+    set(__c1 peek_char(s))
+    if(nil63(__c1))
       break
-    else
-      if has63(whitespace, __c1) then
+    else()
+      if(has63(whitespace __c1))
         read_char(s)
-      else
-        if _37eq(__c1, ";") then
-          while _37and(__c1, _37not(_37eq(__c1, "\n"))) do
-            __c1 = read_char(s)
+      else()
+        if(_37eq(__c1 ";"))
+          while __c1 AND NOT( _37eq(__c1 "\n")) do
+            set(__c1 read_char(s))
           end
           skip_non_code(s)
-        else
+        else()
           break
+        endif()
+      endif()
+    endif()
   end
-end
-read_table = 
-eof = 
-more63 = function (s, x)
-  return _37and(is63(s.more), _37eq(x, s.more))
-end
-eof63 = function (s, x)
-  return _37or(_37eq(x, eof), more63(s, x))
-end
-read_1 = function (s)
+endfunction()
+set(read_table )
+set(eof )
+function(more63 s x)
+  return(PROPAGATE is63(s.more) AND _37eq(x s.more))
+endfunction()
+function(eof63 s x)
+  return(PROPAGATE _37eq(x eof) OR more63(s x))
+endfunction()
+function(read_1 s)
   skip_non_code(s)
-  __c2 = peek_char(s)
-  if is63(__c2) then
-    return (_37or(has(read_table, __c2), has(read_table, "")))(s)
-  else
-    return eof
-end
-read = function (s)
-  __form = read_1(s)
-  if _37eq(",", peek_char(s)) then
-    __r8 = [",", __form]
+  set(__c2 peek_char(s))
+  if(is63(__c2))
+    return(PROPAGATE (has(read_table __c2) OR has(read_table ""))(s))
+  else()
+    return(PROPAGATE eof)
+  endif()
+endfunction()
+function(read s)
+  set(__form read_1(s))
+  if(_37eq("," peek_char(s)))
+    set(__r8 [",", __form])
     while ON do
       read_char(s)
-      __form = read_1(s)
-      if eof63(s, __form) then
-        return expected(s, "tuple")
-      add(__r8, __form)
-      if _37not(_37eq(",", peek_char(s))) then
+      set(__form read_1(s))
+      if(eof63(s __form))
+        return(PROPAGATE expected(s "tuple"))
+      endif()
+      add(__r8 __form)
+      if(NOT( _37eq("," peek_char(s))))
         break
+      endif()
     end
-    return __r8
-  else
-    return __form
-end
-read_all = function (s)
-  __r10 = ""
-  __l = []
+    return(PROPAGATE __r8)
+  else()
+    return(PROPAGATE __form)
+  endif()
+endfunction()
+function(read_all s)
+  set(__r10 "")
+  set(__l [])
   while nil63(__r10) do
-    __form1 = read(s)
-    if more63(s, __form1) then
-      __r10 = s.more
-    else
-      if eof63(s, __form1) then
-        __r10 = __l
-      else
-        add(__l, __form1)
+    set(__form1 read(s))
+    if(more63(s __form1))
+      set(__r10 s.more)
+    else()
+      if(eof63(s __form1))
+        set(__r10 __l)
+      else()
+        add(__l __form1)
+      endif()
+    endif()
   end
-  return __r10
-end
-read_string = function (str, more)
-  __s = stream(str, more)
-  __x1 = read(__s)
-  if _37not(_37eq(__x1, eof)) then
-    return __x1
-end
-key63 = function (atom)
-  return _37and(string63(atom), _37and(_35(atom) > 1, _37eq(char(atom, edge(atom)), ":")))
-end
-expected = function (s, c)
-  if is63(s.more) then
-    return s.more
-  else
-    error(_37cat("Expected ", _37cat(c, _37cat(" at ", s.pos))))
-end
-wrap = function (s, x)
-  __y = read(s)
-  if more63(s, __y) then
-    return __y
-  else
-    return [x, __y]
-end
-hex_prefix63 = function (str)
-  __e = ""
-  if _37eq(code(str, 0), 45) then
-    __e = 1
-  else
-    __e = 0
-  __i = __e
-  __id1 = _37eq(code(str, __i), 48)
-  __e1 = ""
-  if __id1 then
-    __i = __i + 1
-    __n = code(str, __i)
-    __e1 = _37or(_37eq(__n, 120), _37eq(__n, 88))
-  else
-    __e1 = __id1
-  return __e1
-end
-maybe_number = function (str)
-  if hex_prefix63(str) then
-    if number_code63(code(str, edge(str))) then
-      return number(str)
-end
-real63 = function (x)
-  return _37and(number63(x), _37and(_37not(nan63(x)), _37not(inf63(x))))
-end
-read_table[""] = function (s)
-  __str = ""
+  return(PROPAGATE __r10)
+endfunction()
+function(read_string str more)
+  set(__s stream(str more))
+  set(__x1 read(__s))
+  if(NOT( _37eq(__x1 eof)))
+    return(PROPAGATE __x1)
+  endif()
+endfunction()
+function(key63 atom)
+  return(PROPAGATE string63(atom) AND (_35(atom) GREATER 1 AND _37eq(char(atom edge(atom)) ":")))
+endfunction()
+function(expected s c)
+  if(is63(s.more))
+    return(PROPAGATE s.more)
+  else()
+    error(_37cat("Expected " _37cat(c _37cat(" at " s.pos))))
+  endif()
+endfunction()
+function(wrap s x)
+  set(__y read(s))
+  if(more63(s __y))
+    return(PROPAGATE __y)
+  else()
+    return(PROPAGATE [x, __y])
+  endif()
+endfunction()
+function(hex_prefix63 str)
+  set(__e "")
+  if(_37eq(code(str 0) 45))
+    set(__e 1)
+  else()
+    set(__e 0)
+  endif()
+  set(__i "${__e}")
+  set(__id1 _37eq(code(str __i) 48))
+  set(__e1 "")
+  if(__id1)
+    set(__i __i + 1)
+    set(__n code(str __i))
+    set(__e1 _37eq(__n 120) OR _37eq(__n 88))
+  else()
+    set(__e1 __id1)
+  endif()
+  return(PROPAGATE "${__e1}")
+endfunction()
+function(maybe_number str)
+  if(hex_prefix63(str))
+    if(number_code63(code(str edge(str))))
+      return(PROPAGATE number(str))
+    endif()
+  endif()
+endfunction()
+function(real63 x)
+  return(PROPAGATE number63(x) AND (NOT nan63(x) AND NOT inf63(x)))
+endfunction()
+function(__f s)
+  set(__str "")
   while ON do
-    __c3 = peek_char(s)
-    if _37and(__c3, _37and(_37not(has63(whitespace, __c3)), _37not(has63(delimiters, __c3)))) then
-      __str = _37cat(__str, read_char(s))
-    else
+    set(__c3 peek_char(s))
+    if(__c3 AND (NOT has63(whitespace __c3) AND NOT has63(delimiters __c3)))
+      set(__str _37cat(__str read_char(s)))
+    else()
       break
+    endif()
   end
-  if _37eq(__str, "true") then
-    return ON
-  else
-    if _37eq(__str, "false") then
-      return OFF
-    else
-      __n1 = maybe_number(__str)
-      if real63(__n1) then
-        return __n1
-      else
-        return __str
-end
-read_table["("] = function (s)
+  if(_37eq(__str "true"))
+    return(PROPAGATE ON)
+  else()
+    if(_37eq(__str "false"))
+      return(PROPAGATE OFF)
+    else()
+      set(__n1 maybe_number(__str))
+      if(real63(__n1))
+        return(PROPAGATE __n1)
+      else()
+        return(PROPAGATE __str)
+      endif()
+    endif()
+  endif()
+endfunction()
+set(read_table[""] __f)
+function(__f1 s)
   read_char(s)
-  __r20 = ""
-  __l1 = []
+  set(__r20 "")
+  set(__l1 [])
   while nil63(__r20) do
     skip_non_code(s)
-    __c4 = peek_char(s)
-    if _37eq(__c4, ")") then
+    set(__c4 peek_char(s))
+    if(_37eq(__c4 ")"))
       read_char(s)
-      __r20 = __l1
-    else
-      if nil63(__c4) then
-        __r20 = expected(s, ")")
-      else
-        __x3 = read(s)
-        if eof63(s, __x3) then
-          __r20 = expected(s, ")")
-        else
-          if key63(__x3) then
-            __k = clip(__x3, 0, edge(__x3))
-            __v = read(s)
-            __l1 = object(__l1)
-            __l1[__k] = __v
-          else
-            add(__l1, __x3)
+      set(__r20 __l1)
+    else()
+      if(nil63(__c4))
+        set(__r20 expected(s ")"))
+      else()
+        set(__x3 read(s))
+        if(eof63(s __x3))
+          set(__r20 expected(s ")"))
+        else()
+          if(key63(__x3))
+            set(__k clip(__x3 0 edge(__x3)))
+            set(__v read(s))
+            set(__l1 object(__l1))
+            set(__l1[__k] __v)
+          else()
+            add(__l1 __x3)
+          endif()
+        endif()
+      endif()
+    endif()
   end
-  return __r20
-end
-read_table[")"] = function (s)
-  error(_37cat("Unexpected ) at ", s.pos))
-end
-read_matching = function (opener, closer, s)
-  __r23 = ""
-  __pos1 = s.pos
-  __str1 = ""
-  __i1 = 0
-  while __i1 < _35(opener) do
-    __str1 = _37cat(__str1, _37or(read_char(s), ""))
-    __i1 = __i1 + 1
+  return(PROPAGATE __r20)
+endfunction()
+set(read_table["("] __f1)
+function(__f2 s)
+  error(_37cat("Unexpected ) at " s.pos))
+endfunction()
+set(read_table[")"] __f2)
+function(read_matching opener closer s)
+  set(__r23 "")
+  set(__pos1 s.pos)
+  set(__str1 "")
+  set(__i1 0)
+  while __i1 LESS _35(opener) do
+    set(__str1 _37cat(__str1 read_char(s) OR ""))
+    set(__i1 __i1 + 1)
   end
-  if _37eq(__str1, opener) then
+  if(_37eq(__str1 opener))
     while nil63(__r23) do
-      if _37eq(clip(s.string, s.pos, s.pos + _35(closer)), closer) then
-        __i2 = 0
-        while __i2 < _35(closer) do
-          __str1 = _37cat(__str1, read_char(s))
-          __i2 = __i2 + 1
+      if(_37eq(clip(s.string s.pos s.pos + _35(closer)) closer))
+        set(__i2 0)
+        while __i2 LESS _35(closer) do
+          set(__str1 _37cat(__str1 read_char(s)))
+          set(__i2 __i2 + 1)
         end
-        __r23 = __str1
-      else
-        if nil63(peek_char(s)) then
-          __r23 = expected(s, closer)
-        else
-          __str1 = _37cat(__str1, read_char(s))
-          if _37eq(peek_char(s), "\\") then
-            __str1 = _37cat(__str1, read_char(s))
+        set(__r23 __str1)
+      else()
+        if(nil63(peek_char(s)))
+          set(__r23 expected(s closer))
+        else()
+          set(__str1 _37cat(__str1 read_char(s)))
+          if(_37eq(peek_char(s) "\\"))
+            set(__str1 _37cat(__str1 read_char(s)))
+          endif()
+        endif()
+      endif()
     end
-  return __r23
-end
-read_table["\""] = function (s)
-  if string_starts63(s.string, "\"\"\"", s.pos) then
-    return read_matching("\"\"\"", "\"\"\"", s)
-  else
-    __i3 = s.pos
-    __j = search(s.string, "\"", __i3 + 1)
-    __b = either(search(s.string, "\\", __i3 + 1), __j)
-    if _37and(is63(__j), _37and(__j < s.len, __b >= __j)) then
-      s.pos = __j + 1
-      return clip(s.string, __i3, __j + 1)
-    else
-      __r25 = ""
+  endif()
+  return(PROPAGATE __r23)
+endfunction()
+function(__f3 s)
+  if(string_starts63(s.string "\"\"\"" s.pos))
+    return(PROPAGATE read_matching("\"\"\"" "\"\"\"" s))
+  else()
+    set(__i3 s.pos)
+    set(__j search(s.string "\"" __i3 + 1))
+    set(__b either(search(s.string "\\" __i3 + 1) __j))
+    if(is63(__j) AND (__j LESS s.len AND __b GREATER_EQUAL __j))
+      set(s.pos __j + 1)
+      return(PROPAGATE clip(s.string __i3 __j + 1))
+    else()
+      set(__r25 "")
       read_char(s)
       while nil63(__r25) do
-        __c5 = peek_char(s)
-        if _37eq(__c5, "\"") then
+        set(__c5 peek_char(s))
+        if(_37eq(__c5 "\""))
           read_char(s)
-          __r25 = clip(s.string, __i3, s.pos)
-        else
-          if nil63(__c5) then
-            __r25 = expected(s, "\"")
-          else
-            if _37eq(__c5, "\\") then
+          set(__r25 clip(s.string __i3 s.pos))
+        else()
+          if(nil63(__c5))
+            set(__r25 expected(s "\""))
+          else()
+            if(_37eq(__c5 "\\"))
               read_char(s)
+            endif()
             read_char(s)
+          endif()
+        endif()
       end
-      return __r25
-end
-read_table["|"] = function (s)
-  __i4 = s.pos
-  __j1 = search(s.string, "|", __i4 + 1)
-  if _37and(is63(__j1), __j1 < s.len) then
-    s.pos = __j1 + 1
-    return clip(s.string, __i4, __j1 + 1)
-  else
-    return expected(s, "|")
-end
-read_table["'"] = function (s)
+      return(PROPAGATE __r25)
+    endif()
+  endif()
+endfunction()
+set(read_table["\""] __f3)
+function(__f4 s)
+  set(__i4 s.pos)
+  set(__j1 search(s.string "|" __i4 + 1))
+  if(is63(__j1) AND __j1 LESS s.len)
+    set(s.pos __j1 + 1)
+    return(PROPAGATE clip(s.string __i4 __j1 + 1))
+  else()
+    return(PROPAGATE expected(s "|"))
+  endif()
+endfunction()
+set(read_table["|"] __f4)
+function(__f5 s)
   read_char(s)
-  return wrap(s, "quote")
-end
-read_table["`"] = function (s)
+  return(PROPAGATE wrap(s "quote"))
+endfunction()
+set(read_table["'"] __f5)
+function(__f6 s)
   read_char(s)
-  return wrap(s, "quasiquote")
-end
-read_table[","] = function (s)
+  return(PROPAGATE wrap(s "quasiquote"))
+endfunction()
+set(read_table["`"] __f6)
+function(__f7 s)
   read_char(s)
-  __c6 = peek_char(s)
-  if _37or(nil63(__c6), _37or(has63(whitespace, __c6), has63(closing_delimiters, __c6))) then
-    return ","
-  else
-    if _37eq(__c6, "@") then
+  set(__c6 peek_char(s))
+  if(nil63(__c6) OR (has63(whitespace __c6) OR has63(closing_delimiters __c6)))
+    return(PROPAGATE ",")
+  else()
+    if(_37eq(__c6 "@"))
       read_char(s)
-      return wrap(s, "unquote-splicing")
-    else
-      return wrap(s, "unquote")
-end
+      return(PROPAGATE wrap(s "unquote-splicing"))
+    else()
+      return(PROPAGATE wrap(s "unquote"))
+    endif()
+  endif()
+endfunction()
+set(read_table[","] __f7)
+function(__f8 s)
+  read_char(s)
+  return(PROPAGATE wrap(s "%dollar"))
+endfunction()
+set(read_table["$"] __f8)

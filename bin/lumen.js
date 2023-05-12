@@ -694,7 +694,7 @@ split = function (s, sep) {
     return __l5;
   }
 };
-var tostr = function (x) {
+tostr = function (x) {
   if (string63(x)) {
     return x;
   } else {
@@ -1758,7 +1758,7 @@ setenv("step", {
 });
 var __set_of__macro = function (..._42args) {
   var __xs13 = unstash([..._42args]);
-  var __l14 = [];
+  var __l14 = {};
   var ____o25 = __xs13;
   var ____i43 = undefined;
   for (____i43 in ____o25) {

@@ -1,2456 +1,2380 @@
-getenv = function (k, p)
-  if string63(k) then
-    __i = edge(environment)
-    while __i >= 0 do
-      if has63(environment[__i], k) then
-        __b = environment[__i][k]
-        __e43 = ""
-        if p then
-          __e43 = has(__b, p)
-        else
-          __e43 = __b
-        return __e43
-      else
-        __i = __i - 1
+function(getenv k p)
+  if(string63(k))
+    set(__i edge(environment))
+    while __i GREATER_EQUAL 0 do
+      if(has63(environment[__i] k))
+        set(__b environment[__i][k])
+        set(__e45 "")
+        if(p)
+          set(__e45 has(__b p))
+        else()
+          set(__e45 __b)
+        endif()
+        return(PROPAGATE "${__e45}")
+      else()
+        set(__i __i - 1)
+      endif()
     end
-end
-macro_function = function (k)
-  return getenv(k, "macro")
-end
-macro63 = function (k)
-  return is63(macro_function(k))
-end
-special63 = function (k)
-  return is63(getenv(k, "special"))
-end
-special_form63 = function (form)
-  return _37and(_37not(atom63(form)), special63(hd(form)))
-end
-statement63 = function (k)
-  return _37and(special63(k), getenv(k, "stmt"))
-end
-symbol_expansion = function (k)
-  return getenv(k, "symbol")
-end
-symbol63 = function (k)
-  return is63(symbol_expansion(k))
-end
-variable63 = function (k)
-  return is63(getenv(k, "variable"))
-end
-bound63 = function (x)
-  return _37or(macro63(x), _37or(special63(x), _37or(symbol63(x), variable63(x))))
-end
-keyword63 = function (atom)
-  return _37and(string63(atom), _37and(_35(atom) > 1, _37eq(char(atom, 0), ":")))
-end
-quoted = function (form)
-  if keyword63(form) then
-    return form
-  else
-    if string63(form) then
-      return escape(form)
-    else
-      if atom63(form) then
-        return form
-      else
-        return join(["list"], map(quoted, form))
-end
-literal = function (s)
-  if string_literal63(s) then
-    return s
-  else
-    return quoted(s)
-end
-stash42 = function (args)
-  if props63(args) then
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      __l = array(args)
-      ____o = args
-      __k = ""
+  endif()
+endfunction()
+function(macro_function k)
+  return(PROPAGATE getenv(k "macro"))
+endfunction()
+function(macro63 k)
+  return(PROPAGATE is63(macro_function(k)))
+endfunction()
+function(special63 k)
+  return(PROPAGATE is63(getenv(k "special")))
+endfunction()
+function(special_form63 form)
+  return(PROPAGATE NOT atom63(form) AND special63(hd(form)))
+endfunction()
+function(statement63 k)
+  return(PROPAGATE special63(k) AND getenv(k "stmt"))
+endfunction()
+function(symbol_expansion k)
+  return(PROPAGATE getenv(k "symbol"))
+endfunction()
+function(symbol63 k)
+  return(PROPAGATE is63(symbol_expansion(k)))
+endfunction()
+function(variable63 k)
+  return(PROPAGATE is63(getenv(k "variable")))
+endfunction()
+function(bound63 x)
+  return(PROPAGATE macro63(x) OR (special63(x) OR (symbol63(x) OR variable63(x))))
+endfunction()
+function(keyword63 atom)
+  return(PROPAGATE string63(atom) AND (_35(atom) GREATER 1 AND _37eq(char(atom 0) ":")))
+endfunction()
+function(quoted form)
+  if(keyword63(form))
+    return(PROPAGATE form)
+  else()
+    if(string63(form))
+      return(PROPAGATE escape(form))
+    else()
+      if(atom63(form))
+        return(PROPAGATE form)
+      else()
+        return(PROPAGATE join(["list"] map(quoted form)))
+      endif()
+    endif()
+  endif()
+endfunction()
+function(literal s)
+  if(string_literal63(s))
+    return(PROPAGATE s)
+  else()
+    return(PROPAGATE quoted(s))
+  endif()
+endfunction()
+function(stash42 args)
+  if(props63(args))
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      set(__l array(args))
+      set(____o args)
+      set(__k "")
       for (__k in ____o) {
-        __v = ____o[__k]
-        __e45 = ""
-        if numeric63(__k) then
-          __e45 = parseInt(__k)
-        else
-          __e45 = __k
-        __k1 = __e45
-        if _37not(number63(__k1)) then
-          add(__l, ["%literal", __k1, "|=|", __v])
+        set(__v ____o[__k])
+        set(__e48 "")
+        if(numeric63(__k))
+          set(__e48 parseInt(__k))
+        else()
+          set(__e48 __k)
+        endif()
+        set(__k1 "${__e48}")
+        if(NOT number63(__k1))
+          add(__l ["%literal", __k1, "|=|", __v])
+        endif()
       }
-      return __l
-    else
-      __l1 = ["%object", "\"_stash\"", ON]
-      ____o1 = args
-      __k2 = ""
-      for (__k2 in ____o1) {
-        __v1 = ____o1[__k2]
-        __e44 = ""
-        if numeric63(__k2) then
-          __e44 = parseInt(__k2)
-        else
-          __e44 = __k2
-        __k3 = __e44
-        if _37not(number63(__k3)) then
-          add(__l1, literal(__k3))
-          add(__l1, __v1)
-      }
-      return join(, args, [__l1])
-  else
-    return args
-end
-bias = function (k)
-  if number63(k) then
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "lua") then
-      k = k + 1
-    return k
-  else
-    return k
-end
-bind = function (lh, rh)
-  if atom63(lh) then
-    return [lh, rh]
-  else
-    if hd63(lh, ",") then
-      return bind(cut(lh, 1), rh)
-    else
-      if _37eq(hd(lh), "t") then
-        ____id = lh
-        ___ = has(____id, 0)
-        __var = has(____id, 1)
-        __val = has(____id, 2)
-        __val1 = either(__val, __var)
-        return bind(["o", __var, ["the", __val1]], rh)
-      else
-        if _37eq(hd(lh), "o") then
-          ____id1 = lh
-          ___1 = has(____id1, 0)
-          __var1 = has(____id1, 1)
-          __val2 = has(____id1, 2)
-          return [__var1, ["if", ["nil?", rh], __val2, rh]]
-        else
-          __id2 = unique("id")
-          __bs = [__id2, rh]
-          ____o2 = lh
-          __k4 = ""
-          for (__k4 in ____o2) {
-            __v2 = ____o2[__k4]
-            __e46 = ""
-            if numeric63(__k4) then
-              __e46 = parseInt(__k4)
-            else
-              __e46 = __k4
-            __k5 = __e46
-            __e47 = ""
-            if _37eq(__k5, "rest") then
-              __e47 = ["cut", __id2, _35(lh)]
-            else
-              __e47 = ["has", __id2, ["quote", bias(__k5)]]
-            __x11 = __e47
-            if is63(__k5) then
-              __e48 = ""
-              if _37eq(__v2, ON) then
-                __e48 = __k5
-              else
-                __e48 = __v2
-              __k6 = __e48
-              __bs = join(__bs, bind(__k6, __x11))
+      return(PROPAGATE __l)
+    else()
+      if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        set(__l1 array(args))
+        set(____o1 args)
+        set(__k2 "")
+        for (__k2 in ____o1) {
+          set(__v1 ____o1[__k2])
+          set(__e47 "")
+          if(numeric63(__k2))
+            set(__e47 parseInt(__k2))
+          else()
+            set(__e47 __k2)
+          endif()
+          set(__k3 "${__e47}")
+          if(NOT number63(__k3))
+            add(__l1 ["%literal", __k3, "| |", __v1])
+          endif()
+        }
+        return(PROPAGATE __l1)
+      else()
+        set(__l2 ["%object", "\"_stash\"", ON])
+        set(____o2 args)
+        set(__k4 "")
+        for (__k4 in ____o2) {
+          set(__v2 ____o2[__k4])
+          set(__e46 "")
+          if(numeric63(__k4))
+            set(__e46 parseInt(__k4))
+          else()
+            set(__e46 __k4)
+          endif()
+          set(__k5 "${__e46}")
+          if(NOT number63(__k5))
+            add(__l2 literal(__k5))
+            add(__l2 __v2)
+          endif()
+        }
+        return(PROPAGATE join( args [__l2]))
+      endif()
+    endif()
+  else()
+    return(PROPAGATE args)
+  endif()
+endfunction()
+function(bias k)
+  if(number63(k))
+    if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+      set(k k + 1)
+    endif()
+    return(PROPAGATE k)
+  else()
+    return(PROPAGATE k)
+  endif()
+endfunction()
+function(bind lh rh)
+  if(atom63(lh))
+    return(PROPAGATE [lh, rh])
+  else()
+    if(hd63(lh ","))
+      return(PROPAGATE bind(cut(lh 1) rh))
+    else()
+      if(_37eq(hd(lh) "t"))
+        set(____id lh)
+        set(___ has(____id 0))
+        set(__var has(____id 1))
+        set(__val has(____id 2))
+        set(__val1 either(__val __var))
+        return(PROPAGATE bind(["o", __var, ["the", __val1]] rh))
+      else()
+        if(_37eq(hd(lh) "o"))
+          set(____id1 lh)
+          set(___1 has(____id1 0))
+          set(__var1 has(____id1 1))
+          set(__val2 has(____id1 2))
+          return(PROPAGATE [__var1, ["if", ["nil?", rh], __val2, rh]])
+        else()
+          set(__id2 unique("id"))
+          set(__bs [__id2, rh])
+          set(____o3 lh)
+          set(__k6 "")
+          for (__k6 in ____o3) {
+            set(__v3 ____o3[__k6])
+            set(__e49 "")
+            if(numeric63(__k6))
+              set(__e49 parseInt(__k6))
+            else()
+              set(__e49 __k6)
+            endif()
+            set(__k7 "${__e49}")
+            set(__e50 "")
+            if(_37eq(__k7 "rest"))
+              set(__e50 ["cut", __id2, _35(lh)])
+            else()
+              set(__e50 ["has", __id2, ["quote", bias(__k7)]])
+            endif()
+            set(__x12 "${__e50}")
+            if(is63(__k7))
+              set(__e51 "")
+              if(_37eq(__v3 ON))
+                set(__e51 __k7)
+              else()
+                set(__e51 __v3)
+              endif()
+              set(__k8 "${__e51}")
+              set(__bs join(__bs bind(__k8 __x12)))
+            endif()
           }
-          return __bs
-end
-__arguments37__macro = function (from)
-  ____x22 = object(["target"])
-  ____x22.js = [["%idx", ["%idx", ["%idx", "Array", "prototype"], "slice"], "call"], "arguments", from]
-  ____x22.py = ["|list|", "|_args|"]
-  ____x22.lua = ["list", "|...|"]
-  return ____x22
-end
-setenv("arguments%", 
-  _stash ON
-  ["macro"] __arguments37__macro
-)
-body_docstring = function (body)
-  if _37and(_35(body) > 1, string_literal63(hd(body))) then
-    return [hd(body), tl(body)]
-  else
-    return [[], body]
-end
-bind42 = function (args, body)
-  __args1 = 
-  rest = function ()
-    __args1.rest = ON
-    ____x33 = object(["target"])
-    ____x33.py = ["obj", "..."]
-    return ["unstash", ["list", "..."], ____x33]
-  end
-  if atom63(args) then
-    return [__args1, join(["let", [args, rest()]], body)]
-  else
-    ____id3 = body_docstring(body)
-    __doc = has(____id3, 0)
-    __body = has(____id3, 1)
-    __pre = []
-    __bs1 = []
-    __inits = []
-    __r21 = unique("r")
-    ____o3 = args
-    __k7 = ""
-    for (__k7 in ____o3) {
-      __v3 = ____o3[__k7]
-      __e49 = ""
-      if numeric63(__k7) then
-        __e49 = parseInt(__k7)
-      else
-        __e49 = __k7
-      __k8 = __e49
-      if number63(__k8) then
-        if atom63(__v3) then
-          add(__args1, __v3)
-        else
-          if _37eq(hd(__v3), "o") then
-            ____id4 = __v3
-            ___2 = has(____id4, 0)
-            __var2 = has(____id4, 1)
-            __val3 = has(____id4, 2)
-            add(__args1, __var2)
-            add(__inits, ["%if", ["nil?", __var2], ["%set", __var2, __val3]])
-          else
-            if _37eq(hd(__v3), "t") then
-              ____id5 = __v3
-              ___3 = has(____id5, 0)
-              __var3 = has(____id5, 1)
-              __val4 = has(____id5, 2)
-              __val5 = either(__val4, __var3)
-              add(__args1, __var3)
-              add(__inits, ["%if", ["nil?", __var3], ["%set", __var3, ["the", __val5]]])
-            else
-              __x45 = unique("x")
-              add(__args1, __x45)
-              __bs1 = join(__bs1, [__v3, __x45])
+          return(PROPAGATE __bs)
+        endif()
+      endif()
+    endif()
+  endif()
+endfunction()
+function(__arguments37__macro from)
+  set(____x23 object(["target"]))
+  set(____x23.js [["%idx", ["%idx", ["%idx", "Array", "prototype"], "slice"], "call"], "arguments", from])
+  set(____x23.py ["|list|", "|_args|"])
+  set(____x23.lua ["list", "|...|"])
+  return(PROPAGATE ____x23)
+endfunction()
+setenv("arguments%" macro __arguments37__macro)
+function(body_docstring body)
+  if(_35(body) GREATER 1 AND string_literal63(hd(body)))
+    return(PROPAGATE [hd(body), tl(body)])
+  else()
+    return(PROPAGATE [[], body])
+  endif()
+endfunction()
+function(bind42 args body)
+  set(__args1 )
+  function(rest)
+    set(__args1.rest ON)
+    set(____x34 object(["target"]))
+    set(____x34.py ["obj", "..."])
+    return(PROPAGATE ["unstash", ["list", "..."], ____x34])
+  endfunction()
+  if(atom63(args))
+    return(PROPAGATE [__args1, join(["let", [args, rest()]] body)])
+  else()
+    set(____id3 body_docstring(body))
+    set(__doc has(____id3 0))
+    set(__body has(____id3 1))
+    set(__pre [])
+    set(__bs1 [])
+    set(__inits [])
+    set(__r21 unique("r"))
+    set(____o4 args)
+    set(__k9 "")
+    for (__k9 in ____o4) {
+      set(__v4 ____o4[__k9])
+      set(__e52 "")
+      if(numeric63(__k9))
+        set(__e52 parseInt(__k9))
+      else()
+        set(__e52 __k9)
+      endif()
+      set(__k10 "${__e52}")
+      if(number63(__k10))
+        if(atom63(__v4))
+          add(__args1 __v4)
+        else()
+          if(_37eq(hd(__v4) "o"))
+            set(____id4 __v4)
+            set(___2 has(____id4 0))
+            set(__var2 has(____id4 1))
+            set(__val3 has(____id4 2))
+            add(__args1 __var2)
+            add(__inits ["%if", ["nil?", __var2], ["%set", __var2, __val3]])
+          else()
+            if(_37eq(hd(__v4) "t"))
+              set(____id5 __v4)
+              set(___3 has(____id5 0))
+              set(__var3 has(____id5 1))
+              set(__val4 has(____id5 2))
+              set(__val5 either(__val4 __var3))
+              add(__args1 __var3)
+              add(__inits ["%if", ["nil?", __var3], ["%set", __var3, ["the", __val5]]])
+            else()
+              set(__x46 unique("x"))
+              add(__args1 __x46)
+              set(__bs1 join(__bs1 [__v4, __x46]))
+            endif()
+          endif()
+        endif()
+      endif()
     }
-    if props63(args) then
-      __pre = join(__pre, [__r21, rest()])
-      __n4 = _35(__args1)
-      __i5 = 0
-      while __i5 < __n4 do
-        __v4 = __args1[__i5]
-        __pre = join(__pre, [__v4, ["destash!", __v4, __r21]])
-        __i5 = __i5 + 1
+    if(props63(args))
+      set(__pre join(__pre [__r21, rest()]))
+      set(__n5 _35(__args1))
+      set(__i6 0)
+      while __i6 LESS __n5 do
+        set(__v5 __args1[__i6])
+        set(__pre join(__pre [__v5, ["destash!", __v5, __r21]]))
+        set(__i6 __i6 + 1)
       end
-      __bs1 = join(__bs1, [props(args), __r21])
-    __forms = join(["let", __pre], __inits, [join(["let", __bs1], __body)])
-    __e50 = ""
-    if is63(__doc) then
-      __e50 = ["do", __doc, __forms]
-    else
-      __e50 = __forms
-    return [__args1, __e50]
-end
-quoting63 = function (depth)
-  return number63(depth)
-end
-quasiquoting63 = function (depth)
-  return _37and(quoting63(depth), depth > 0)
-end
-can_unquote63 = function (depth)
-  return _37and(quoting63(depth), _37eq(depth, 1))
-end
-quasisplice63 = function (x, depth)
-  return _37and(can_unquote63(depth), _37and(_37not(atom63(x)), _37eq(hd(x), "unquote-splicing")))
-end
-expand_local = function (__x56)
-  ____id6 = __x56
-  __x57 = has(____id6, 0)
-  __name = has(____id6, 1)
-  __value = has(____id6, 2)
-  setenv(__name, 
-    _stash ON
-    variable ON
-  )
-  return ["%local", __name, macroexpand(__value)]
-end
-expand_function = function (__x59)
-  ____id7 = __x59
-  __x60 = has(____id7, 0)
-  __args = has(____id7, 1)
-  __body1 = cut(____id7, 2)
-  add(environment, )
-  ____r29 = ""
+      set(__bs1 join(__bs1 [props(args), __r21]))
+    endif()
+    set(__forms join(["let", __pre] __inits [join(["let", __bs1] __body)]))
+    set(__e53 "")
+    if(is63(__doc))
+      set(__e53 ["do", __doc, __forms])
+    else()
+      set(__e53 __forms)
+    endif()
+    return(PROPAGATE [__args1, "${__e53}"])
+  endif()
+endfunction()
+function(quoting63 depth)
+  return(PROPAGATE number63(depth))
+endfunction()
+function(quasiquoting63 depth)
+  return(PROPAGATE quoting63(depth) AND depth GREATER 0)
+endfunction()
+function(can_unquote63 depth)
+  return(PROPAGATE quoting63(depth) AND _37eq(depth 1))
+endfunction()
+function(quasisplice63 x depth)
+  return(PROPAGATE can_unquote63(depth) AND (NOT atom63(x) AND _37eq(hd(x) "unquote-splicing")))
+endfunction()
+function(expand_local __x57)
+  set(____id6 __x57)
+  set(__x58 has(____id6 0))
+  set(__name has(____id6 1))
+  set(__value has(____id6 2))
+  setenv(__name variable ON)
+  return(PROPAGATE ["%local", __name, macroexpand(__value)])
+endfunction()
+function(expand_function __x60)
+  set(____id7 __x60)
+  set(__x61 has(____id7 0))
+  set(__args has(____id7 1))
+  set(__body1 cut(____id7 2))
+  add(environment )
+  set(____r29 "")
   try{
-    ____o4 = __args
-    ____i6 = ""
-    for (____i6 in ____o4) {
-      ____x61 = ____o4[____i6]
-      __e51 = ""
-      if numeric63(____i6) then
-        __e51 = parseInt(____i6)
-      else
-        __e51 = ____i6
-      ____i61 = __e51
-      setenv(____x61, 
-        _stash ON
-        variable ON
-      )
-    }
-    ____r29 = join(["%function", __args], macroexpand(__body1))
-  }
-  finally{
-    drop(environment)
-  }
-  return ____r29
-end
-expand_definition = function (__x63)
-  ____id8 = __x63
-  __x64 = has(____id8, 0)
-  __name1 = has(____id8, 1)
-  __args11 = has(____id8, 2)
-  __body2 = cut(____id8, 3)
-  add(environment, )
-  ____r32 = ""
-  try{
-    ____o5 = __args11
-    ____i7 = ""
+    set(____o5 __args)
+    set(____i7 "")
     for (____i7 in ____o5) {
-      ____x65 = ____o5[____i7]
-      __e52 = ""
-      if numeric63(____i7) then
-        __e52 = parseInt(____i7)
-      else
-        __e52 = ____i7
-      ____i71 = __e52
-      setenv(____x65, 
-        _stash ON
-        variable ON
-      )
+      set(____x62 ____o5[____i7])
+      set(__e54 "")
+      if(numeric63(____i7))
+        set(__e54 parseInt(____i7))
+      else()
+        set(__e54 ____i7)
+      endif()
+      set(____i71 "${__e54}")
+      setenv(____x62 variable ON)
     }
-    ____r32 = join([__x64, __name1, __args11], macroexpand(__body2))
+    set(____r29 join(["%function", __args] macroexpand(__body1)))
   }
   finally{
     drop(environment)
   }
-  return ____r32
-end
-expand_macro = function (form)
-  return macroexpand(expand1(form))
-end
-expand1 = function (__x67)
-  ____id9 = __x67
-  __name2 = has(____id9, 0)
-  __body3 = cut(____id9, 1)
-  return apply(macro_function(__name2), __body3)
-end
-real63 = function (x)
-  return _37and(number63(x), _37and(_37not(nan63(x)), _37not(inf63(x))))
-end
-valid_access63 = function (str)
-  return _37and(_35(str) > 2, _37and(_37not(_37eq(".", char(str, 0))), _37and(_37not(_37eq(".", char(str, edge(str)))), _37not(search(str, "..")))))
-end
-parse_access = function (str)
-  return reduce(function (a, b)
-    __n7 = number(a)
-    if is63(__n7) then
-      return ["at", b, __n7]
-    else
-      return ["%idx", b, a]
-  end, reverse(split(str, ".")))
-end
-parse_access63 = function (form)
-  return _37and(string63(form), _37and(_37not(string_literal63(form)), _37and(_37not(id_literal63(form)), _37and(is63(search(form, ".")), valid_access63(form)))))
-end
-macroexpand = function (form)
-  if parse_access63(form) then
-    return macroexpand(parse_access(form))
-  else
-    if symbol63(form) then
-      return macroexpand(symbol_expansion(form))
-    else
-      if atom63(form) then
-        return form
-      else
-        __x70 = hd(form)
-        if _37eq(__x70, "%local") then
-          return expand_local(form)
-        else
-          if _37eq(__x70, "%function") then
-            return expand_function(form)
-          else
-            if _37eq(__x70, "%global-function") then
-              return expand_definition(form)
-            else
-              if _37eq(__x70, "%local-function") then
-                return expand_definition(form)
-              else
-                if _37eq(__x70, "%expansion") then
-                  return form[1]
-                else
-                  if macro63(__x70) then
-                    return expand_macro(form)
-                  else
-                    if parse_access63(__x70) then
-                      return macroexpand(join([parse_access(__x70)], tl(form)))
-                    else
-                      return map(macroexpand, form)
-end
-quasiquote_list = function (form, depth)
-  __xs = [["list"]]
-  ____o6 = form
-  __k9 = ""
-  for (__k9 in ____o6) {
-    __v5 = ____o6[__k9]
-    __e53 = ""
-    if numeric63(__k9) then
-      __e53 = parseInt(__k9)
-    else
-      __e53 = __k9
-    __k10 = __e53
-    if _37not(number63(__k10)) then
-      __e54 = ""
-      if quasisplice63(__v5, depth) then
-        __e54 = quasiexpand(__v5[1])
-      else
-        __e54 = quasiexpand(__v5, depth)
-      __v6 = __e54
-      last(__xs)[__k10] = __v6
+  return(PROPAGATE ____r29)
+endfunction()
+function(expand_definition __x64)
+  set(____id8 __x64)
+  set(__x65 has(____id8 0))
+  set(__name1 has(____id8 1))
+  set(__args11 has(____id8 2))
+  set(__body2 cut(____id8 3))
+  add(environment )
+  set(____r32 "")
+  try{
+    set(____o6 __args11)
+    set(____i8 "")
+    for (____i8 in ____o6) {
+      set(____x66 ____o6[____i8])
+      set(__e55 "")
+      if(numeric63(____i8))
+        set(__e55 parseInt(____i8))
+      else()
+        set(__e55 ____i8)
+      endif()
+      set(____i81 "${__e55}")
+      setenv(____x66 variable ON)
+    }
+    set(____r32 join([__x65, __name1, __args11] macroexpand(__body2)))
   }
-  ____x74 = form
-  ____i9 = 0
-  while ____i9 < _35(____x74) do
-    __x75 = ____x74[____i9]
-    if quasisplice63(__x75, depth) then
-      __x76 = quasiexpand(__x75[1])
-      add(__xs, __x76)
-      add(__xs, ["list"])
-    else
-      add(last(__xs), quasiexpand(__x75, depth))
-    ____i9 = ____i9 + 1
+  finally{
+    drop(environment)
+  }
+  return(PROPAGATE ____r32)
+endfunction()
+function(expand_macro form)
+  return(PROPAGATE macroexpand(expand1(form)))
+endfunction()
+function(expand1 __x68)
+  set(____id9 __x68)
+  set(__name2 has(____id9 0))
+  set(__body3 cut(____id9 1))
+  return(PROPAGATE apply(macro_function(__name2) __body3))
+endfunction()
+function(real63 x)
+  return(PROPAGATE number63(x) AND (NOT nan63(x) AND NOT inf63(x)))
+endfunction()
+function(valid_access63 str)
+  return(PROPAGATE _35(str) GREATER 2 AND (NOT( _37eq("." char(str 0))) AND (NOT( _37eq("." char(str edge(str)))) AND NOT search(str ".."))))
+endfunction()
+function(parse_access str)
+  function(__f2 a b)
+    set(__n8 number(a))
+    if(is63(__n8))
+      return(PROPAGATE ["at", b, __n8])
+    else()
+      return(PROPAGATE ["%idx", b, a])
+    endif()
+  endfunction()
+  return(PROPAGATE reduce(__f2 reverse(split(str "."))))
+endfunction()
+function(parse_access63 form)
+  return(PROPAGATE string63(form) AND (NOT string_literal63(form) AND (NOT id_literal63(form) AND (is63(search(form ".")) AND valid_access63(form)))))
+endfunction()
+function(macroexpand form)
+  if(parse_access63(form))
+    return(PROPAGATE macroexpand(parse_access(form)))
+  else()
+    if(symbol63(form))
+      return(PROPAGATE macroexpand(symbol_expansion(form)))
+    else()
+      if(atom63(form))
+        return(PROPAGATE form)
+      else()
+        set(__x71 hd(form))
+        if(_37eq(__x71 "%local"))
+          return(PROPAGATE expand_local(form))
+        else()
+          if(_37eq(__x71 "%function"))
+            return(PROPAGATE expand_function(form))
+          else()
+            if(_37eq(__x71 "%global-function"))
+              return(PROPAGATE expand_definition(form))
+            else()
+              if(_37eq(__x71 "%local-function"))
+                return(PROPAGATE expand_definition(form))
+              else()
+                if(_37eq(__x71 "%expansion"))
+                  return(PROPAGATE form[1])
+                else()
+                  if(macro63(__x71))
+                    return(PROPAGATE expand_macro(form))
+                  else()
+                    if(parse_access63(__x71))
+                      return(PROPAGATE macroexpand(join([parse_access(__x71)] tl(form))))
+                    else()
+                      return(PROPAGATE map(macroexpand form))
+                    endif()
+                  endif()
+                endif()
+              endif()
+            endif()
+          endif()
+        endif()
+      endif()
+    endif()
+  endif()
+endfunction()
+function(quasiquote_list form depth)
+  set(__xs [["list"]])
+  set(____o7 form)
+  set(__k11 "")
+  for (__k11 in ____o7) {
+    set(__v6 ____o7[__k11])
+    set(__e56 "")
+    if(numeric63(__k11))
+      set(__e56 parseInt(__k11))
+    else()
+      set(__e56 __k11)
+    endif()
+    set(__k12 "${__e56}")
+    if(NOT number63(__k12))
+      set(__e57 "")
+      if(quasisplice63(__v6 depth))
+        set(__e57 quasiexpand(__v6[1]))
+      else()
+        set(__e57 quasiexpand(__v6 depth))
+      endif()
+      set(__v7 "${__e57}")
+      set(last(__xs)[__k12] __v7)
+    endif()
+  }
+  set(____x75 form)
+  set(____i10 0)
+  while ____i10 LESS _35(____x75) do
+    set(__x76 ____x75[____i10])
+    if(quasisplice63(__x76 depth))
+      set(__x77 quasiexpand(__x76[1]))
+      add(__xs __x77)
+      add(__xs ["list"])
+    else()
+      add(last(__xs) quasiexpand(__x76 depth))
+    endif()
+    set(____i10 ____i10 + 1)
   end
-  __pruned = keep(function (x)
-    return _37or(_35(x) > 1, _37or(_37not(_37eq(hd(x), "list")), props63(x)))
-  end, __xs)
-  if one63(__pruned) then
-    return hd(__pruned)
-  else
-    return join(["join"], __pruned)
-end
-quasiexpand = function (form, depth)
-  if quasiquoting63(depth) then
-    if atom63(form) then
-      return ["quote", form]
-    else
-      if _37and(can_unquote63(depth), _37eq(hd(form), "unquote")) then
-        return quasiexpand(form[1])
-      else
-        if _37or(_37eq(hd(form), "unquote"), _37eq(hd(form), "unquote-splicing")) then
-          return quasiquote_list(form, depth - 1)
-        else
-          if _37eq(hd(form), "quasiquote") then
-            return quasiquote_list(form, depth + 1)
-          else
-            return quasiquote_list(form, depth)
-  else
-    if atom63(form) then
-      return form
-    else
-      if _37eq(hd(form), "quote") then
-        return form
-      else
-        if _37eq(hd(form), "quasiquote") then
-          return quasiexpand(form[1], 1)
-        else
-          return map(function (x)
-            return quasiexpand(x, depth)
-          end, form)
-end
-expand_if = function (__x80)
-  ____id10 = __x80
-  __a = has(____id10, 0)
-  __b1 = has(____id10, 1)
-  __c = cut(____id10, 2)
-  if is63(__b1) then
-    return [join(["%if", __a, __b1], expand_if(__c))]
-  else
-    if is63(__a) then
-      return [__a]
-end
-setenv("indent-level", 
-  _stash ON
-  toplevel ON
-  value 0
-)
-setenv("indent-level", 
-  _stash ON
-  symbol ["get-value", ["quote", "indent-level"]]
-)
-indentation = function ()
-  __s = ""
-  __i10 = 0
-  while __i10 < has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") do
-    __s = _37cat(__s, "  ")
-    __i10 = __i10 + 1
+  function(__f3 x)
+    return(PROPAGATE _35(x) GREATER 1 OR (NOT( _37eq(hd(x) "list")) OR props63(x)))
+  endfunction()
+  set(__pruned keep(__f3 __xs))
+  if(one63(__pruned))
+    return(PROPAGATE hd(__pruned))
+  else()
+    return(PROPAGATE join(["join"] __pruned))
+  endif()
+endfunction()
+function(quasiexpand form depth)
+  if(quasiquoting63(depth))
+    if(atom63(form))
+      return(PROPAGATE ["quote", form])
+    else()
+      if(can_unquote63(depth) AND _37eq(hd(form) "unquote"))
+        return(PROPAGATE quasiexpand(form[1]))
+      else()
+        if(_37eq(hd(form) "unquote") OR _37eq(hd(form) "unquote-splicing"))
+          return(PROPAGATE quasiquote_list(form depth - 1))
+        else()
+          if(_37eq(hd(form) "quasiquote"))
+            return(PROPAGATE quasiquote_list(form depth + 1))
+          else()
+            return(PROPAGATE quasiquote_list(form depth))
+          endif()
+        endif()
+      endif()
+    endif()
+  else()
+    if(atom63(form))
+      return(PROPAGATE form)
+    else()
+      if(_37eq(hd(form) "quote"))
+        return(PROPAGATE form)
+      else()
+        if(_37eq(hd(form) "quasiquote"))
+          return(PROPAGATE quasiexpand(form[1] 1))
+        else()
+          function(__f4 x)
+            return(PROPAGATE quasiexpand(x depth))
+          endfunction()
+          return(PROPAGATE map(__f4 form))
+        endif()
+      endif()
+    endif()
+  endif()
+endfunction()
+function(expand_if __x81)
+  set(____id10 __x81)
+  set(__a has(____id10 0))
+  set(__b1 has(____id10 1))
+  set(__c cut(____id10 2))
+  if(is63(__b1))
+    return(PROPAGATE [join(["%if", __a, __b1] expand_if(__c))])
+  else()
+    if(is63(__a))
+      return(PROPAGATE [__a])
+    endif()
+  endif()
+endfunction()
+setenv("indent-level" toplevel ON value 0)
+setenv("indent-level" symbol ["get-value", ["quote", "indent-level"]])
+function(indentation)
+  set(__s "")
+  set(__i11 0)
+  while __i11 LESS has(setenv("indent-level" toplevel ON) "value") do
+    set(__s _37cat(__s "  "))
+    set(__i11 __i11 + 1)
   end
-  return __s
-end
-reserved = 
-  all 
-    ["="] ON
-    ["=="] ON
-    ["+"] ON
-    ["-"] ON
-    ["%"] ON
-    ["*"] ON
-    ["/"] ON
-    ["<"] ON
-    [">"] ON
-    ["<="] ON
-    [">="] ON
+  return(PROPAGATE __s)
+endfunction()
+set(reserved 
+  ALL 
+    "=" ON
+    "==" ON
+    "+" ON
+    "_" ON
+    "%" ON
+    "*" ON
+    "/" ON
+    "<" ON
+    ">" ON
+    "<=" ON
+    ">=" ON
   
-  js 
-    ["break"] ON
-    case ON
-    catch ON
-    class ON
-    const ON
-    ["continue"] ON
-    debugger ON
-    default ON
-    delete ON
-    do ON
-    ["else"] ON
-    eval ON
-    finally ON
-    for ON
-    ["function"] ON
-    ["if"] ON
-    import ON
-    in ON
-    instanceof ON
-    let ON
-    ["return"] ON
-    switch ON
-    throw ON
-    try ON
-    typeof ON
-    var ON
-    void ON
-    with ON
+  JS 
+    BREAK ON
+    CASE ON
+    CATCH ON
+    CLASS ON
+    CONST ON
+    CONTINUE ON
+    DEBUGGER ON
+    DEFAULT ON
+    DELETE ON
+    DO ON
+    ELSE ON
+    EVAL ON
+    FINALLY ON
+    FOR ON
+    FUNCTION ON
+    IF ON
+    IMPORT ON
+    IN ON
+    INSTANCEOF ON
+    LET ON
+    RETURN ON
+    SWITCH ON
+    THROW ON
+    TRY ON
+    TYPEOF ON
+    VAR ON
+    VOID ON
+    WITH ON
   
-  lua 
-    and ON
-    end ON
-    in ON
-    load ON
-    repeat ON
-    ["while"] ON
-    ["break"] ON
-    false ON
-    local ON
-    ["return"] ON
-    do ON
-    for ON
-    nil ON
-    then ON
-    ["else"] ON
-    ["function"] ON
-    not ON
-    true ON
-    ["elseif"] ON
-    ["if"] ON
-    or ON
-    until ON
+  LUA 
+    AND ON
+    END ON
+    IN ON
+    LOAD ON
+    REPEAT ON
+    WHILE ON
+    BREAK ON
+    FALSE ON
+    LOCAL ON
+    RETURN ON
+    DO ON
+    FOR ON
+    NIL ON
+    THEN ON
+    ELSE ON
+    FUNCTION ON
+    NOT ON
+    TRUE ON
+    ELSEIF ON
+    IF ON
+    OR ON
+    UNTIL ON
   
-  py 
-    and ON
-    except ON
-    lambda ON
-    with ON
-    as ON
-    finally ON
-    nonlocal ON
-    ["while"] ON
-    assert ON
-    false ON
-    None ON
-    yield ON
-    ["break"] ON
-    for ON
-    not ON
-    class ON
-    from ON
-    or ON
-    ["continue"] ON
-    global ON
-    pass ON
-    def ON
-    ["if"] ON
-    raise ON
-    del ON
-    import ON
-    ["return"] ON
-    elif ON
-    in ON
-    True ON
-    ["else"] ON
-    is ON
-    try ON
-    str ON
-    print ON
+  PY 
+    AND ON
+    EXCEPT ON
+    LAMBDA ON
+    WITH ON
+    AS ON
+    FINALLY ON
+    NONLOCAL ON
+    WHILE ON
+    ASSERT ON
+    FALSE ON
+    NONE ON
+    YIELD ON
+    BREAK ON
+    FOR ON
+    NOT ON
+    CLASS ON
+    FROM ON
+    OR ON
+    CONTINUE ON
+    GLOBAL ON
+    PASS ON
+    DEF ON
+    IF ON
+    RAISE ON
+    DEL ON
+    IMPORT ON
+    RETURN ON
+    ELIF ON
+    IN ON
+    TRUE ON
+    ELSE ON
+    IS ON
+    TRY ON
+    STR ON
+    PRINT ON
   
-  cmake 
-    ["set"] ON
-    ["foreach"] ON
-    ["endforeach"] ON
-    ["while"] ON
-    ["endwhile"] ON
-    ["if"] ON
-    ["elseif"] ON
-    ["else"] ON
-    ["block"] ON
-    ["endblock"] ON
-    ["macro"] ON
-    ["endmacro"] ON
-    ["function"] ON
-    ["endfunction"] ON
-    ["break"] ON
-    ["return"] ON
-    ["continue"] ON
-    ["AND"] ON
-    ["OR"] ON
-    ["TRUE"] ON
-    ["FALSE"] ON
-    ["ON"] ON
-    ["OFF"] ON
-    ["Y"] ON
-    ["N"] ON
+  CMAKE 
+    "AND" ON
+    "OR" ON
+    "TRUE" ON
+    "FALSE" ON
+    "ON" ON
+    "OFF" ON
+    "Y" ON
+    "N" ON
   
-
-reserved63 = function (x)
-  return _37or(has63(reserved.all, x), has63(reserved[has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value")], x))
-end
-valid_code63 = function (n)
-  return _37or(number_code63(n), _37or(_37and(n > 64, n < 91), _37or(_37and(n > 96, n < 123), _37eq(n, 95))))
-end
-compile_keyword = function (x)
-  return escape(x)
-end
-compile_name = function (name)
-  if keyword63(name) then
-    return compile(clip(name, 1))
-  else
-    return compile(name)
-end
-compile_id = function (id, raw63)
-  if keyword63(id) then
-    return compile_keyword(id)
-  else
-    if _37eq(code(id, 0), 46) then
-      return _37cat(".", compile_id(clip(id, 1), ON))
-    else
-      __e55 = ""
-      if _37eq(has(setenv("target", 
-        _stash ON
-        toplevel ON
-      ), "value"), "py") then
-        __e55 = "L_"
-      else
-        __e55 = "_"
-      __x86 = __e55
-      __e56 = ""
-      if number_code63(code(id, 0)) then
-        __e56 = __x86
-      else
-        __e56 = ""
-      __id11 = __e56
-      __i11 = 0
-      while __i11 < _35(id) do
-        __c1 = char(id, __i11)
-        __n9 = code(__c1)
-        __e57 = ""
-        if _37and(_37eq(__c1, "-"), _37not(_37eq(id, "-"))) then
-          __e60 = ""
-          if _37eq(__i11, 0) then
-            __e60 = __x86
-          else
-            __e60 = "_"
-          __e57 = __e60
-        else
-          __e58 = ""
-          if valid_code63(__n9) then
-            __e58 = __c1
-          else
-            __e59 = ""
-            if _37eq(__i11, 0) then
-              __e59 = _37cat(__x86, __n9)
-            else
-              __e59 = __n9
-            __e58 = __e59
-          __e57 = __e58
-        __c11 = __e57
-        __id11 = _37cat(__id11, __c11)
-        __i11 = __i11 + 1
+)
+function(reserved63 x)
+  return(PROPAGATE has63(reserved.all x) OR has63(reserved[has(setenv("target" toplevel ON) "value")] x))
+endfunction()
+function(valid_code63 n)
+  return(PROPAGATE number_code63(n) OR (n GREATER 64 AND n LESS 91 OR (n GREATER 96 AND n LESS 123 OR _37eq(n 95))))
+endfunction()
+function(compile_keyword x)
+  return(PROPAGATE escape(x))
+endfunction()
+function(compile_name name)
+  if(keyword63(name))
+    return(PROPAGATE compile(clip(name 1)))
+  else()
+    return(PROPAGATE compile(name))
+  endif()
+endfunction()
+function(compile_id id raw63)
+  if(keyword63(id))
+    return(PROPAGATE compile_keyword(id))
+  else()
+    if(_37eq(code(id 0) 46))
+      return(PROPAGATE _37cat("." compile_id(clip(id 1) ON)))
+    else()
+      set(__e58 "")
+      if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+        set(__e58 "L_")
+      else()
+        set(__e58 "_")
+      endif()
+      set(__x87 "${__e58}")
+      set(__e59 "")
+      if(number_code63(code(id 0)))
+        set(__e59 __x87)
+      else()
+        set(__e59 "")
+      endif()
+      set(__id11 "${__e59}")
+      set(__i12 0)
+      while __i12 LESS _35(id) do
+        set(__c1 char(id __i12))
+        set(__n10 code(__c1))
+        set(__e60 "")
+        if(_37eq(__c1 "-") AND NOT( _37eq(id "-")))
+          set(__e63 "")
+          if(_37eq(__i12 0))
+            set(__e63 __x87)
+          else()
+            set(__e63 "_")
+          endif()
+          set(__e60 "${__e63}")
+        else()
+          set(__e61 "")
+          if(valid_code63(__n10))
+            set(__e61 __c1)
+          else()
+            set(__e62 "")
+            if(_37eq(__i12 0))
+              set(__e62 _37cat(__x87 __n10))
+            else()
+              set(__e62 __n10)
+            endif()
+            set(__e61 "${__e62}")
+          endif()
+          set(__e60 "${__e61}")
+        endif()
+        set(__c11 "${__e60}")
+        set(__id11 _37cat(__id11 __c11))
+        set(__i12 __i12 + 1)
       end
-      if raw63 then
-        return __id11
-      else
-        if reserved63(__id11) then
-          return _37cat(__x86, __id11)
-        else
-          return __id11
-end
-valid_id63 = function (x)
-  return _37and(some63(x), _37eq(x, compile_id(x)))
-end
-__names = 
-unique = function (x)
-  __x87 = compile_id(x)
-  if has63(__names, __x87) then
-    __i12 = __names[__x87]
-    __names[__x87] = __names[__x87] + 1
-    return unique(_37cat(__x87, __i12))
-  else
-    __names[__x87] = 1
-    return _37cat("__", __x87)
-end
-key = function (k)
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    return compile(k)
-  else
-    if string_literal63(k) then
-      __i13 = inner(k)
-      if valid_id63(__i13) then
-        return __i13
-      else
-        return _37cat("[", _37cat(k, "]"))
-    else
-      return _37cat("[", _37cat(compile(k), "]"))
-end
-mapo = function (f, t)
-  __o7 = []
-  ____o8 = t
-  __k11 = ""
-  for (__k11 in ____o8) {
-    __v7 = ____o8[__k11]
-    __e61 = ""
-    if numeric63(__k11) then
-      __e61 = parseInt(__k11)
-    else
-      __e61 = __k11
-    __k12 = __e61
-    __x88 = f(__v7)
-    if is63(__x88) then
-      add(__o7, literal(__k12))
-      add(__o7, __x88)
+      if(raw63)
+        return(PROPAGATE __id11)
+      else()
+        if(reserved63(__id11))
+          return(PROPAGATE _37cat(__x87 __id11))
+        else()
+          return(PROPAGATE __id11)
+        endif()
+      endif()
+    endif()
+  endif()
+endfunction()
+function(valid_id63 x)
+  return(PROPAGATE some63(x) AND _37eq(x compile_id(x)))
+endfunction()
+set(__names )
+function(unique x)
+  set(__x88 compile_id(x))
+  if(has63(__names __x88))
+    set(__i13 __names[__x88])
+    set(__names[__x88] __names[__x88] + 1)
+    return(PROPAGATE unique(_37cat(__x88 __i13)))
+  else()
+    set(__names[__x88] 1)
+    return(PROPAGATE _37cat("__" __x88))
+  endif()
+endfunction()
+function(key k)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    return(PROPAGATE compile(k))
+  else()
+    if(string_literal63(k))
+      set(__i14 inner(k))
+      if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        set(__e64 "")
+        if(valid_id63(__i14))
+          set(__e64 __i14)
+        else()
+          set(__e64 k)
+        endif()
+        return(PROPAGATE screamcase("${__e64}"))
+      else()
+        if(valid_id63(__i14))
+          return(PROPAGATE __i14)
+        else()
+          return(PROPAGATE _37cat("[" _37cat(k "]")))
+        endif()
+      endif()
+    else()
+      return(PROPAGATE _37cat("[" _37cat(compile(k) "]")))
+    endif()
+  endif()
+endfunction()
+function(mapo f t)
+  set(__o8 [])
+  set(____o9 t)
+  set(__k13 "")
+  for (__k13 in ____o9) {
+    set(__v8 ____o9[__k13])
+    set(__e65 "")
+    if(numeric63(__k13))
+      set(__e65 parseInt(__k13))
+    else()
+      set(__e65 __k13)
+    endif()
+    set(__k14 "${__e65}")
+    set(__x89 f(__v8))
+    if(is63(__x89))
+      add(__o8 literal(__k14))
+      add(__o8 __x89)
+    endif()
   }
-  return __o7
-end
-____x90 = object([])
-____x91 = object([])
-____x91.js = "!"
-____x91.lua = "not"
-____x91.py = "not"
-____x90["%not"] = ____x91
-____x90["%unm"] = "-"
-____x92 = object([])
-____x92["%mul"] = "*"
-____x92["%div"] = "/"
-____x92["%idiv"] = "//"
-____x92["%mod"] = "%"
-____x93 = object([])
-____x94 = object([])
-____x94.js = "+"
-____x94.lua = ".."
-____x94.py = "+"
-____x93["%cat"] = ____x94
-____x95 = object([])
-____x95["%add"] = "+"
-____x95["%sub"] = "-"
-____x96 = object([])
-____x96["%lt"] = "<"
-____x96["%gt"] = ">"
-____x96["%le"] = "<="
-____x96["%ge"] = ">="
-____x97 = object([])
-____x98 = object([])
-____x98.js = "==="
-____x98.lua = "=="
-____x98.py = "=="
-____x97["%eq"] = ____x98
-____x99 = object([])
-____x100 = object([])
-____x100.py = "in"
-____x99["%in"] = ____x100
-____x101 = object([])
-____x101.py = "is"
-____x99["%is"] = ____x101
-____x102 = object([])
-____x103 = object([])
-____x103.js = "&&"
-____x103.lua = "and"
-____x103.py = "and"
-____x102["%and"] = ____x103
-____x104 = object([])
-____x105 = object([])
-____x105.js = "||"
-____x105.lua = "or"
-____x105.py = "or"
-____x104["%or"] = ____x105
-infix = [____x90, ____x92, ____x93, ____x95, ____x96, ____x97, ____x99, ____x102, ____x104]
-unary63 = function (form)
-  return _37and(two63(form), in63(hd(form), ["%not", "%unm"]))
-end
-index = function (k)
-  return k
-end
-precedence = function (form)
-  if _37not(_37or(atom63(form), unary63(form))) then
-    if atom63(hd(form)) then
-      ____o9 = infix
-      __k13 = ""
-      for (__k13 in ____o9) {
-        __v8 = ____o9[__k13]
-        __e62 = ""
-        if numeric63(__k13) then
-          __e62 = parseInt(__k13)
-        else
-          __e62 = __k13
-        __k14 = __e62
-        if has63(__v8, hd(form)) then
-          return index(__k14)
+  return(PROPAGATE __o8)
+endfunction()
+set(____x91 object([]))
+set(____x92 object([]))
+set(____x92.js "!")
+set(____x92.lua "not")
+set(____x92.py "not")
+set(____x92.cmake "NOT")
+set(____x91["%not"] ____x92)
+set(____x91["%unm"] "-")
+set(____x93 object([]))
+set(____x93["%mul"] "*")
+set(____x93["%div"] "/")
+set(____x93["%idiv"] "//")
+set(____x93["%mod"] "%")
+set(____x94 object([]))
+set(____x95 object([]))
+set(____x95.js "+")
+set(____x95.lua "..")
+set(____x95.py "+")
+set(____x94["%cat"] ____x95)
+set(____x96 object([]))
+set(____x96["%add"] "+")
+set(____x96["%sub"] "-")
+set(____x97 object([]))
+set(____x98 object([]))
+set(____x98.cmake "LESS")
+set(____x98.all "<")
+set(____x97["%lt"] ____x98)
+set(____x99 object([]))
+set(____x99.cmake "GREATER")
+set(____x99.all ">")
+set(____x97["%gt"] ____x99)
+set(____x100 object([]))
+set(____x100.cmake "LESS_EQUAL")
+set(____x100.all "<=")
+set(____x97["%le"] ____x100)
+set(____x101 object([]))
+set(____x101.cmake "GREATER_EQUAL")
+set(____x101.all ">=")
+set(____x97["%ge"] ____x101)
+set(____x102 object([]))
+set(____x103 object([]))
+set(____x103.js "===")
+set(____x103.lua "==")
+set(____x103.py "==")
+set(____x102["%eq"] ____x103)
+set(____x104 object([]))
+set(____x105 object([]))
+set(____x105.py "in")
+set(____x104["%in"] ____x105)
+set(____x106 object([]))
+set(____x106.py "is")
+set(____x104["%is"] ____x106)
+set(____x107 object([]))
+set(____x108 object([]))
+set(____x108.js "&&")
+set(____x108.lua "and")
+set(____x108.py "and")
+set(____x108.cmake "AND")
+set(____x107["%and"] ____x108)
+set(____x109 object([]))
+set(____x110 object([]))
+set(____x110.js "||")
+set(____x110.lua "or")
+set(____x110.py "or")
+set(____x110.cmake "OR")
+set(____x109["%or"] ____x110)
+set(infix [____x91, ____x93, ____x94, ____x96, ____x97, ____x102, ____x104, ____x107, ____x109])
+function(unary63 form)
+  return(PROPAGATE two63(form) AND in63(hd(form) ["%not", "%unm"]))
+endfunction()
+function(index k)
+  return(PROPAGATE k)
+endfunction()
+function(precedence form)
+  if(NOT( atom63(form) OR unary63(form)))
+    if(atom63(hd(form)))
+      set(____o10 infix)
+      set(__k15 "")
+      for (__k15 in ____o10) {
+        set(__v9 ____o10[__k15])
+        set(__e66 "")
+        if(numeric63(__k15))
+          set(__e66 parseInt(__k15))
+        else()
+          set(__e66 __k15)
+        endif()
+        set(__k16 "${__e66}")
+        if(has63(__v9 hd(form)))
+          return(PROPAGATE index(__k16))
+        endif()
       }
-  return 0
-end
-getop = function (op)
-  if string63(op) then
-    return find(function (level)
-      __x107 = has(level, op)
-      if _37eq(__x107, ON) then
-        return op
-      else
-        if string63(__x107) then
-          return __x107
-        else
-          if is63(__x107) then
-            return has(__x107, has(setenv("target", 
-              _stash ON
-              toplevel ON
-            ), "value"))
-    end, infix)
-end
-infix63 = function (x)
-  return is63(getop(x))
-end
-infix_operator63 = function (x)
-  return _37and(_37not(atom63(x)), infix63(hd(x)))
-end
-compile_args = function (args, default63)
-  __s1 = "("
-  __c2 = ""
-  ____x108 = args
-  ____i16 = 0
-  while ____i16 < _35(____x108) do
-    __x109 = ____x108[____i16]
-    __s1 = _37cat(__s1, _37cat(__c2, compile(__x109)))
-    if _37and(_37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py"), _37and(default63, _37and(_37not(id_literal63(__x109)), _37not(_37eq(__x109, "..."))))) then
-      __s1 = _37cat(__s1, "=None")
-    __c2 = ", "
-    ____i16 = ____i16 + 1
+    endif()
+  endif()
+  return(PROPAGATE 0)
+endfunction()
+function(getop op)
+  if(string63(op))
+    function(__f5 level)
+      set(__x112 has(level op))
+      if(_37eq(__x112 ON))
+        return(PROPAGATE op)
+      else()
+        if(string63(__x112))
+          return(PROPAGATE __x112)
+        else()
+          if(is63(__x112))
+            return(PROPAGATE has(__x112 has(setenv("target" toplevel ON) "value")) OR has(__x112 "all"))
+          endif()
+        endif()
+      endif()
+    endfunction()
+    return(PROPAGATE find(__f5 infix))
+  endif()
+endfunction()
+function(infix63 x)
+  return(PROPAGATE is63(getop(x)))
+endfunction()
+function(infix_operator63 x)
+  return(PROPAGATE NOT atom63(x) AND infix63(hd(x)))
+endfunction()
+function(compile_args args default63)
+  set(__s1 "(")
+  set(__c2 "")
+  set(____x113 args)
+  set(____i17 0)
+  while ____i17 LESS _35(____x113) do
+    set(__x114 ____x113[____i17])
+    set(__s1 _37cat(__s1 _37cat(__c2 compile(__x114))))
+    if((_37eq(has(setenv("target" toplevel ON) "value") "py") OR _37eq(has(setenv("target" toplevel ON) "value") "cmake")) AND (default63 AND (NOT id_literal63(__x114) AND NOT( _37eq(__x114 "...")))))
+      set(__e67 "")
+      if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        set(__e67 "")
+      else()
+        set(__e67 "=None")
+      endif()
+      set(__s1 _37cat(__s1 "${__e67}"))
+    endif()
+    set(__e68 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      set(__e68 " ")
+    else()
+      set(__e68 ", ")
+    endif()
+    set(__c2 "${__e68}")
+    set(____i17 ____i17 + 1)
   end
-  return _37cat(__s1, ")")
-end
-escape_newlines = function (s)
-  if _37and(nil63(search(s, "\n")), nil63(search(s, "\r"))) then
-    return s
-  else
-    __s11 = ""
-    __i17 = 0
-    while __i17 < _35(s) do
-      __c3 = char(s, __i17)
-      __e63 = ""
-      if _37eq(__c3, "\n") then
-        __e63 = "\\n"
-      else
-        __e64 = ""
-        if _37eq(__c3, "\r") then
-          __e64 = "\\r"
-        else
-          __e64 = __c3
-        __e63 = __e64
-      __s11 = _37cat(__s11, __e63)
-      __i17 = __i17 + 1
+  return(PROPAGATE _37cat(__s1 ")"))
+endfunction()
+function(escape_newlines s)
+  if(nil63(search(s "\n")) AND nil63(search(s "\r")))
+    return(PROPAGATE s)
+  else()
+    set(__s11 "")
+    set(__i18 0)
+    while __i18 LESS _35(s) do
+      set(__c3 char(s __i18))
+      set(__e69 "")
+      if(_37eq(__c3 "\n"))
+        set(__e69 "\\n")
+      else()
+        set(__e70 "")
+        if(_37eq(__c3 "\r"))
+          set(__e70 "\\r")
+        else()
+          set(__e70 __c3)
+        endif()
+        set(__e69 "${__e70}")
+      endif()
+      set(__s11 _37cat(__s11 "${__e69}"))
+      set(__i18 __i18 + 1)
     end
-    return __s11
-end
-compile_nil = function ()
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    return "None"
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "cmake") then
-      return "\"\""
-    else
-      if _37eq(has(setenv("target", 
-        _stash ON
-        toplevel ON
-      ), "value"), "lua") then
-        return "nil"
-      else
-        return "undefined"
-end
-compile_boolean = function (x)
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    if x then
-      return "True"
-    else
-      return "False"
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "cmake") then
-      if x then
-        return "ON"
-      else
-        return "OFF"
-    else
-      if x then
-        return "true"
-      else
-        return "false"
-end
-triple_quoted63 = function (x)
-  return _37and(string_literal63(x), _37and(string_literal63(inner(x)), string_literal63(inner(inner(x)))))
-end
-un_triple_quote = function (x)
-  return escape(inner(inner(inner(x))))
-end
-compile_string = function (x)
-  if triple_quoted63(x) then
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      return x
-    else
-      return escape_newlines(un_triple_quote(x))
-  else
-    return escape_newlines(x)
-end
-compile_rest = function ()
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    return "*_args, **_keys"
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "js") then
-      return _37cat("...", compile("*args"))
-    else
-      return "..."
-end
-compile_atom = function (x, raw63)
-  if _37eq(x, "nil") then
-    return compile_nil()
-  else
-    if _37eq(x, "...") then
-      return compile_rest()
-    else
-      if id_literal63(x) then
-        return inner(x)
-      else
-        if string_literal63(x) then
-          return compile_string(x)
-        else
-          if string63(x) then
-            return compile_id(x, raw63)
-          else
-            if boolean63(x) then
-              return compile_boolean(x)
-            else
-              if nan63(x) then
-                return "nan"
-              else
-                if _37eq(x, inf) then
-                  return "inf"
-                else
-                  if _37eq(x, _inf) then
-                    return "-inf"
-                  else
-                    if number63(x) then
-                      return _37cat(x, "")
-                    else
-                      error(_37cat("Cannot compile atom: ", str(x)))
-end
-terminator = function (stmt63)
-  if _37not(stmt63) then
-    return ""
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "js") then
-      return ";\n"
-    else
-      return "\n"
-end
-compile_special = function (form, stmt63)
-  ____id111 = form
-  __x110 = has(____id111, 0)
-  __args2 = cut(____id111, 1)
-  ____id12 = getenv(__x110)
-  __special = has(____id12, "special")
-  __stmt = has(____id12, "stmt")
-  __self_tr63 = has(____id12, "tr")
-  __e65 = ""
-  if _37and(stmt63, _37not(__stmt)) then
-    __e65 = indentation()
-  else
-    __e65 = ""
-  __p = __e65
-  __tr = terminator(_37and(stmt63, _37not(__self_tr63)))
-  return _37cat(__p, _37cat(apply(__special, __args2), __tr))
-end
-parenthesize_call63 = function (x)
-  return _37or(_37and(_37not(atom63(x)), _37eq(hd(x), "%function")), precedence(x) > 0)
-end
-method_call63 = function (form)
-  __e66 = ""
-  if list63(form) then
-    __e66 = hd(form)
-  else
-    __e66 = form
-  __x111 = __e66
-  return _37and(string63(__x111), _37and(_35(__x111, 1) > 1, _37eq(char(__x111, 0), ".")))
-end
-compile_call = function (form)
-  __f = hd(form)
-  __f1 = compile_name(__f)
-  __args3 = stash42(tl(form))
-  __e67 = ""
-  if method_call63(hd(__args3)) then
-    __e67 = mapcat(compile, __args3, "")
-  else
-    __e67 = compile_args(__args3)
-  __args4 = __e67
-  if parenthesize_call63(__f) then
-    return _37cat("(", _37cat(__f1, _37cat(")", __args4)))
-  else
-    return _37cat(__f1, __args4)
-end
-op_delims = function (parent, child, ...)
-  ____r77 = unstash([...])
-  __parent = destash33(parent, ____r77)
-  __child = destash33(child, ____r77)
-  ____id13 = ____r77
-  __right = has(____id13, "right")
-  __e68 = ""
-  if __right then
-    __e68 = _6261
-  else
-    __e68 = _62
-  if __e68(precedence(__child), precedence(__parent)) then
-    return ["(", ")"]
-  else
-    return ["", ""]
-end
-compile_infix = function (form)
-  ____id14 = form
-  __op = has(____id14, 0)
-  ____id15 = cut(____id14, 1)
-  __a1 = has(____id15, 0)
-  __b2 = has(____id15, 1)
-  ____id16 = op_delims(form, __a1)
-  __ao = has(____id16, 0)
-  __ac = has(____id16, 1)
-  ____id17 = op_delims(form, __b2, 
-    _stash ON
-    right ON
-  )
-  __bo = has(____id17, 0)
-  __bc = has(____id17, 1)
-  __a2 = compile(__a1)
-  __b3 = compile(__b2)
-  __op1 = getop(__op)
-  if unary63(form) then
-    return _37cat(__op1, _37cat(__ao, _37cat(" ", _37cat(__a2, __ac))))
-  else
-    return _37cat(__ao, _37cat(__a2, _37cat(__ac, _37cat(" ", _37cat(__op1, _37cat(" ", _37cat(__bo, _37cat(__b3, __bc))))))))
-end
-compile_body = function (body)
-  setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ).value = has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") + 1
-  ____x115 = compile(body, 
-    _stash ON
-    stmt ON
-  )
-  setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ).value = has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") - 1
-  __s2 = ____x115
-  if _37and(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py"), none63(__s2)) then
-    setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ).value = has(setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ), "value") + 1
-    ____x116 = _37cat(indentation(), "pass\n")
-    setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ).value = has(setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ), "value") - 1
-    return ____x116
-  else
-    return __s2
-end
-compile_function = function (args, body, ...)
-  ____r80 = unstash([...])
-  __args5 = destash33(args, ____r80)
-  __body4 = destash33(body, ____r80)
-  ____id18 = ____r80
-  __name3 = has(____id18, "name")
-  __prefix = has(____id18, "prefix")
-  __async = has(____id18, "async")
-  __e69 = ""
-  if __name3 then
-    __e69 = compile_name(__name3)
-  else
-    __e69 = ""
-  __id19 = __e69
-  __e70 = ""
-  if has(__args5, "rest") then
-    __e70 = join(__args5, ["..."])
-  else
-    __e70 = __args5
-  __args12 = __e70
-  __args6 = compile_args(__args12, ON)
-  __body5 = compile_body(__body4)
-  __ind = indentation()
-  __e71 = ""
-  if __prefix then
-    __e71 = _37cat(__prefix, " ")
-  else
-    __e71 = ""
-  __p1 = __e71
-  __e72 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    __e72 = ""
-  else
-    __e72 = "end"
-  __tr1 = __e72
-  __e73 = ""
-  if _37and(__async, _37not(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua"))) then
-    __e73 = "async "
-  else
-    __e73 = ""
-  __a3 = __e73
-  if __name3 then
-    __tr1 = _37cat(__tr1, "\n")
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    return _37cat(__a3, _37cat("function ", _37cat(__id19, _37cat(__args6, _37cat(" {\n", _37cat(__body5, _37cat(__ind, _37cat("}", __tr1))))))))
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      __e74 = ""
-      if none63(__ind) then
-        __e74 = "\n"
-      else
-        __e74 = ""
-      __ws = __e74
-      return _37cat(__a3, _37cat("def ", _37cat(__id19, _37cat(__args6, _37cat(":\n", _37cat(__body5, __ws))))))
-    else
-      return _37cat(__p1, _37cat("function ", _37cat(__id19, _37cat(__args6, _37cat("\n", _37cat(__body5, _37cat(__ind, __tr1)))))))
-end
-can_return63 = function (form)
-  return _37and(is63(form), _37or(atom63(form), _37and(_37not(_37eq(hd(form), "%return")), _37not(statement63(hd(form))))))
-end
-compile = function (form, raw63, ...)
-  ____r82 = unstash([...])
-  __form = destash33(form, ____r82)
-  __raw63 = destash33(raw63, ____r82)
-  ____id20 = ____r82
-  __stmt1 = has(____id20, "stmt")
-  if nil63(__form) then
-    return ""
-  else
-    if special_form63(__form) then
-      return compile_special(__form, __stmt1)
-    else
-      __tr2 = terminator(__stmt1)
-      __e75 = ""
-      if __stmt1 then
-        __e75 = indentation()
-      else
-        __e75 = ""
-      __ind1 = __e75
-      __e76 = ""
-      if atom63(__form) then
-        __e76 = compile_atom(__form, __raw63)
-      else
-        __e77 = ""
-        if infix63(hd(__form)) then
-          __e77 = compile_infix(__form)
-        else
-          __e77 = compile_call(__form)
-        __e76 = __e77
-      __form1 = __e76
-      return _37cat(__ind1, _37cat(__form1, __tr2))
-end
-lower_statement = function (form, tail63)
-  __hoist = []
-  __e = lower(form, __hoist, ON, tail63)
-  __e78 = ""
-  if _37and(some63(__hoist), is63(__e)) then
-    __e78 = join(["%do"], __hoist, [__e])
-  else
-    __e79 = ""
-    if is63(__e) then
-      __e79 = __e
-    else
-      __e80 = ""
-      if _35(__hoist) > 1 then
-        __e80 = join(["%do"], __hoist)
-      else
-        __e80 = hd(__hoist)
-      __e79 = __e80
-    __e78 = __e79
-  return either(__e78, ["%do"])
-end
-lower_body = function (body, tail63)
-  return lower_statement(join(["%do"], body), tail63)
-end
-literal63 = function (form)
-  return _37or(atom63(form), _37or(_37eq(hd(form), "%array"), _37or(_37eq(hd(form), "%object"), _37or(_37eq(hd(form), "%list"), _37eq(hd(form), ",")))))
-end
-standalone63 = function (form)
-  return _37or(_37and(_37not(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua")), string_literal63(form)), _37or(_37and(_37not(atom63(form)), _37and(_37not(infix63(hd(form))), _37and(_37not(literal63(form)), _37not(_37eq("%get", hd(form)))))), id_literal63(form)))
-end
-lower_do = function (args, hoist, stmt63, tail63)
-  ____x125 = almost(args)
-  ____i18 = 0
-  while ____i18 < _35(____x125) do
-    __x126 = ____x125[____i18]
-    ____y = lower(__x126, hoist, stmt63)
-    if yes(____y) then
-      __e1 = ____y
-      if standalone63(__e1) then
-        add(hoist, __e1)
-    ____i18 = ____i18 + 1
+    return(PROPAGATE __s11)
+  endif()
+endfunction()
+function(compile_nil)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    return(PROPAGATE "None")
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      return(PROPAGATE "\"\"")
+    else()
+      if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+        return(PROPAGATE "nil")
+      else()
+        return(PROPAGATE "undefined")
+      endif()
+    endif()
+  endif()
+endfunction()
+function(compile_boolean x)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    if(x)
+      return(PROPAGATE "True")
+    else()
+      return(PROPAGATE "False")
+    endif()
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      if(x)
+        return(PROPAGATE "ON")
+      else()
+        return(PROPAGATE "OFF")
+      endif()
+    else()
+      if(x)
+        return(PROPAGATE "true")
+      else()
+        return(PROPAGATE "false")
+      endif()
+    endif()
+  endif()
+endfunction()
+function(triple_quoted63 x)
+  return(PROPAGATE string_literal63(x) AND (string_literal63(inner(x)) AND string_literal63(inner(inner(x)))))
+endfunction()
+function(un_triple_quote x)
+  return(PROPAGATE escape(inner(inner(inner(x)))))
+endfunction()
+function(compile_string x)
+  if(triple_quoted63(x))
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      return(PROPAGATE x)
+    else()
+      return(PROPAGATE escape_newlines(un_triple_quote(x)))
+    endif()
+  else()
+    return(PROPAGATE escape_newlines(x))
+  endif()
+endfunction()
+function(compile_rest)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    return(PROPAGATE "*_args, **_keys")
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+      return(PROPAGATE _37cat("..." compile("*args")))
+    else()
+      return(PROPAGATE "...")
+    endif()
+  endif()
+endfunction()
+function(compile_atom x raw63)
+  if(_37eq(x "nil"))
+    return(PROPAGATE compile_nil())
+  else()
+    if(_37eq(x "..."))
+      return(PROPAGATE compile_rest())
+    else()
+      if(id_literal63(x))
+        return(PROPAGATE inner(x))
+      else()
+        if(string_literal63(x))
+          return(PROPAGATE compile_string(x))
+        else()
+          if(string63(x))
+            return(PROPAGATE compile_id(x raw63))
+          else()
+            if(boolean63(x))
+              return(PROPAGATE compile_boolean(x))
+            else()
+              if(nan63(x))
+                return(PROPAGATE "nan")
+              else()
+                if(_37eq(x inf))
+                  return(PROPAGATE "inf")
+                else()
+                  if(_37eq(x _inf))
+                    return(PROPAGATE "-inf")
+                  else()
+                    if(number63(x))
+                      return(PROPAGATE _37cat(x ""))
+                    else()
+                      error(_37cat("Cannot compile atom: " str(x)))
+                    endif()
+                  endif()
+                endif()
+              endif()
+            endif()
+          endif()
+        endif()
+      endif()
+    endif()
+  endif()
+endfunction()
+function(terminator stmt63)
+  if(NOT stmt63)
+    return(PROPAGATE "")
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+      return(PROPAGATE ";\n")
+    else()
+      return(PROPAGATE "\n")
+    endif()
+  endif()
+endfunction()
+function(compile_special form stmt63)
+  set(____id111 form)
+  set(__x115 has(____id111 0))
+  set(__args2 cut(____id111 1))
+  set(____id12 getenv(__x115))
+  set(__special has(____id12 "special"))
+  set(__stmt has(____id12 "stmt"))
+  set(__self_tr63 has(____id12 "tr"))
+  set(__e71 "")
+  if(stmt63 AND NOT __stmt)
+    set(__e71 indentation())
+  else()
+    set(__e71 "")
+  endif()
+  set(__p "${__e71}")
+  set(__tr terminator(stmt63 AND NOT __self_tr63))
+  return(PROPAGATE _37cat(__p _37cat(apply(__special __args2) __tr)))
+endfunction()
+function(parenthesize_call63 x)
+  return(PROPAGATE NOT atom63(x) AND _37eq(hd(x) "%function") OR precedence(x) GREATER 0)
+endfunction()
+function(method_call63 form)
+  set(__e72 "")
+  if(list63(form))
+    set(__e72 hd(form))
+  else()
+    set(__e72 form)
+  endif()
+  set(__x116 "${__e72}")
+  return(PROPAGATE string63(__x116) AND (_35(__x116 1) GREATER 1 AND _37eq(char(__x116 0) ".")))
+endfunction()
+function(compile_call form)
+  set(__f hd(form))
+  set(__f1 compile_name(__f))
+  set(__args3 stash42(tl(form)))
+  set(__e73 "")
+  if(method_call63(hd(__args3)))
+    set(__e73 mapcat(compile __args3 ""))
+  else()
+    set(__e73 compile_args(__args3))
+  endif()
+  set(__args4 "${__e73}")
+  if(parenthesize_call63(__f))
+    return(PROPAGATE _37cat("(" _37cat(__f1 _37cat(")" __args4))))
+  else()
+    return(PROPAGATE _37cat(__f1 __args4))
+  endif()
+endfunction()
+function(op_delims parent child ...)
+  set(____r77 unstash([...]))
+  set(__parent destash33(parent ____r77))
+  set(__child destash33(child ____r77))
+  set(____id13 ____r77)
+  set(__right has(____id13 "right"))
+  set(__e74 "")
+  if(__right)
+    set(__e74 _6261)
+  else()
+    set(__e74 _62)
+  endif()
+  if("${__e74}"(precedence(__child) precedence(__parent)))
+    return(PROPAGATE ["(", ")"])
+  else()
+    return(PROPAGATE ["", ""])
+  endif()
+endfunction()
+function(compile_infix form)
+  set(____id14 form)
+  set(__op has(____id14 0))
+  set(____id15 cut(____id14 1))
+  set(__a1 has(____id15 0))
+  set(__b2 has(____id15 1))
+  set(____id16 op_delims(form __a1))
+  set(__ao has(____id16 0))
+  set(__ac has(____id16 1))
+  set(____id17 op_delims(form __b2 right ON))
+  set(__bo has(____id17 0))
+  set(__bc has(____id17 1))
+  set(__a2 compile(__a1))
+  set(__b3 compile(__b2))
+  set(__op1 getop(__op))
+  if(unary63(form))
+    return(PROPAGATE _37cat(__op1 _37cat(__ao _37cat(" " _37cat(__a2 __ac)))))
+  else()
+    return(PROPAGATE _37cat(__ao _37cat(__a2 _37cat(__ac _37cat(" " _37cat(__op1 _37cat(" " _37cat(__bo _37cat(__b3 __bc)))))))))
+  endif()
+endfunction()
+function(compile_body body)
+  set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") + 1)
+  set(____x120 compile(body stmt ON))
+  set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") - 1)
+  set(__s2 ____x120)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py") AND none63(__s2))
+    set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") + 1)
+    set(____x121 _37cat(indentation() "pass\n"))
+    set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") - 1)
+    return(PROPAGATE ____x121)
+  else()
+    return(PROPAGATE __s2)
+  endif()
+endfunction()
+function(compile_function args body ...)
+  set(____r80 unstash([...]))
+  set(__args5 destash33(args ____r80))
+  set(__body4 destash33(body ____r80))
+  set(____id18 ____r80)
+  set(__name3 has(____id18 "name"))
+  set(__prefix has(____id18 "prefix"))
+  set(__async has(____id18 "async"))
+  set(__e75 "")
+  if(__name3)
+    set(__e75 compile_name(__name3))
+  else()
+    set(__e75 "")
+  endif()
+  set(__id19 "${__e75}")
+  set(__e76 "")
+  if(has(__args5 "rest"))
+    set(__e76 join(__args5 ["..."]))
+  else()
+    set(__e76 __args5)
+  endif()
+  set(__args12 "${__e76}")
+  set(__e77 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    set(__e77 compile_args(join([["%literal", __id19]] __args12) ON))
+  else()
+    set(__e77 compile_args(__args12 ON))
+  endif()
+  set(__args6 "${__e77}")
+  set(__body5 compile_body(__body4))
+  set(__ind indentation())
+  set(__e78 "")
+  if(__prefix)
+    set(__e78 _37cat(__prefix " "))
+  else()
+    set(__e78 "")
+  endif()
+  set(__p1 "${__e78}")
+  set(__e79 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    set(__e79 "")
+  else()
+    set(__e80 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      set(__e80 "endfunction()")
+    else()
+      set(__e80 "end")
+    endif()
+    set(__e79 "${__e80}")
+  endif()
+  set(__tr1 "${__e79}")
+  set(__e81 "")
+  if(__async AND NOT( _37eq(has(setenv("target" toplevel ON) "value") "lua")))
+    set(__e81 "async ")
+  else()
+    set(__e81 "")
+  endif()
+  set(__a3 "${__e81}")
+  if(__name3)
+    set(__tr1 _37cat(__tr1 "\n"))
+  endif()
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    return(PROPAGATE _37cat(__a3 _37cat("function " _37cat(__id19 _37cat(__args6 _37cat(" {\n" _37cat(__body5 _37cat(__ind _37cat("}" __tr1)))))))))
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      set(__e82 "")
+      if(none63(__ind))
+        set(__e82 "\n")
+      else()
+        set(__e82 "")
+      endif()
+      set(__ws "${__e82}")
+      return(PROPAGATE _37cat(__a3 _37cat("def " _37cat(__id19 _37cat(__args6 _37cat(":\n" _37cat(__body5 __ws)))))))
+    else()
+      if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        return(PROPAGATE _37cat(__a3 _37cat("function" _37cat(__args6 _37cat("\n" _37cat(__body5 _37cat(__ind __tr1)))))))
+      else()
+        return(PROPAGATE _37cat(__p1 _37cat("function " _37cat(__id19 _37cat(__args6 _37cat("\n" _37cat(__body5 _37cat(__ind __tr1))))))))
+      endif()
+    endif()
+  endif()
+endfunction()
+function(can_return63 form)
+  return(PROPAGATE is63(form) AND (atom63(form) OR NOT( _37eq(hd(form) "%return")) AND NOT statement63(hd(form))))
+endfunction()
+function(compile form raw63 ...)
+  set(____r82 unstash([...]))
+  set(__form destash33(form ____r82))
+  set(__raw63 destash33(raw63 ____r82))
+  set(____id20 ____r82)
+  set(__stmt1 has(____id20 "stmt"))
+  if(nil63(__form))
+    return(PROPAGATE "")
+  else()
+    if(special_form63(__form))
+      return(PROPAGATE compile_special(__form __stmt1))
+    else()
+      set(__tr2 terminator(__stmt1))
+      set(__e83 "")
+      if(__stmt1)
+        set(__e83 indentation())
+      else()
+        set(__e83 "")
+      endif()
+      set(__ind1 "${__e83}")
+      set(__e84 "")
+      if(atom63(__form))
+        set(__e84 compile_atom(__form __raw63))
+      else()
+        set(__e85 "")
+        if(infix63(hd(__form)))
+          set(__e85 compile_infix(__form))
+        else()
+          set(__e85 compile_call(__form))
+        endif()
+        set(__e84 "${__e85}")
+      endif()
+      set(__form1 "${__e84}")
+      return(PROPAGATE _37cat(__ind1 _37cat(__form1 __tr2)))
+    endif()
+  endif()
+endfunction()
+function(lower_statement form tail63)
+  set(__hoist [])
+  set(__e lower(form __hoist ON tail63))
+  set(__e86 "")
+  if(some63(__hoist) AND is63(__e))
+    set(__e86 join(["%do"] __hoist [__e]))
+  else()
+    set(__e87 "")
+    if(is63(__e))
+      set(__e87 __e)
+    else()
+      set(__e88 "")
+      if(_35(__hoist) GREATER 1)
+        set(__e88 join(["%do"] __hoist))
+      else()
+        set(__e88 hd(__hoist))
+      endif()
+      set(__e87 "${__e88}")
+    endif()
+    set(__e86 "${__e87}")
+  endif()
+  return(PROPAGATE either("${__e86}" ["%do"]))
+endfunction()
+function(lower_body body tail63)
+  return(PROPAGATE lower_statement(join(["%do"] body) tail63))
+endfunction()
+function(literal63 form)
+  return(PROPAGATE atom63(form) OR (_37eq(hd(form) "%array") OR (_37eq(hd(form) "%object") OR (_37eq(hd(form) "%list") OR _37eq(hd(form) ",")))))
+endfunction()
+function(standalone63 form)
+  return(PROPAGATE NOT( _37eq(has(setenv("target" toplevel ON) "value") "lua")) AND string_literal63(form) OR (NOT atom63(form) AND (NOT infix63(hd(form)) AND (NOT literal63(form) AND NOT( _37eq("%get" hd(form))))) OR id_literal63(form)))
+endfunction()
+function(lower_do args hoist stmt63 tail63)
+  set(____x132 almost(args))
+  set(____i19 0)
+  while ____i19 LESS _35(____x132) do
+    set(__x133 ____x132[____i19])
+    set(____y lower(__x133 hoist stmt63))
+    if(yes(____y))
+      set(__e1 ____y)
+      if(standalone63(__e1))
+        add(hoist __e1)
+      endif()
+    endif()
+    set(____i19 ____i19 + 1)
   end
-  __e2 = lower(last(args), hoist, stmt63, tail63)
-  if _37and(tail63, can_return63(__e2)) then
-    return ["%return", __e2]
-  else
-    return __e2
-end
-lower_set = function (args, hoist, stmt63, tail63)
-  ____id21 = args
-  __lh = has(____id21, 0)
-  __rh = has(____id21, 1)
-  __lh1 = lower(__lh, hoist)
-  __rh1 = lower(__rh, hoist)
-  add(hoist, ["%set", __lh1, __rh1])
-  if _37not(_37and(stmt63, _37not(tail63))) then
-    return __lh1
-end
-lower_if = function (args, hoist, stmt63, tail63)
-  ____id22 = args
-  __cond = has(____id22, 0)
-  __then = has(____id22, 1)
-  ___else = has(____id22, 2)
-  if stmt63 then
-    __e82 = ""
-    if is63(___else) then
-      __e82 = [lower_body([___else], tail63)]
-    return add(hoist, join(["%if", lower(__cond, hoist), lower_body([__then], tail63)], __e82))
-  else
-    __e3 = unique("e")
-    add(hoist, ["%local", __e3, "nil"])
-    __e81 = ""
-    if is63(___else) then
-      __e81 = [lower(["%set", __e3, ___else])]
-    add(hoist, join(["%if", lower(__cond, hoist), lower(["%set", __e3, __then])], __e81))
-    return __e3
-end
-lower_short = function (x, args, hoist)
-  ____id23 = args
-  __a4 = has(____id23, 0)
-  __b4 = has(____id23, 1)
-  __hoist1 = []
-  __b11 = lower(__b4, __hoist1)
-  if some63(__hoist1) then
-    __id24 = unique("id")
-    __e83 = ""
-    if _37eq(x, "%and") then
-      __e83 = ["%if", __id24, __b4, __id24]
-    else
-      __e83 = ["%if", __id24, __id24, __b4]
-    return lower(["%do", ["%local", __id24, __a4], __e83], hoist)
-  else
-    return [x, lower(__a4, hoist), __b11]
-end
-lower_try = function (args, hoist, tail63)
-  return add(hoist, ["%try", lower_body(args, tail63)])
-end
-lower_while = function (args, hoist)
-  ____id25 = args
-  __c4 = has(____id25, 0)
-  __body6 = cut(____id25, 1)
-  __pre1 = []
-  __c5 = lower(__c4, __pre1)
-  __e84 = ""
-  if none63(__pre1) then
-    __e84 = ["%while", __c5, lower_body(__body6)]
-  else
-    __e84 = ["%while", ON, join(["%do"], __pre1, [["%if", ["%not", __c5], ["%break"]], lower_body(__body6)])]
-  return add(hoist, __e84)
-end
-lower_for = function (args, hoist)
-  ____id26 = args
-  __h = has(____id26, 0)
-  __k15 = has(____id26, 1)
-  __body7 = cut(____id26, 2)
-  return add(hoist, join(["%for", lower(__h, hoist), __k15, lower_body(__body7)], props(__body7)))
-end
-lower_with = function (args, hoist, stmt63, tail63)
-  ____id27 = args
-  __h1 = has(____id27, 0)
-  __body8 = cut(____id27, 1)
-  if _37and(stmt63, _37not(tail63)) then
-    return add(hoist, join(["%with", lower(__h1, hoist), lower_body(__body8, tail63)], props(__body8)))
-  else
-    __e4 = unique("e")
-    add(hoist, ["%local", __e4])
-    add(hoist, join(["%with", lower(__h1, hoist), lower(["%set", __e4, join(["%do"], __body8)])], props(__body8)))
-    return __e4
-end
-lower_block = function (args, hoist, stmt63, tail63)
-  ____id28 = args
-  __name4 = has(____id28, 0)
-  __h2 = has(____id28, 1)
-  __body9 = cut(____id28, 2)
-  return add(hoist, ["%block", __name4, lower(__h2, hoist), lower_body(__body9, tail63)])
-end
-lower_from = function (args, hoist, stmt63, tail63)
-  ____id29 = args
-  __name5 = has(____id29, 0)
-  __import_ = has(____id29, 1)
-  __id30 = has(____id29, 2)
-  __as_ = has(____id29, 3)
-  __alias = has(____id29, 4)
-  add(hoist, join(["from"], args))
-  return _37or(__alias, __id30)
-end
-lower_import = function (__x159, hoist, stmt63, tail63)
-  ____id31 = __x159
-  __name6 = has(____id31, 0)
-  __alias1 = cut(____id31, 1)
-  __e85 = ""
-  if _37eq(hd(__alias1), "as") then
-    __e85 = __alias1[1]
-  else
-    __e85 = hd(__alias1)
-  __as = __e85
-  __id32 = _37or(__as, __name6)
-  add(hoist, join(["import", __name6], __alias1))
-  if _37not(stmt63) then
-    return __id32
-end
-lower_function = function (args, hoist)
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    __f11 = unique("f")
-    return lower(["%do", join(["%local-function", __f11], args), __f11], hoist)
-  else
-    ____id33 = args
-    __a5 = has(____id33, 0)
-    __body10 = cut(____id33, 1)
-    return join(["%function", __a5, lower_body(__body10, ON)], props(__body10))
-end
-lower_definition = function (kind, args, hoist)
-  ____id34 = args
-  __name7 = has(____id34, 0)
-  __args7 = has(____id34, 1)
-  __body11 = cut(____id34, 2)
-  return add(hoist, join([kind, __name7, __args7, lower_body(__body11, ON)], props(__body11)))
-end
-lower_call = function (form, hoist)
-  __form2 = map(function (x)
-    return lower(x, hoist)
-  end, form)
-  if some63(__form2) then
-    return __form2
-end
-pairwise63 = function (form)
-  return in63(hd(form), ["%lt", "%le", "%eq", "%ge", "%gt"])
-end
-lower_pairwise = function (form)
-  if pairwise63(form) then
-    __e5 = []
-    ____id35 = form
-    __x166 = has(____id35, 0)
-    __args8 = cut(____id35, 1)
-    reduce(function (a, b)
-      add(__e5, [__x166, a, b])
-      return a
-    end, __args8)
-    return join(["%and"], reverse(__e5))
-  else
-    return form
-end
-lower_infix63 = function (form)
-  return _37and(infix63(hd(form)), _35(form) > 3)
-end
-lower_infix = function (form, hoist)
-  __form3 = lower_pairwise(form)
-  ____id36 = __form3
-  __x169 = has(____id36, 0)
-  __args9 = cut(____id36, 1)
-  return lower(reduce(function (a, b)
-    return [__x169, b, a]
-  end, reverse(__args9)), hoist)
-end
-lower_special = function (form, hoist)
-  __e6 = lower_call(form, hoist)
-  if __e6 then
-    return add(hoist, __e6)
-end
-lower = function (form, hoist, stmt63, tail63)
-  if atom63(form) then
-    return form
-  else
-    if empty63(form) then
-      return ["%array"]
-    else
-      if nil63(hoist) then
-        return lower_statement(form)
-      else
-        if lower_infix63(form) then
-          return lower_infix(form, hoist)
-        else
-          ____id37 = form
-          __x172 = has(____id37, 0)
-          __args10 = cut(____id37, 1)
-          if _37eq(__x172, "%do") then
-            return lower_do(__args10, hoist, stmt63, tail63)
-          else
-            if _37eq(__x172, "%call") then
-              return lower(__args10, hoist, stmt63, tail63)
-            else
-              if _37eq(__x172, "%set") then
-                return lower_set(__args10, hoist, stmt63, tail63)
-              else
-                if _37eq(__x172, "%if") then
-                  return lower_if(__args10, hoist, stmt63, tail63)
-                else
-                  if _37eq(__x172, "%try") then
-                    return lower_try(__args10, hoist, tail63)
-                  else
-                    if _37eq(__x172, "%while") then
-                      return lower_while(__args10, hoist)
-                    else
-                      if _37eq(__x172, "%for") then
-                        return lower_for(__args10, hoist)
-                      else
-                        if _37eq(__x172, "%with") then
-                          return lower_with(__args10, hoist, stmt63, tail63)
-                        else
-                          if _37eq(__x172, "%block") then
-                            return lower_block(__args10, hoist, stmt63, tail63)
-                          else
-                            if _37eq(__x172, "%cases") then
-                              return lower_cases(__args10, hoist, stmt63, tail63)
-                            else
-                              if _37eq(__x172, "import") then
-                                return lower_import(__args10, hoist, stmt63, tail63)
-                              else
-                                if _37eq(__x172, "from") then
-                                  return lower_from(__args10, hoist, stmt63, tail63)
-                                else
-                                  if _37eq(__x172, "%function") then
-                                    return lower_function(__args10, hoist)
-                                  else
-                                    if _37or(_37eq(__x172, "%local-function"), _37eq(__x172, "%global-function")) then
-                                      return lower_definition(__x172, __args10, hoist)
-                                    else
-                                      if in63(__x172, ["%and", "%or"]) then
-                                        return lower_short(__x172, __args10, hoist)
-                                      else
-                                        if statement63(__x172) then
-                                          return lower_special(form, hoist)
-                                        else
-                                          return lower_call(form, hoist)
-end
-expand = function (form)
-  return lower(macroexpand(form))
-end
-eval_result = function (globals, locals)
-  return lumen_result
-end
-eval = function (form, globals, locals)
-  __previous = has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value")
-  setenv("target", 
-    _stash ON
-    toplevel ON
-  ).value = "cmake"
-  __code = compile(expand(["%set", "lumen-result", form]))
-  setenv("target", 
-    _stash ON
-    toplevel ON
-  ).value = __previous
-  run(__code, globals, locals)
-  return eval_result(globals, locals)
-end
-immediate_call63 = function (x)
-  return _37and(_37not(atom63(x)), _37and(_37not(atom63(hd(x))), _37eq(hd(hd(x)), "%function")))
-end
-___37do__special = function (...)
-  __forms2 = unstash([...])
-  __s4 = ""
-  ____x179 = __forms2
-  ____i20 = 0
-  while ____i20 < _35(____x179) do
-    __x180 = ____x179[____i20]
-    if _37and(_37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "lua"), _37and(immediate_call63(__x180), _37eq("\n", char(__s4, edge(__s4))))) then
-      __s4 = _37cat(clip(__s4, 0, edge(__s4)), ";\n")
-    __s4 = _37cat(__s4, compile(__x180, 
-      _stash ON
-      stmt ON
-    ))
-    if _37not(atom63(__x180)) then
-      if _37or(_37eq(hd(__x180), "%return"), _37eq(hd(__x180), "%break")) then
+  set(__e2 lower(last(args) hoist stmt63 tail63))
+  if(tail63 AND can_return63(__e2))
+    return(PROPAGATE ["%return", __e2])
+  else()
+    return(PROPAGATE __e2)
+  endif()
+endfunction()
+function(lower_set args hoist stmt63 tail63)
+  set(____id21 args)
+  set(__lh has(____id21 0))
+  set(__rh has(____id21 1))
+  set(__lh1 lower(__lh hoist))
+  set(__rh1 lower(__rh hoist))
+  add(hoist ["%set", __lh1, __rh1])
+  if(NOT( stmt63 AND NOT tail63 OR OFF))
+    return(PROPAGATE __lh1)
+  endif()
+endfunction()
+function(lower_if args hoist stmt63 tail63)
+  set(____id22 args)
+  set(__cond has(____id22 0))
+  set(__then has(____id22 1))
+  set(__else has(____id22 2))
+  if(stmt63)
+    set(__e90 "")
+    if(is63(__else))
+      set(__e90 [lower_body([__else] tail63)])
+    endif()
+    return(PROPAGATE add(hoist join(["%if", lower(__cond hoist), lower_body([__then] tail63)] "${__e90}")))
+  else()
+    set(__e3 unique("e"))
+    add(hoist ["%local", __e3, "nil"])
+    set(__e89 "")
+    if(is63(__else))
+      set(__e89 [lower(["%set", __e3, __else])])
+    endif()
+    add(hoist join(["%if", lower(__cond hoist), lower(["%set", __e3, __then])] "${__e89}"))
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      return(PROPAGATE ["%id", __e3])
+    else()
+      return(PROPAGATE __e3)
+    endif()
+  endif()
+endfunction()
+function(lower_short x args hoist)
+  set(____id23 args)
+  set(__a4 has(____id23 0))
+  set(__b4 has(____id23 1))
+  set(__hoist1 [])
+  set(__b11 lower(__b4 __hoist1))
+  if(some63(__hoist1))
+    set(__id24 unique("id"))
+    set(__e91 "")
+    if(_37eq(x "%and"))
+      set(__e91 ["%if", __id24, __b4, __id24])
+    else()
+      set(__e91 ["%if", __id24, __id24, __b4])
+    endif()
+    return(PROPAGATE lower(["%do", ["%local", __id24, __a4], "${__e91}"] hoist))
+  else()
+    return(PROPAGATE [x, lower(__a4 hoist), __b11])
+  endif()
+endfunction()
+function(lower_try args hoist tail63)
+  return(PROPAGATE add(hoist ["%try", lower_body(args tail63)]))
+endfunction()
+function(lower_while args hoist)
+  set(____id25 args)
+  set(__c4 has(____id25 0))
+  set(__body6 cut(____id25 1))
+  set(__pre1 [])
+  set(__c5 lower(__c4 __pre1))
+  set(__e92 "")
+  if(none63(__pre1))
+    set(__e92 ["%while", __c5, lower_body(__body6)])
+  else()
+    set(__e92 ["%while", ON, join(["%do"] __pre1 [["%if", ["%not", __c5], ["%break"]], lower_body(__body6)])])
+  endif()
+  return(PROPAGATE add(hoist "${__e92}"))
+endfunction()
+function(lower_for args hoist)
+  set(____id26 args)
+  set(__h has(____id26 0))
+  set(__k17 has(____id26 1))
+  set(__body7 cut(____id26 2))
+  return(PROPAGATE add(hoist join(["%for", lower(__h hoist), __k17, lower_body(__body7)] props(__body7))))
+endfunction()
+function(lower_with args hoist stmt63 tail63)
+  set(____id27 args)
+  set(__h1 has(____id27 0))
+  set(__body8 cut(____id27 1))
+  if(stmt63 AND NOT tail63)
+    return(PROPAGATE add(hoist join(["%with", lower(__h1 hoist), lower_body(__body8 tail63)] props(__body8))))
+  else()
+    set(__e4 unique("e"))
+    add(hoist ["%local", __e4])
+    add(hoist join(["%with", lower(__h1 hoist), lower(["%set", __e4, join(["%do"] __body8)])] props(__body8)))
+    return(PROPAGATE __e4)
+  endif()
+endfunction()
+function(lower_block kind args hoist stmt63 tail63)
+  set(____id28 args)
+  set(__name4 has(____id28 0))
+  set(__h2 has(____id28 1))
+  set(__body9 cut(____id28 2))
+  return(PROPAGATE add(hoist [kind, __name4, lower(__h2 hoist), lower_body(__body9 tail63)]))
+endfunction()
+function(lower_from args hoist stmt63 tail63)
+  set(____id29 args)
+  set(__name5 has(____id29 0))
+  set(__import_ has(____id29 1))
+  set(__id30 has(____id29 2))
+  set(__as_ has(____id29 3))
+  set(__alias has(____id29 4))
+  add(hoist join(["from"] args))
+  return(PROPAGATE __alias OR __id30)
+endfunction()
+function(lower_import __x167 hoist stmt63 tail63)
+  set(____id31 __x167)
+  set(__name6 has(____id31 0))
+  set(__alias1 cut(____id31 1))
+  set(__e93 "")
+  if(_37eq(hd(__alias1) "as"))
+    set(__e93 __alias1[1])
+  else()
+    set(__e93 hd(__alias1))
+  endif()
+  set(__as "${__e93}")
+  set(__id32 __as OR __name6)
+  add(hoist join(["import", __name6] __alias1))
+  if(NOT stmt63)
+    return(PROPAGATE __id32)
+  endif()
+endfunction()
+function(lower_function args hoist)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py") OR _37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    set(__f11 unique("f"))
+    return(PROPAGATE lower(["%do", join(["%local-function", __f11] args), __f11] hoist))
+  else()
+    set(____id33 args)
+    set(__a5 has(____id33 0))
+    set(__body10 cut(____id33 1))
+    return(PROPAGATE join(["%function", __a5, lower_body(__body10 ON)] props(__body10)))
+  endif()
+endfunction()
+function(lower_definition kind args hoist)
+  set(____id34 args)
+  set(__name7 has(____id34 0))
+  set(__args7 has(____id34 1))
+  set(__body11 cut(____id34 2))
+  return(PROPAGATE add(hoist join([kind, __name7, __args7, lower_body(__body11 ON)] props(__body11))))
+endfunction()
+function(lower_call form hoist)
+  function(__f6 x)
+    return(PROPAGATE lower(x hoist))
+  endfunction()
+  set(__form2 map(__f6 form))
+  if(some63(__form2))
+    return(PROPAGATE __form2)
+  endif()
+endfunction()
+function(pairwise63 form)
+  return(PROPAGATE in63(hd(form) ["%lt", "%le", "%eq", "%ge", "%gt"]))
+endfunction()
+function(lower_pairwise form)
+  if(pairwise63(form))
+    set(__e5 [])
+    set(____id35 form)
+    set(__x174 has(____id35 0))
+    set(__args8 cut(____id35 1))
+    function(__f7 a b)
+      add(__e5 [__x174, a, b])
+      return(PROPAGATE a)
+    endfunction()
+    reduce(__f7 __args8)
+    return(PROPAGATE join(["%and"] reverse(__e5)))
+  else()
+    return(PROPAGATE form)
+  endif()
+endfunction()
+function(lower_infix63 form)
+  return(PROPAGATE infix63(hd(form)) AND _35(form) GREATER 3)
+endfunction()
+function(lower_infix form hoist)
+  set(__form3 lower_pairwise(form))
+  set(____id36 __form3)
+  set(__x177 has(____id36 0))
+  set(__args9 cut(____id36 1))
+  function(__f8 a b)
+    return(PROPAGATE [__x177, b, a])
+  endfunction()
+  return(PROPAGATE lower(reduce(__f8 reverse(__args9)) hoist))
+endfunction()
+function(lower_special form hoist)
+  set(__e6 lower_call(form hoist))
+  if(__e6)
+    return(PROPAGATE add(hoist __e6))
+  endif()
+endfunction()
+function(lower form hoist stmt63 tail63)
+  if(atom63(form))
+    return(PROPAGATE form)
+  else()
+    if(empty63(form))
+      return(PROPAGATE ["%array"])
+    else()
+      if(nil63(hoist))
+        return(PROPAGATE lower_statement(form))
+      else()
+        if(lower_infix63(form))
+          return(PROPAGATE lower_infix(form hoist))
+        else()
+          set(____id37 form)
+          set(__x180 has(____id37 0))
+          set(__args10 cut(____id37 1))
+          if(_37eq(__x180 "%do"))
+            return(PROPAGATE lower_do(__args10 hoist stmt63 tail63))
+          else()
+            if(_37eq(__x180 "%call"))
+              return(PROPAGATE lower(__args10 hoist stmt63 tail63))
+            else()
+              if(_37eq(__x180 "%set"))
+                return(PROPAGATE lower_set(__args10 hoist stmt63 tail63))
+              else()
+                if(_37eq(__x180 "%if"))
+                  return(PROPAGATE lower_if(__args10 hoist stmt63 tail63))
+                else()
+                  if(_37eq(__x180 "%try"))
+                    return(PROPAGATE lower_try(__args10 hoist tail63))
+                  else()
+                    if(_37eq(__x180 "%while"))
+                      return(PROPAGATE lower_while(__args10 hoist))
+                    else()
+                      if(_37eq(__x180 "%for"))
+                        return(PROPAGATE lower_for(__args10 hoist))
+                      else()
+                        if(_37eq(__x180 "%with"))
+                          return(PROPAGATE lower_with(__args10 hoist stmt63 tail63))
+                        else()
+                          if(_37eq(__x180 "%block"))
+                            return(PROPAGATE lower_block("%block" __args10 hoist stmt63 tail63))
+                          else()
+                            if(_37eq(__x180 "%cases"))
+                              return(PROPAGATE lower_cases(__args10 hoist stmt63 tail63))
+                            else()
+                              if(_37eq(__x180 "import"))
+                                return(PROPAGATE lower_import(__args10 hoist stmt63 tail63))
+                              else()
+                                if(_37eq(__x180 "from"))
+                                  return(PROPAGATE lower_from(__args10 hoist stmt63 tail63))
+                                else()
+                                  if(_37eq(__x180 "%function"))
+                                    return(PROPAGATE lower_function(__args10 hoist))
+                                  else()
+                                    if(_37eq(__x180 "%local-function") OR _37eq(__x180 "%global-function"))
+                                      return(PROPAGATE lower_definition(__x180 __args10 hoist))
+                                    else()
+                                      if(in63(__x180 ["%and", "%or"]))
+                                        return(PROPAGATE lower_short(__x180 __args10 hoist))
+                                      else()
+                                        if(statement63(__x180))
+                                          return(PROPAGATE lower_special(form hoist))
+                                        else()
+                                          return(PROPAGATE lower_call(form hoist))
+                                        endif()
+                                      endif()
+                                    endif()
+                                  endif()
+                                endif()
+                              endif()
+                            endif()
+                          endif()
+                        endif()
+                      endif()
+                    endif()
+                  endif()
+                endif()
+              endif()
+            endif()
+          endif()
+        endif()
+      endif()
+    endif()
+  endif()
+endfunction()
+function(expand form)
+  return(PROPAGATE lower(macroexpand(form)))
+endfunction()
+function(eval_result globals locals)
+  return(PROPAGATE lumen_result)
+endfunction()
+function(eval form globals locals)
+  set(__previous has(setenv("target" toplevel ON) "value"))
+  set(setenv("target" toplevel ON).value "cmake")
+  set(__code compile(expand(["%set", "lumen-result", form])))
+  set(setenv("target" toplevel ON).value __previous)
+  run(__code globals locals)
+  return(PROPAGATE eval_result(globals locals))
+endfunction()
+function(immediate_call63 x)
+  return(PROPAGATE NOT atom63(x) AND (NOT atom63(hd(x)) AND _37eq(hd(hd(x)) "%function")))
+endfunction()
+function(___37do__special ...)
+  set(__forms2 unstash([...]))
+  set(__s4 "")
+  set(____x187 __forms2)
+  set(____i21 0)
+  while ____i21 LESS _35(____x187) do
+    set(__x188 ____x187[____i21])
+    if(_37eq(has(setenv("target" toplevel ON) "value") "lua") AND (immediate_call63(__x188) AND _37eq("\n" char(__s4 edge(__s4)))))
+      set(__s4 _37cat(clip(__s4 0 edge(__s4)) ";\n"))
+    endif()
+    set(__s4 _37cat(__s4 compile(__x188 stmt ON)))
+    if(NOT atom63(__x188))
+      if(_37eq(hd(__x188) "%return") OR _37eq(hd(__x188) "%break"))
         break
-    ____i20 = ____i20 + 1
+      endif()
+    endif()
+    set(____i21 ____i21 + 1)
   end
-  return __s4
-end
-setenv("%do", 
-  _stash ON
-  special ___37do__special
-  stmt ON
-  tr ON
-)
-___37if__special = function (cond, cons, alt)
-  __cond2 = compile(cond)
-  __cons1 = compile_body(cons)
-  __e86 = ""
-  if alt then
-    __e86 = compile_body(alt)
-  __alt1 = __e86
-  __ind3 = indentation()
-  __s6 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    __s6 = _37cat(__s6, _37cat(__ind3, _37cat("if (", _37cat(__cond2, _37cat(") {\n", _37cat(__cons1, _37cat(__ind3, "}")))))))
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      __s6 = _37cat(__s6, _37cat(__ind3, _37cat("if ", _37cat(__cond2, _37cat(":\n", __cons1)))))
-    else
-      __s6 = _37cat(__s6, _37cat(__ind3, _37cat("if ", _37cat(__cond2, _37cat(" then\n", __cons1)))))
-  if _37and(__alt1, _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js")) then
-    __s6 = _37cat(__s6, _37cat(" else {\n", _37cat(__alt1, _37cat(__ind3, "}"))))
-  else
-    if _37and(__alt1, _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py")) then
-      __s6 = _37cat(__s6, _37cat(__ind3, _37cat("else:\n", __alt1)))
-    else
-      if __alt1 then
-        __s6 = _37cat(__s6, _37cat(__ind3, _37cat("else\n", __alt1)))
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua") then
-    return _37cat(__s6, _37cat(__ind3, "end\n"))
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "js") then
-      return _37cat(__s6, "\n")
-    else
-      return __s6
-end
-setenv("%if", 
-  _stash ON
-  special ___37if__special
-  stmt ON
-  tr ON
-)
-___37while__special = function (cond, form)
-  __cond4 = compile(cond)
-  __body13 = compile_body(form)
-  __ind5 = indentation()
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    return _37cat(__ind5, _37cat("while (", _37cat(__cond4, _37cat(") {\n", _37cat(__body13, _37cat(__ind5, "}\n"))))))
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      return _37cat(__ind5, _37cat("while ", _37cat(__cond4, _37cat(":\n", __body13))))
-    else
-      return _37cat(__ind5, _37cat("while ", _37cat(__cond4, _37cat(" do\n", _37cat(__body13, _37cat(__ind5, "end\n"))))))
-end
-setenv("%while", 
-  _stash ON
-  special ___37while__special
-  stmt ON
-  tr ON
-)
-___37for__special = function (t, k, form, ...)
-  ____r119 = unstash([...])
-  __t2 = destash33(t, ____r119)
-  __k18 = destash33(k, ____r119)
-  __form5 = destash33(form, ____r119)
-  ____id39 = ____r119
-  __async2 = has(____id39, "async")
-  __t3 = compile(__t2)
-  __k19 = compile(__k18)
-  __ind7 = indentation()
-  __body15 = compile_body(__form5)
-  __e87 = ""
-  if __async2 then
-    __e87 = "async "
-  else
-    __e87 = ""
-  __a7 = __e87
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua") then
-    return _37cat(__ind7, _37cat("for ", _37cat(__k19, _37cat(" in next, ", _37cat(__t3, _37cat(" do\n", _37cat(__body15, _37cat(__ind7, "end\n"))))))))
-  else
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      return _37cat(__ind7, _37cat(__a7, _37cat("for ", _37cat(__k19, _37cat(" in ", _37cat(__t3, _37cat(":\n", __body15)))))))
-    else
-      return _37cat(__ind7, _37cat("for (", _37cat(__k19, _37cat(" in ", _37cat(__t3, _37cat(") {\n", _37cat(__body15, _37cat(__ind7, "}\n"))))))))
-end
-setenv("%for", 
-  _stash ON
-  special ___37for__special
-  stmt ON
-  tr ON
-)
-___37with__special = function (t, form, ...)
-  ____r121 = unstash([...])
-  __t6 = destash33(t, ____r121)
-  __form7 = destash33(form, ____r121)
-  ____id41 = ____r121
-  __async4 = has(____id41, "async")
-  __t7 = compile(__t6)
-  __ind9 = indentation()
-  __body17 = compile_body(__form7)
-  __e88 = ""
-  if __async4 then
-    __e88 = "async "
-  else
-    __e88 = ""
-  __a9 = __e88
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    return _37cat(__ind9, _37cat(__a9, _37cat("with ", _37cat(__t7, _37cat(":\n", __body17)))))
-  else
-    return ""
-end
-setenv("%with", 
-  _stash ON
-  special ___37with__special
-  stmt ON
-  tr ON
-)
-___37block__special = function (name, t, form)
-  __t9 = compile(t)
-  __ind11 = indentation()
-  __body19 = compile_body(form)
-  __e89 = ""
-  if some63(__t9) then
-    __e89 = " "
-  else
-    __e89 = ""
-  __sep1 = __e89
-  __e90 = ""
-  if some63(__t9) then
-    __e90 = "("
-  else
-    __e90 = ""
-  __lh2 = __e90
-  __e91 = ""
-  if some63(__t9) then
-    __e91 = ")"
-  else
-    __e91 = ""
-  __rh2 = __e91
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    return _37cat(__ind11, _37cat(name, _37cat(__sep1, _37cat(__t9, _37cat(":\n", __body19)))))
-  else
-    return _37cat(__ind11, _37cat(name, _37cat(__sep1, _37cat(__lh2, _37cat(__t9, _37cat(__rh2, _37cat(__sep1, _37cat("{\n", _37cat(__body19, _37cat(__ind11, "}\n"))))))))))
-end
-setenv("%block", 
-  _stash ON
-  special ___37block__special
-  stmt ON
-  tr ON
-)
-___37try__special = function (form)
-  __ind13 = indentation()
-  __body21 = compile_body(form)
-  __e92 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    __e92 = ["%do", ["import", "sys"], ["%local", "e", [["%idx", "sys", "exc_info"]]], ["%return", ["%array", OFF, ["%get", "e", 1], "e"]]]
-  else
-    __e92 = ["%return", ["%array", OFF, "e"]]
-  __hf1 = __e92
-  setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ).value = has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") + 1
-  ____x206 = compile(__hf1, 
-    _stash ON
-    stmt ON
-  )
-  setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ).value = has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") - 1
-  __h4 = ____x206
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    return _37cat(__ind13, _37cat("try {\n", _37cat(__body21, _37cat(__ind13, _37cat("}\n", _37cat(__ind13, _37cat("catch (e) {\n", _37cat(__h4, _37cat(__ind13, "}\n")))))))))
-  else
-    return _37cat(__ind13, _37cat("try:\n", _37cat(__body21, _37cat(__ind13, _37cat("except:\n", __h4)))))
-end
-setenv("%try", 
-  _stash ON
-  special ___37try__special
-  stmt ON
-  tr ON
-)
-___37delete__special = function (place)
-  __e93 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    __e93 = "del "
-  else
-    __e93 = "delete "
-  return _37cat(indentation(), _37cat(__e93, compile(place)))
-end
-setenv("%delete", 
-  _stash ON
-  special ___37delete__special
-  stmt ON
-)
-___37break__special = function ()
-  return _37cat(indentation(), "break")
-end
-setenv("%break", 
-  _stash ON
-  special ___37break__special
-  stmt ON
-)
-___37function__special = function (args, ...)
-  ____r131 = unstash([...])
-  __args121 = destash33(args, ____r131)
-  ____id43 = ____r131
-  __body23 = cut(____id43, 0)
-  return apply(compile_function, join([__args121], __body23, []))
-end
-setenv("%function", 
-  _stash ON
-  special ___37function__special
-)
-___37global_function__special = function (name, args, ...)
-  ____r133 = unstash([...])
-  __name9 = destash33(name, ____r133)
-  __args14 = destash33(args, ____r133)
-  ____id45 = ____r133
-  __body25 = cut(____id45, 0)
-  if _37or(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua"), _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py")) then
-    ____x221 = object([__args14])
-    ____x221.name = __name9
-    ____x222 = object([])
-    ____x222.name = __name9
-    __x220 = apply(compile_function, join(____x221, __body25, ____x222))
-    return _37cat(indentation(), __x220)
-  else
-    return compile(["%set", __name9, join(["%function", __args14], __body25)], 
-      _stash ON
-      stmt ON
-    )
-end
-setenv("%global-function", 
-  _stash ON
-  special ___37global_function__special
-  stmt ON
-  tr ON
-)
-___37local_function__special = function (name, args, ...)
-  ____r135 = unstash([...])
-  __name11 = destash33(name, ____r135)
-  __args16 = destash33(args, ____r135)
-  ____id47 = ____r135
-  __body27 = cut(____id47, 0)
-  if _37or(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua"), _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py")) then
-    ____x233 = object([__args16])
-    ____x233.name = __name11
-    ____x233.prefix = "local"
-    ____x234 = object([])
-    ____x234.name = __name11
-    ____x234.prefix = "local"
-    __x232 = apply(compile_function, join(____x233, __body27, ____x234))
-    return _37cat(indentation(), __x232)
-  else
-    return compile(["%local", __name11, join(["%function", __args16], __body27)], 
-      _stash ON
-      stmt ON
-    )
-end
-setenv("%local-function", 
-  _stash ON
-  special ___37local_function__special
-  stmt ON
-  tr ON
-)
-___37return__special = function (x)
-  __e94 = ""
-  if nil63(x) then
-    __e94 = "return"
-  else
-    __e94 = _37cat("return ", compile(x))
-  __x238 = __e94
-  return _37cat(indentation(), __x238)
-end
-setenv("%return", 
-  _stash ON
-  special ___37return__special
-  stmt ON
-)
-___37new__special = function (x)
-  return _37cat("new ", compile(x))
-end
-setenv("%new", 
-  _stash ON
-  special ___37new__special
-)
-___37typeof__special = function (x)
-  return _37cat("typeof(", _37cat(compile(x), ")"))
-end
-setenv("%typeof", 
-  _stash ON
-  special ___37typeof__special
-)
-___37error__special = function (x)
-  __e95 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    __e95 = _37cat("throw ", compile(["%new", ["Error", x]]))
-  else
-    __e96 = ""
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      __e96 = _37cat("raise ", compile(["Exception", x]))
-    else
-      __e96 = _37cat("error(", _37cat(compile(x), ")"))
-    __e95 = __e96
-  __e19 = __e95
-  return _37cat(indentation(), __e19)
-end
-setenv("%error", 
-  _stash ON
-  special ___37error__special
-  stmt ON
-)
-___37throw__special = function (x)
-  __e97 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    __e97 = _37cat("throw ", compile(x))
-  else
-    __e98 = ""
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "py") then
-      __e98 = _37cat("raise ", compile(x))
-    else
-      __e98 = _37cat("error(", _37cat(compile(x), ")"))
-    __e97 = __e98
-  __e23 = __e97
-  return _37cat(indentation(), __e23)
-end
-setenv("%throw", 
-  _stash ON
-  special ___37throw__special
-  stmt ON
-)
-___37local__special = function (name, value)
-  if _37and(nil63(value), _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py")) then
-    value = "nil"
-  __id49 = compile(name)
-  __value11 = compile(value)
-  __e99 = ""
-  if is63(value) then
-    __e99 = _37cat(" = ", __value11)
-  else
-    __e99 = ""
-  __rh4 = __e99
-  __e100 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "js") then
-    __e100 = "var "
-  else
-    __e101 = ""
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "lua") then
-      __e101 = "local "
-    else
-      __e101 = ""
-    __e100 = __e101
-  __keyword1 = __e100
-  __ind15 = indentation()
-  return _37cat(__ind15, _37cat(__keyword1, _37cat(__id49, __rh4)))
-end
-setenv("%local", 
-  _stash ON
-  special ___37local__special
-  stmt ON
-)
-___37set__special = function (lh, rh)
-  __lh4 = compile(lh)
-  __e102 = ""
-  if nil63(rh) then
-    __e102 = "nil"
-  else
-    __e102 = rh
-  __rh6 = compile(__e102)
-  return _37cat(indentation(), _37cat(__lh4, _37cat(" = ", __rh6)))
-end
-setenv("%set", 
-  _stash ON
-  special ___37set__special
-  stmt ON
-)
-___37get__special = function (t, k)
-  __t12 = compile(t)
-  __k121 = compile(k)
-  if _37or(_37and(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua"), _37eq(char(__t12, 0), "{")), infix_operator63(t)) then
-    __t12 = _37cat("(", _37cat(__t12, ")"))
-  if _37and(string_literal63(k), _37and(valid_id63(inner(k)), _37not(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py")))) then
-    return _37cat(__t12, _37cat(".", inner(k)))
-  else
-    return _37cat(__t12, _37cat("[", _37cat(__k121, "]")))
-end
-setenv("%get", 
-  _stash ON
-  special ___37get__special
-)
-___37idx__special = function (t, k)
-  __t14 = compile(t)
-  __k141 = compile(k, "raw")
-  if _37or(_37and(_37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua"), _37eq(char(__t14, 0), "{")), infix_operator63(t)) then
-    __t14 = _37cat("(", _37cat(__t14, ")"))
-  return _37cat(__t14, _37cat(".", __k141))
-end
-setenv("%idx", 
-  _stash ON
-  special ___37idx__special
-)
-___37array__special = function (...)
-  __forms4 = unstash([...])
-  __e103 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua") then
-    __e103 = "{"
-  else
-    __e103 = "["
-  __open1 = __e103
-  __e104 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua") then
-    __e104 = "}"
-  else
-    __e104 = "]"
-  __close1 = __e104
-  __s8 = ""
-  __c7 = ""
-  ____o11 = __forms4
-  __k22 = ""
-  for (__k22 in ____o11) {
-    __v10 = ____o11[__k22]
-    __e105 = ""
-    if numeric63(__k22) then
-      __e105 = parseInt(__k22)
-    else
-      __e105 = __k22
-    __k23 = __e105
-    if number63(__k23) then
-      __s8 = _37cat(__s8, _37cat(__c7, compile(__v10)))
-      __c7 = ", "
+  return(PROPAGATE __s4)
+endfunction()
+setenv("%do" special ___37do__special stmt ON tr ON)
+function(___37cmake_block__special body)
+  set(__ind3 indentation())
+  set(__s6 "")
+  set(__s6 _37cat(__s6 _37cat(__ind3 "block(SCOPE_FOR VARIABLES)\n")))
+  set(__s6 _37cat(__s6 compile_body(body)))
+  set(__s6 _37cat(__s6 _37cat(__ind3 "endblock()\n")))
+  return(PROPAGATE __s6)
+endfunction()
+setenv("%cmake-block" special ___37cmake_block__special stmt ON tr ON)
+function(___37if__special cond cons alt)
+  set(__cond2 compile(cond))
+  set(__cons1 compile_body(cons))
+  set(__e94 "")
+  if(alt)
+    set(__e94 compile_body(alt))
+  endif()
+  set(__alt1 "${__e94}")
+  set(__ind5 indentation())
+  set(__s8 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("if (" _37cat(__cond2 _37cat(") {\n" _37cat(__cons1 _37cat(__ind5 "}"))))))))
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("if " _37cat(__cond2 _37cat(":\n" __cons1))))))
+    else()
+      if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("if(" _37cat(__cond2 _37cat(")\n" __cons1))))))
+      else()
+        set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("if " _37cat(__cond2 _37cat(" then\n" __cons1))))))
+      endif()
+    endif()
+  endif()
+  if(__alt1 AND _37eq(has(setenv("target" toplevel ON) "value") "js"))
+    set(__s8 _37cat(__s8 _37cat(" else {\n" _37cat(__alt1 _37cat(__ind5 "}")))))
+  else()
+    if(__alt1 AND _37eq(has(setenv("target" toplevel ON) "value") "py"))
+      set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("else:\n" __alt1))))
+    else()
+      if(__alt1 AND _37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("else()\n" __alt1))))
+      else()
+        if(__alt1)
+          set(__s8 _37cat(__s8 _37cat(__ind5 _37cat("else\n" __alt1))))
+        endif()
+      endif()
+    endif()
+  endif()
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+    return(PROPAGATE _37cat(__s8 _37cat(__ind5 "end\n")))
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+      return(PROPAGATE _37cat(__s8 "\n"))
+    else()
+      if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+        return(PROPAGATE _37cat(__s8 _37cat(__ind5 "endif()\n")))
+      else()
+        return(PROPAGATE __s8)
+      endif()
+    endif()
+  endif()
+endfunction()
+setenv("%if" special ___37if__special stmt ON tr ON)
+function(___37while__special cond form)
+  set(__cond4 compile(cond))
+  set(__body13 compile_body(form))
+  set(__ind7 indentation())
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    return(PROPAGATE _37cat(__ind7 _37cat("while (" _37cat(__cond4 _37cat(") {\n" _37cat(__body13 _37cat(__ind7 "}\n")))))))
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      return(PROPAGATE _37cat(__ind7 _37cat("while " _37cat(__cond4 _37cat(":\n" __body13)))))
+    else()
+      return(PROPAGATE _37cat(__ind7 _37cat("while " _37cat(__cond4 _37cat(" do\n" _37cat(__body13 _37cat(__ind7 "end\n")))))))
+    endif()
+  endif()
+endfunction()
+setenv("%while" special ___37while__special stmt ON tr ON)
+function(___37for__special t k form ...)
+  set(____r121 unstash([...]))
+  set(__t2 destash33(t ____r121))
+  set(__k20 destash33(k ____r121))
+  set(__form5 destash33(form ____r121))
+  set(____id39 ____r121)
+  set(__async2 has(____id39 "async"))
+  set(__t3 compile(__t2))
+  set(__k21 compile(__k20))
+  set(__ind9 indentation())
+  set(__body15 compile_body(__form5))
+  set(__e95 "")
+  if(__async2)
+    set(__e95 "async ")
+  else()
+    set(__e95 "")
+  endif()
+  set(__a7 "${__e95}")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+    return(PROPAGATE _37cat(__ind9 _37cat("for " _37cat(__k21 _37cat(" in next, " _37cat(__t3 _37cat(" do\n" _37cat(__body15 _37cat(__ind9 "end\n")))))))))
+  else()
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      return(PROPAGATE _37cat(__ind9 _37cat(__a7 _37cat("for " _37cat(__k21 _37cat(" in " _37cat(__t3 _37cat(":\n" __body15))))))))
+    else()
+      return(PROPAGATE _37cat(__ind9 _37cat("for (" _37cat(__k21 _37cat(" in " _37cat(__t3 _37cat(") {\n" _37cat(__body15 _37cat(__ind9 "}\n")))))))))
+    endif()
+  endif()
+endfunction()
+setenv("%for" special ___37for__special stmt ON tr ON)
+function(___37with__special t form ...)
+  set(____r123 unstash([...]))
+  set(__t6 destash33(t ____r123))
+  set(__form7 destash33(form ____r123))
+  set(____id41 ____r123)
+  set(__async4 has(____id41 "async"))
+  set(__t7 compile(__t6))
+  set(__ind11 indentation())
+  set(__body17 compile_body(__form7))
+  set(__e96 "")
+  if(__async4)
+    set(__e96 "async ")
+  else()
+    set(__e96 "")
+  endif()
+  set(__a9 "${__e96}")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    return(PROPAGATE _37cat(__ind11 _37cat(__a9 _37cat("with " _37cat(__t7 _37cat(":\n" __body17))))))
+  else()
+    return(PROPAGATE "")
+  endif()
+endfunction()
+setenv("%with" special ___37with__special stmt ON tr ON)
+function(___37block__special name t form)
+  set(__t9 compile(t))
+  set(__ind13 indentation())
+  set(__body19 compile_body(form))
+  set(__e97 "")
+  if(some63(__t9))
+    set(__e97 " ")
+  else()
+    set(__e97 "")
+  endif()
+  set(__sep1 "${__e97}")
+  set(__e98 "")
+  if(some63(__t9))
+    set(__e98 "(")
+  else()
+    set(__e98 "")
+  endif()
+  set(__lh2 "${__e98}")
+  set(__e99 "")
+  if(some63(__t9))
+    set(__e99 ")")
+  else()
+    set(__e99 "")
+  endif()
+  set(__rh2 "${__e99}")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    return(PROPAGATE _37cat(__ind13 _37cat(name _37cat(__sep1 _37cat(__t9 _37cat(":\n" __body19))))))
+  else()
+    return(PROPAGATE _37cat(__ind13 _37cat(name _37cat(__sep1 _37cat(__lh2 _37cat(__t9 _37cat(__rh2 _37cat(__sep1 _37cat("{\n" _37cat(__body19 _37cat(__ind13 "}\n")))))))))))
+  endif()
+endfunction()
+setenv("%block" special ___37block__special stmt ON tr ON)
+function(___37try__special form)
+  set(__ind15 indentation())
+  set(__body21 compile_body(form))
+  set(__e100 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    set(__e100 ["%do", ["import", "sys"], ["%local", "e", [["%idx", "sys", "exc_info"]]], ["%return", ["%array", OFF, ["%get", "e", 1], "e"]]])
+  else()
+    set(__e100 ["%return", ["%array", OFF, "e"]])
+  endif()
+  set(__hf1 "${__e100}")
+  set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") + 1)
+  set(____x214 compile(__hf1 stmt ON))
+  set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") - 1)
+  set(__h4 ____x214)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    return(PROPAGATE _37cat(__ind15 _37cat("try {\n" _37cat(__body21 _37cat(__ind15 _37cat("}\n" _37cat(__ind15 _37cat("catch (e) {\n" _37cat(__h4 _37cat(__ind15 "}\n"))))))))))
+  else()
+    return(PROPAGATE _37cat(__ind15 _37cat("try:\n" _37cat(__body21 _37cat(__ind15 _37cat("except:\n" __h4))))))
+  endif()
+endfunction()
+setenv("%try" special ___37try__special stmt ON tr ON)
+function(___37delete__special place)
+  set(__e101 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    set(__e101 "del ")
+  else()
+    set(__e101 "delete ")
+  endif()
+  return(PROPAGATE _37cat(indentation() _37cat("${__e101}" compile(place))))
+endfunction()
+setenv("%delete" special ___37delete__special stmt ON)
+function(___37break__special)
+  return(PROPAGATE _37cat(indentation() "break"))
+endfunction()
+setenv("%break" special ___37break__special stmt ON)
+function(___37function__special args ...)
+  set(____r133 unstash([...]))
+  set(__args121 destash33(args ____r133))
+  set(____id43 ____r133)
+  set(__body23 cut(____id43 0))
+  return(PROPAGATE apply(compile_function join([__args121] __body23 [])))
+endfunction()
+setenv("%function" special ___37function__special)
+function(___37global_function__special name args ...)
+  set(____r135 unstash([...]))
+  set(__name9 destash33(name ____r135))
+  set(__args14 destash33(args ____r135))
+  set(____id45 ____r135)
+  set(__body25 cut(____id45 0))
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua") OR (_37eq(has(setenv("target" toplevel ON) "value") "py") OR _37eq(has(setenv("target" toplevel ON) "value") "cmake")))
+    set(____x229 object([__args14]))
+    set(____x229.name __name9)
+    set(____x230 object([]))
+    set(____x230.name __name9)
+    set(__x228 apply(compile_function join(____x229 __body25 ____x230)))
+    return(PROPAGATE _37cat(indentation() __x228))
+  else()
+    return(PROPAGATE compile(["%set", __name9, join(["%function", __args14] __body25)] stmt ON))
+  endif()
+endfunction()
+setenv("%global-function" special ___37global_function__special stmt ON tr ON)
+function(___37local_function__special name args ...)
+  set(____r137 unstash([...]))
+  set(__name11 destash33(name ____r137))
+  set(__args16 destash33(args ____r137))
+  set(____id47 ____r137)
+  set(__body27 cut(____id47 0))
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua") OR (_37eq(has(setenv("target" toplevel ON) "value") "py") OR _37eq(has(setenv("target" toplevel ON) "value") "cmake")))
+    set(____x241 object([__args16]))
+    set(____x241.name __name11)
+    set(____x241.prefix "local")
+    set(____x242 object([]))
+    set(____x242.name __name11)
+    set(____x242.prefix "local")
+    set(__x240 apply(compile_function join(____x241 __body27 ____x242)))
+    return(PROPAGATE _37cat(indentation() __x240))
+  else()
+    return(PROPAGATE compile(["%local", __name11, join(["%function", __args16] __body27)] stmt ON))
+  endif()
+endfunction()
+setenv("%local-function" special ___37local_function__special stmt ON tr ON)
+function(___37ref__special variable)
+  return(PROPAGATE _37cat("${" _37cat(compile_id(tostr(variable)) "}")))
+endfunction()
+setenv("%ref" special ___37ref__special)
+function(___37id__special variable)
+  return(PROPAGATE escape(compile(["%ref", variable])))
+endfunction()
+setenv("%id" special ___37id__special)
+function(___37return__special x)
+  set(__e102 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    set(__e104 "")
+    if(nil63(x))
+      set(__e104 ["return"])
+    else()
+      set(__e104 ["return", "PROPAGATE", x])
+    endif()
+    set(__e102 compile("${__e104}"))
+  else()
+    set(__e103 "")
+    if(nil63(x))
+      set(__e103 "return")
+    else()
+      set(__e103 _37cat("return " compile(x)))
+    endif()
+    set(__e102 "${__e103}")
+  endif()
+  return(PROPAGATE _37cat(indentation() "${__e102}"))
+endfunction()
+setenv("%return" special ___37return__special stmt ON)
+function(___37new__special x)
+  return(PROPAGATE _37cat("new " compile(x)))
+endfunction()
+setenv("%new" special ___37new__special)
+function(___37typeof__special x)
+  return(PROPAGATE _37cat("typeof(" _37cat(compile(x) ")")))
+endfunction()
+setenv("%typeof" special ___37typeof__special)
+function(___37error__special x)
+  set(__e105 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    set(__e105 _37cat("throw " compile(["%new", ["Error", x]])))
+  else()
+    set(__e106 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      set(__e106 _37cat("raise " compile(["Exception", x])))
+    else()
+      set(__e106 _37cat("error(" _37cat(compile(x) ")")))
+    endif()
+    set(__e105 "${__e106}")
+  endif()
+  set(__e21 "${__e105}")
+  return(PROPAGATE _37cat(indentation() __e21))
+endfunction()
+setenv("%error" special ___37error__special stmt ON)
+function(___37throw__special x)
+  set(__e107 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    set(__e107 _37cat("throw " compile(x)))
+  else()
+    set(__e108 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+      set(__e108 _37cat("raise " compile(x)))
+    else()
+      set(__e108 _37cat("error(" _37cat(compile(x) ")")))
+    endif()
+    set(__e107 "${__e108}")
+  endif()
+  set(__e25 "${__e107}")
+  return(PROPAGATE _37cat(indentation() __e25))
+endfunction()
+setenv("%throw" special ___37throw__special stmt ON)
+function(___37local__special name value)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    return(PROPAGATE compile(["%set", name, value]))
+  endif()
+  if(nil63(value) AND _37eq(has(setenv("target" toplevel ON) "value") "py"))
+    set(value "nil")
+  endif()
+  set(__id49 compile(name))
+  set(__value11 compile(value))
+  set(__e109 "")
+  if(is63(value))
+    set(__e109 _37cat(" = " __value11))
+  else()
+    set(__e109 "")
+  endif()
+  set(__rh4 "${__e109}")
+  set(__e110 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "js"))
+    set(__e110 "var ")
+  else()
+    set(__e111 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+      set(__e111 "local ")
+    else()
+      set(__e111 "")
+    endif()
+    set(__e110 "${__e111}")
+  endif()
+  set(__keyword1 "${__e110}")
+  set(__ind17 indentation())
+  return(PROPAGATE _37cat(__ind17 _37cat(__keyword1 _37cat(__id49 __rh4))))
+endfunction()
+setenv("%local" special ___37local__special stmt ON)
+function(___37set__special lh rh)
+  set(__lh4 compile(lh))
+  set(__e112 "")
+  if(nil63(rh))
+    set(__e112 "nil")
+  else()
+    set(__e112 rh)
+  endif()
+  set(__rh6 compile("${__e112}"))
+  set(__ind19 indentation())
+  if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    return(PROPAGATE _37cat(indentation() _37cat("set(" _37cat(__lh4 _37cat(" " _37cat(__rh6 ")"))))))
+  else()
+    return(PROPAGATE _37cat(indentation() _37cat(__lh4 _37cat(" = " __rh6))))
+  endif()
+endfunction()
+setenv("%set" special ___37set__special stmt ON)
+function(___37get__special t k)
+  set(__t12 compile(t))
+  set(__k121 compile(k))
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua") AND _37eq(char(__t12 0) "{") OR infix_operator63(t))
+    set(__t12 _37cat("(" _37cat(__t12 ")")))
+  endif()
+  if(string_literal63(k) AND (valid_id63(inner(k)) AND NOT( _37eq(has(setenv("target" toplevel ON) "value") "py"))))
+    return(PROPAGATE _37cat(__t12 _37cat("." inner(k))))
+  else()
+    return(PROPAGATE _37cat(__t12 _37cat("[" _37cat(__k121 "]"))))
+  endif()
+endfunction()
+setenv("%get" special ___37get__special)
+function(___37idx__special t k)
+  set(__t14 compile(t))
+  set(__k141 compile(k "raw"))
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua") AND _37eq(char(__t14 0) "{") OR infix_operator63(t))
+    set(__t14 _37cat("(" _37cat(__t14 ")")))
+  endif()
+  return(PROPAGATE _37cat(__t14 _37cat("." __k141)))
+endfunction()
+setenv("%idx" special ___37idx__special)
+function(___37array__special ...)
+  set(__forms4 unstash([...]))
+  set(__e113 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+    set(__e113 "{")
+  else()
+    set(__e113 "[")
+  endif()
+  set(__open1 "${__e113}")
+  set(__e114 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+    set(__e114 "}")
+  else()
+    set(__e114 "]")
+  endif()
+  set(__close1 "${__e114}")
+  set(__s10 "")
+  set(__c7 "")
+  set(____o12 __forms4)
+  set(__k24 "")
+  for (__k24 in ____o12) {
+    set(__v11 ____o12[__k24])
+    set(__e115 "")
+    if(numeric63(__k24))
+      set(__e115 parseInt(__k24))
+    else()
+      set(__e115 __k24)
+    endif()
+    set(__k25 "${__e115}")
+    if(number63(__k25))
+      set(__s10 _37cat(__s10 _37cat(__c7 compile(__v11))))
+      set(__c7 ", ")
+    endif()
   }
-  return _37cat(__open1, _37cat(__s8, __close1))
-end
-setenv("%array", 
-  _stash ON
-  special ___37array__special
-)
-___37object__special = function (...)
-  __forms6 = unstash([...])
-  __e106 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "cmake") then
-    __e106 = ""
-  else
-    __e106 = "{"
-  __s10 = __e106
-  __c9 = ""
-  __e107 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua") then
-    __e107 = " = "
-  else
-    __e108 = ""
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "cmake") then
-      __e108 = " "
-    else
-      __e108 = ": "
-    __e107 = __e108
-  __sep3 = __e107
-  setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ).value = has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") + 1
-  ____x252 = indentation()
-  setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ).value = has(setenv("indent-level", 
-    _stash ON
-    toplevel ON
-  ), "value") - 1
-  __ind17 = ____x252
-  __e109 = ""
-  if _35(__forms6) > 2 then
-    __e109 = _37cat("\n", __ind17)
-  __pad1 = __e109
-  __e110 = ""
-  if is63(__pad1) then
-    __e110 = _37cat("\n", indentation())
-  else
-    __e110 = ""
-  __end1 = __e110
-  __s10 = _37cat(__s10, either(__pad1, ""))
-  ____x253 = pair(__forms6)
-  ____i24 = 0
-  while ____i24 < _35(____x253) do
-    ____id51 = ____x253[____i24]
-    __k25 = has(____id51, 0)
-    __v12 = has(____id51, 1)
-    setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ).value = has(setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ), "value") + 1
-    ____x254 = compile(__v12)
-    setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ).value = has(setenv("indent-level", 
-      _stash ON
-      toplevel ON
-    ), "value") - 1
-    __s10 = _37cat(__s10, _37cat(__c9, _37cat(key(__k25), _37cat(__sep3, ____x254))))
-    __e111 = ""
-    if _37eq(has(setenv("target", 
-      _stash ON
-      toplevel ON
-    ), "value"), "cmake") then
-      __e111 = ""
-    else
-      __e111 = ","
-    __c9 = _37cat(__e111, either(__pad1, " "))
-    ____i24 = ____i24 + 1
+  return(PROPAGATE _37cat(__open1 _37cat(__s10 __close1)))
+endfunction()
+setenv("%array" special ___37array__special)
+function(___37object__special ...)
+  set(__forms6 unstash([...]))
+  set(__e116 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    set(__e116 "")
+  else()
+    set(__e116 "{")
+  endif()
+  set(__s12 "${__e116}")
+  set(__c9 "")
+  set(__e117 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+    set(__e117 " = ")
+  else()
+    set(__e118 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      set(__e118 " ")
+    else()
+      set(__e118 ": ")
+    endif()
+    set(__e117 "${__e118}")
+  endif()
+  set(__sep3 "${__e117}")
+  set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") + 1)
+  set(____x266 indentation())
+  set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") - 1)
+  set(__ind21 ____x266)
+  set(__e119 "")
+  if(_35(__forms6) GREATER 2)
+    set(__e119 _37cat("\n" __ind21))
+  endif()
+  set(__pad1 "${__e119}")
+  set(__e120 "")
+  if(is63(__pad1))
+    set(__e120 _37cat("\n" indentation()))
+  else()
+    set(__e120 "")
+  endif()
+  set(__end1 "${__e120}")
+  set(__s12 _37cat(__s12 either(__pad1 "")))
+  set(____x267 pair(__forms6))
+  set(____i25 0)
+  while ____i25 LESS _35(____x267) do
+    set(____id51 ____x267[____i25])
+    set(__k27 has(____id51 0))
+    set(__v13 has(____id51 1))
+    set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") + 1)
+    set(____x268 compile(__v13))
+    set(setenv("indent-level" toplevel ON).value has(setenv("indent-level" toplevel ON) "value") - 1)
+    set(__s12 _37cat(__s12 _37cat(__c9 _37cat(key(__k27) _37cat(__sep3 ____x268)))))
+    set(__e121 "")
+    if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+      set(__e121 "")
+    else()
+      set(__e121 ",")
+    endif()
+    set(__c9 _37cat("${__e121}" either(__pad1 " ")))
+    set(____i25 ____i25 + 1)
   end
-  __e112 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "cmake") then
-    __e112 = ""
-  else
-    __e112 = "}"
-  return _37cat(__s10, _37cat(__end1, __e112))
-end
-setenv("%object", 
-  _stash ON
-  special ___37object__special
-)
-___37list__special = function (form, comps, cond, ...)
-  ____r155 = unstash([...])
-  __form9 = destash33(form, ____r155)
-  __comps1 = destash33(comps, ____r155)
-  __cond6 = destash33(cond, ____r155)
-  ____id55 = ____r155
-  __kind1 = has(____id55, "kind")
-  __s12 = compile(__form9)
-  __e113 = ""
-  if _37eq(__kind1, "object") then
-    __e113 = ["{", "}"]
-  else
-    __e113 = ["[", "]"]
-  ____id56 = __e113
-  __lh6 = has(____id56, 0)
-  __rh8 = has(____id56, 1)
-  if _37not(_37eq(__kind1, "object")) then
-    __s12 = _37cat("(", _37cat(__s12, ")"))
-  ____x262 = __comps1
-  ____i26 = 0
-  while ____i26 < _35(____x262) do
-    ____id57 = ____x262[____i26]
-    __k27 = has(____id57, 0)
-    __v14 = has(____id57, 1)
-    __s12 = _37cat(__s12, _37cat(" for ", _37cat(compile(__k27), _37cat(" in ", compile(__v14)))))
-    ____i26 = ____i26 + 1
+  set(__e122 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "cmake"))
+    set(__e122 "")
+  else()
+    set(__e122 "}")
+  endif()
+  return(PROPAGATE _37cat(__s12 _37cat(__end1 "${__e122}")))
+endfunction()
+setenv("%object" special ___37object__special)
+function(___37list__special form comps cond ...)
+  set(____r161 unstash([...]))
+  set(__form9 destash33(form ____r161))
+  set(__comps1 destash33(comps ____r161))
+  set(__cond6 destash33(cond ____r161))
+  set(____id55 ____r161)
+  set(__kind1 has(____id55 "kind"))
+  set(__s14 compile(__form9))
+  set(__e123 "")
+  if(_37eq(__kind1 "object"))
+    set(__e123 ["{", "}"])
+  else()
+    set(__e123 ["[", "]"])
+  endif()
+  set(____id56 "${__e123}")
+  set(__lh6 has(____id56 0))
+  set(__rh8 has(____id56 1))
+  if(NOT( _37eq(__kind1 "object")))
+    set(__s14 _37cat("(" _37cat(__s14 ")")))
+  endif()
+  set(____x276 __comps1)
+  set(____i27 0)
+  while ____i27 LESS _35(____x276) do
+    set(____id57 ____x276[____i27])
+    set(__k29 has(____id57 0))
+    set(__v15 has(____id57 1))
+    set(__s14 _37cat(__s14 _37cat(" for " _37cat(compile(__k29) _37cat(" in " compile(__v15))))))
+    set(____i27 ____i27 + 1)
   end
-  if is63(__cond6) then
-    __s12 = _37cat(__s12, _37cat(" if ", compile(__cond6)))
-  return _37cat(__lh6, _37cat(__s12, __rh8))
-end
-setenv("%list", 
-  _stash ON
-  special ___37list__special
-)
-___37literal__special = function (...)
-  __args18 = unstash([...])
-  return apply(cat, map(compile, __args18))
-end
-setenv("%literal", 
-  _stash ON
-  special ___37literal__special
-)
-__global__special = function (x)
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    return _37cat(indentation(), _37cat("global ", _37cat(compile(x), "\n")))
-  else
-    return ""
-end
-setenv("global", 
-  _stash ON
-  special __global__special
-  stmt ON
-  tr ON
-)
-__import__special = function (name, ...)
-  ____r159 = unstash([...])
-  __name13 = destash33(name, ____r159)
-  ____id60 = ____r159
-  __alias3 = cut(____id60, 0)
-  __ind19 = indentation()
-  __e114 = ""
-  if _37eq(hd(__alias3), "as") then
-    __e114 = __alias3[1]
-  else
-    __e114 = hd(__alias3)
-  __as2 = __e114
-  __id61 = _37or(__as2, __name13)
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    __s14 = _37cat(__ind19, _37cat("import ", compile(__name13)))
-    if __as2 then
-      __s14 = _37cat(__s14, _37cat(" as ", compile(__id61)))
-    return __s14
-  else
-    return _37cat(__ind19, compile(["%local", __id61, ["require", escape(__name13)]]))
-end
-setenv("import", 
-  _stash ON
-  special __import__special
-  stmt ON
-)
-__from__special = function (name, ...)
-  ____r163 = unstash([...])
-  __name15 = destash33(name, ____r163)
-  ____id64 = ____r163
-  __imports1 = cut(____id64, 0)
-  __ind21 = indentation()
-  __id65 = __name15
-  __r164 = ""
-  __r164 = drop(__imports1)
-  __e115 = ""
-  if _37eq(last(__imports1), "as") then
-    __e115 = drop(__imports1)
-  else
-    add(__imports1, __r164)
-    __r164 = ""
-    __e115 = __r164
-  __as4 = __r164
-  __e116 = ""
-  if _37eq(hd(__imports1), "import") then
-    __e116 = tl(__imports1)
-  else
-    __e116 = __imports1
-  __names3 = __e116
-  __names4 = mapcat(function (x)
-    if _37eq(x, "*") then
-      return x
-    else
-      return compile(x)
-  end, __names3, ", ")
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "py") then
-    __s16 = _37cat(__ind21, _37cat("from ", _37cat(compile(__name15), _37cat(" import ", __names4))))
-    if __as4 then
-      __s16 = _37cat(__s16, _37cat(" as ", compile(__as4)))
-    return __s16
-  else
-    return ""
-end
-setenv("from", 
-  _stash ON
-  special __from__special
-  stmt ON
-)
-___44__special = function (...)
-  __args20 = unstash([...])
-  if none63(__args20) then
-    return ", "
-  else
-    if one63(__args20) then
-      return _37cat(", ", compile(hd(__args20)))
-    else
-      return mapcat(compile, __args20, ", ")
-end
-setenv(",", 
-  _stash ON
-  special ___44__special
-)
-__3458__special34 = function (...)
-  __args22 = unstash([...])
-  if none63(__args22) then
-    return ":"
-  else
-    if one63(__args22) then
-      return _37cat(":", compile(hd(__args22)))
-    else
-      return mapcat(compile, __args22, ":")
-end
-setenv(":", 
-  _stash ON
-  special __3458__special34
-)
-___37as__special = function (form, id)
-  return _37cat(compile(form), _37cat(" as ", compile(id)))
-end
-setenv("%as", 
-  _stash ON
-  special ___37as__special
-)
-__yield__special = function (...)
-  __args24 = unstash([...])
-  return _37cat(indentation(), _37cat("yield ", mapcat(compile, __args24, ", ")))
-end
-setenv("yield", 
-  _stash ON
-  special __yield__special
-  stmt ON
-)
-__await__special = function (x)
-  __e117 = ""
-  if _37eq(has(setenv("target", 
-    _stash ON
-    toplevel ON
-  ), "value"), "lua") then
-    __e117 = ""
-  else
-    __e117 = "await "
-  __a11 = __e117
-  return _37cat(__a11, compile(x))
-end
-setenv("await", 
-  _stash ON
-  special __await__special
-)
-___37b__special = function (x)
-  return _37cat("b", compile(x))
-end
-setenv("%b", 
-  _stash ON
-  special ___37b__special
-)
-___37f__special = function (x)
-  return _37cat("f", compile(x))
-end
-setenv("%f", 
-  _stash ON
-  special ___37f__special
-)
-___37r__special = function (x)
-  return _37cat("r", compile(x))
-end
-setenv("%r", 
-  _stash ON
-  special ___37r__special
-)
-___64__special = function (x)
-  return _37cat(indentation(), _37cat("@", compile(x)))
-end
-setenv("@", 
-  _stash ON
-  special ___64__special
-  stmt ON
-)
+  if(is63(__cond6))
+    set(__s14 _37cat(__s14 _37cat(" if " compile(__cond6))))
+  endif()
+  return(PROPAGATE _37cat(__lh6 _37cat(__s14 __rh8)))
+endfunction()
+setenv("%list" special ___37list__special)
+function(compile_literal x)
+  if(string_literal63(x))
+    return(PROPAGATE inner(x))
+  else()
+    return(PROPAGATE compile(x))
+  endif()
+endfunction()
+function(___37literal__special ...)
+  set(__args18 unstash([...]))
+  return(PROPAGATE mapcat(compile_literal __args18))
+endfunction()
+setenv("%literal" special ___37literal__special)
+function(__global__special x)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    return(PROPAGATE _37cat(indentation() _37cat("global " _37cat(compile(x) "\n"))))
+  else()
+    return(PROPAGATE "")
+  endif()
+endfunction()
+setenv("global" special __global__special stmt ON tr ON)
+function(__import__special name ...)
+  set(____r166 unstash([...]))
+  set(__name13 destash33(name ____r166))
+  set(____id60 ____r166)
+  set(__alias3 cut(____id60 0))
+  set(__ind23 indentation())
+  set(__e124 "")
+  if(_37eq(hd(__alias3) "as"))
+    set(__e124 __alias3[1])
+  else()
+    set(__e124 hd(__alias3))
+  endif()
+  set(__as2 "${__e124}")
+  set(__id61 __as2 OR __name13)
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    set(__s16 _37cat(__ind23 _37cat("import " compile(__name13))))
+    if(__as2)
+      set(__s16 _37cat(__s16 _37cat(" as " compile(__id61))))
+    endif()
+    return(PROPAGATE __s16)
+  else()
+    return(PROPAGATE _37cat(__ind23 compile(["%local", __id61, ["require", escape(__name13)]])))
+  endif()
+endfunction()
+setenv("import" special __import__special stmt ON)
+function(__from__special name ...)
+  set(____r170 unstash([...]))
+  set(__name15 destash33(name ____r170))
+  set(____id64 ____r170)
+  set(__imports1 cut(____id64 0))
+  set(__ind25 indentation())
+  set(__id65 __name15)
+  set(__r171 "")
+  set(__r171 drop(__imports1))
+  set(__e125 "")
+  if(_37eq(last(__imports1) "as"))
+    set(__e125 drop(__imports1))
+  else()
+    add(__imports1 __r171)
+    set(__r171 "")
+    set(__e125 __r171)
+  endif()
+  "${__e125}"
+  set(__as4 __r171)
+  set(__e126 "")
+  if(_37eq(hd(__imports1) "import"))
+    set(__e126 tl(__imports1))
+  else()
+    set(__e126 __imports1)
+  endif()
+  set(__names3 "${__e126}")
+  function(__f9 x)
+    if(_37eq(x "*"))
+      return(PROPAGATE x)
+    else()
+      return(PROPAGATE compile(x))
+    endif()
+  endfunction()
+  set(__names4 mapcat(__f9 __names3 ", "))
+  if(_37eq(has(setenv("target" toplevel ON) "value") "py"))
+    set(__s18 _37cat(__ind25 _37cat("from " _37cat(compile(__name15) _37cat(" import " __names4)))))
+    if(__as4)
+      set(__s18 _37cat(__s18 _37cat(" as " compile(__as4))))
+    endif()
+    return(PROPAGATE __s18)
+  else()
+    return(PROPAGATE "")
+  endif()
+endfunction()
+setenv("from" special __from__special stmt ON)
+function(___44__special ...)
+  set(__args20 unstash([...]))
+  if(none63(__args20))
+    return(PROPAGATE ", ")
+  else()
+    if(one63(__args20))
+      return(PROPAGATE _37cat(", " compile(hd(__args20))))
+    else()
+      return(PROPAGATE mapcat(compile __args20 ", "))
+    endif()
+  endif()
+endfunction()
+setenv("," special ___44__special)
+function(__3458__special34 ...)
+  set(__args22 unstash([...]))
+  if(none63(__args22))
+    return(PROPAGATE ":")
+  else()
+    if(one63(__args22))
+      return(PROPAGATE _37cat(":" compile(hd(__args22))))
+    else()
+      return(PROPAGATE mapcat(compile __args22 ":"))
+    endif()
+  endif()
+endfunction()
+setenv(":" special __3458__special34)
+function(___37as__special form id)
+  return(PROPAGATE _37cat(compile(form) _37cat(" as " compile(id))))
+endfunction()
+setenv("%as" special ___37as__special)
+function(__yield__special ...)
+  set(__args24 unstash([...]))
+  return(PROPAGATE _37cat(indentation() _37cat("yield " mapcat(compile __args24 ", "))))
+endfunction()
+setenv("yield" special __yield__special stmt ON)
+function(__await__special x)
+  set(__e127 "")
+  if(_37eq(has(setenv("target" toplevel ON) "value") "lua"))
+    set(__e127 "")
+  else()
+    set(__e127 "await ")
+  endif()
+  set(__a11 "${__e127}")
+  return(PROPAGATE _37cat(__a11 compile(x)))
+endfunction()
+setenv("await" special __await__special)
+function(___37b__special x)
+  return(PROPAGATE _37cat("b" compile(x)))
+endfunction()
+setenv("%b" special ___37b__special)
+function(___37f__special x)
+  return(PROPAGATE _37cat("f" compile(x)))
+endfunction()
+setenv("%f" special ___37f__special)
+function(___37r__special x)
+  return(PROPAGATE _37cat("r" compile(x)))
+endfunction()
+setenv("%r" special ___37r__special)
+function(___64__special x)
+  return(PROPAGATE _37cat(indentation() _37cat("@" compile(x))))
+endfunction()
+setenv("@" special ___64__special stmt ON)

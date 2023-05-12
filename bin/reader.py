@@ -297,3 +297,8 @@ def __f8(s=None):
       return wrap(s, "unquote")
 
 read_table[","] = __f8
+def __f9(s=None):
+  read_char(s)
+  return wrap(s, "%dollar")
+
+read_table["$"] = __f9

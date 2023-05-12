@@ -325,6 +325,10 @@ read_table[","] = function (s)
     end
   end
 end
+read_table["$"] = function (s)
+  read_char(s)
+  return wrap(s, "%dollar")
+end
 local __exports = exports or {}
 __exports.stream = stream
 __exports.read = read

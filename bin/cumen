@@ -1,0 +1,31 @@
+#!/bin/bash
+
+dir="$(pwd)"
+bin="$0"
+while [ -L "${bin}" ]
+do
+    x="$(readlink "${bin}")"
+    cd "$(dirname "${bin}")"
+    bin="${x}"
+done
+cd "$(dirname "${bin}")"
+home="$(pwd)"
+cd "${dir}"
+
+script="$1"
+shift 1
+
+# https://unix.stackexchange.com/questions/617828/remove-file-path-and-extension-and-just-leaving-the-file-name
+case $script in
+  *.l)
+    name="${script##*/}";
+    name="${name%.*}";
+    set -e
+    "${home}/lumen" -c "${script}" -o "${name}.cmake" -t cmake
+    script="${name}.cmake"
+    ;;
+esac
+
+exec cmake -P "${script}" "$@"
+
+

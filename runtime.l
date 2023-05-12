@@ -392,7 +392,7 @@
                     (set s (clip s (+ i n)))))))
           (add l s))))))
 
-(define tostr (x)
+(define-global tostr (x)
   (if (string? x) x (nil? x) "" (str x)))
 
 (define cat2 (a b)

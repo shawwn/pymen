@@ -1,4 +1,5 @@
-(when-compiling
-  `(do ,@(read-from-file "runtime.l")
-       ,@(read-from-file "macros.l")
-       ,@(read-from-file "main.l")))
+(target cmake: (do)
+  (when-compiling
+    `(do ,@(read-from-file "runtime.l")
+         ,@(read-from-file "macros.l")
+         ,@(read-from-file "main.l"))))

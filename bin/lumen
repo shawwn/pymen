@@ -35,6 +35,9 @@ case $host in
     py*)
         code=lumen.py
         export PYTHONPATH="${PYTHONPATH}:${home}:${dir}";;
+    cmake*)
+        code=lumen.cmake
+        export CMAKE_MODULE_PATH="${CMAKE_MODULE_PATH}:${home}:${dir}";;
     *)
         code=lumen.lua
         export LUA_PATH="$LUA_PATH;${home}/?.lua;${dir}/lib/?.lua;;";;
