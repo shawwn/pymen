@@ -110,7 +110,7 @@ var stash42 = function (args) {
           add(__l1, __v1);
         }
       }
-      return join(args, [__l1]);
+      return join({}, args, [__l1]);
     }
   } else {
     return args;
@@ -664,6 +664,33 @@ var reserved = {
     ["try"]: true,
     str: true,
     print: true
+  },
+  cmake: {
+    set: true,
+    foreach: true,
+    endforeach: true,
+    while: true,
+    endwhile: true,
+    ["if"]: true,
+    elseif: true,
+    ["else"]: true,
+    block: true,
+    endblock: true,
+    macro: true,
+    endmacro: true,
+    ["function"]: true,
+    endfunction: true,
+    ["break"]: true,
+    ["return"]: true,
+    ["continue"]: true,
+    AND: true,
+    OR: true,
+    TRUE: true,
+    FALSE: true,
+    ON: true,
+    OFF: true,
+    Y: true,
+    N: true
   }
 };
 reserved63 = function (x) {
@@ -970,10 +997,17 @@ var compile_nil = function () {
     if (has(setenv("target", {
       _stash: true,
       toplevel: true
-    }), "value") === "lua") {
-      return "nil";
+    }), "value") === "cmake") {
+      return "\"\"";
     } else {
-      return "undefined";
+      if (has(setenv("target", {
+        _stash: true,
+        toplevel: true
+      }), "value") === "lua") {
+        return "nil";
+      } else {
+        return "undefined";
+      }
     }
   }
 };
@@ -988,10 +1022,21 @@ var compile_boolean = function (x) {
       return "False";
     }
   } else {
-    if (x) {
-      return "true";
+    if (has(setenv("target", {
+      _stash: true,
+      toplevel: true
+    }), "value") === "cmake") {
+      if (x) {
+        return "ON";
+      } else {
+        return "OFF";
+      }
     } else {
-      return "false";
+      if (x) {
+        return "true";
+      } else {
+        return "false";
+      }
     }
   }
 };

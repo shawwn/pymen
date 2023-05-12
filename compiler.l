@@ -65,7 +65,7 @@
             (unless (number? k)
               (add l (literal k))
               (add l v)))
-          (join args (list l))))
+          (join (obj) args (list l))))
     args))
 
 (define bias (k)
@@ -295,7 +295,20 @@
           "class" "from" "or" "continue" "global" "pass" "def" "if"
           "raise" "del" "import" "return" "elif" "in" "True" "else"
           "is" "try"
-          "from" "str" "print")))
+          "from" "str" "print")
+    cmake: (set-of
+             "set"
+             "foreach" "endforeach"
+             "while" "endwhile"
+             "if" "elseif" "else"
+             "block" "endblock"
+             "macro" "endmacro"
+             "function" "endfunction"
+             "break" "return" "continue"
+             "AND" "OR"
+             "TRUE" "FALSE" "ON" "OFF" "Y" "N"
+             )
+    ))
 
 (define-global reserved? (x)
   (or (has? (get reserved 'all) x)
@@ -430,12 +443,15 @@
 
 (define compile-nil ()
   (if (target? 'py) "None"
+      (target? 'cmake) '""
       (target? 'lua) "nil"
     "undefined"))
 
 (define compile-boolean (x)
   (if (target? 'py)
       (if x "True" "False")
+      (target? 'cmake)
+      (if x "ON" "OFF")
     (if x "true" "false")))
 
 (define triple-quoted? (x)

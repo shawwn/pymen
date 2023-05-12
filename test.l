@@ -227,7 +227,12 @@ c"
     (test= 5 (# s)))
   (test= 3 (# "a\nb"))
   (test= 3 (# "a\\b"))
-  (test= "x3" (cat "x" (+ 1 2))))
+  (test= "x3" (cat "x" (+ 1 2)))
+  (test= "FOO_BAR" (uppercase "foo_bar"))
+  (test= "foo_bar" (lowercase "FOO_BAR"))
+  (test= "foo, bar, baz" (concat ", " '(foo bar baz)))
+  (test= "FOO, BAR, BAZ" (concat ", " '(foo bar baz) uppercase))
+  )
 
 (define-test quote
   (test= 7 (quote 7))

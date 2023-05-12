@@ -74,7 +74,9 @@
       (inc n))))
 
 (define-global # (x upto)
-  (target lua: (%literal |#| x)
+  (target
+    cmake: (string length: x)
+    lua: (%literal |#| x)
     (if (or (string? x)
             (array? x))
         (target js: (idx x length)
@@ -240,6 +242,11 @@
         (let n (# r)
           (each (k v) l
             (if (number? k) (inc k n) (set l (object l)))
+            (target js:
+              (if (= k 'length)
+                  (if (target? 'cmake)
+                      (set k 'LENGTH)
+                      (error "Can't use 'length' as an array key for this target"))))
             (set (get r k) v)))))))
 
 (define-global find (f t)
@@ -301,6 +308,9 @@
           (when (is? y)
             (cat! r c y)
             (set c (or sep ""))))))))
+
+(define-global concat (sep x f)
+  (mapcat f x sep))
 
 (define-global keep (f x)
   (map (fn (v) (when (yes (f v)) v)) x))
@@ -445,6 +455,26 @@
 
 (target js: (define tostring (x) ((idx x toString))))
 (target py: (define tostring (x) (repr x)))
+
+(define-global uppercase (x)
+  (target
+    lua: ((idx string upper) x)
+    js: ((idx x toUpperCase))
+    py: ((idx x upper))
+    cmake: (string toupper: x)))
+
+(define-global lowercase (x)
+  (target
+    lua: ((idx string lower) x)
+    js: ((idx x toLowerCase))
+    py: ((idx x lower))
+    cmake: (string tolower: x)))
+
+(define-global dashcase (x)
+  (mapcat lowercase (split x "_") "-"))
+
+(define-global screamcase (x)
+  (mapcat uppercase (split x "-") "_"))
 
 (define-global escape (s)
   (if (and (nil? (search s "\n"))

@@ -96,7 +96,7 @@ local function stash42(args)
           add(__l1, __v1)
         end
       end
-      return join(args, {__l1})
+      return join({}, args, {__l1})
     end
   else
     return args
@@ -664,6 +664,33 @@ local reserved = {
     try = true,
     str = true,
     print = true
+  },
+  cmake = {
+    set = true,
+    foreach = true,
+    endforeach = true,
+    ["while"] = true,
+    endwhile = true,
+    ["if"] = true,
+    ["elseif"] = true,
+    ["else"] = true,
+    block = true,
+    endblock = true,
+    macro = true,
+    endmacro = true,
+    ["function"] = true,
+    endfunction = true,
+    ["break"] = true,
+    ["return"] = true,
+    continue = true,
+    AND = true,
+    OR = true,
+    TRUE = true,
+    FALSE = true,
+    ON = true,
+    OFF = true,
+    Y = true,
+    N = true
   }
 }
 function reserved63(x)
@@ -958,10 +985,17 @@ local function compile_nil()
     if has(setenv("target", {
       _stash = true,
       toplevel = true
-    }), "value") == "lua" then
-      return "nil"
+    }), "value") == "cmake" then
+      return "\"\""
     else
-      return "undefined"
+      if has(setenv("target", {
+        _stash = true,
+        toplevel = true
+      }), "value") == "lua" then
+        return "nil"
+      else
+        return "undefined"
+      end
     end
   end
 end
@@ -976,10 +1010,21 @@ local function compile_boolean(x)
       return "False"
     end
   else
-    if x then
-      return "true"
+    if has(setenv("target", {
+      _stash = true,
+      toplevel = true
+    }), "value") == "cmake" then
+      if x then
+        return "ON"
+      else
+        return "OFF"
+      end
     else
-      return "false"
+      if x then
+        return "true"
+      else
+        return "false"
+      end
     end
   end
 end

@@ -82,7 +82,7 @@ def stash42(args=None):
         if not number63(__k1):
           add(__l1, literal(__k1))
           add(__l1, __v1)
-      return join(args, [__l1])
+      return join({}, args, [__l1])
   else:
     return args
 
@@ -519,6 +519,33 @@ reserved = {
     "try": True,
     "str": True,
     "print": True
+  },
+  "cmake": {
+    "set": True,
+    "foreach": True,
+    "endforeach": True,
+    "while": True,
+    "endwhile": True,
+    "if": True,
+    "elseif": True,
+    "else": True,
+    "block": True,
+    "endblock": True,
+    "macro": True,
+    "endmacro": True,
+    "function": True,
+    "endfunction": True,
+    "break": True,
+    "return": True,
+    "continue": True,
+    "AND": True,
+    "OR": True,
+    "TRUE": True,
+    "FALSE": True,
+    "ON": True,
+    "OFF": True,
+    "Y": True,
+    "N": True
   }
 }
 def reserved63(x=None):
@@ -758,10 +785,13 @@ def compile_nil():
   if has(setenv("target", toplevel=True), "value") == "py":
     return "None"
   else:
-    if has(setenv("target", toplevel=True), "value") == "lua":
-      return "nil"
+    if has(setenv("target", toplevel=True), "value") == "cmake":
+      return "\"\""
     else:
-      return "undefined"
+      if has(setenv("target", toplevel=True), "value") == "lua":
+        return "nil"
+      else:
+        return "undefined"
 
 def compile_boolean(x=None):
   if has(setenv("target", toplevel=True), "value") == "py":
@@ -770,10 +800,16 @@ def compile_boolean(x=None):
     else:
       return "False"
   else:
-    if x:
-      return "true"
+    if has(setenv("target", toplevel=True), "value") == "cmake":
+      if x:
+        return "ON"
+      else:
+        return "OFF"
     else:
-      return "false"
+      if x:
+        return "true"
+      else:
+        return "false"
 
 def triple_quoted63(x=None):
   return string_literal63(x) and (string_literal63(inner(x)) and string_literal63(inner(inner(x))))
