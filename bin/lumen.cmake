@@ -1,4 +1,4 @@
-environment = [{}]
+environment = []
 nil63 = function (x)
 end
 is63 = function (x)
@@ -48,7 +48,7 @@ array = function (x)
 end
 object = function (x)
   if array63(x) then
-    __l1 = {}
+    __l1 = 
     ____o1 = x
     __k2 = ""
     for (__k2 in ____o1) {
@@ -88,10 +88,10 @@ length = function (x, upto)
   return __n2
 end
 _35 = function (x, upto)
-  return string({
-    _stash: ON,
-    length: x
-  })
+  return string(
+    _stash ON
+    length x
+  )
 end
 none63 = function (x)
   return _37eq(_35(x, 0), 0)
@@ -188,7 +188,7 @@ cut = function (x, from, upto)
   return __l2
 end
 props = function (x)
-  __t = {}
+  __t = 
   ____o4 = x
   __k8 = ""
   for (__k8 in ____o4) {
@@ -208,7 +208,7 @@ values = function (x)
   if array63(x) then
     return x
   else
-    __t1 = {}
+    __t1 = 
     ____o5 = x
     __k10 = ""
     for (__k10 in ____o5) {
@@ -462,7 +462,7 @@ empty63 = function (t)
 end
 stash = function (args)
   if props63(args) then
-    __p = {}
+    __p = 
     ____o11 = args
     __k18 = ""
     for (__k18 in ____o11) {
@@ -485,7 +485,7 @@ stash = function (args)
 end
 unstash = function (args, params)
   if none63(args) then
-    return _37or(params, {})
+    return _37or(params, )
   else
     __l4 = last(args)
     if _37and(obj63(__l4), has63(__l4, "_stash")) then
@@ -705,16 +705,16 @@ numeric63 = function (s)
   return some63(s)
 end
 uppercase = function (x)
-  return string({
-    _stash: ON,
-    toupper: x
-  })
+  return string(
+    _stash ON
+    toupper x
+  )
 end
 lowercase = function (x)
-  return string({
-    _stash: ON,
-    tolower: x
-  })
+  return string(
+    _stash ON
+    tolower x
+  )
 end
 dashcase = function (x)
   return mapcat(lowercase, split(x, "_"), "-")
@@ -798,7 +798,7 @@ str = function (x, repr, stack)
                       if __e37 then
                         __s = "("
                         __sp = ""
-                        __xs11 = {}
+                        __xs11 = 
                         __ks = []
                         __l6 = _37or(stack, [])
                         add(__l6, x)
@@ -874,7 +874,7 @@ setenv = function (k, ...)
     if has63(__frame, __k31) then
       __e40 = __frame[__k31]
     else
-      __e40 = {}
+      __e40 = 
     __entry = __e40
     ____o17 = __keys
     __k32 = ""
@@ -913,32 +913,32 @@ sqrt = math.sqrt
 tan = math.tan
 tanh = math.tanh
 trunc = math.floor
-setenv("target", {
-  _stash: ON,
-  toplevel: ON,
-  value: either(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "cmake")
-})
-setenv("target", {
-  _stash: ON,
-  symbol: ["get-value", ["quote", "target"]]
-})
+setenv("target", 
+  _stash ON
+  toplevel ON
+  value either(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "cmake")
+)
+setenv("target", 
+  _stash ON
+  symbol ["get-value", ["quote", "target"]]
+)
 __quote__macro = function (form)
   return quoted(form)
 end
-setenv("quote", {
-  _stash: ON,
-  ["macro"]: __quote__macro
-})
+setenv("quote", 
+  _stash ON
+  ["macro"] __quote__macro
+)
 __quasiquote__macro = function (form)
   return quasiexpand(form, 1)
 end
-setenv("quasiquote", {
-  _stash: ON,
-  ["macro"]: __quasiquote__macro
-})
+setenv("quasiquote", 
+  _stash ON
+  ["macro"] __quasiquote__macro
+)
 __set__macro = function (...)
   __args3 = unstash([...])
   return join(["%do"], map(function (__x40)
@@ -952,47 +952,47 @@ __set__macro = function (...)
       return ["%set", __lh1, __rh1]
   end, pair(__args3)))
 end
-setenv("set", {
-  _stash: ON,
-  ["macro"]: __set__macro
-})
+setenv("set", 
+  _stash ON
+  ["macro"] __set__macro
+)
 __at__macro = function (l, i)
-  if _37and(_37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "lua"), number63(i)) then
+  if _37and(_37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "lua"), number63(i)) then
     i = i + 1
   else
-    if _37eq(has(setenv("target", {
-      _stash: ON,
-      toplevel: ON
-    }), "value"), "lua") then
+    if _37eq(has(setenv("target", 
+      _stash ON
+      toplevel ON
+    ), "value"), "lua") then
       i = ["+", i, 1]
   return ["%get", l, i]
 end
-setenv("at", {
-  _stash: ON,
-  ["macro"]: __at__macro
-})
+setenv("at", 
+  _stash ON
+  ["macro"] __at__macro
+)
 __wipe__macro = function (place)
-  if _37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "lua") then
+  if _37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "lua") then
     return ["set", place, "nil"]
   else
     return ["%delete", place]
 end
-setenv("wipe", {
-  _stash: ON,
-  ["macro"]: __wipe__macro
-})
+setenv("wipe", 
+  _stash ON
+  ["macro"] __wipe__macro
+)
 __list__macro = function (...)
   __body2 = unstash([...])
-  if _37and(one63(__body2), _37and(hd63(__body2, "..."), _37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "py"))) then
+  if _37and(one63(__body2), _37and(hd63(__body2, "..."), _37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "py"))) then
     return "_args"
   else
     if _37and(_35(__body2) > 2, _37and(_37eq(__body2[1], "for"), _37eq(__body2[3], "in"))) then
@@ -1041,18 +1041,18 @@ __list__macro = function (...)
       else
         return join(["%array"], __l10)
 end
-setenv("list", {
-  _stash: ON,
-  ["macro"]: __list__macro
-})
+setenv("list", 
+  _stash ON
+  ["macro"] __list__macro
+)
 __if__macro = function (...)
   __branches1 = unstash([...])
   return hd(expand_if(__branches1))
 end
-setenv("if", {
-  _stash: ON,
-  ["macro"]: __if__macro
-})
+setenv("if", 
+  _stash ON
+  ["macro"] __if__macro
+)
 __case__macro = function (expr, ...)
   ____r110 = unstash([...])
   __expr5 = destash33(expr, ____r110)
@@ -1089,10 +1089,10 @@ __case__macro = function (expr, ...)
   end
   return ["let", __x91, __expr5, join(["if"], apply(join, map(__cl1, pair(__clauses1))))]
 end
-setenv("case", {
-  _stash: ON,
-  ["macro"]: __case__macro
-})
+setenv("case", 
+  _stash ON
+  ["macro"] __case__macro
+)
 __of__macro = function (x, ...)
   ____r114 = unstash([...])
   __x106 = destash33(x, ____r114)
@@ -1100,10 +1100,10 @@ __of__macro = function (x, ...)
   __values1 = cut(____id18, 0)
   return join(["case", __x106, __values1, ON, OFF], props(__values1))
 end
-setenv("of", {
-  _stash: ON,
-  ["macro"]: __of__macro
-})
+setenv("of", 
+  _stash ON
+  ["macro"] __of__macro
+)
 __when__macro = function (cond, ...)
   ____r116 = unstash([...])
   __cond3 = destash33(cond, ____r116)
@@ -1111,10 +1111,10 @@ __when__macro = function (cond, ...)
   __body5 = cut(____id20, 0)
   return ["%if", __cond3, join(["%do"], __body5)]
 end
-setenv("when", {
-  _stash: ON,
-  ["macro"]: __when__macro
-})
+setenv("when", 
+  _stash ON
+  ["macro"] __when__macro
+)
 __unless__macro = function (cond, ...)
   ____r118 = unstash([...])
   __cond5 = destash33(cond, ____r118)
@@ -1122,16 +1122,16 @@ __unless__macro = function (cond, ...)
   __body7 = cut(____id22, 0)
   return ["%if", ["%not", __cond5], join(["%do"], __body7)]
 end
-setenv("unless", {
-  _stash: ON,
-  ["macro"]: __unless__macro
-})
+setenv("unless", 
+  _stash ON
+  ["macro"] __unless__macro
+)
 __obj__macro = function (...)
   __body10 = unstash([...])
-  if _37and(one63(__body10), _37and(hd63(__body10, "..."), _37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "py"))) then
+  if _37and(one63(__body10), _37and(hd63(__body10, "..."), _37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "py"))) then
     return "_keys"
   else
     if _37and(_35(__body10) > 2, _37and(_37eq(__body10[1], "for"), _37eq(__body10[3], "in"))) then
@@ -1165,10 +1165,10 @@ __obj__macro = function (...)
         return x
       end, __body10))
 end
-setenv("obj", {
-  _stash: ON,
-  ["macro"]: __obj__macro
-})
+setenv("obj", 
+  _stash ON
+  ["macro"] __obj__macro
+)
 __let__macro = function (bs, ...)
   ____r122 = unstash([...])
   __bs11 = destash33(bs, ____r122)
@@ -1195,10 +1195,10 @@ __let__macro = function (bs, ...)
         __id36 = __id121
       return ["%do", ["%local", __id36, __val1], ["let-symbol", __renames1, join(["let", join(__bs12, __bs21)], __body131)]]
 end
-setenv("let", {
-  _stash: ON,
-  ["macro"]: __let__macro
-})
+setenv("let", 
+  _stash ON
+  ["macro"] __let__macro
+)
 __with__macro = function (x, v, ...)
   ____r124 = unstash([...])
   __x159 = destash33(x, ____r124)
@@ -1213,10 +1213,10 @@ __with__macro = function (x, v, ...)
     else
       return join(["let", [__x159, __v23]], __body15, [__x159])
 end
-setenv("with", {
-  _stash: ON,
-  ["macro"]: __with__macro
-})
+setenv("with", 
+  _stash ON
+  ["macro"] __with__macro
+)
 __let_when__macro = function (x, v, ...)
   ____r126 = unstash([...])
   __x174 = destash33(x, ____r126)
@@ -1226,10 +1226,10 @@ __let_when__macro = function (x, v, ...)
   __y6 = unique("y")
   return ["let", __y6, __v25, ["when", ["yes", __y6], join(["let", [__x174, __y6]], __body17)]]
 end
-setenv("let-when", {
-  _stash: ON,
-  ["macro"]: __let_when__macro
-})
+setenv("let-when", 
+  _stash ON
+  ["macro"] __let_when__macro
+)
 __define_macro__macro = function (name, args, ...)
   ____r128 = unstash([...])
   __name1 = destash33(name, ____r128)
@@ -1243,10 +1243,10 @@ __define_macro__macro = function (name, args, ...)
   eval(__form1)
   return __form1
 end
-setenv("define-macro", {
-  _stash: ON,
-  ["macro"]: __define_macro__macro
-})
+setenv("define-macro", 
+  _stash ON
+  ["macro"] __define_macro__macro
+)
 __define_special__macro = function (name, args, ...)
   ____r130 = unstash([...])
   __name3 = destash33(name, ____r130)
@@ -1260,23 +1260,23 @@ __define_special__macro = function (name, args, ...)
   eval(__form3)
   return __form3
 end
-setenv("define-special", {
-  _stash: ON,
-  ["macro"]: __define_special__macro
-})
+setenv("define-special", 
+  _stash ON
+  ["macro"] __define_special__macro
+)
 __define_symbol__macro = function (name, expansion)
-  setenv(name, {
-    _stash: ON,
-    symbol: expansion
-  })
+  setenv(name, 
+    _stash ON
+    symbol expansion
+  )
   ____x203 = object(["setenv", ["quote", name]])
   ____x203.symbol = ["quote", expansion]
   return ____x203
 end
-setenv("define-symbol", {
-  _stash: ON,
-  ["macro"]: __define_symbol__macro
-})
+setenv("define-symbol", 
+  _stash ON
+  ["macro"] __define_symbol__macro
+)
 __define_reader__macro = function (__x212, ...)
   ____r134 = unstash([...])
   ____x212 = destash33(__x212, ____r134)
@@ -1287,78 +1287,78 @@ __define_reader__macro = function (__x212, ...)
   __body23 = cut(____id52, 0)
   return ["%set", ["%get", "read-table", __char1], join(["fn", [__s2]], __body23)]
 end
-setenv("define-reader", {
-  _stash: ON,
-  ["macro"]: __define_reader__macro
-})
+setenv("define-reader", 
+  _stash ON
+  ["macro"] __define_reader__macro
+)
 __define__macro = function (name, x, ...)
   ____r136 = unstash([...])
   __name5 = destash33(name, ____r136)
   __x223 = destash33(x, ____r136)
   ____id54 = ____r136
   __body25 = cut(____id54, 0)
-  setenv(__name5, {
-    _stash: ON,
-    variable: ON
-  })
+  setenv(__name5, 
+    _stash ON
+    variable ON
+  )
   if some63(__body25) then
     return join(["%local-function", __name5], bind42(__x223, __body25), props(__body25))
   else
     return join(["%local", __name5, __x223], props(__body25))
 end
-setenv("define", {
-  _stash: ON,
-  ["macro"]: __define__macro
-})
+setenv("define", 
+  _stash ON
+  ["macro"] __define__macro
+)
 __define_global__macro = function (name, x, ...)
   ____r138 = unstash([...])
   __name7 = destash33(name, ____r138)
   __x231 = destash33(x, ____r138)
   ____id56 = ____r138
   __body27 = cut(____id56, 0)
-  setenv(__name7, {
-    _stash: ON,
-    toplevel: ON,
-    variable: ON
-  })
+  setenv(__name7, 
+    _stash ON
+    toplevel ON
+    variable ON
+  )
   if some63(__body27) then
     return join(["%global-function", __name7], bind42(__x231, __body27), props(__body27))
   else
     return join(["set", __name7, __x231], props(__body27))
 end
-setenv("define-global", {
-  _stash: ON,
-  ["macro"]: __define_global__macro
-})
+setenv("define-global", 
+  _stash ON
+  ["macro"] __define_global__macro
+)
 __get_value__macro = function (x)
   ____x238 = object(["setenv", x])
   ____x238.toplevel = ON
   return ["has", ____x238, ["quote", "value"]]
 end
-setenv("get-value", {
-  _stash: ON,
-  ["macro"]: __get_value__macro
-})
+setenv("get-value", 
+  _stash ON
+  ["macro"] __get_value__macro
+)
 __define_constant__macro = function (name, x)
   ____x249 = object(["setenv", ["quote", name]])
   ____x249.toplevel = ON
   ____x249.value = either(x, ["get-value", ["quote", name]])
   return ["%do", ____x249, ["define-symbol", name, ["get-value", ["quote", name]]]]
 end
-setenv("define-constant", {
-  _stash: ON,
-  ["macro"]: __define_constant__macro
-})
+setenv("define-constant", 
+  _stash ON
+  ["macro"] __define_constant__macro
+)
 __define_variable__macro = function (name, x)
   if is63(x) then
     return ["define-constant", name, ["either", ["get-value", ["quote", name]], x]]
   else
     return ["define-constant", name]
 end
-setenv("define-variable", {
-  _stash: ON,
-  ["macro"]: __define_variable__macro
-})
+setenv("define-variable", 
+  _stash ON
+  ["macro"] __define_variable__macro
+)
 __after__macro = function (x, ...)
   ____r147 = unstash([...])
   __x279 = destash33(x, ____r147)
@@ -1370,18 +1370,18 @@ __after__macro = function (x, ...)
   ____x280.lua = join(["let", [[__ok1, __r148], ["guard", __x279]]], __body29, [["if", __ok1, __r148, ["throw", __r148]]])
   return ____x280
 end
-setenv("after", {
-  _stash: ON,
-  ["macro"]: __after__macro
-})
+setenv("after", 
+  _stash ON
+  ["macro"] __after__macro
+)
 __with_frame__macro = function (...)
   __body31 = unstash([...])
   return ["%do", ["add", "environment", ["obj"]], ["after", join(["%do"], __body31), ["drop", "environment"]]]
 end
-setenv("with-frame", {
-  _stash: ON,
-  ["macro"]: __with_frame__macro
-})
+setenv("with-frame", 
+  _stash ON
+  ["macro"] __with_frame__macro
+)
 __with_values__macro = function (...)
   __body33 = unstash([...])
   __forms3 = []
@@ -1402,10 +1402,10 @@ __with_values__macro = function (...)
   }
   return join(["with-frame"], __forms3)
 end
-setenv("with-values", {
-  _stash: ON,
-  ["macro"]: __with_values__macro
-})
+setenv("with-values", 
+  _stash ON
+  ["macro"] __with_values__macro
+)
 __with_bindings__macro = function (__x318, ...)
   ____r150 = unstash([...])
   ____x318 = destash33(__x318, ____r150)
@@ -1418,16 +1418,16 @@ __with_bindings__macro = function (__x318, ...)
   ____x323.variable = ON
   return join(["with-frame", ["each", __x320, __names5, ____x323]], __body35)
 end
-setenv("with-bindings", {
-  _stash: ON,
-  ["macro"]: __with_bindings__macro
-})
+setenv("with-bindings", 
+  _stash ON
+  ["macro"] __with_bindings__macro
+)
 __let_macro__macro = function (definitions, ...)
   ____r155 = unstash([...])
   __definitions1 = destash33(definitions, ____r155)
   ____id64 = ____r155
   __body37 = cut(____id64, 0)
-  add(environment, {})
+  add(environment, )
   ____r157 = ""
   try{
     map(function (m)
@@ -1440,16 +1440,16 @@ __let_macro__macro = function (definitions, ...)
   }
   return ____r157
 end
-setenv("let-macro", {
-  _stash: ON,
-  ["macro"]: __let_macro__macro
-})
+setenv("let-macro", 
+  _stash ON
+  ["macro"] __let_macro__macro
+)
 __let_symbol__macro = function (expansions, ...)
   ____r163 = unstash([...])
   __expansions1 = destash33(expansions, ____r163)
   ____id67 = ____r163
   __body39 = cut(____id67, 0)
-  add(environment, {})
+  add(environment, )
   ____r165 = ""
   try{
     map(function (__x335)
@@ -1465,10 +1465,10 @@ __let_symbol__macro = function (expansions, ...)
   }
   return ____r165
 end
-setenv("let-symbol", {
-  _stash: ON,
-  ["macro"]: __let_symbol__macro
-})
+setenv("let-symbol", 
+  _stash ON
+  ["macro"] __let_symbol__macro
+)
 __let_unique__macro = function (names, ...)
   ____r169 = unstash([...])
   __names7 = destash33(names, ____r169)
@@ -1479,10 +1479,10 @@ __let_unique__macro = function (names, ...)
   end, __names7)
   return join(["let", apply(join, __bs3)], __body41)
 end
-setenv("let-unique", {
-  _stash: ON,
-  ["macro"]: __let_unique__macro
-})
+setenv("let-unique", 
+  _stash ON
+  ["macro"] __let_unique__macro
+)
 __fn__macro = function (args, ...)
   ____r172 = unstash([...])
   __args9 = destash33(args, ____r172)
@@ -1490,10 +1490,10 @@ __fn__macro = function (args, ...)
   __body43 = cut(____id72, 0)
   return join(["%function"], bind42(__args9, __body43), props(__body43))
 end
-setenv("fn", {
-  _stash: ON,
-  ["macro"]: __fn__macro
-})
+setenv("fn", 
+  _stash ON
+  ["macro"] __fn__macro
+)
 __apply__macro = function (f, ...)
   ____r174 = unstash([...])
   __f3 = destash33(f, ____r174)
@@ -1507,10 +1507,10 @@ __apply__macro = function (f, ...)
     else
       return join(["%call", "apply", __f3], __args111)
 end
-setenv("apply", {
-  _stash: ON,
-  ["macro"]: __apply__macro
-})
+setenv("apply", 
+  _stash ON
+  ["macro"] __apply__macro
+)
 __guard__macro = function (expr)
   ____x402 = object(["target", [["%function", join(), ["%try", ["list", ON, expr]]]]])
   ____x414 = object(["obj"])
@@ -1519,10 +1519,10 @@ __guard__macro = function (expr)
   ____x402.lua = ["list", ["xpcall", ["%function", join(), expr], ["%function", ["m"], ["if", ["obj?", "m"], "m", ____x414]]]]
   return ["let-macro", [["%return", "args", ["error", "\"Can't return from guard\""]]], ____x402]
 end
-setenv("guard", {
-  _stash: ON,
-  ["macro"]: __guard__macro
-})
+setenv("guard", 
+  _stash ON
+  ["macro"] __guard__macro
+)
 __each__macro = function (x, t, ...)
   ____r178 = unstash([...])
   __x443 = destash33(x, ____r178)
@@ -1548,22 +1548,22 @@ __each__macro = function (x, t, ...)
   ____x449 = object(["target", __o23])
   ____x449.py = ["indices", __o23]
   __e47 = ""
-  if _37or(_37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "lua"), _37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "py")) then
+  if _37or(_37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "lua"), _37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "py")) then
     __e47 = __body45
   else
     __e47 = [join(["let", __k43, ["if", ["numeric?", __k43], ["parseInt", __k43], __k43]], __body45)]
   return ["let", [__o23, __t4, __k43, "nil"], join(["%for", ____x449, __k43], props(__body45), [join(["let", [__v29, ["%get", __o23, __k43]]], __e47)])]
 end
-setenv("each", {
-  _stash: ON,
-  ["macro"]: __each__macro
-})
+setenv("each", 
+  _stash ON
+  ["macro"] __each__macro
+)
 __for__macro = function (i, to, ...)
   ____r180 = unstash([...])
   __i39 = destash33(i, ____r180)
@@ -1575,10 +1575,10 @@ __for__macro = function (i, to, ...)
   else
     return ["let", __i39, 0, join(["while", ["<", __i39, __to1]], __body47, [["inc", __i39]])]
 end
-setenv("for", {
-  _stash: ON,
-  ["macro"]: __for__macro
-})
+setenv("for", 
+  _stash ON
+  ["macro"] __for__macro
+)
 __step__macro = function (v, t, ...)
   ____r182 = unstash([...])
   __v31 = destash33(v, ____r182)
@@ -1589,10 +1589,10 @@ __step__macro = function (v, t, ...)
   __i41 = unique("i")
   return ["let", [__x486, __t6], ["for", __i41, ["#", __x486], join(["let", [__v31, ["at", __x486, __i41]]], __body49)]]
 end
-setenv("step", {
-  _stash: ON,
-  ["macro"]: __step__macro
-})
+setenv("step", 
+  _stash ON
+  ["macro"] __step__macro
+)
 __set_of__macro = function (...)
   __xs13 = unstash([...])
   __l14 = []
@@ -1610,44 +1610,44 @@ __set_of__macro = function (...)
   }
   return join(["obj"], __l14)
 end
-setenv("set-of", {
-  _stash: ON,
-  ["macro"]: __set_of__macro
-})
+setenv("set-of", 
+  _stash ON
+  ["macro"] __set_of__macro
+)
 __target63__macro = function (x)
   return ["=", "target", x]
 end
-setenv("target?", {
-  _stash: ON,
-  ["macro"]: __target63__macro
-})
+setenv("target?", 
+  _stash ON
+  ["macro"] __target63__macro
+)
 __target__macro = function (...)
   __clauses3 = unstash([...])
-  if has63(__clauses3, has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value")) then
-    return __clauses3[has(setenv("target", {
-      _stash: ON,
-      toplevel: ON
-    }), "value")]
+  if has63(__clauses3, has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value")) then
+    return __clauses3[has(setenv("target", 
+      _stash ON
+      toplevel ON
+    ), "value")]
   else
     return hd(__clauses3)
 end
-setenv("target", {
-  _stash: ON,
-  ["macro"]: __target__macro
-})
+setenv("target", 
+  _stash ON
+  ["macro"] __target__macro
+)
 __language__macro = function ()
-  return ["quote", has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value")]
+  return ["quote", has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value")]
 end
-setenv("language", {
-  _stash: ON,
-  ["macro"]: __language__macro
-})
+setenv("language", 
+  _stash ON
+  ["macro"] __language__macro
+)
 __join33__macro = function (a, ...)
   ____r188 = unstash([...])
   __a6 = destash33(a, ____r188)
@@ -1655,10 +1655,10 @@ __join33__macro = function (a, ...)
   __bs5 = cut(____id84, 0)
   return ["set", __a6, join(["join", __a6], __bs5)]
 end
-setenv("join!", {
-  _stash: ON,
-  ["macro"]: __join33__macro
-})
+setenv("join!", 
+  _stash ON
+  ["macro"] __join33__macro
+)
 __cat33__macro = function (a, ...)
   ____r190 = unstash([...])
   __a8 = destash33(a, ____r190)
@@ -1666,10 +1666,10 @@ __cat33__macro = function (a, ...)
   __bs7 = cut(____id86, 0)
   return ["set", __a8, join(["cat", __a8], __bs7)]
 end
-setenv("cat!", {
-  _stash: ON,
-  ["macro"]: __cat33__macro
-})
+setenv("cat!", 
+  _stash ON
+  ["macro"] __cat33__macro
+)
 __inc__macro = function (n, by)
   __e49 = ""
   if nil63(by) then
@@ -1678,10 +1678,10 @@ __inc__macro = function (n, by)
     __e49 = by
   return ["set", n, ["+", n, __e49]]
 end
-setenv("inc", {
-  _stash: ON,
-  ["macro"]: __inc__macro
-})
+setenv("inc", 
+  _stash ON
+  ["macro"] __inc__macro
+)
 __dec__macro = function (n, by)
   __e50 = ""
   if nil63(by) then
@@ -1690,18 +1690,18 @@ __dec__macro = function (n, by)
     __e50 = by
   return ["set", n, ["-", n, __e50]]
 end
-setenv("dec", {
-  _stash: ON,
-  ["macro"]: __dec__macro
-})
+setenv("dec", 
+  _stash ON
+  ["macro"] __dec__macro
+)
 __with_indent__macro = function (form)
   __x531 = unique("x")
   return ["%do", ["inc", "indent-level"], ["with", __x531, form, ["dec", "indent-level"]]]
 end
-setenv("with-indent", {
-  _stash: ON,
-  ["macro"]: __with_indent__macro
-})
+setenv("with-indent", 
+  _stash ON
+  ["macro"] __with_indent__macro
+)
 __export__macro = function (...)
   __names9 = unstash([...])
   __forms5 = map(function (k)
@@ -1710,40 +1710,40 @@ __export__macro = function (...)
     else
       return ["%do", ["%set", ["%get", "exports", ["quote", k]], k], ["%set", ["idx", "exports", k], k]]
   end, __names9)
-  if _37eq(has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value"), "js") then
+  if _37eq(has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value"), "js") then
     return join(["%do"], __forms5)
   else
-    if _37eq(has(setenv("target", {
-      _stash: ON,
-      toplevel: ON
-    }), "value"), "lua") then
+    if _37eq(has(setenv("target", 
+      _stash ON
+      toplevel ON
+    ), "value"), "lua") then
       return join(["let", "exports", ["or", "exports", ["obj"]]], __forms5, [["return", "exports"]])
 end
-setenv("export", {
-  _stash: ON,
-  ["macro"]: __export__macro
-})
+setenv("export", 
+  _stash ON
+  ["macro"] __export__macro
+)
 __when_compiling__macro = function (...)
   __body51 = unstash([...])
   return eval(join(["%do"], __body51))
 end
-setenv("when-compiling", {
-  _stash: ON,
-  ["macro"]: __when_compiling__macro
-})
+setenv("when-compiling", 
+  _stash ON
+  ["macro"] __when_compiling__macro
+)
 __during_compilation__macro = function (...)
   __body53 = unstash([...])
   __form5 = join(["%do"], __body53)
   eval(__form5)
   return __form5
 end
-setenv("during-compilation", {
-  _stash: ON,
-  ["macro"]: __during_compilation__macro
-})
+setenv("during-compilation", 
+  _stash ON
+  ["macro"] __during_compilation__macro
+)
 __def__macro = function (name, ...)
   ____r200 = unstash([...])
   __name11 = destash33(name, ____r200)
@@ -1751,10 +1751,10 @@ __def__macro = function (name, ...)
   __body55 = cut(____id88, 0)
   return join(["define-global", __name11], __body55)
 end
-setenv("def", {
-  _stash: ON,
-  ["macro"]: __def__macro
-})
+setenv("def", 
+  _stash ON
+  ["macro"] __def__macro
+)
 __mac__macro = function (name, ...)
   ____r202 = unstash([...])
   __name13 = destash33(name, ____r202)
@@ -1762,10 +1762,10 @@ __mac__macro = function (name, ...)
   __body57 = cut(____id90, 0)
   return join(["define-macro", __name13], __body57)
 end
-setenv("mac", {
-  _stash: ON,
-  ["macro"]: __mac__macro
-})
+setenv("mac", 
+  _stash ON
+  ["macro"] __mac__macro
+)
 __defconst__macro = function (name, ...)
   ____r204 = unstash([...])
   __name15 = destash33(name, ____r204)
@@ -1773,10 +1773,10 @@ __defconst__macro = function (name, ...)
   __value1 = cut(____id92, 0)
   return join(["def", __name15], __value1)
 end
-setenv("defconst", {
-  _stash: ON,
-  ["macro"]: __defconst__macro
-})
+setenv("defconst", 
+  _stash ON
+  ["macro"] __defconst__macro
+)
 __undefined63__macro = function (name)
   ____x595 = object(["target"])
   ____x595.js = ["=", ["typeof", name], "\"undefined\""]
@@ -1784,10 +1784,10 @@ __undefined63__macro = function (name)
   ____x595.py = ["not", ["%in", ["quote", compile(name)], ["globals"]]]
   return ____x595
 end
-setenv("undefined?", {
-  _stash: ON,
-  ["macro"]: __undefined63__macro
-})
+setenv("undefined?", 
+  _stash ON
+  ["macro"] __undefined63__macro
+)
 __defvar__macro = function (name, ...)
   ____r208 = unstash([...])
   __name17 = destash33(name, ____r208)
@@ -1797,10 +1797,10 @@ __defvar__macro = function (name, ...)
   ____x613.py = ["global", __name17]
   return ["when", ["undefined?", __name17], ____x613, join(["defconst", __name17], __value3)]
 end
-setenv("defvar", {
-  _stash: ON,
-  ["macro"]: __defvar__macro
-})
+setenv("defvar", 
+  _stash ON
+  ["macro"] __defvar__macro
+)
 __async__macro = function (keyword, ...)
   ____r210 = unstash([...])
   __keyword1 = destash33(keyword, ____r210)
@@ -1810,24 +1810,24 @@ __async__macro = function (keyword, ...)
   ____x619.async = ON
   return join(____x619, __body59)
 end
-setenv("async", {
-  _stash: ON,
-  ["macro"]: __async__macro
-})
+setenv("async", 
+  _stash ON
+  ["macro"] __async__macro
+)
 ___37read_from_file__macro = function (name)
   return ["when-compiling", ["quasiquote", ["%do", ["unquote-splicing", ["read-from-file", name]]]]]
 end
-setenv("%read-from-file", {
-  _stash: ON,
-  ["macro"]: ___37read_from_file__macro
-})
+setenv("%read-from-file", 
+  _stash ON
+  ["macro"] ___37read_from_file__macro
+)
 __the__macro = function (name)
   return ["getenv", ["quote", name], ["quote", "value"]]
 end
-setenv("the", {
-  _stash: ON,
-  ["macro"]: __the__macro
-})
+setenv("the", 
+  _stash ON
+  ["macro"] __the__macro
+)
 __cat__macro = function (a, ...)
   ____r216 = unstash([...])
   __a10 = destash33(a, ____r216)
@@ -1848,10 +1848,10 @@ __cat__macro = function (a, ...)
         ____x648.py = join(["%call", "cat", __a10], __bs9)
         return ____x648
 end
-setenv("cat", {
-  _stash: ON,
-  ["macro"]: __cat__macro
-})
+setenv("cat", 
+  _stash ON
+  ["macro"] __cat__macro
+)
 ___43__macro = function (...)
   __args13 = unstash([...])
   if none63(__args13) then
@@ -1862,10 +1862,10 @@ ___43__macro = function (...)
     else
       return join(["%add"], __args13)
 end
-setenv("+", {
-  _stash: ON,
-  ["macro"]: ___43__macro
-})
+setenv("+", 
+  _stash ON
+  ["macro"] ___43__macro
+)
 _____macro = function (...)
   __args15 = unstash([...])
   if none63(__args15) then
@@ -1876,10 +1876,10 @@ _____macro = function (...)
     else
       return join(["%sub"], __args15)
 end
-setenv("-", {
-  _stash: ON,
-  ["macro"]: _____macro
-})
+setenv("-", 
+  _stash ON
+  ["macro"] _____macro
+)
 ___42__macro = function (...)
   __args17 = unstash([...])
   if none63(__args17) then
@@ -1890,10 +1890,10 @@ ___42__macro = function (...)
     else
       return join(["%mul"], __args17)
 end
-setenv("*", {
-  _stash: ON,
-  ["macro"]: ___42__macro
-})
+setenv("*", 
+  _stash ON
+  ["macro"] ___42__macro
+)
 ___47__macro = function (...)
   __args19 = unstash([...])
   if none63(__args19) then
@@ -1904,10 +1904,10 @@ ___47__macro = function (...)
     else
       return join(["%div"], __args19)
 end
-setenv("/", {
-  _stash: ON,
-  ["macro"]: ___47__macro
-})
+setenv("/", 
+  _stash ON
+  ["macro"] ___47__macro
+)
 ___4747__macro = function (...)
   __args21 = unstash([...])
   if none63(__args21) then
@@ -1918,10 +1918,10 @@ ___4747__macro = function (...)
     else
       return join(["%idiv"], __args21)
 end
-setenv("//", {
-  _stash: ON,
-  ["macro"]: ___4747__macro
-})
+setenv("//", 
+  _stash ON
+  ["macro"] ___4747__macro
+)
 ___37__macro = function (...)
   __args23 = unstash([...])
   if none63(__args23) then
@@ -1932,10 +1932,10 @@ ___37__macro = function (...)
     else
       return join(["%mod"], __args23)
 end
-setenv("%", {
-  _stash: ON,
-  ["macro"]: ___37__macro
-})
+setenv("%", 
+  _stash ON
+  ["macro"] ___37__macro
+)
 ___60__macro = function (a, ...)
   ____r218 = unstash([...])
   __a12 = destash33(a, ____r218)
@@ -1949,10 +1949,10 @@ ___60__macro = function (a, ...)
     else
       return ["%and", ["%lt", __a12, hd(__bs111)], join(["<"], __bs111)]
 end
-setenv("<", {
-  _stash: ON,
-  ["macro"]: ___60__macro
-})
+setenv("<", 
+  _stash ON
+  ["macro"] ___60__macro
+)
 ___6061__macro = function (a, ...)
   ____r220 = unstash([...])
   __a14 = destash33(a, ____r220)
@@ -1966,10 +1966,10 @@ ___6061__macro = function (a, ...)
     else
       return ["%and", ["%le", __a14, hd(__bs13)], join(["<="], __bs13)]
 end
-setenv("<=", {
-  _stash: ON,
-  ["macro"]: ___6061__macro
-})
+setenv("<=", 
+  _stash ON
+  ["macro"] ___6061__macro
+)
 ___61__macro = function (a, ...)
   ____r222 = unstash([...])
   __a16 = destash33(a, ____r222)
@@ -1983,10 +1983,10 @@ ___61__macro = function (a, ...)
     else
       return ["%and", ["%eq", __a16, hd(__bs15)], join(["="], __bs15)]
 end
-setenv("=", {
-  _stash: ON,
-  ["macro"]: ___61__macro
-})
+setenv("=", 
+  _stash ON
+  ["macro"] ___61__macro
+)
 ___6261__macro = function (a, ...)
   ____r224 = unstash([...])
   __a18 = destash33(a, ____r224)
@@ -2000,10 +2000,10 @@ ___6261__macro = function (a, ...)
     else
       return ["%and", ["%ge", __a18, hd(__bs17)], join([">="], __bs17)]
 end
-setenv(">=", {
-  _stash: ON,
-  ["macro"]: ___6261__macro
-})
+setenv(">=", 
+  _stash ON
+  ["macro"] ___6261__macro
+)
 ___62__macro = function (a, ...)
   ____r226 = unstash([...])
   __a20 = destash33(a, ____r226)
@@ -2017,10 +2017,10 @@ ___62__macro = function (a, ...)
     else
       return ["%and", ["%gt", __a20, hd(__bs19)], join([">"], __bs19)]
 end
-setenv(">", {
-  _stash: ON,
-  ["macro"]: ___62__macro
-})
+setenv(">", 
+  _stash ON
+  ["macro"] ___62__macro
+)
 __not__macro = function (...)
   __args25 = unstash([...])
   if none63(__args25) then
@@ -2031,10 +2031,10 @@ __not__macro = function (...)
     else
       return ["%and", ["%not", hd(__args25)], join(["not"], tl(__args25))]
 end
-setenv("not", {
-  _stash: ON,
-  ["macro"]: __not__macro
-})
+setenv("not", 
+  _stash ON
+  ["macro"] __not__macro
+)
 __and__macro = function (a, ...)
   ____r228 = unstash([...])
   __a22 = destash33(a, ____r228)
@@ -2051,10 +2051,10 @@ __and__macro = function (a, ...)
       else
         return ["%and", __a22, join(["and"], __bs211)]
 end
-setenv("and", {
-  _stash: ON,
-  ["macro"]: __and__macro
-})
+setenv("and", 
+  _stash ON
+  ["macro"] __and__macro
+)
 __or__macro = function (a, ...)
   ____r230 = unstash([...])
   __a24 = destash33(a, ____r230)
@@ -2071,26 +2071,26 @@ __or__macro = function (a, ...)
       else
         return ["%or", __a24, join(["or"], __bs23)]
 end
-setenv("or", {
-  _stash: ON,
-  ["macro"]: __or__macro
-})
+setenv("or", 
+  _stash ON
+  ["macro"] __or__macro
+)
 __break__macro = function (...)
   __args27 = unstash([...])
   return join(["%break"], __args27)
 end
-setenv("break", {
-  _stash: ON,
-  ["macro"]: __break__macro
-})
+setenv("break", 
+  _stash ON
+  ["macro"] __break__macro
+)
 __return__macro = function (...)
   __args29 = unstash([...])
   return join(["%return"], __args29)
 end
-setenv("return", {
-  _stash: ON,
-  ["macro"]: __return__macro
-})
+setenv("return", 
+  _stash ON
+  ["macro"] __return__macro
+)
 __while__macro = function (c, ...)
   ____r232 = unstash([...])
   __c3 = destash33(c, ____r232)
@@ -2098,100 +2098,100 @@ __while__macro = function (c, ...)
   __body61 = cut(____id114, 0)
   return join(["%while", __c3], __body61)
 end
-setenv("while", {
-  _stash: ON,
-  ["macro"]: __while__macro
-})
+setenv("while", 
+  _stash ON
+  ["macro"] __while__macro
+)
 __do__macro = function (...)
   __body63 = unstash([...])
   return join(["%do"], __body63)
 end
-setenv("do", {
-  _stash: ON,
-  ["macro"]: __do__macro
-})
+setenv("do", 
+  _stash ON
+  ["macro"] __do__macro
+)
 __get__macro = function (...)
   __args31 = unstash([...])
   return join(["%get"], __args31)
 end
-setenv("get", {
-  _stash: ON,
-  ["macro"]: __get__macro
-})
+setenv("get", 
+  _stash ON
+  ["macro"] __get__macro
+)
 __idx__macro = function (...)
   __args33 = unstash([...])
   return join(["%idx"], __args33)
 end
-setenv("idx", {
-  _stash: ON,
-  ["macro"]: __idx__macro
-})
+setenv("idx", 
+  _stash ON
+  ["macro"] __idx__macro
+)
 __new__macro = function (...)
   __args35 = unstash([...])
   return join(["%new"], __args35)
 end
-setenv("new", {
-  _stash: ON,
-  ["macro"]: __new__macro
-})
+setenv("new", 
+  _stash ON
+  ["macro"] __new__macro
+)
 __typeof__macro = function (...)
   __args37 = unstash([...])
   return join(["%typeof"], __args37)
 end
-setenv("typeof", {
-  _stash: ON,
-  ["macro"]: __typeof__macro
-})
+setenv("typeof", 
+  _stash ON
+  ["macro"] __typeof__macro
+)
 __error__macro = function (...)
   __args39 = unstash([...])
   return join(["%error"], __args39)
 end
-setenv("error", {
-  _stash: ON,
-  ["macro"]: __error__macro
-})
+setenv("error", 
+  _stash ON
+  ["macro"] __error__macro
+)
 __throw__macro = function (...)
   __args41 = unstash([...])
   return join(["%throw"], __args41)
 end
-setenv("throw", {
-  _stash: ON,
-  ["macro"]: __throw__macro
-})
+setenv("throw", 
+  _stash ON
+  ["macro"] __throw__macro
+)
 __raise__macro = function (...)
   __args43 = unstash([...])
   return join(["%throw"], __args43)
 end
-setenv("raise", {
-  _stash: ON,
-  ["macro"]: __raise__macro
-})
+setenv("raise", 
+  _stash ON
+  ["macro"] __raise__macro
+)
 __is__macro = function (...)
   __args45 = unstash([...])
   ____x803 = object(["target", join(["="], __args45)])
   ____x803.py = join(["%is"], __args45)
   return ____x803
 end
-setenv("is", {
-  _stash: ON,
-  ["macro"]: __is__macro
-})
+setenv("is", 
+  _stash ON
+  ["macro"] __is__macro
+)
 __in__macro = function (...)
   __args47 = unstash([...])
   return join(["%in"], __args47)
 end
-setenv("in", {
-  _stash: ON,
-  ["macro"]: __in__macro
-})
+setenv("in", 
+  _stash ON
+  ["macro"] __in__macro
+)
 __as__macro = function (...)
   __args49 = unstash([...])
   return join(["%as"], __args49)
 end
-setenv("as", {
-  _stash: ON,
-  ["macro"]: __as__macro
-})
+setenv("as", 
+  _stash ON
+  ["macro"] __as__macro
+)
 ___37expand_case__macro = function (x, ...)
   ____r234 = unstash([...])
   __x821 = destash33(x, ____r234)
@@ -2212,10 +2212,10 @@ ___37expand_case__macro = function (x, ...)
     __e52 = __bs25
   return join(["%block", __a26], __e52, __body65)
 end
-setenv("%expand-case", {
-  _stash: ON,
-  ["macro"]: ___37expand_case__macro
-})
+setenv("%expand-case", 
+  _stash ON
+  ["macro"] ___37expand_case__macro
+)
 ___37cases__macro = function (...)
   __args51 = unstash([...])
   if none63(__args51) then
@@ -2232,10 +2232,10 @@ ___37cases__macro = function (...)
         return ["%expand-case", __x842, ["%set", __r237, join(["%do"], __body67)]]
       end, almost(__args51)), [join(["%expand-case"], last(__args51))])
 end
-setenv("%cases", {
-  _stash: ON,
-  ["macro"]: ___37cases__macro
-})
+setenv("%cases", 
+  _stash ON
+  ["macro"] ___37cases__macro
+)
 __try__macro = function (x, ...)
   ____r240 = unstash([...])
   __x863 = destash33(x, ____r240)
@@ -2283,10 +2283,10 @@ __try__macro = function (x, ...)
   end
   return join(["%cases", ["try", __x863]], __forms7, [__fin1])
 end
-setenv("try", {
-  _stash: ON,
-  ["macro"]: __try__macro
-})
+setenv("try", 
+  _stash ON
+  ["macro"] __try__macro
+)
 __errsafe__macro = function (x, _else)
   if nil63(_else) then
     _else = "nil"
@@ -2294,28 +2294,28 @@ __errsafe__macro = function (x, _else)
   __v33 = unique("v")
   return ["let", [[__ok7, __v33], ["guard", x]], ["if", __ok7, __v33, _else]]
 end
-setenv("errsafe", {
-  _stash: ON,
-  ["macro"]: __errsafe__macro
-})
+setenv("errsafe", 
+  _stash ON
+  ["macro"] __errsafe__macro
+)
 __dbg__macro = function ()
   ____x892 = object(["target", ["do"]])
   ____x892.py = ["do", ["import", "pdb"], [["idx", "pdb", "set-trace"]]]
   return ____x892
 end
-setenv("dbg", {
-  _stash: ON,
-  ["macro"]: __dbg__macro
-})
+setenv("dbg", 
+  _stash ON
+  ["macro"] __dbg__macro
+)
 __see__macro = function (form)
   __form7 = expand(form)
   print(compile(expand(["%set", "lumen-result", __form7])))
   return __form7
 end
-setenv("see", {
-  _stash: ON,
-  ["macro"]: __see__macro
-})
+setenv("see", 
+  _stash ON
+  ["macro"] __see__macro
+)
 reader = require("reader")
 compiler = require("compiler")
 system = require("system")
@@ -2463,7 +2463,7 @@ rep = function (str)
     return toplevel_print(__v38)
 end
 repl = function ()
-  o = {buf: ""}
+  o = buf ""
   reset = function ()
     o.buf = ""
     return disp("> ")
@@ -2504,37 +2504,37 @@ expand_file = function (path)
 end
 compile_file = function (path)
   __form10 = expand_file(path)
-  return compiler.compile(__form10, {
-    _stash: ON,
-    stmt: ON
-  })
+  return compiler.compile(__form10, 
+    _stash ON
+    stmt ON
+  )
 end
 load = function (path)
-  __previous = has(setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }), "value")
-  __previous_indent = has(setenv("indent-level", {
-    _stash: ON,
-    toplevel: ON
-  }), "value")
-  setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }).value = "cmake"
-  setenv("indent-level", {
-    _stash: ON,
-    toplevel: ON
-  }).value = 0
+  __previous = has(setenv("target", 
+    _stash ON
+    toplevel ON
+  ), "value")
+  __previous_indent = has(setenv("indent-level", 
+    _stash ON
+    toplevel ON
+  ), "value")
+  setenv("target", 
+    _stash ON
+    toplevel ON
+  ).value = "cmake"
+  setenv("indent-level", 
+    _stash ON
+    toplevel ON
+  ).value = 0
   __code = compile_file(path)
-  setenv("indent-level", {
-    _stash: ON,
-    toplevel: ON
-  }).value = __previous_indent
-  setenv("target", {
-    _stash: ON,
-    toplevel: ON
-  }).value = __previous
+  setenv("indent-level", 
+    _stash ON
+    toplevel ON
+  ).value = __previous_indent
+  setenv("target", 
+    _stash ON
+    toplevel ON
+  ).value = __previous
   return compiler.run(__code)
 end
 script_file63 = function (path)
@@ -2610,10 +2610,10 @@ main = function (args)
           return repl()
       else
         if __target1 then
-          setenv("target", {
-            _stash: ON,
-            toplevel: ON
-          }).value = __target1
+          setenv("target", 
+            _stash ON
+            toplevel ON
+          ).value = __target1
         __code1 = compile_file(__input)
         if _37or(nil63(__output), _37eq(__output, "-")) then
           return print(__code1)

@@ -1019,18 +1019,16 @@
     (cat open s close)))
 
 (define-special %object forms
-  (let (s "{" c ""
-        sep (if (target? 'lua) " = " ": ")
+  (let (s (if (target? 'cmake) "" "{") c ""
+        sep (if (target? 'lua) " = " (target? 'cmake) " " ": ")
         ind (with-indent (indentation))
         pad (if (> (# forms) 2) (cat "\n" ind))
         end (if (is? pad) (cat "\n" (indentation)) ""))
     (cat! s (either pad ""))
-    (each (k v) (pair forms)
-      (when (number? k)
-        (let ((k v) v)
-          (cat! s c (key k) sep (with-indent (compile v)))
-          (set c (cat "," (either pad " "))))))
-    (cat s end "}")))
+    (step (k v) (pair forms)
+      (cat! s c (key k) sep (with-indent (compile v)))
+      (set c (cat (if (target? 'cmake) "" ",") (either pad " "))))
+    (cat s end (if (target? 'cmake) "" "}"))))
 
 (define-special %list (form comps cond kind: kind)
   (let (s (compile form)

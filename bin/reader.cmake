@@ -1,25 +1,25 @@
-delimiters = {
-  ["("]: ON,
-  [")"]: ON,
-  [";"]: ON,
-  [","]: ON,
-  ["\r"]: ON,
-  ["\n"]: ON
-}
-closing_delimiters = {[")"]: ON}
-whitespace = {
-  [" "]: ON,
-  ["\t"]: ON,
-  ["\r"]: ON,
-  ["\n"]: ON
-}
+delimiters = 
+  ["("] ON
+  [")"] ON
+  [";"] ON
+  [","] ON
+  ["\r"] ON
+  ["\n"] ON
+
+closing_delimiters = [")"] ON
+whitespace = 
+  [" "] ON
+  ["\t"] ON
+  ["\r"] ON
+  ["\n"] ON
+
 stream = function (str, more)
-  return {
-    pos: 0,
-    string: str,
-    len: _35(str),
-    more: more
-  }
+  return 
+    pos 0
+    string str
+    len _35(str)
+    more more
+  
 end
 peek_char = function (s)
   ____id = s
@@ -53,8 +53,8 @@ skip_non_code = function (s)
           break
   end
 end
-read_table = {}
-eof = {}
+read_table = 
+eof = 
 more63 = function (s, x)
   return _37and(is63(s.more), _37eq(x, s.more))
 end
