@@ -1,136 +1,10 @@
 cmake_policy(VERSION "3.25.0")
 set(reserved 
-  ALL 
-    "=" ON
-    "==" ON
-    "+" ON
-    "_" ON
-    "%" ON
-    "*" ON
-    "/" ON
-    "<" ON
-    ">" ON
-    "<=" ON
-    ">=" ON
-  
-  JS 
-    BREAK ON
-    CASE ON
-    CATCH ON
-    CLASS ON
-    CONST ON
-    CONTINUE ON
-    DEBUGGER ON
-    DEFAULT ON
-    DELETE ON
-    DO ON
-    ELSE ON
-    EVAL ON
-    FINALLY ON
-    FOR ON
-    FUNCTION ON
-    IF ON
-    IMPORT ON
-    IN ON
-    INSTANCEOF ON
-    LET ON
-    RETURN ON
-    SWITCH ON
-    THROW ON
-    TRY ON
-    TYPEOF ON
-    VAR ON
-    VOID ON
-    WITH ON
-  
-  LUA 
-    AND ON
-    END ON
-    IN ON
-    LOAD ON
-    REPEAT ON
-    WHILE ON
-    BREAK ON
-    FALSE ON
-    LOCAL ON
-    RETURN ON
-    DO ON
-    FOR ON
-    NIL ON
-    THEN ON
-    ELSE ON
-    FUNCTION ON
-    NOT ON
-    TRUE ON
-    ELSEIF ON
-    IF ON
-    OR ON
-    UNTIL ON
-  
-  PY 
-    AND ON
-    EXCEPT ON
-    LAMBDA ON
-    WITH ON
-    AS ON
-    FINALLY ON
-    NONLOCAL ON
-    WHILE ON
-    ASSERT ON
-    FALSE ON
-    NONE ON
-    YIELD ON
-    BREAK ON
-    FOR ON
-    NOT ON
-    CLASS ON
-    FROM ON
-    OR ON
-    CONTINUE ON
-    GLOBAL ON
-    PASS ON
-    DEF ON
-    IF ON
-    RAISE ON
-    DEL ON
-    IMPORT ON
-    RETURN ON
-    ELIF ON
-    IN ON
-    TRUE ON
-    ELSE ON
-    IS ON
-    TRY ON
-    STR ON
-    PRINT ON
-  
-  CMAKE 
-    SET ON
-    FOREACH ON
-    ENDFOREACH ON
-    WHILE ON
-    ENDWHILE ON
-    IF ON
-    ELSEIF ON
-    ELSE ON
-    BLOCK ON
-    ENDBLOCK ON
-    MACRO ON
-    ENDMACRO ON
-    FUNCTION ON
-    ENDFUNCTION ON
-    BREAK ON
-    RETURN ON
-    CONTINUE ON
-    "AND" ON
-    "OR" ON
-    "TRUE" ON
-    "FALSE" ON
-    "ON" ON
-    "OFF" ON
-    "Y" ON
-    "N" ON
-  
+  ALL "\"=\"" "\"==\"" "\"+\"" "\"-\"" "\"%\"" "\"*\"" "\"/\"" "\"<\"" "\">\"" "\"<=\"" "\">=\""
+  JS "\"break\"" "\"case\"" "\"catch\"" "\"class\"" "\"const\"" "\"continue\"" "\"debugger\"" "\"default\"" "\"delete\"" "\"do\"" "\"else\"" "\"eval\"" "\"finally\"" "\"for\"" "\"function\"" "\"if\"" "\"import\"" "\"in\"" "\"instanceof\"" "\"let\"" "\"return\"" "\"switch\"" "\"throw\"" "\"try\"" "\"typeof\"" "\"var\"" "\"void\"" "\"with\""
+  LUA "\"and\"" "\"end\"" "\"in\"" "\"load\"" "\"repeat\"" "\"while\"" "\"break\"" "\"false\"" "\"local\"" "\"return\"" "\"do\"" "\"for\"" "\"nil\"" "\"then\"" "\"else\"" "\"function\"" "\"not\"" "\"true\"" "\"elseif\"" "\"if\"" "\"or\"" "\"until\""
+  PY "\"and\"" "\"except\"" "\"lambda\"" "\"with\"" "\"as\"" "\"finally\"" "\"nonlocal\"" "\"while\"" "\"assert\"" "\"false\"" "\"None\"" "\"yield\"" "\"break\"" "\"for\"" "\"not\"" "\"class\"" "\"from\"" "\"or\"" "\"continue\"" "\"global\"" "\"pass\"" "\"def\"" "\"if\"" "\"raise\"" "\"del\"" "\"import\"" "\"return\"" "\"elif\"" "\"in\"" "\"True\"" "\"else\"" "\"is\"" "\"try\"" "\"from\"" "\"str\"" "\"print\""
+  CMAKE "\"set\"" "\"foreach\"" "\"endforeach\"" "\"while\"" "\"endwhile\"" "\"if\"" "\"elseif\"" "\"else\"" "\"block\"" "\"endblock\"" "\"macro\"" "\"endmacro\"" "\"function\"" "\"endfunction\"" "\"break\"" "\"return\"" "\"continue\"" "\"AND\"" "\"OR\"" "\"TRUE\"" "\"FALSE\"" "\"ON\"" "\"OFF\"" "\"Y\"" "\"N\""
 )
 message("hi")
 message("${reserved}")
@@ -167,13 +41,13 @@ set(l "a" "b" "c" "d" "e" "f" "g")
 count("${l}" _N)
 message("count: " "${_N}")
 unset(_N)
-set(__e2 "")
+set(__e "")
 if(4 GREATER 3 AND 2)
-  set(__e2 "yes")
+  set(__e "yes")
 else()
-  set(__e2 "no")
+  set(__e "no")
 endif()
-message("${__e2}")
+message("${__e}")
 set(RGBA_LIST0 0 0 0 255 0 0 255 0 255 0 255 0 0 255 255 0)
 message("${RGBA_LIST0}")
 message("${RGBA_LIST0}")
@@ -214,16 +88,20 @@ function(blank63 x VAR)
 endfunction()
 function(is63 x VAR)
   strlen("${x}" n)
-  set(__e3 "")
+  set(__e1 "")
   if("${n}" GREATER 0)
-    set(__e3 ON)
+    set(__e1 ON)
   else()
-    set(__e3 OFF)
+    set(__e1 OFF)
   endif()
-  set("${VAR}" "${__e3}")
+  set("${VAR}" "${__e1}")
   return(PROPAGATE "${VAR}")
 endfunction()
-set(SPEEDTREE_SOURCE_DIR "/Users/shawn/ml/noh4/lib/SpeedTree/source/SourceCode")
+set(HOME "$ENV{HOME}")
+set(NOH_ROOT "$ENV{HOME}/ml/noh4")
+set(SPEEDTREE_DIR "${NOH_ROOT}/lib/SpeedTree")
+set(SPEEDTREE_SOURCE_DIR "${SPEEDTREE_DIR}/source/SourceCode")
+set(SPEEDTREE_INCLUDE_DIR "${SPEEDTREE_DIR}/include")
 file(GLOB_RECURSE SpeedTree___cpp "${SPEEDTREE_SOURCE_DIR}/*.cpp")
 set(__step_v5 "${SpeedTree___cpp}")
 while(__step_v5)
@@ -259,3 +137,39 @@ function(eval x)
 endfunction()
 eval("message(\"hi\")")
 eval("message(\"hi\")")
+file(GLOB_RECURSE k2_src RELATIVE "${NOH_ROOT}" "${NOH_ROOT}/src/k2/*.cpp" "${NOH_ROOT}/src/k2/*.h")
+set(__step_v7 "${k2_src}")
+while(__step_v7)
+  list(POP_FRONT __step_v7 x)
+  message("${x}")
+endwhile()
+unset(k2_src)
+function(glob VAR dir)
+  unset(__map_l2)
+  set(__step_v8 ${ARGN})
+  while(__step_v8)
+    list(POP_FRONT __step_v8 it)
+    list(APPEND __map_l2 "${dir}/${it}")
+  endwhile()
+  set(l "${__map_l2}")
+  file(GLOB_RECURSE "${VAR}" RELATIVE "${dir}" ${l})
+  return(PROPAGATE "${VAR}")
+endfunction()
+glob(k2_src "${NOH_ROOT}/src/k2" "*.cpp" "*.h")
+set(__step_v9 "${k2_src}")
+while(__step_v9)
+  list(POP_FRONT __step_v9 x)
+  message("yess: " "${x}")
+endwhile()
+glob(speedtree_src "${SPEEDTREE_SOURCE_DIR}" "*.cpp" "*.h")
+glob(speedtree_hdr "${SPEEDTREE_INCLUDE_DIR}" "*.h")
+set(__step_v10 "${speedtree_src}")
+while(__step_v10)
+  list(POP_FRONT __step_v10 x)
+  message("speedtree src: " "${x}")
+endwhile()
+set(__step_v11 "${speedtree_hdr}")
+while(__step_v11)
+  list(POP_FRONT __step_v11 x)
+  message("speedtree hdr: " "${x}")
+endwhile()

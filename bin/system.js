@@ -1,4 +1,5 @@
 var fs = require("fs");
+var pathlib = require("path");
 var child_process = require("child_process");
 var read_file = function (path) {
   return fs.readFileSync(path, "utf8");
@@ -50,6 +51,18 @@ var reload = function (module) {
 var shell = function (command) {
   return child_process.execSync(command).toString();
 };
+var chdir = function (dir) {
+  return process.chdir(dir);
+};
+var dirname = function (path) {
+  return pathlib.dirname(path);
+};
+var basename = function (path) {
+  return pathlib.basename(path);
+};
+var extname = function (path) {
+  return pathlib.extname(path);
+};
 exports["read-file"] = read_file;
 exports.read_file = read_file;
 exports["write-file"] = write_file;
@@ -72,3 +85,4 @@ exports.exit = exit;
 exports.argv = argv;
 exports.reload = reload;
 exports.shell = shell;
+exports.chdir = chdir;

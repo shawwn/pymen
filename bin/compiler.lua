@@ -57,7 +57,7 @@ function quoted(form)
       if atom63(form) then
         return form
       else
-        return join({"list"}, map(quoted, form))
+        return join({"quasilist"}, map(quoted, form))
       end
     end
   end
@@ -187,8 +187,8 @@ end
 local function __arguments37__macro(from)
   local ____x24 = object({"target"})
   ____x24.js = {{"%idx", {"%idx", {"%idx", "Array", "prototype"}, "slice"}, "call"}, "arguments", from}
-  ____x24.py = {"|list|", "|_args|"}
-  ____x24.lua = {"list", "|...|"}
+  ____x24.py = {"list", "|_args|"}
+  ____x24.lua = {"quasilist", "|...|"}
   ____x24.cmake = {"%ref", "ARGN"}
   return ____x24
 end
@@ -209,7 +209,7 @@ function bind42(args, body)
     __args1.rest = true
     local ____x36 = object({"target"})
     ____x36.py = {"obj", "..."}
-    return {"unstash", {"list", "..."}, ____x36}
+    return {"unstash", {"quasilist", "..."}, ____x36}
   end
   if atom63(args) then
     return {__args1, join({"let", {args, rest()}}, body)}
@@ -468,7 +468,7 @@ function macroexpand(form)
   end
 end
 local function quasiquote_list(form, depth)
-  local __xs = {{"list"}}
+  local __xs = {{"quasilist"}}
   local ____o7 = form
   local __k6 = nil
   for __k6 in next, ____o7 do
@@ -491,14 +491,14 @@ local function quasiquote_list(form, depth)
     if quasisplice63(__x84, depth) then
       local __x85 = quasiexpand(__x84[2])
       add(__xs, __x85)
-      add(__xs, {"list"})
+      add(__xs, {"quasilist"})
     else
       add(last(__xs), quasiexpand(__x84, depth))
     end
     ____i10 = ____i10 + 1
   end
   local __pruned = keep(function (x)
-    return _35(x) > 1 or (not( hd(x) == "list") or props63(x))
+    return _35(x) > 1 or (not( hd(x) == "quasilist") or props63(x))
   end, __xs)
   if one63(__pruned) then
     return hd(__pruned)

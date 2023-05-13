@@ -48,7 +48,7 @@
   (if (keyword? form) form
       (string? form) (escape form)
       (atom? form) form
-    `(list ,@(map quoted form))))
+    `(quasilist ,@(map quoted form))))
 
 (define literal (s)
   (if (string-literal? s) s (quoted s)))
@@ -104,8 +104,8 @@
 
 (define-macro arguments% (from)
   `(target js: ((%idx (%idx (%idx Array prototype) slice) call) arguments ,from)
-           py: (|list| |_args|)
-           lua: (list |...|)
+           py: (list |_args|)
+           lua: (quasilist |...|)
            cmake: (%ref ARGN)))
 
 (define body-docstring (body)
@@ -118,7 +118,7 @@
   (let args1 (obj)
     (define rest ()
       (set (get args1 'rest) true)
-      `(unstash (list ,"...") (target py: (obj ,"..."))))
+      `(unstash (quasilist ,"...") (target py: (obj ,"..."))))
     (if (atom? args)
         (list args1 `(let ,(list args (rest)) ,@body))
       (let ((doc body) (body-docstring body)
@@ -221,7 +221,7 @@
         (map macroexpand form)))))
 
 (define quasiquote-list (form depth)
-  (let xs (list (target py: (object '(list)) '(list)))
+  (let xs (list (target py: (object '(quasilist)) '(quasilist)))
     (each (k v) form
       (unless (number? k)
         (let v (if (quasisplice? v depth)
@@ -234,12 +234,12 @@
       (if (quasisplice? x depth)
           (let x (quasiexpand (at x 1))
             (add xs x)
-            (add xs '(list)))
+            (add xs '(quasilist)))
         (add (last xs) (quasiexpand x depth))))
     (let pruned
         (keep (fn (x)
                 (or (> (# x) 1)
-                    (not (= (hd x) 'list))
+                    (not (= (hd x) 'quasilist))
                     (props? x)))
               xs)
       (if (one? pruned)

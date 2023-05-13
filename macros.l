@@ -24,7 +24,7 @@
       `(set ,place nil)
     `(%delete ,place)))
 
-(define-macro list body
+(define-macro lumen-list body
   (if (and (one? body)
            (hd? body "...")
            (target? 'py))
@@ -53,6 +53,12 @@
         (if (some? forms)
             `(let ,x (object (%array ,@l)) ,@forms ,x)
           `(%array ,@l))))))
+
+(define-macro list args
+  `(lumen-list ,@args))
+
+(define-macro quasilist args
+  `(lumen-list ,@args))
 
 (define-macro if branches
   (hd (expand-if branches)))

@@ -84,6 +84,18 @@ local function shell(command)
   __f2.close(__f2)
   return __x2
 end
+local function chdir(dir)
+  error("Don't know how to chdir on this host")
+end
+local function dirname(path)
+  error("Don't know how to dirname on this host")
+end
+local function basename(path)
+  error("Don't know how to basename on this host")
+end
+local function extname(path)
+  error("Don't know how to extname on this host")
+end
 local __exports = exports or {}
 __exports["read-file"] = read_file
 __exports.read_file = read_file
@@ -107,4 +119,5 @@ __exports.exit = exit
 __exports.argv = argv
 __exports.reload = reload
 __exports.shell = shell
+__exports.chdir = chdir
 return __exports

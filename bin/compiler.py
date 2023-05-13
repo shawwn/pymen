@@ -54,7 +54,7 @@ def quoted(form=None):
       if atom63(form):
         return form
       else:
-        return join(["list"], map(quoted, form))
+        return join(["quasilist"], map(quoted, form))
 
 def literal(s=None):
   if string_literal63(s):
@@ -151,8 +151,8 @@ def bind(lh=None, rh=None):
 def __arguments37__macro(L_from=None):
   ____x24 = object(["target"])
   ____x24["js"] = [["%idx", ["%idx", ["%idx", "Array", "prototype"], "slice"], "call"], "arguments", L_from]
-  ____x24["py"] = ["|list|", "|_args|"]
-  ____x24["lua"] = ["list", "|...|"]
+  ____x24["py"] = ["list", "|_args|"]
+  ____x24["lua"] = ["quasilist", "|...|"]
   ____x24["cmake"] = ["%ref", "ARGN"]
   return ____x24
 
@@ -169,7 +169,7 @@ def bind42(args=None, body=None):
     __args1["rest"] = True
     ____x36 = object(["target"])
     ____x36["py"] = ["obj", "..."]
-    return ["unstash", ["list", "..."], ____x36]
+    return ["unstash", ["quasilist", "..."], ____x36]
   if atom63(args):
     return [__args1, join(["let", [args, rest()]], body)]
   else:
@@ -344,7 +344,7 @@ def macroexpand(form=None):
                       return map(macroexpand, form)
 
 def quasiquote_list(form=None, depth=None):
-  __xs = [object(["list"])]
+  __xs = [object(["quasilist"])]
   ____o7 = form
   __k6 = None
   for __k6 in indices(____o7):
@@ -364,12 +364,12 @@ def quasiquote_list(form=None, depth=None):
     if quasisplice63(__x78, depth):
       __x79 = quasiexpand(__x78[1])
       add(__xs, __x79)
-      add(__xs, ["list"])
+      add(__xs, ["quasilist"])
     else:
       add(last(__xs), quasiexpand(__x78, depth))
     ____i10 = ____i10 + 1
   def __f3(x=None):
-    return L_35(x) > 1 or (not( hd(x) == "list") or props63(x))
+    return L_35(x) > 1 or (not( hd(x) == "quasilist") or props63(x))
   __pruned = keep(__f3, __xs)
   if one63(__pruned):
     return hd(__pruned)

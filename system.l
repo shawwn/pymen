@@ -1,6 +1,7 @@
 (target py: (from lumen import *))
 (target py: (import sys))
 (target js: (define fs (require 'fs)))
+(target js: (define pathlib (require 'path)))
 (target js: (define child_process (require 'child_process)))
 
 (target lua:
@@ -110,6 +111,30 @@
            (with x ((idx f read) f '*all)
              ((idx f close) f)))))
 
+(define chdir (dir)
+  (target
+    js: ((idx process chdir) dir)
+    py: ((idx os chdir) dir)
+    (error "Don't know how to chdir on this host")))
+
+(define dirname (path)
+  (target
+    js: ((idx pathlib dirname) path)
+    py: ((idx (idx os path) dirname) path)
+    (error "Don't know how to dirname on this host")))
+
+(define basename (path)
+  (target
+    js: ((idx pathlib basename) path)
+    py: ((idx (idx os path) basename) path)
+    (error "Don't know how to basename on this host")))
+
+(define extname (path)
+  (target
+    js: ((idx pathlib extname) path)
+    py: (at ((idx (idx os path) splitext) path) 1)
+    (error "Don't know how to extname on this host")))
+
 (export read-file
         write-file
         file-exists?
@@ -123,4 +148,5 @@
         exit
         argv
         reload
-        shell)
+        shell
+        chdir)

@@ -57,7 +57,7 @@ quoted = function (form) {
       if (atom63(form)) {
         return form;
       } else {
-        return join(["list"], map(quoted, form));
+        return join(["quasilist"], map(quoted, form));
       }
     }
   }
@@ -214,8 +214,8 @@ bind = function (lh, rh) {
 var __arguments37__macro = function (from) {
   var ____x24 = object(["target"]);
   ____x24.js = [["%idx", ["%idx", ["%idx", "Array", "prototype"], "slice"], "call"], "arguments", from];
-  ____x24.py = ["|list|", "|_args|"];
-  ____x24.lua = ["list", "|...|"];
+  ____x24.py = ["list", "|_args|"];
+  ____x24.lua = ["quasilist", "|...|"];
   ____x24.cmake = ["%ref", "ARGN"];
   return ____x24;
 };
@@ -236,7 +236,7 @@ bind42 = function (args, body) {
     __args1.rest = true;
     var ____x36 = object(["target"]);
     ____x36.py = ["obj", "..."];
-    return ["unstash", ["list", "..."], ____x36];
+    return ["unstash", ["quasilist", "..."], ____x36];
   };
   if (atom63(args)) {
     return [__args1, join(["let", [args, rest()]], body)];
@@ -468,7 +468,7 @@ macroexpand = function (form) {
   }
 };
 var quasiquote_list = function (form, depth) {
-  var __xs = [["list"]];
+  var __xs = [["quasilist"]];
   var ____o7 = form;
   var __k11 = undefined;
   for (__k11 in ____o7) {
@@ -498,14 +498,14 @@ var quasiquote_list = function (form, depth) {
     if (quasisplice63(__x78, depth)) {
       var __x79 = quasiexpand(__x78[1]);
       add(__xs, __x79);
-      add(__xs, ["list"]);
+      add(__xs, ["quasilist"]);
     } else {
       add(last(__xs), quasiexpand(__x78, depth));
     }
     ____i10 = ____i10 + 1;
   }
   var __pruned = keep(function (x) {
-    return _35(x) > 1 || (!( hd(x) === "list") || props63(x));
+    return _35(x) > 1 || (!( hd(x) === "quasilist") || props63(x));
   }, __xs);
   if (one63(__pruned)) {
     return hd(__pruned);

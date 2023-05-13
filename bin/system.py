@@ -74,3 +74,15 @@ def reload(module=None):
 def shell(command=None):
   pass
 
+def chdir(dir=None):
+  return os.chdir(dir)
+
+def dirname(path=None):
+  return os.path.dirname(path)
+
+def basename(path=None):
+  return os.path.basename(path)
+
+def extname(path=None):
+  return os.path.splitext(path)[1]
+
