@@ -2,9 +2,30 @@
 
 (when-compiling
   (setenv 'list macro: nil)
+  ; (define-symbol ... (target cmake: (arguments%)))
+  ;(define-symbol arguments (arguments%))
+  (define-symbol arguments (%ref ARGN))
+  ; (define-macro unquote-splicing (x)
+  ;   (set x (expand x))
+  ;   `(%ref ,(if (id? x) (at x 1) x)))
+  (define-special unpack (x)
+    (compile `(%ref ,(if (id? x) (at x 1) x))))
+
+  (define-macro unquote-splicing (x)
+    `(unpack ,x))
+
+  (define-macro mac (name args rest: body)
+    `(when-compiling
+       (define-macro ,name ,args
+         ,@body)
+       nil))
+
+  (define-symbol PWD CMAKE_CURRENT_LIST_DIR)
+  (define-macro getcwd () '$CMAKE_CURRENT_LIST_DIR)
   nil)
 
 (cmake_policy VERSION "3.25.0")
+  
 
 (define reserved
   (obj
@@ -70,13 +91,10 @@
   (list LENGTH x $VAR)
   (return $VAR))
 
-(when-compiling
-  ; (define-symbol ... (%ref ARGN))
-  nil)
-
 (define err ()
   ; (message FATAL_ERROR (%ref ARGN))
-  (message FATAL_ERROR (arguments%))
+  ; (message FATAL_ERROR (arguments%))
+  (message FATAL_ERROR arguments)
   (return))
 
 (set l '(a b c d e f g))
@@ -108,7 +126,7 @@
 
 (when-compiling
   (define-global listify (x)
-    (if (list? x) x (lumen-list x)))
+    (if (list? x) x (quasilist x)))
 
   (define-macro step (vars l rest: body)
     (let-unique (step-v)
@@ -183,7 +201,7 @@
 (message STATUS "(blank? \"\"): " $_)
 
 (define call (f)
-  (cmake-language CALL $f (arguments%))
+  (cmake-language CALL $f arguments)
   (return))
 
 (call message "hi")
@@ -202,52 +220,141 @@
 (eval (%compile (message "hi")))
 
 
-(file GLOB_RECURSE k2_src
-      RELATIVE $NOH_ROOT
-      "${NOH_ROOT}/src/k2/*.cpp"
-      "${NOH_ROOT}/src/k2/*.h"
-      )
-(step x $k2_src
-  (message $x))
+(step x $(file GLOB_RECURSE &k2_src
+               RELATIVE $NOH_ROOT
+               "${NOH_ROOT}/src/k2/*.cpp"
+               "${NOH_ROOT}/src/k2/*.h")
+  (message "foo: " $x)
+  (break))
 (unset k2_src)
 
+(mac map% (f l)
+  (let-unique (map-l)
+    `(do (unset ,map-l)
+         (step it ,l
+           (list APPEND ,map-l ,f))
+         $,map-l)))
+
+(define-global add (VAR)
+  (step x $arguments
+    (list APPEND $VAR $x))
+  $VAR)
+
+
+(define strjoin (VAR)
+  (string JOIN "" &$VAR arguments)
+  )
+
 (when-compiling
-  (define-macro map (VAR f l)
-    (let-unique (map-l)
-      `(do (unset ,map-l)
-           (step it ,l
-             (list APPEND ,map-l ,f))
-           (set ,VAR $,map-l))))
-  (define-macro add (l x)
-    `(list APPEND ,l ,x))
+  (define-macro cat args
+    `$(strjoin &,(unique 'cat-x) ,@args))
   nil)
 
 
+(unset x)
+(message $(strjoin &x "foo" "bar" $speedtree_src))
+(message (cat $NOH_ROOT "/src/k2"))
 
 ; (define glob (VAR dir)
 ;   (unset l)
-;   (step x (arguments%)
+;   (step x $arguments
 ;     (list APPEND l "${dir}/${x}"))
 ;   (file GLOB_RECURSE $VAR
 ;         RELATIVE $dir
 ;         (%ref l))
 ;   (return $VAR))
 
-(define glob (VAR dir)
-  (map l "${dir}/${it}" (arguments%))
-  (file GLOB_RECURSE $VAR
+(define globdir (VAR dir)
+  ; (set l (map% "${dir}/${it}" arguments))
+  ; (set l (map% (cat $dir "/" $it) arguments))
+  (file GLOB_RECURSE &$VAR
         RELATIVE $dir
-        (%ref l))
-  (return $VAR))
+        (unpack (map% (cat $dir "/" $it) arguments))
+        ; (%ref l)
+        ))
 
-(glob k2_src "${NOH_ROOT}/src/k2" "*.cpp" "*.h")
+(mac call% (f rest: args)
+  `$(,f ,@(map (fn (x)
+                 (if (= x '_)
+                     `&,(unique (%cat f "-x"))
+                     x))
+               args)))
+
+(mac globdir% (dir rest: args)
+  ;(set l (map% "${dir}/${it}" arguments))
+  ;(set l (map% (cat $dir "/" $it) arguments))
+  ; `(file GLOB_RECURSE &,(unique 'globdir-x)
+  ;        RELATIVE ,dir
+  ;        (map% (cat ,dir "/" $it) arguments))
+  ; `$(globdir &,(unique 'globdir-x) ,dir ,@args)
+  `(call% globdir _ ,dir ,@args))
+
+(globdir k2_src (cat $NOH_ROOT "/src/k2") "*.cpp" "*.h")
 (step x $k2_src
-  (message "yess: " $x))
+  (message "k2_src: " $x)
+  (break))
 
-(glob speedtree_src "${SPEEDTREE_SOURCE_DIR}" "*.cpp" "*.h")
-(glob speedtree_hdr "${SPEEDTREE_INCLUDE_DIR}" "*.h")
+(globdir speedtree_src $SPEEDTREE_SOURCE_DIR "*.cpp" "*.h")
+(globdir speedtree_hdr $SPEEDTREE_INCLUDE_DIR "*.h")
 (step x $speedtree_src
-  (message "speedtree src: " $x))
+  (message "speedtree src: " $x)
+  (break))
 (step x $speedtree_hdr
-  (message "speedtree hdr: " $x))
+  (message "speedtree hdr: " $x)
+  (break))
 
+
+(step x (globdir &speedtree_src $SPEEDTREE_SOURCE_DIR "*.cpp" "*.h")
+  (message "yay: " $x)
+  (break))
+
+(define match? (input pattern VAR)
+  (is? $(string REGEX MATCH $pattern &x $input) &$VAR))
+
+(step x $(file GLOB_RECURSE &files "*")
+  (when $(match? $x "[.]l$" &ok)
+    (message "YAY: " $x)
+    (break)))
+
+(when-compiling
+  (define-macro match? (input pattern)
+    `$(%call match? ,input ,pattern &,(unique 'ok)))
+  nil)
+
+(step x $(file GLOB_RECURSE &files "*")
+  (when (match? $x "[.]l$")
+    (message "YAY2: " $x)
+    (break)))
+
+; (globdir files (getcwd) "*.*")
+(step x $(globdir &files (getcwd) "*")
+  (when (match? $x "[.]l$")
+    (message "YAY3: " $x)
+    (break)))
+
+(mac glob% args
+  ; `$(file GLOB_RECURSE &,(unique 'glob-x) ,@args)
+  `(call% file GLOB_RECURSE _ ,@args))
+
+(step x (glob% "*")
+  (when (match? $x "[.]l$")
+    (message "YAY4: " $x)
+    (break)))
+
+
+(step x $(add &l 'foo 'bar 'baz)
+  (message $x)
+  (break))
+
+(message $l)
+(message ,@l)
+
+(step x (glob% "*")
+  (message "YAY5: " $x)
+  (break))
+
+(step x (call% file GLOB_RECURSE _ "*")
+  (message "YAY6: " $x)
+  (break))
+
+(message $(string TOLOWER $(string MAKE_C_IDENTIFIER "Foo Bar" &Y) &X))

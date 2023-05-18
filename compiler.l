@@ -59,12 +59,12 @@
           (with l (array args)
             (each (k v) args
               (unless (number? k)
-                (add l `(%literal ,k |=| ,v)))))
+                (add l `(%compile ,k |=| ,v)))))
           (target? 'cmake)
           (with l (array args)
             (each (k v) args
               (unless (number? k)
-                (add l `(%literal ,k | | ,v)))))
+                (add l `(%compile ,k | | ,v)))))
         (let l '(%object "_stash" true)
           (each (k v) args
             (unless (number? k)
@@ -205,10 +205,68 @@
        (is? (search form "."))
        (valid-access? form)))
 
+(define-global expand-access (form)
+  (when (parse-access? form)
+    (parse-access form)))
+
+(define-global expand-atom-functions* ())
+; (add expand-atom-functions* expand-compose)
+; (add expand-atom-functions* expand-ref)
+; (add expand-atom-functions* expand-and)
+(add expand-atom-functions* expand-access)
+
+(define-global expand-atom (form)
+  (step f expand-atom-functions*
+    (let x (f form)
+      (unless (= x nil)
+        (return x))))
+  form)
+
+(define-global macroexpand-atom (form)
+  (if (symbol? form)
+      (macroexpand (symbol-expansion form))
+    (let expr (expand-atom form)
+      (if (= expr form) expr (macroexpand expr)))))
+
+(define-global macroexpand (form)
+  (if (atom? form) (macroexpand-atom form)
+      (none? form) (map macroexpand form)
+    (let (x (macroexpand (hd form))
+          args (tl form))
+      (if (nil? x) (macroexpand args)
+          (= x '%local) (expand-local form)
+          (= x '%function) (expand-function form)
+          (= x '%global-function) (expand-definition form)
+          (= x '%local-function) (expand-definition form)
+          (= x '%expansion) (at form 1)
+          (macro? x) (expand-macro form)
+          ; (parse-access? x) (macroexpand `(,(parse-access x) ,@(tl form)))
+        `(,x ,@(map macroexpand args))))))
+
+(define-global macroexpand (form)
+  (print (str `(macroexpand ,form)))
+  (if (parse-access? form) (macroexpand (parse-access form))
+      (symbol? form) (macroexpand (symbol-expansion form))
+      (atom? form) form
+      (none? form) (map macroexpand form)
+    (let (x (macroexpand (hd form))
+          args (tl form)
+          form `(,x ,@args))
+      (if (= x nil) (macroexpand args)
+          (= x '%local) (expand-local form)
+          (= x '%function) (expand-function form)
+          (= x '%global-function) (expand-definition form)
+          (= x '%local-function) (expand-definition form)
+          (= x '%expansion) (at form 1)
+          (macro? x) (expand-macro form)
+          ; (parse-access? x) (macroexpand `(,(parse-access x) ,@(tl form)))
+        ; `(,x ,@(map macroexpand args))
+        `(,x ,@(map macroexpand args))
+        ))))
+
 (define-global macroexpand (form)
   (if (parse-access? form) (macroexpand (parse-access form))
-      (symbol? form)
-      (macroexpand (symbol-expansion form))
+      (symbol? form) (macroexpand (symbol-expansion form))
       (atom? form) form
     (let x (hd form)
       (if (= x '%local) (expand-local form)
@@ -400,7 +458,7 @@
      %ge: (cmake: GREATER_EQUAL all: >=))
     (%eq: (js: === lua: == py: ==))
     (%in: (py: in) %is: (py: is))
-    (%and: (js: && lua: and py: and cmake: AND))
+    (%and: (js: ,"&&" lua: and py: and cmake: AND))
     (%or: (js: ,"||" lua: or py: or cmake: OR))))
 
 (define unary? (form)
@@ -567,7 +625,7 @@
                   `(,@args ,"...")
                 args)
         args (if (target? 'cmake)
-                 (compile-args `((%literal ,id) ,@args1) true)
+                 (compile-args `((%compile ,id) ,@args1) true)
                  (compile-args args1 true))
         body (compile-body body)
         ind (indentation)
@@ -619,6 +677,9 @@
       (= (hd form) '%array)
       (= (hd form) '%object)
       (= (hd form) '%list)
+      (= (hd form) '%ptr)
+      (= (hd form) '%id)
+      (= (hd form) '%ref)
       (= (hd form) ',)))
 
 (define standalone? (form)
@@ -746,9 +807,48 @@
   (let ((name args rest: body) args)
     (add hoist `(,kind ,name ,args ,(lower-body body true) ,@(props body)))))
 
+(during-compilation
+(define-global ref? (x)
+  (and (list? x) (hd? x '%ref)))
+
+(define-global id? (x)
+  (and (list? x) (hd? x '%id)))
+
+(define-global ptr? (x)
+  (and (list? x) (hd? x '%ptr)))
+
+(define-global reference? (x)
+  (or (ref? x) (id? x) (ptr? x)))
+
+(define-global ptr-name (x)
+  (at x 1))
+
+(define-global ptr-decay (x)
+  (let x (ptr-name x)
+    (if (id? x) x
+        (ref? x) x
+      `(%id ,x))))
+
+(define-global ptr-decay (x)
+  x)
+)
+
+(define lower-invoke (form hoist)
+  (with ptr nil
+    (define lower-ptr (x)
+      (when (ptr? x)
+        (set ptr (ptr-decay x))
+        (set x (ptr-name x)))
+      x)
+    (let form (map lower-ptr form)
+      (if (and (is? ptr)
+               (not (literal? form)))
+          (add hoist form)
+          (set ptr form)))))
+
 (define lower-call (form hoist)
   (let form (map (fn (x) (lower x hoist)) form)
-    (if (some? form) form)))
+    (if (some? form) (lower-invoke form hoist))))
 
 (define pairwise? (form)
   (in? (hd form) '(%lt %le %eq %ge %gt)))
@@ -828,7 +928,7 @@
 (target lua: (define load1 (or |loadstring| |load|)))
 (target lua:
   (define run (code)
-    (let |f,e| (load1 code)
+    (let ((f e) (list (load1 code)))
       (if f (f) (error (cat e " in " code))))))
 
 (target py:
@@ -845,12 +945,10 @@
     lumen-result))
 
 (define-global eval (form globals locals)
-  (let previous target
-    (set target (language))
-    (let code (compile (expand `(%set lumen-result ,form)))
-      (set target previous)
-      (run code globals locals)
-      (eval-result globals locals))))
+  (let code (let* (target (language) indent-level 0)
+              (compile (expand `(%set lumen-result ,form))))
+    (run code globals locals)
+    (eval-result globals locals)))
 
 (define-global immediate-call? (x)
   (and (not (atom? x)) (not (atom? (hd x))) (= (hd (hd x)) '%function)))
@@ -985,11 +1083,15 @@
     (compile `(%local ,name (%function ,args ,@body)) stmt: true)))
 
 (define-special %ref (variable)
-  (cat "${" (compile-id (tostr variable)) "}"))
+  (if (id? variable)
+      (compile variable)
+      (cat "${" (compile variable) "}")))
 
-(define-special %id (variable)
-  (escape (compile `(%ref ,variable))))
+(define-special %id (x)
+  (escape (compile `(%ptr ,x))))
 
+(define-special %ptr (x)
+  (compile (if (reference? x) x `(%ref ,x))))
 
 (define-special %return (x) stmt: true
   (cat (indentation)
@@ -1106,6 +1208,9 @@
 
 (define-special %literal args
   (mapcat compile-literal args))
+
+(define-special %compile args
+  (mapcat compile args))
 
 (define-special global (x) stmt: true tr: true
   (if (target? 'py)

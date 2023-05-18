@@ -22,9 +22,8 @@
       (if (nil? c) (break)
           (has? whitespace c) (read-char s)
           (= c ";")
-          (do (while (and c (not (= c "\n")))
-                (set c (read-char s)))
-              (skip-non-code s))
+          (while (and c (not (= c "\n")))
+            (set c (read-char s)))
         (break)))))
 
 (define read-table (obj))
@@ -211,6 +210,10 @@
 (define-reader ("$" s)
   (read-char s)
   (wrap s '%dollar))
+
+(define-reader ("&" s)
+  (read-char s)
+  (wrap s '%ampersand))
 
 (export stream
         read

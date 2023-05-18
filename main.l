@@ -215,13 +215,9 @@
     ((idx compiler compile) form stmt: true)))
 
 (define-global load (path)
-  (let (previous target previous-indent indent-level)
-    (set target (language))
-    (set indent-level 0)
-    (let code (compile-file path)
-      (set indent-level previous-indent)
-      (set target previous)
-      ((idx compiler run) code))))
+  (let code (let* (target (language) indent-level 0)
+              (compile-file path))
+    ((idx compiler run) code)))
 
 (define script-file? (path)
   (not (or (= "-" (char path 0))

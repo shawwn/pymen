@@ -24,7 +24,7 @@
       `(set ,place nil)
     `(%delete ,place)))
 
-(define-macro lumen-list body
+(define-macro quasilist body ; indent fn
   (if (and (one? body)
            (hd? body "...")
            (target? 'py))
@@ -55,10 +55,7 @@
           `(%array ,@l))))))
 
 (define-macro list args
-  `(lumen-list ,@args))
-
-(define-macro quasilist args
-  `(lumen-list ,@args))
+  `(quasilist ,@args))
 
 (define-macro if branches
   (hd (expand-if branches)))
@@ -84,7 +81,7 @@
 (define-macro unless (cond rest: body)
   `(%if (%not ,cond) (%do ,@body)))
 
-(define-macro obj body
+(define-macro obj body ; indent fn
   (if (and (one? body)
            (hd? body "...")
            (target? 'py))
@@ -109,18 +106,32 @@
     `(%object ,@(mapo (fn (x) x) body))))
 
 (define-macro let (bs rest: body)
-  (if (or (atom? bs) (hd? bs ',)) `(let (,bs ,(hd body)) ,@(tl body))
-      (none? bs) `(%do ,@body)
+  (if (or (atom? bs) (hd? bs ',))
+      `(let (,bs ,(hd body)) ,@(tl body))
+      (none? bs)
+      `(%do ,@body)
     (let ((lh rh rest: bs2) bs
-          (id val rest: bs1) (bind lh rh))
-      (let renames ()
-        (unless (id-literal? id)
-          (let id1 (unique id)
-            (set renames (list id id1)
-                 id id1)))
-        `(%do (%local ,id ,val)
-              (let-symbol ,renames
-                (let ,(join bs1 bs2) ,@body)))))))
+          (id val rest: bs1) (bind lh rh)
+          id1 (unique id))
+      `(%do (%local ,id1 ,val)
+            (let-symbol (,id ,id1)
+              (let ,(join bs1 bs2) ,@body))))))
+
+(define-macro let* (bs rest: body)
+  (if (atom? bs) `(let* (,bs ,(hd body)) ,@(tl body))
+      (none? bs) `(%do ,@body)
+    (let ((lh rh rest: bs2) bs)
+      `(let-global ,lh ,rh
+         (let* ,bs2
+           ,@body)))))
+
+(define-macro let-global (name value rest: body)
+  (let-unique (prev ok x)
+    `(let ,prev ,name
+       (set ,name ,value)
+       (let ((,ok ,x) (guard (%do ,@body)))
+         (set ,name ,prev)
+         (if ,ok ,x (throw ,x))))))
 
 (define-macro with (x v rest: body)
   (if (= v 'as)
@@ -141,18 +152,18 @@
   (let (id (unique (cat name "--macro"))
         form `(do (define ,id ,args ,@body)
                   (setenv ',name macro: ,id)))
-    (eval form)
+    ; (eval form)
     form))
 
 (define-macro define-special (name args rest: body)
   (let (id (unique (cat name "--special"))
         form `(do (define ,id ,args ,@body)
                   (setenv ',name special: ,id ,@(props body))))
-    (eval form)
+    ; (eval form)
     form))
 
-(define-macro define-symbol (name expansion)
-  (setenv name symbol: expansion)
+(define-macro define-symbol (name expansion) ; indent body
+  ; (setenv name symbol: expansion)
   `(setenv ',name symbol: ',expansion))
 
 (define-macro define-reader ((char s) rest: body)
@@ -173,11 +184,11 @@
 (define-macro get-value (x)
   `(has (setenv ,x toplevel: true) 'value))
 
-(define-macro define-constant (name x)
+(define-macro define-constant (name x) ; indent body
   `(%do (setenv ',name toplevel: true value: ,(either x `(get-value ',name)))
         (define-symbol ,name (get-value ',name))))
 
-(define-macro define-variable (name x)
+(define-macro define-variable (name x) ; indent body
   (if (is? x)
       `(define-constant ,name (either (get-value ',name) ,x))
     `(define-constant ,name)))
@@ -212,16 +223,18 @@
 (define-macro let-macro (definitions rest: body)
   (with-frame
     (map (fn (m)
-           (macroexpand `(define-macro ,@m)))
+           (eval `(define-macro ,@m)))
          definitions)
-    `(%do ,@(macroexpand body))))
+    `(%expansion (%do ,@(macroexpand body)))))
 
 (define-macro let-symbol (expansions rest: body)
-  (with-frame
-    (map (fn ((name exp))
-           (macroexpand `(define-symbol ,name ,exp)))
-         (pair expansions))
-    `(%do ,@(macroexpand body))))
+  (if (atom? expansions)
+      `(let-symbol (,expansions ,(hd body)) ,@(tl body))
+    (with-frame
+      (map (fn ((name exp))
+             (eval `(define-symbol ,name ,exp)))
+           (pair expansions))
+      `(%expansion (%do ,@(macroexpand body))))))
 
 (define-macro let-unique (names rest: body)
   (let bs (map (fn (n)
@@ -370,8 +383,12 @@
 (define-macro cat (a rest: bs)
   (if (nil? a) ""
       (none? bs) a
-      (one? bs) `(target py: (%call cat ,a ,@bs) (%cat ,a ,@bs))
-    `(target py: (%call cat ,a ,@bs) (%cat ,a (cat ,@bs)))))
+      (one? bs) `(target py: (%call cat ,a ,@bs)
+                         cmake: (%call cat ,a ,@bs)
+                         (%cat ,a ,@bs))
+    `(target py: (%call cat ,a ,@bs)
+             cmake: (%call cat ,a ,@bs)
+             (%cat ,a (cat ,@bs)))))
 
 (define-macro + args
   (if (none? args) 0
@@ -521,6 +538,11 @@
                 (error "Unknown try clause"))))
        ,fin)))
 
+(define-macro eif (var (o expr 'nil) (o fail 'nil) (o ok 'nil))
+  (let-unique (ok?)
+    `(let ((,ok? ,var) (guard ,expr))
+       (if ,ok? ,ok ,fail))))
+
 (define-macro errsafe (x (o else 'nil))
   (let-unique (ok v)
     `(let ((,ok ,v) (guard ,x))
@@ -529,6 +551,9 @@
 (define-macro dbg ()
   `(target py: (do (import pdb) ((idx pdb set-trace))) (do)))
 
+(define-global prcode (form)
+  (print (str (expand `(%set lumen-result ,form)))))
+
 (define-macro see (form)
   (let form (expand form)
     (print (compile (expand `(%set lumen-result ,form))))
@@ -536,4 +561,7 @@
 
 (define-macro %dollar (x)
   `(%id ,x))
+
+(define-macro %ampersand (x)
+  `(%ptr ,x))
 

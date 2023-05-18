@@ -50,7 +50,6 @@ local function skip_non_code(s)
           while __c1 and not( __c1 == "\n") do
             __c1 = read_char(s)
           end
-          skip_non_code(s)
         else
           break
         end
@@ -328,6 +327,10 @@ end
 read_table["$"] = function (s)
   read_char(s)
   return wrap(s, "%dollar")
+end
+read_table["&"] = function (s)
+  read_char(s)
+  return wrap(s, "%ampersand")
 end
 local __exports = exports or {}
 __exports.stream = stream

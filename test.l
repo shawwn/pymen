@@ -7,27 +7,28 @@
 (import reader)
 (import compiler)
 
-(define-macro test (x msg)
-  `(if (not ,x)
-       (do (set failed (+ failed 1))
-           (return ,msg))
-     (inc passed)))
-
 (define equal? (a b)
   (if (atom? a) (= a b)
     (= (str a) (str b))))
 
-(define-macro test= (a b)
-  (let-unique (x y)
-    `(let (,x ,a ,y ,b)
-       (test (equal? ,x ,y)
-             (cat "failed: expected " (str ,x) ", was " (str ,y))))))
+(during-compilation
+  (define-macro test (x msg)
+    `(if (not ,x)
+         (do (set failed (+ failed 1))
+             (return ,msg))
+       (inc passed)))
 
-(define-macro prep ()
-  `(do (global passed) (global failed)))
+  (define-macro test= (a b)
+    (let-unique (x y)
+      `(let (,x ,a ,y ,b)
+         (test (equal? ,x ,y)
+               (cat "failed: expected " (str ,x) ", was " (str ,y))))))
 
-(define-macro define-test (name rest: body)
-  `(add tests (list ',name (fn () (prep) ,@body))))
+  (define-macro prep ()
+    `(do (global passed) (global failed)))
+
+  (define-macro define-test (name rest: body)
+    `(add tests (list ',name (fn () (prep) ,@body)))))
 
 (define-global run ()
   (step (name f) tests
@@ -802,7 +803,8 @@ c"
       (test= 20 b))))
 
 (define-test define-symbol
-  (define-symbol zzz 42)
+  (during-compilation
+    (define-symbol zzz 42))
   (test= zzz 42))
 
 (define-test macros-and-symbols

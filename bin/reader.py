@@ -48,7 +48,6 @@ def skip_non_code(s=None):
         if __c1 == ";":
           while __c1 and not( __c1 == "\n"):
             __c1 = read_char(s)
-          skip_non_code(s)
         else:
           break
 
@@ -302,3 +301,8 @@ def __f9(s=None):
   return wrap(s, "%dollar")
 
 read_table["$"] = __f9
+def __f10(s=None):
+  read_char(s)
+  return wrap(s, "%ampersand")
+
+read_table["&"] = __f10

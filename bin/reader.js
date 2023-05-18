@@ -50,7 +50,6 @@ var skip_non_code = function (s) {
           while (__c1 && !( __c1 === "\n")) {
             __c1 = read_char(s);
           }
-          skip_non_code(s);
         } else {
           break;
         }
@@ -328,6 +327,10 @@ read_table[","] = function (s) {
 read_table["$"] = function (s) {
   read_char(s);
   return wrap(s, "%dollar");
+};
+read_table["&"] = function (s) {
+  read_char(s);
+  return wrap(s, "%ampersand");
 };
 exports.stream = stream;
 exports.read = read;
